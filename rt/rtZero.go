@@ -9,10 +9,10 @@ import (
 )
 
 var (
-	True  = BoolOf(true)
-	False = BoolOf(false)
-	Zero  = FloatOf(0.0)
-	Empty = StringOf("")
+	True    = BoolOf(true)
+	False   = BoolOf(false)
+	Zero    = FloatOf(0.0)
+	Nothing = StringOf("")
 )
 
 const defaultType = "" // empty string

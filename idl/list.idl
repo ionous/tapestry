@@ -184,12 +184,23 @@ Spec:requires:contains:
 
     - # Determine the number of values in a list.
       Flow:slots:lede:terms:
-        - "list_len"
+        - "list_length"
         - "num_eval"
         - "list"
         - - # The list to measure.
             Term:name:type:
               - "length"
+              - "list"
+              - "assignment"
+
+    - # Determine if the length of the list is zero.
+      Flow:slots:lede:terms:
+        - "list_empty"
+        - "bool_eval"
+        - "is"
+        - - # The list to measure.
+            Term:name:type:
+              - "empty"
               - "list"
               - "assignment"
 

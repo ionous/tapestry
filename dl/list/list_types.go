@@ -275,21 +275,21 @@ func (op *ListFind_Slice) Repeats() bool {
 }
 
 // Determine the number of values in a list.
-type ListLen struct {
+type ListLength struct {
 	List   rtti.Assignment
 	Markup map[string]any
 }
 
-// list_len, a type of flow.
-var Zt_ListLen typeinfo.Flow
+// list_length, a type of flow.
+var Zt_ListLength typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*ListLen) TypeInfo() typeinfo.T {
-	return &Zt_ListLen
+func (*ListLength) TypeInfo() typeinfo.T {
+	return &Zt_ListLength
 }
 
 // Implements [typeinfo.Markup]
-func (op *ListLen) GetMarkup(ensure bool) map[string]any {
+func (op *ListLength) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -297,18 +297,56 @@ func (op *ListLen) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumEval = (*ListLen)(nil)
+var _ rtti.NumEval = (*ListLength)(nil)
 
-// Holds a slice of type ListLen.
-type ListLen_Slice []ListLen
+// Holds a slice of type ListLength.
+type ListLength_Slice []ListLength
 
-// Implements [typeinfo.Instance] for a slice of ListLen.
-func (*ListLen_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ListLen
+// Implements [typeinfo.Instance] for a slice of ListLength.
+func (*ListLength_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ListLength
 }
 
-// Implements [typeinfo.Repeats] for a slice of ListLen.
-func (op *ListLen_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of ListLength.
+func (op *ListLength_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Determine if the length of the list is zero.
+type ListEmpty struct {
+	List   rtti.Assignment
+	Markup map[string]any
+}
+
+// list_empty, a type of flow.
+var Zt_ListEmpty typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*ListEmpty) TypeInfo() typeinfo.T {
+	return &Zt_ListEmpty
+}
+
+// Implements [typeinfo.Markup]
+func (op *ListEmpty) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.BoolEval = (*ListEmpty)(nil)
+
+// Holds a slice of type ListEmpty.
+type ListEmpty_Slice []ListEmpty
+
+// Implements [typeinfo.Instance] for a slice of ListEmpty.
+func (*ListEmpty_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ListEmpty
+}
+
+// Implements [typeinfo.Repeats] for a slice of ListEmpty.
+func (op *ListEmpty_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1006,8 +1044,8 @@ func init() {
 			"comment": []interface{}{"Search a list for a specific value.", "", "The [rt.NumEval] version returns the index of the value in the list."},
 		},
 	}
-	Zt_ListLen = typeinfo.Flow{
-		Name: "list_len",
+	Zt_ListLength = typeinfo.Flow{
+		Name: "list_length",
 		Lede: "list",
 		Terms: []typeinfo.Term{{
 			Name:  "list",
@@ -1022,6 +1060,24 @@ func init() {
 		},
 		Markup: map[string]any{
 			"comment": "Determine the number of values in a list.",
+		},
+	}
+	Zt_ListEmpty = typeinfo.Flow{
+		Name: "list_empty",
+		Lede: "is",
+		Terms: []typeinfo.Term{{
+			Name:  "list",
+			Label: "empty",
+			Markup: map[string]any{
+				"comment": "The list to measure.",
+			},
+			Type: &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_BoolEval,
+		},
+		Markup: map[string]any{
+			"comment": "Determine if the length of the list is zero.",
 		},
 	}
 	Zt_MakeTextList = typeinfo.Flow{
@@ -1372,7 +1428,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_ListPopping,
 	&Zt_ListRepeat,
 	&Zt_ListFind,
-	&Zt_ListLen,
+	&Zt_ListLength,
+	&Zt_ListEmpty,
 	&Zt_MakeTextList,
 	&Zt_MakeNumList,
 	&Zt_MakeRecordList,
@@ -1403,7 +1460,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	9114433845950072538:  (*ListErasing)(nil),    /* execute=Erase:index:count:as:do:else: */
 	18153283510173426603: (*ListFind)(nil),       /* bool_eval=Find:value: */
 	1621463986020822393:  (*ListFind)(nil),       /* num_eval=Find:value: */
-	17357997793114147131: (*ListLen)(nil),        /* num_eval=List length: */
+	10867951538760575464: (*ListEmpty)(nil),      /* bool_eval=Is empty: */
+	17357997793114147131: (*ListLength)(nil),     /* num_eval=List length: */
 	17885543535270178165: (*ListMap)(nil),        /* execute=Map:using:list: */
 	4715091378117636320:  (*MakeNumList)(nil),    /* num_list_eval=Num list: */
 	18395754738475377848: (*ListPop)(nil),        /* execute=Pop: */

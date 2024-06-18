@@ -358,7 +358,7 @@
                   - "@obj"
                   - At field: "not scenery"
               - Not:
-                  Is empty:
+                  Is nothing:
                     Object:dot:
                       - "@obj"
                       - At field: "initial appearance"

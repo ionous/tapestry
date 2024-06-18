@@ -179,7 +179,7 @@ func nounIndex(nouns []string, i int) (ret rt.Value) {
 	if i < len(nouns) {
 		ret = rt.StringOf(nouns[i])
 	} else {
-		ret = rt.Empty
+		ret = rt.Nothing
 	}
 	return
 }

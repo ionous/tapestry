@@ -171,23 +171,24 @@ func (op *TextEndsWith_Slice) Repeats() bool {
 }
 
 // Determine whether text is completely without content.
-// Even spaces are considered content. The text "" is considered empty,
-// the text " " is considered *not* empty.
-type IsEmpty struct {
+// Even spaces are considered content.
+// The text "" is considered nothing,
+// The text " " is considered something.
+type IsNothing struct {
 	Text   rtti.TextEval
 	Markup map[string]any
 }
 
-// is_empty, a type of flow.
-var Zt_IsEmpty typeinfo.Flow
+// is_nothing, a type of flow.
+var Zt_IsNothing typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*IsEmpty) TypeInfo() typeinfo.T {
-	return &Zt_IsEmpty
+func (*IsNothing) TypeInfo() typeinfo.T {
+	return &Zt_IsNothing
 }
 
 // Implements [typeinfo.Markup]
-func (op *IsEmpty) GetMarkup(ensure bool) map[string]any {
+func (op *IsNothing) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -195,18 +196,18 @@ func (op *IsEmpty) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.BoolEval = (*IsEmpty)(nil)
+var _ rtti.BoolEval = (*IsNothing)(nil)
 
-// Holds a slice of type IsEmpty.
-type IsEmpty_Slice []IsEmpty
+// Holds a slice of type IsNothing.
+type IsNothing_Slice []IsNothing
 
-// Implements [typeinfo.Instance] for a slice of IsEmpty.
-func (*IsEmpty_Slice) TypeInfo() typeinfo.T {
-	return &Zt_IsEmpty
+// Implements [typeinfo.Instance] for a slice of IsNothing.
+func (*IsNothing_Slice) TypeInfo() typeinfo.T {
+	return &Zt_IsNothing
 }
 
-// Implements [typeinfo.Repeats] for a slice of IsEmpty.
-func (op *IsEmpty_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of IsNothing.
+func (op *IsNothing_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -610,92 +611,6 @@ func (op *Singularize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Express a number using numerals.
-// For example, given the number `1` return the text "1".
-//
-// The [story.Execute] version prints the text for the player.
-type PrintNumDigits struct {
-	Num    rtti.NumEval
-	Markup map[string]any
-}
-
-// print_num_digits, a type of flow.
-var Zt_PrintNumDigits typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*PrintNumDigits) TypeInfo() typeinfo.T {
-	return &Zt_PrintNumDigits
-}
-
-// Implements [typeinfo.Markup]
-func (op *PrintNumDigits) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*PrintNumDigits)(nil)
-var _ rtti.Execute = (*PrintNumDigits)(nil)
-
-// Holds a slice of type PrintNumDigits.
-type PrintNumDigits_Slice []PrintNumDigits
-
-// Implements [typeinfo.Instance] for a slice of PrintNumDigits.
-func (*PrintNumDigits_Slice) TypeInfo() typeinfo.T {
-	return &Zt_PrintNumDigits
-}
-
-// Implements [typeinfo.Repeats] for a slice of PrintNumDigits.
-func (op *PrintNumDigits_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Express an integer in plain english.
-// For example, given the number `1` return the text "one".
-// It converts floating point numbers to integer by truncating:
-// given `1.6`, it returns "one".
-//
-// The [story.Execute] version prints the text for the player.
-type PrintNumWords struct {
-	Num    rtti.NumEval
-	Markup map[string]any
-}
-
-// print_num_words, a type of flow.
-var Zt_PrintNumWords typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*PrintNumWords) TypeInfo() typeinfo.T {
-	return &Zt_PrintNumWords
-}
-
-// Implements [typeinfo.Markup]
-func (op *PrintNumWords) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*PrintNumWords)(nil)
-var _ rtti.Execute = (*PrintNumWords)(nil)
-
-// Holds a slice of type PrintNumWords.
-type PrintNumWords_Slice []PrintNumWords
-
-// Implements [typeinfo.Instance] for a slice of PrintNumWords.
-func (*PrintNumWords_Slice) TypeInfo() typeinfo.T {
-	return &Zt_PrintNumWords
-}
-
-// Implements [typeinfo.Repeats] for a slice of PrintNumWords.
-func (op *PrintNumWords_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -792,12 +707,12 @@ func init() {
 			"comment": "Determine whether text ends in a particular way.",
 		},
 	}
-	Zt_IsEmpty = typeinfo.Flow{
-		Name: "is_empty",
+	Zt_IsNothing = typeinfo.Flow{
+		Name: "is_nothing",
 		Lede: "is",
 		Terms: []typeinfo.Term{{
 			Name:  "text",
-			Label: "empty",
+			Label: "nothing",
 			Markup: map[string]any{
 				"comment": "The text to check for content.",
 			},
@@ -807,7 +722,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether text is completely without content.", "Even spaces are considered content. The text \"\" is considered empty,", "the text \" \" is considered *not* empty."},
+			"comment": []interface{}{"Determine whether text is completely without content.", "Even spaces are considered content.", "The text \"\" is considered nothing,", "The text \" \" is considered something."},
 		},
 	}
 	Zt_Matches = typeinfo.Flow{
@@ -1004,44 +919,6 @@ func init() {
 			"comment": []interface{}{"Change a plural word into its singular form.", "A plural word only has one singular form.", "For example, given the word \"people\", return \"person\".", "See [pluralize] for more information."},
 		},
 	}
-	Zt_PrintNumDigits = typeinfo.Flow{
-		Name: "print_num_digits",
-		Lede: "numeral",
-		Terms: []typeinfo.Term{{
-			Name:  "num",
-			Label: "digits",
-			Markup: map[string]any{
-				"comment": "The number to change into text, or to print.",
-			},
-			Type: &rtti.Zt_NumEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Express a number using numerals.", "For example, given the number `1` return the text \"1\".", "", "The [story.Execute] version prints the text for the player."},
-		},
-	}
-	Zt_PrintNumWords = typeinfo.Flow{
-		Name: "print_num_words",
-		Lede: "numeral",
-		Terms: []typeinfo.Term{{
-			Name:  "num",
-			Label: "words",
-			Markup: map[string]any{
-				"comment": "The number to change into words, or to print.",
-			},
-			Type: &rtti.Zt_NumEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Express an integer in plain english.", "For example, given the number `1` return the text \"one\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
-		},
-	}
 }
 
 // package listing of type data
@@ -1062,7 +939,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_FindText,
 	&Zt_TextStartsWith,
 	&Zt_TextEndsWith,
-	&Zt_IsEmpty,
+	&Zt_IsNothing,
 	&Zt_Matches,
 	&Zt_Capitalize,
 	&Zt_Join,
@@ -1073,8 +950,6 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_MakeUppercase,
 	&Zt_Pluralize,
 	&Zt_Singularize,
-	&Zt_PrintNumDigits,
-	&Zt_PrintNumWords,
 }
 
 // a list of all command signatures
@@ -1083,17 +958,13 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8695677004499439692:  (*Capitalize)(nil),       /* text_eval=Capitalize: */
 	7190419643383427713:  (*FindText)(nil),         /* bool_eval=Find:text: */
 	2922486476891061679:  (*FindText)(nil),         /* num_eval=Find:text: */
-	10867951538760575464: (*IsEmpty)(nil),          /* bool_eval=Is empty: */
+	16089833969261460812: (*IsNothing)(nil),        /* bool_eval=Is nothing: */
 	6139101839500298168:  (*Matches)(nil),          /* bool_eval=Is text:expression: */
 	43416298232103202:    (*TextStartsWith)(nil),   /* bool_eval=Is text:prefix: */
 	14194170362800670601: (*TextEndsWith)(nil),     /* bool_eval=Is text:suffix: */
 	10106284345457008764: (*Join)(nil),             /* text_eval=Join parts: */
 	16037301925772243654: (*Join)(nil),             /* text_eval=Join:parts: */
 	11334467785012784241: (*MakeLowercase)(nil),    /* text_eval=Lower: */
-	4721393964025254579:  (*PrintNumDigits)(nil),   /* execute=Numeral digits: */
-	14515844015968836994: (*PrintNumDigits)(nil),   /* text_eval=Numeral digits: */
-	9655583796217513308:  (*PrintNumWords)(nil),    /* execute=Numeral words: */
-	18009133328614046007: (*PrintNumWords)(nil),    /* text_eval=Numeral words: */
 	11420921600352749983: (*Pluralize)(nil),        /* text_eval=Plural of: */
 	12963686195606417453: (*MakeReversed)(nil),     /* text_eval=Reverse text: */
 	10747671703915852065: (*MakeSentenceCase)(nil), /* text_eval=Sentence: */

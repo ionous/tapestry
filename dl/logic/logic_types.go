@@ -396,7 +396,7 @@ func (op *NotAny_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// An if statement.
+// Select a block of statements to run based on a true/false check.
 type ChooseBranch struct {
 	Condition rtti.BoolEval
 	Args      []call.Arg
@@ -871,7 +871,7 @@ func init() {
 			&Zt_Brancher,
 		},
 		Markup: map[string]any{
-			"comment": "An if statement.",
+			"comment": "Select a block of statements to run based on a true/false check.",
 		},
 	}
 	Zt_ChooseNothingElse = typeinfo.Flow{

@@ -14,7 +14,7 @@
     - "the standard activating checks"
     - - If:assuming:do:else:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:
@@ -25,7 +25,7 @@
           - - Print: "@response"
           - If:assuming:do:
               - Not:
-                  Is empty: "@response"
+                  Is nothing: "@response"
               - - Arg:from:
                     - "response"
                     - FromText:
@@ -62,7 +62,7 @@
     - "the standard deactivating checks"
     - - If:assuming:do:else:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:
@@ -73,7 +73,7 @@
           - - Print: "@response"
           - If:assuming:do:
               - Not:
-                  Is empty: "@response"
+                  Is nothing: "@response"
               - - Arg:from:
                     - "response"
                     - FromText:

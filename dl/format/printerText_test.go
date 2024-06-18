@@ -27,10 +27,10 @@ func ExamplePrintWords() {
 	// hello there world
 }
 
-func ExamplePrintParens() {
+func ExamplePrintBrackets() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &format.PrintParens{Exe: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &format.PrintBrackets{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:

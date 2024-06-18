@@ -66,15 +66,16 @@ Spec:requires:contains:
               - "text_eval"
 
     - # Determine whether text is completely without content.
-      # Even spaces are considered content. The text "" is considered empty,
-      # the text " " is considered *not* empty.
+      # Even spaces are considered content.
+      # The text "" is considered nothing,
+      # The text " " is considered something.
       Flow:slots:lede:terms:
-        - "is_empty"
+        - "is_nothing"
         - "bool_eval"
         - "is"
         - - # The text to check for content.
             Term:name:type:
-              - "empty"
+              - "nothing"
               - "text"
               - "text_eval"
 
@@ -216,33 +217,3 @@ Spec:requires:contains:
               - "of"
               - "text"
               - "text_eval"
-
-    - # Express a number using numerals.
-      # For example, given the number `1` return the text "1".
-      #
-      # The [story.Execute] version prints the text for the player.
-      Flow:slots:lede:terms:
-        - "print_num_digits"
-        - ["text_eval", "execute"]
-        - "numeral"
-        - - # The number to change into text, or to print.
-            Term:name:type:
-              - "digits"
-              - "num"
-              - "num_eval"
-
-    - # Express an integer in plain english.
-      # For example, given the number `1` return the text "one".
-      # It converts floating point numbers to integer by truncating:
-      # given `1.6`, it returns "one".
-      #
-      # The [story.Execute] version prints the text for the player.
-      Flow:slots:lede:terms:
-        - "print_num_words"
-        - ["text_eval", "execute"]
-        - "numeral"
-        - - # The number to change into words, or to print.
-            Term:name:type:
-              - "words"
-              - "num"
-              - "num_eval"

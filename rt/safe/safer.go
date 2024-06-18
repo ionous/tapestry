@@ -36,7 +36,7 @@ func GetTemplateText() (ret rt.Value) {
 		ret = hack
 		HackTillTemplatesCanEvaluatePatternTypes = nil
 	} else {
-		ret = rt.Empty // if the res was empty, it might have intentionally been empty
+		ret = rt.Nothing // if the res was empty, it might have intentionally been empty
 	}
 	return
 }

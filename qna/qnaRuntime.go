@@ -372,7 +372,7 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 			} else if i := k.FieldIndex(field); i < 0 {
 				err = rt.UnknownResponse(rawField)
 			} else if ft := k.Field(i); ft.Init == nil {
-				ret = rt.Empty
+				ret = rt.Nothing
 			} else {
 				ret, err = ft.Init.GetAssignedValue(run)
 			}

@@ -30,10 +30,10 @@ func TestText(t *testing.T) {
 	})
 
 	t.Run("isEmpty", func(t *testing.T) {
-		if e := testTrue(t, &run, &text.IsEmpty{Text: literal.T("")}); e != nil {
+		if e := testTrue(t, &run, &text.IsNothing{Text: literal.T("")}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &logic.Not{Test: &text.IsEmpty{Text: literal.T("xxx")}}); e != nil {
+		if e := testTrue(t, &run, &logic.Not{Test: &text.IsNothing{Text: literal.T("xxx")}}); e != nil {
 			t.Fatal(e)
 		}
 	})

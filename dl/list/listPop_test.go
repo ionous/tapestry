@@ -43,7 +43,7 @@ func popTest(front bool, amt int, src ...string) []string {
 		Exe: []rt.Execute{
 			&logic.ChooseBranch{
 				Condition: &math.CompareNum{
-					A: &list.ListLen{
+					A: &list.ListLength{
 						List: &call.FromTextList{Value: object.Variable("text")},
 					},
 					Compare: math.C_Comparison_EqualTo,

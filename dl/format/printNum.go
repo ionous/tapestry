@@ -1,4 +1,4 @@
-package text
+package format
 
 import (
 	"strconv"
@@ -9,10 +9,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
-func (op *PrintNumDigits) Execute(run rt.Runtime) (err error) {
+func (op *PrintNum) Execute(run rt.Runtime) (err error) {
 	return safe.WriteText(run, op)
 }
-func (op *PrintNumDigits) GetText(run rt.Runtime) (ret rt.Value, err error) {
+func (op *PrintNum) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if n, e := safe.GetNum(run, op.Num); e != nil {
 		err = cmd.Error(op, e)
 	} else {
@@ -21,10 +21,10 @@ func (op *PrintNumDigits) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *PrintNumWords) Execute(run rt.Runtime) (err error) {
+func (op *PrintCount) Execute(run rt.Runtime) (err error) {
 	return safe.WriteText(run, op)
 }
-func (op *PrintNumWords) GetText(run rt.Runtime) (ret rt.Value, err error) {
+func (op *PrintCount) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if n, e := safe.GetNum(run, op.Num); e != nil {
 		err = cmd.Error(op, e)
 	} else {

@@ -45,7 +45,7 @@
     - - TextList: "list"
     - - Repeat if:do:
           - Not:
-              Is empty: "@obj"
+              Is nothing: "@obj"
           - - Push:value:
                 - "@list"
                 - FromText: "@obj"
@@ -82,7 +82,7 @@
           - "@obj"
     - - Repeat if:do:
           - Not:
-              Is empty: "@search"
+              Is nothing: "@search"
           - - If:do:
                 - Is compatible:kind:
                     - "@search"
@@ -127,7 +127,7 @@
           - FromText: "@object"
       - # We search every parent of the second object for every parent of the first object. Slow but simple.
         Repeat if:do:
-          - Is empty: "@ancestor"
+          - Is nothing: "@ancestor"
           - - Set:value:
                 - "@o2"
                 - FromText: "@other_object"

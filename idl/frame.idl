@@ -34,7 +34,7 @@ Spec:requires:contains:
               - "_"
               - "text"
 
-    - # One or more scenes ( aka. domain ) have started.
+    - # One or more scenes ( aka domain ) have started.
       Flow:slots:terms:
         - "scene_started"
         - "notification"
@@ -44,7 +44,7 @@ Spec:requires:contains:
               - "domains"
               - "text"
               - true
-    - # One or more scenes ( aka. domain ) have finished.
+    - # One or more scenes ( aka domain ) have finished.
       Flow:slots:terms:
         - "scene_ended"
         - "notification"

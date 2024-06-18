@@ -32,7 +32,7 @@
   Define rule:do:
     - "instead of going"
     - - If:do:
-          - Is empty: "@door"
+          - Is nothing: "@door"
           - - Say response:with:
                 - "going nowhere"
                 - "{We:|capitalize!} can't go that way."

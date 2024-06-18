@@ -205,7 +205,7 @@ func ObjectText(run rt.Runtime, eval rt.TextEval) (ret rt.Value, err error) {
 	} else if t, e := eval.GetText(run); e != nil {
 		err = e
 	} else if n := t.String(); len(n) == 0 {
-		ret = rt.Empty
+		ret = rt.Nothing
 	} else {
 		ret, err = run.GetField(meta.ObjectId, n)
 	}

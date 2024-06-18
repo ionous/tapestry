@@ -128,8 +128,8 @@ func testExpression(str string, want interface{}) (err error) {
 // test full templates
 func TestTemplates(t *testing.T) {
 	t.Run("print", func(t *testing.T) {
-		if e := testTemplate("{print_num_words: .group_size}",
-			&text.PrintNumWords{
+		if e := testTemplate("{print_count: .group_size}",
+			&format.PrintCount{
 				Num: &render.UnknownDot{
 					Name: T("group_size"),
 				},
@@ -196,8 +196,8 @@ func TestTemplates(t *testing.T) {
 		}
 	})
 	t.Run("filter", func(t *testing.T) {
-		if e := testTemplate("{15|print_num_digits!}",
-			&text.PrintNumDigits{
+		if e := testTemplate("{15|print_num!}",
+			&format.PrintNum{
 				Num: I(15),
 			}); e != nil {
 			t.Fatal(e)
@@ -206,10 +206,10 @@ func TestTemplates(t *testing.T) {
 	// all of the text in a template gets turned into an expression
 	// plain text between bracketed sections becomes text evals
 	t.Run("span", func(t *testing.T) {
-		if e := testTemplate("{15|print_num_digits!} {if 7=7}boop{end}",
+		if e := testTemplate("{15|print_num!} {if 7=7}boop{end}",
 			&text.Join{
 				Parts: []rt.TextEval{
-					&text.PrintNumDigits{Num: F(15)},
+					&format.PrintNum{Num: F(15)},
 					T(" "),
 					&logic.ChooseText{
 						If: &math.CompareNum{

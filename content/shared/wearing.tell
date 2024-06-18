@@ -14,7 +14,7 @@
     - "standard wearing checks"
     - - If:assuming:do:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:
@@ -51,7 +51,7 @@
     - "standard removing checks"
     - - If:assuming:do:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:

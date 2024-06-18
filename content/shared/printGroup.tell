@@ -34,7 +34,7 @@
                     Variable:dot:
                       - "grouping"
                       - - At field: "hide size"
-                - - Print parentheses:
+                - - Bracket:
                       - Print commas:
                           - Repeat across:as:do:
                               - FromTextList: "@objs"
@@ -93,7 +93,7 @@
     - "ungrouped objects"
     - - If:do:
           - Is all:
-              - Is empty:
+              - Is nothing:
                   Variable:dot:
                     - "grouping"
                     - - At field: "label"

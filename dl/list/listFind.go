@@ -44,7 +44,7 @@ func (op *ListFind) getIndex(run rt.Runtime) (ret int, err error) {
 		case affine.Text:
 			ret = findString(els, val.String())
 		default:
-			err = fmt.Errorf("%s not implemented")
+			err = fmt.Errorf("%s not implemented", aff)
 		}
 	}
 	return

@@ -115,7 +115,7 @@ func (op *FrameOutput_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// One or more scenes ( aka. domain ) have started.
+// One or more scenes ( aka domain ) have started.
 type SceneStarted struct {
 	Domains []string
 	Markup  map[string]any
@@ -153,7 +153,7 @@ func (op *SceneStarted_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// One or more scenes ( aka. domain ) have finished.
+// One or more scenes ( aka domain ) have finished.
 type SceneEnded struct {
 	Domains []string
 	Markup  map[string]any
@@ -338,7 +338,7 @@ func init() {
 			&Zt_Notification,
 		},
 		Markup: map[string]any{
-			"comment": "One or more scenes ( aka. domain ) have started.",
+			"comment": "One or more scenes ( aka domain ) have started.",
 		},
 	}
 	Zt_SceneEnded = typeinfo.Flow{
@@ -356,7 +356,7 @@ func init() {
 			&Zt_Notification,
 		},
 		Markup: map[string]any{
-			"comment": "One or more scenes ( aka. domain ) have finished.",
+			"comment": "One or more scenes ( aka domain ) have finished.",
 		},
 	}
 	Zt_StateChanged = typeinfo.Flow{

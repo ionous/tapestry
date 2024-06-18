@@ -5,62 +5,56 @@
     - - Declare: "You and Mildred are in the kitchen.
           The coffee is in the machine.
           Mildred is carrying the empire apple."
-    - - Print:
-          Rows do:
-            - Print:
-                Row do:
-                  - Print: "Fail to retrieve from something closed:<br>"
-                  - Retrieving actor:noun:otherNoun:
-                      - FromText:
-                          Object:dot:
-                            - "player"
-                            - At field: "pawn"
-                      - FromText: "coffee"
-                      - FromText: "machine"
-            - Print:
-                Row do:
-                  - Say: "The soup's parent was: {the: {parent_of: .soup}}."
-                  - Print: "Okay, retrieve from supporter:<br>"
-                  - Retrieving actor:noun:otherNoun:
-                      - FromText:
-                          Object:dot:
-                            - "player"
-                            - At field: "pawn"
-                      - FromText: "soup"
-                      - FromText: "shelf"
-                  - Say: "The soup's parent is: {the: {parent_of: .soup}}."
-            - Print:
-                Row do:
-                  - Say: "The hook's parent was: {the: {parent_of: .hook}}."
-                  - Print: "Okay, retrieve from container:<br>"
-                  - Retrieving actor:noun:otherNoun:
-                      - FromText:
-                          Object:dot:
-                            - "player"
-                            - At field: "pawn"
-                      - FromText: "hook"
-                      - FromText: "cabinet"
-                  - Say: "The hook's parent is: {the: {parent_of: .hook}}."
-            - Print:
-                Row do:
-                  - Print: "Fail to retrieve incorrectly:<br>"
-                  - Retrieving actor:noun:otherNoun:
-                      - FromText:
-                          Object:dot:
-                            - "player"
-                            - At field: "pawn"
-                      - FromText: "hat"
-                      - FromText: "cabinet"
-            - Print:
-                Row do:
-                  - Print: "Fail to steal:<br>"
-                  - Retrieving actor:noun:otherNoun:
-                      - FromText:
-                          Object:dot:
-                            - "player"
-                            - At field: "pawn"
-                      - FromText: "apple"
-                      - FromText: "Mildred"
+    - - Print rows:
+          - Print row:
+              - Print: "Fail to retrieve from something closed:<br>"
+              - Retrieving actor:noun:otherNoun:
+                  - FromText:
+                      Object:dot:
+                        - "player"
+                        - At field: "pawn"
+                  - FromText: "coffee"
+                  - FromText: "machine"
+          - Print row:
+              - Say: "The soup's parent was: {the: {parent_of: .soup}}."
+              - Print: "Okay, retrieve from supporter:<br>"
+              - Retrieving actor:noun:otherNoun:
+                  - FromText:
+                      Object:dot:
+                        - "player"
+                        - At field: "pawn"
+                  - FromText: "soup"
+                  - FromText: "shelf"
+              - Say: "The soup's parent is: {the: {parent_of: .soup}}."
+          - Print row:
+              - Say: "The hook's parent was: {the: {parent_of: .hook}}."
+              - Print: "Okay, retrieve from container:<br>"
+              - Retrieving actor:noun:otherNoun:
+                  - FromText:
+                      Object:dot:
+                        - "player"
+                        - At field: "pawn"
+                  - FromText: "hook"
+                  - FromText: "cabinet"
+              - Say: "The hook's parent is: {the: {parent_of: .hook}}."
+          - Print row:
+              - Print: "Fail to retrieve incorrectly:<br>"
+              - Retrieving actor:noun:otherNoun:
+                  - FromText:
+                      Object:dot:
+                        - "player"
+                        - At field: "pawn"
+                  - FromText: "hat"
+                  - FromText: "cabinet"
+          - Print row:
+              - Print: "Fail to steal:<br>"
+              - Retrieving actor:noun:otherNoun:
+                  - FromText:
+                      Object:dot:
+                        - "player"
+                        - At field: "pawn"
+                  - FromText: "apple"
+                  - FromText: "Mildred"
       - Expect text:
           - "  - Fail to retrieve from something closed:"
           - "  The espresso machine isn't open."

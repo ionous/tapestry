@@ -14,7 +14,7 @@
     - "the standard dropping checks"
     - - If:assuming:do:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - # can we handle ( locally touch ) the object.
@@ -31,7 +31,7 @@
     - "the standard dropping action"
     - - If:assuming:do:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:

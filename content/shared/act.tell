@@ -59,7 +59,7 @@
     - - If:do:
           - Is all:
               - Not:
-                  Is empty: "@guard"
+                  Is nothing: "@guard"
               - Not:
                   Object:dot:
                     - "@noun"

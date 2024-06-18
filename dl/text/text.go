@@ -9,7 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *IsEmpty) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+func (op *IsNothing) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmd.Error(op, e)
 	} else {

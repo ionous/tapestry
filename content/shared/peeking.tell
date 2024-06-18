@@ -13,7 +13,7 @@
     - "instead of peeking"
     - - If:assuming:do:
           - Not:
-              Is empty: "@result"
+              Is nothing: "@result"
           - - Arg:from:
                 - "result"
                 - FromText:

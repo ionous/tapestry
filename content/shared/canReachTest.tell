@@ -7,7 +7,7 @@
       - Declare: "You are in the cabinet."
     - - If:assuming:do:else:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:
@@ -20,7 +20,7 @@
       - Expect text: "okay: The espresso machine isn't open."
       - If:assuming:do:else:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:
@@ -36,7 +36,7 @@
           - "open"
       - If:assuming:do:else:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:
@@ -52,7 +52,7 @@
           - "closed"
       - If:assuming:do:else:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:
@@ -65,7 +65,7 @@
       - Expect text: "okay: The cabinet isn't open."
       - If:assuming:do:else:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:

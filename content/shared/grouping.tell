@@ -39,7 +39,7 @@
               - Object:dot:
                   - "@obj"
                   - At field: "counted"
-              - Is empty:
+              - Is nothing:
                   Variable:dot:
                     - "grouping"
                     - - At field: "label"
@@ -98,11 +98,11 @@
     - "match groups"
     - - If:do:else:
           - Is any:
-              - Is empty:
+              - Is nothing:
                   Variable:dot:
                     - "first"
                     - - At field: "label"
-              - Is empty:
+              - Is nothing:
                   Variable:dot:
                     - "second"
                     - - At field: "label"

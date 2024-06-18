@@ -30,7 +30,7 @@ func getNextText(run rt.Runtime, parts []rt.TextEval, onedex int) (ret rt.Value,
 	if i, max := onedex-1, len(parts); i >= 0 && i < max {
 		ret, err = safe.GetText(run, parts[i])
 	} else {
-		ret = rt.Empty
+		ret = rt.Nothing
 	}
 	return
 }

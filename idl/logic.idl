@@ -110,7 +110,7 @@ Spec:requires:contains:
     - # Helper for the else statements of [ChooseBranch].
       Slot: "brancher"
 
-    - # An if statement.
+    - # Select a block of statements to run based on a true/false check.
       Flow:slots:lede:terms:
         - "choose_branch"
         - - "execute"

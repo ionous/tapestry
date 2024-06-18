@@ -28,7 +28,7 @@
 - Define rule:do:
     - "before move object"
     - - If:do:
-          - Is empty: "@obj"
+          - Is nothing: "@obj"
           - - Set:value:
                 - "@response"
                 - FromText:
@@ -76,7 +76,7 @@
           - "object"
     - - Nothing:
     - - If:do:
-          - Is empty: "@from"
+          - Is nothing: "@from"
           - - Log:value:
                 - "debug"
                 - FromText: "You can't remove nothing from play."

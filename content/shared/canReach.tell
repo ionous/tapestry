@@ -28,7 +28,7 @@
           - FromText: "@actor"
       - Repeat if:do:
           - Not:
-              Is empty: "@i"
+              Is nothing: "@i"
           - # There's no problem reaching yourself, so start by putting yourself in the list of visited places.
             - Push:value:
                 - "@path"
@@ -40,11 +40,11 @@
                     ParentOf obj:
                       FromText: "@i"
             - If:do:
-                - Is empty: "@reach_response"
+                - Is nothing: "@reach_response"
                 - # Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized.
                   - If:assuming:do:
                       - Not:
-                          Is empty: "@response"
+                          Is nothing: "@response"
                       - - Arg:from:
                             - "response"
                             - FromText:
@@ -78,7 +78,7 @@
           - FromText: "@noun"
       - Repeat if:do:
           - Not:
-              Is empty: "@i"
+              Is nothing: "@i"
           - - # set lca to the index of i in path
               Set:value:
                 - "@lca"
@@ -102,7 +102,7 @@
                       FromText: "@i"
             - If:assuming:do:
                 - Not:
-                    Is empty: "@response"
+                    Is nothing: "@response"
                 - - Arg:from:
                       - "response"
                       - FromText:
@@ -145,7 +145,7 @@
                     - FromText: "@reach_response"
               - If:do:
                   - Not:
-                      Is empty: "@dig_error"
+                      Is nothing: "@dig_error"
                   - # There was no error reaching up to the lca, so return any errors digging down to the noun.
                     - Set:value:
                         - "@response"

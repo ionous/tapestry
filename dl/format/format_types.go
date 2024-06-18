@@ -398,21 +398,21 @@ func (op *PrintWords_Slice) Repeats() bool {
 
 // Collect printed text and surround the output with parenthesis '()'.
 // If no text is printed, no parentheses are printed.
-type PrintParens struct {
+type PrintBrackets struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
-// print_parens, a type of flow.
-var Zt_PrintParens typeinfo.Flow
+// print_brackets, a type of flow.
+var Zt_PrintBrackets typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*PrintParens) TypeInfo() typeinfo.T {
-	return &Zt_PrintParens
+func (*PrintBrackets) TypeInfo() typeinfo.T {
+	return &Zt_PrintBrackets
 }
 
 // Implements [typeinfo.Markup]
-func (op *PrintParens) GetMarkup(ensure bool) map[string]any {
+func (op *PrintBrackets) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -420,19 +420,19 @@ func (op *PrintParens) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*PrintParens)(nil)
-var _ rtti.Execute = (*PrintParens)(nil)
+var _ rtti.TextEval = (*PrintBrackets)(nil)
+var _ rtti.Execute = (*PrintBrackets)(nil)
 
-// Holds a slice of type PrintParens.
-type PrintParens_Slice []PrintParens
+// Holds a slice of type PrintBrackets.
+type PrintBrackets_Slice []PrintBrackets
 
-// Implements [typeinfo.Instance] for a slice of PrintParens.
-func (*PrintParens_Slice) TypeInfo() typeinfo.T {
-	return &Zt_PrintParens
+// Implements [typeinfo.Instance] for a slice of PrintBrackets.
+func (*PrintBrackets_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintBrackets
 }
 
-// Implements [typeinfo.Repeats] for a slice of PrintParens.
-func (op *PrintParens_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of PrintBrackets.
+func (op *PrintBrackets_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -476,21 +476,21 @@ func (op *PrintCommas_Slice) Repeats() bool {
 }
 
 // Group text into an unordered list <ul>.
-type Rows struct {
+type PrintRows struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
-// rows, a type of flow.
-var Zt_Rows typeinfo.Flow
+// print_rows, a type of flow.
+var Zt_PrintRows typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*Rows) TypeInfo() typeinfo.T {
-	return &Zt_Rows
+func (*PrintRows) TypeInfo() typeinfo.T {
+	return &Zt_PrintRows
 }
 
 // Implements [typeinfo.Markup]
-func (op *Rows) GetMarkup(ensure bool) map[string]any {
+func (op *PrintRows) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -498,38 +498,39 @@ func (op *Rows) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*Rows)(nil)
+var _ rtti.TextEval = (*PrintRows)(nil)
+var _ rtti.Execute = (*PrintRows)(nil)
 
-// Holds a slice of type Rows.
-type Rows_Slice []Rows
+// Holds a slice of type PrintRows.
+type PrintRows_Slice []PrintRows
 
-// Implements [typeinfo.Instance] for a slice of Rows.
-func (*Rows_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Rows
+// Implements [typeinfo.Instance] for a slice of PrintRows.
+func (*PrintRows_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintRows
 }
 
-// Implements [typeinfo.Repeats] for a slice of Rows.
-func (op *Rows_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of PrintRows.
+func (op *PrintRows_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
 // Group text into a single line <li> as part of a list of lines.
 // See also: 'rows'.
-type Row struct {
+type PrintRow struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
-// row, a type of flow.
-var Zt_Row typeinfo.Flow
+// print_row, a type of flow.
+var Zt_PrintRow typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*Row) TypeInfo() typeinfo.T {
-	return &Zt_Row
+func (*PrintRow) TypeInfo() typeinfo.T {
+	return &Zt_PrintRow
 }
 
 // Implements [typeinfo.Markup]
-func (op *Row) GetMarkup(ensure bool) map[string]any {
+func (op *PrintRow) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -537,18 +538,105 @@ func (op *Row) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*Row)(nil)
+var _ rtti.TextEval = (*PrintRow)(nil)
+var _ rtti.Execute = (*PrintRow)(nil)
 
-// Holds a slice of type Row.
-type Row_Slice []Row
+// Holds a slice of type PrintRow.
+type PrintRow_Slice []PrintRow
 
-// Implements [typeinfo.Instance] for a slice of Row.
-func (*Row_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Row
+// Implements [typeinfo.Instance] for a slice of PrintRow.
+func (*PrintRow_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintRow
 }
 
-// Implements [typeinfo.Repeats] for a slice of Row.
-func (op *Row_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of PrintRow.
+func (op *PrintRow_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Express a number using digits.
+// For example, given the number `12` return the text "12".
+//
+// The [story.Execute] version prints the text for the player.
+type PrintNum struct {
+	Num    rtti.NumEval
+	Markup map[string]any
+}
+
+// print_num, a type of flow.
+var Zt_PrintNum typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*PrintNum) TypeInfo() typeinfo.T {
+	return &Zt_PrintNum
+}
+
+// Implements [typeinfo.Markup]
+func (op *PrintNum) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextEval = (*PrintNum)(nil)
+var _ rtti.Execute = (*PrintNum)(nil)
+
+// Holds a slice of type PrintNum.
+type PrintNum_Slice []PrintNum
+
+// Implements [typeinfo.Instance] for a slice of PrintNum.
+func (*PrintNum_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintNum
+}
+
+// Implements [typeinfo.Repeats] for a slice of PrintNum.
+func (op *PrintNum_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Express an integer in plain english ( aka a cardinal number ).
+// For example, given the number `12` return the text "tweleve".
+// It converts floating point numbers to integer by truncating:
+// given `1.6`, it returns "one".
+//
+// The [story.Execute] version prints the text for the player.
+type PrintCount struct {
+	Num    rtti.NumEval
+	Markup map[string]any
+}
+
+// print_count, a type of flow.
+var Zt_PrintCount typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*PrintCount) TypeInfo() typeinfo.T {
+	return &Zt_PrintCount
+}
+
+// Implements [typeinfo.Markup]
+func (op *PrintCount) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextEval = (*PrintCount)(nil)
+var _ rtti.Execute = (*PrintCount)(nil)
+
+// Holds a slice of type PrintCount.
+type PrintCount_Slice []PrintCount
+
+// Implements [typeinfo.Instance] for a slice of PrintCount.
+func (*PrintCount_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintCount
+}
+
+// Implements [typeinfo.Repeats] for a slice of PrintCount.
+func (op *PrintCount_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -740,12 +828,11 @@ func init() {
 			"comment": "Collect printed text and separate that text by single spaces.",
 		},
 	}
-	Zt_PrintParens = typeinfo.Flow{
-		Name: "print_parens",
-		Lede: "print",
+	Zt_PrintBrackets = typeinfo.Flow{
+		Name: "print_brackets",
+		Lede: "bracket",
 		Terms: []typeinfo.Term{{
 			Name:    "exe",
-			Label:   "parentheses",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "Runs one or more statements, and collects any text printed by them.",
@@ -777,12 +864,12 @@ func init() {
 			"comment": "Separates words with commas, and 'and'.",
 		},
 	}
-	Zt_Rows = typeinfo.Flow{
-		Name: "rows",
-		Lede: "rows",
+	Zt_PrintRows = typeinfo.Flow{
+		Name: "print_rows",
+		Lede: "print",
 		Terms: []typeinfo.Term{{
 			Name:    "exe",
-			Label:   "do",
+			Label:   "rows",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "Runs one or more statements, and collects any text printed by them.",
@@ -791,17 +878,18 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
+			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": "Group text into an unordered list <ul>.",
 		},
 	}
-	Zt_Row = typeinfo.Flow{
-		Name: "row",
-		Lede: "row",
+	Zt_PrintRow = typeinfo.Flow{
+		Name: "print_row",
+		Lede: "print",
 		Terms: []typeinfo.Term{{
 			Name:    "exe",
-			Label:   "do",
+			Label:   "row",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "Runs one or more statements, and collects any text printed by them.",
@@ -810,9 +898,48 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
+			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
+		},
+	}
+	Zt_PrintNum = typeinfo.Flow{
+		Name: "print_num",
+		Lede: "print",
+		Terms: []typeinfo.Term{{
+			Name:  "num",
+			Label: "num",
+			Markup: map[string]any{
+				"comment": "The number to change into text, or to print.",
+			},
+			Type: &rtti.Zt_NumEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Express a number using digits.", "For example, given the number `12` return the text \"12\".", "", "The [story.Execute] version prints the text for the player."},
+		},
+	}
+	Zt_PrintCount = typeinfo.Flow{
+		Name: "print_count",
+		Lede: "print",
+		Terms: []typeinfo.Term{{
+			Name:  "num",
+			Label: "count",
+			Markup: map[string]any{
+				"comment": "The number to change into words, or to print.",
+			},
+			Type: &rtti.Zt_NumEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Express an integer in plain english ( aka a cardinal number ).", "For example, given the number `12` return the text \"tweleve\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 }
@@ -848,15 +975,19 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_BufferText,
 	&Zt_PrintText,
 	&Zt_PrintWords,
-	&Zt_PrintParens,
+	&Zt_PrintBrackets,
 	&Zt_PrintCommas,
-	&Zt_Rows,
-	&Zt_Row,
+	&Zt_PrintRows,
+	&Zt_PrintRow,
+	&Zt_PrintNum,
+	&Zt_PrintCount,
 }
 
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
+	6760736350978281265:  (*PrintBrackets)(nil),  /* execute=Bracket: */
+	7683154690772057430:  (*PrintBrackets)(nil),  /* text_eval=Bracket: */
 	9767668117811810575:  (*BufferText)(nil),     /* text_eval=Buffer do: */
 	16098131496381194958: (*CycleText)(nil),      /* counter=Cycle name:text: */
 	5355971188045229340:  (*CycleText)(nil),      /* text_eval=Cycle name:text: */
@@ -866,15 +997,19 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1194153657675604478:  (*ParagraphBreak)(nil), /* execute=ParagraphBreak */
 	16169738297367022876: (*PrintCommas)(nil),    /* execute=Print commas: */
 	6231219704730380469:  (*PrintCommas)(nil),    /* text_eval=Print commas: */
-	4206645811149297220:  (*PrintParens)(nil),    /* execute=Print parentheses: */
-	8219093008786386363:  (*PrintParens)(nil),    /* text_eval=Print parentheses: */
+	4978673516128950201:  (*PrintCount)(nil),     /* execute=Print count: */
+	2099789459701495774:  (*PrintCount)(nil),     /* text_eval=Print count: */
+	12546625601524102208: (*PrintNum)(nil),       /* execute=Print num: */
+	406006008187655303:   (*PrintNum)(nil),       /* text_eval=Print num: */
+	6233864352801529036:  (*PrintRow)(nil),       /* execute=Print row: */
+	10792303622714475175: (*PrintRow)(nil),       /* text_eval=Print row: */
+	13143970129676688055: (*PrintRows)(nil),      /* execute=Print rows: */
+	10295299865541058706: (*PrintRows)(nil),      /* text_eval=Print rows: */
 	4149419216708670664:  (*PrintWords)(nil),     /* execute=Print separator:words: */
 	4219359027975954467:  (*PrintWords)(nil),     /* text_eval=Print separator:words: */
 	1331651249232124175:  (*PrintWords)(nil),     /* execute=Print words: */
 	17978150574109115948: (*PrintWords)(nil),     /* text_eval=Print words: */
 	4512128922644282356:  (*PrintText)(nil),      /* execute=Print: */
-	14820902432990466009: (*Row)(nil),            /* text_eval=Row do: */
-	42419598592471524:    (*Rows)(nil),           /* text_eval=Rows do: */
 	12460624099586212271: (*ShuffleText)(nil),    /* counter=Shuffle name:text: */
 	8909818107999898193:  (*ShuffleText)(nil),    /* text_eval=Shuffle name:text: */
 	3444877746271964624:  (*ShuffleText)(nil),    /* counter=Shuffle text: */

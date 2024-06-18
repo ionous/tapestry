@@ -13,7 +13,7 @@
     - "instead of taking"
     - - If:assuming:do:
           - Not:
-              Is empty: "@result"
+              Is nothing: "@result"
           - - Arg:from:
                 - "result"
                 - FromText:
@@ -27,7 +27,7 @@
     - "taking"
     - - If:assuming:do:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:

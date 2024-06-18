@@ -79,7 +79,7 @@ func TestRecordValue(t *testing.T) {
 			t.Fatal("expected no such field")
 		} else if e := rv.SetFieldByName("a", rt.True); e == nil {
 			t.Fatal("aspects should be set with strings")
-		} else if e := rv.SetFieldByName("x", rt.Empty); e == nil {
+		} else if e := rv.SetFieldByName("x", rt.Nothing); e == nil {
 			t.Fatal("traits should be set with bools")
 		} else if e := rv.SetFieldByName("x", rt.False); e == nil {
 			// we dont have support for opposite values right now.

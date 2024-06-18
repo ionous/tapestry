@@ -19,7 +19,7 @@
     - "the standard retrieving checks"
     - - If:assuming:do:else:
           - Not:
-              Is empty: "@result"
+              Is nothing: "@result"
           - - Arg:from:
                 - "result"
                 - FromText:
@@ -30,7 +30,7 @@
           - - Print: "@result"
           - If:assuming:do:
               - Not:
-                  Is empty: "@result"
+                  Is nothing: "@result"
               - - Arg:from:
                     - "result"
                     - FromText:

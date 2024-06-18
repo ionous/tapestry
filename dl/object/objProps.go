@@ -20,7 +20,7 @@ func (op *ObjectName) GetText(run rt.Runtime) (ret rt.Value, err error) {
 		err = cmd.Error(op, e)
 	} else {
 		if name := obj.String(); len(name) == 0 {
-			ret = rt.Empty
+			ret = rt.Nothing
 		} else if v, e := run.GetField(meta.ObjectName, name); e != nil {
 			err = cmd.Error(op, e)
 		} else {
@@ -82,7 +82,7 @@ func (op *KindOf) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if k, e := objectKind(run, op.Target, op.Nothing); e != nil {
 		err = e
 	} else if k == nil {
-		ret = rt.Empty
+		ret = rt.Nothing
 	} else {
 		ret = rt.StringOf(k.Name()) // tbd: should kind string have a type of meta.ObjectKind?
 	}

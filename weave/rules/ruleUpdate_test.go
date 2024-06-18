@@ -17,7 +17,7 @@ func TestUpdateTracker(t *testing.T) {
 	updatesArg := call.Arg{Value: &call.FromBool{Value: updates}}
 	embeddedArg := call.Arg{Value: &call.FromBool{Value: embedded}}
 	//
-	negative := &text.IsEmpty{}
+	negative := &text.IsNothing{}
 	negativeArg := call.Arg{Value: &call.FromBool{Value: negative}}
 	//
 	if b := up.CheckFilter(nil); b != false {

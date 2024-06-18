@@ -434,10 +434,10 @@ var Phrases = []Phrase{
 	// ------------------------------------------------------------------------
 	{
 		// fix? mixed feelings on the trailing full-stop.
-		test: `The story has the title "{15|print_num_digits!}".`,
+		test: `The story has the title "{15|print_num!}".`,
 		result: []string{
 			// test that it can convert a template
-			"AddNounValue:", "story", "title", `{"FromText:":{"Numeral:":{"Num:":15}}}`,
+			"AddNounValue:", "story", "title", `{"FromText:":{"Print num:":{"Num value:":15}}}`,
 		},
 	},
 	{

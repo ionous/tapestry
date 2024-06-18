@@ -18,20 +18,18 @@
                 - "object"
                 - "object"
           - - Nothing:
-          - - Print:
-                Rows do:
-                  - Repeat across:as:do:
-                      - FromTextList:
-                          Fields of:
-                            Kind of: "@object"
-                      - "field"
-                      - - Print:
-                            Row do:
-                              - Say: "{.field}:"
-                              - Print:
-                                  Object:dot:
-                                    - "@object"
-                                    - - At field: "@field"
+          - - Print rows:
+                - Repeat across:as:do:
+                    - FromTextList:
+                        Fields of:
+                          Kind of: "@object"
+                    - "field"
+                    - - Print row:
+                          - Say: "{.field}:"
+                          - Print:
+                              Object:dot:
+                                - "@object"
+                                - - At field: "@field"
       - Define pattern:requires:provides:do:
           - "request debug location"
           - - Text:kind:

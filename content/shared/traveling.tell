@@ -34,7 +34,7 @@
     - "standard traveling checks"
     - - If:assuming:do:else:
           - Not:
-              Is empty: "@resp"
+              Is nothing: "@resp"
           - - Arg:from:
                 - "resp"
                 - FromText:
@@ -45,7 +45,7 @@
           - - Print: "@resp"
           - If:assuming:do:
               - Not:
-                  Is empty: "@resp"
+                  Is nothing: "@resp"
               - - Arg:from:
                     - "resp"
                     - FromText:
@@ -58,7 +58,7 @@
 - Define rule:do:
     - "instead of traveling through"
     - - If:do:
-          - Is empty: "@destination"
+          - Is nothing: "@destination"
           - - Say response:with:
                 - "can only travel to a destination"
                 - "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
@@ -67,7 +67,7 @@
     - "traveling through"
     - - If:assuming:do:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:

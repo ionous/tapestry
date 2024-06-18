@@ -128,12 +128,12 @@ Spec:requires:contains:
     - # Collect printed text and surround the output with parenthesis '()'.
       # If no text is printed, no parentheses are printed.
       Flow:slots:lede:terms:
-        - "print_parens"
+        - "print_brackets"
         - ["text_eval", "execute"]
-        - "print"
+        - "bracket"
         - - # Runs one or more statements, and collects any text printed by them.
             Term:name:type:repeats:
-              - "parentheses"
+              - "_"
               - "exe"
               - "execute"
               - true
@@ -149,26 +149,57 @@ Spec:requires:contains:
               - "execute"
               - true
 
-
     - # Group text into an unordered list <ul>.
-      Flow:slots:terms:
-        - "rows"
-        - "text_eval"
+      Flow:slots:lede:terms:
+        - "print_rows"
+        - ["text_eval", "execute"]
+        - "print"
         - - # Runs one or more statements, and collects any text printed by them.
             Term:name:type:repeats:
-              - "do"
+              - "rows"
               - "exe"
               - "execute"
               - true
 
     - # Group text into a single line <li> as part of a list of lines.
       # See also: 'rows'.
-      Flow:slots:terms:
-        - "row"
-        - "text_eval"
+      Flow:slots:lede:terms:
+        - "print_row"
+        - ["text_eval", "execute"]
+        - "print"
         - - # Runs one or more statements, and collects any text printed by them.
             Term:name:type:repeats:
-              - "do"
+              - "row"
               - "exe"
               - "execute"
               - true
+
+    - # Express a number using digits.
+      # For example, given the number `12` return the text "12".
+      #
+      # The [story.Execute] version prints the text for the player.
+      Flow:slots:lede:terms:
+        - "print_num"
+        - ["text_eval", "execute"]
+        - "print"
+        - - # The number to change into text, or to print.
+            Term:type:
+              - "num"
+              - "num_eval"
+
+    - # Express an integer in plain english ( aka a cardinal number ).
+      # For example, given the number `12` return the text "tweleve".
+      # It converts floating point numbers to integer by truncating:
+      # given `1.6`, it returns "one".
+      #
+      # The [story.Execute] version prints the text for the player.
+      Flow:slots:lede:terms:
+        - "print_count"
+        - ["text_eval", "execute"]
+        - "print"
+        - - # The number to change into words, or to print.
+            Term:name:type:
+              - "count"
+              - "num"
+              - "num_eval"
+

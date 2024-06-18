@@ -22,15 +22,13 @@
           - "object group"
           - MakeGroups objs:
               FromTextList: "@objs"
-    - - Print:
-          Rows do:
-            - Repeat across:as:do:
-                - FromRecordList: "@groups"
-                - "group"
-                - - Print:
-                      Row do:
-                        - PrintGroup group:
-                            FromRecord: "@group"
+    - - Print rows:
+          - Repeat across:as:do:
+              - FromRecordList: "@groups"
+              - "group"
+              - - Print row:
+                    - PrintGroup group:
+                        FromRecord: "@group"
 - #
   Define pattern:requires:provides:do:
     - "print object"
@@ -61,7 +59,7 @@
           - - Print words:
                 - A noun:
                     FromText: "@obj"
-                - Print parentheses:
+                - Bracket:
                     - PrintDetails obj:
                         FromText: "@obj"
 - Define rule:do:
@@ -183,7 +181,7 @@
           - "object"
       - Bool: "is empty"
     - - Bool: "skip"
-    - - Print parentheses:
+    - - Bracket:
           Print commas:
             - PrintInnerStatus obj:isEmpty:
                 - FromText: "@obj"

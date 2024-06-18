@@ -83,7 +83,7 @@
     - - TextList: "list"
     - - Repeat if:do:
           - Not:
-              Is empty: "@obj"
+              Is nothing: "@obj"
           - - Push:value:
                 - "@list"
                 - FromText: "@obj"
@@ -134,7 +134,7 @@
         # ( was start game called? )
         Expect:
           Not:
-            Is empty: "@actor"
+            Is nothing: "@actor"
       - If:do:
           - Is any:
               - "@refresh"
@@ -173,7 +173,7 @@
     - - # determine the ceiling.
         Repeat if:do:
           - Not:
-              Is empty: "@object"
+              Is nothing: "@object"
           - - Set:value:
                 - "@ceiling"
                 - FromText: "@object"

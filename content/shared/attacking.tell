@@ -33,7 +33,7 @@
     - "standard attacking checks"
     - - If:assuming:do:
           - Not:
-              Is empty: "@response"
+              Is nothing: "@response"
           - - Arg:from:
                 - "response"
                 - FromText:

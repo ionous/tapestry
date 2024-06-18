@@ -13,7 +13,7 @@
     - "instead of searching"
     - - If:assuming:do:
           - Not:
-              Is empty: "@result"
+              Is nothing: "@result"
           - - Arg:from:
                 - "result"
                 - FromText:
