@@ -3,6 +3,7 @@
 --- 
 
 To install Tapestry, please see the [Getting Started](/getting-started/#installing-tapestry) page.
+
 # Status
 
 Tapestry is a work in progress. You could use it to create some simple text based games, but you will encounter bugs and missing features. 
@@ -17,6 +18,10 @@ Near term goals include:
 
 
 # Version History
+
+**v0.24.6**: 
+
+- Documentation and various changes to make the command language more consistent with itself.
 
 **v0.24.5**: 
 
