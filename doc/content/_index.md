@@ -3,8 +3,6 @@ title: Tapestry
 type: homepage
 summary: Tapestry documentation.
 geekdocBreadcrumb: false
-params:
-  hideindex: true # w/o this, the list template will generate bad content
 ---
 A story engine for games.
 

@@ -1,6 +1,9 @@
 ---
 geekdocCollapseSection: true
 title: Slots
+
+params:
+  showindex: true
 ---
 
 Every Tapestry story file ( `.tell` ) contains a list of Story Statement slots. Various commands can fit into those slots, the complete list of which can be found on the [Story Statement](/api/slot/story_statement) page. Taken together, the story commands allow an author to model a complete game world.

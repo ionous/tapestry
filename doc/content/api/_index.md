@@ -1,8 +1,6 @@
 ---
 title: "API Reference"
 weight: 500 # keep below all the regular pages
-params:
-  hideindex: true # w/o this, the list template will generate bad content
 ---
 
 This documents the commands used in <code>.tell</code> story files. 

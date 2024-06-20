@@ -7,7 +7,7 @@
     {{ partial "utils/content" . }}
 
      {{/* Ranges through subpages */}}
-     {{ if not .Params.hideindex }}
+     {{ if .Params.showindex }}
       {{ range .Pages }}
         <li>
           <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a> - {{ .Summary }}
