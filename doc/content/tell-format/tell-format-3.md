@@ -58,6 +58,6 @@ Except for the index file; filenames starting with a dot ( `.` ) or underscore (
 
 # Other folders and files
 
-There is one other folder worth mentioning. Stories files must be woven into a database to play. By default, that database is saved to "Documents/build/play.db".
+There is one other folder worth mentioning. Stories files must be woven into a database to play. By default, that database is saved to "Documents/Tapestry/build/play.db".
 
 TODO: save game info.
