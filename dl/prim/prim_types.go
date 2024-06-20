@@ -10,9 +10,10 @@ import (
 	"strconv"
 )
 
-// A true/false value. Technically, boolean values are described using strings.
-// However, the tell, json, and generated go code all expect literal true/false values
-// wherever this bool type is detected. Therefore, only the specs need to use this type.
+// A true or false value.
+// Even though the definition here uses a string,
+// the tell loading code ( and the go generated code )
+// have shortcuts which understand how to handle unquoted ( literal ) values.
 type Bool int
 
 // The enumerated values of Bool.
@@ -45,7 +46,7 @@ var Zt_Bool = typeinfo.Str{
 		"true",
 	},
 	Markup: map[string]any{
-		"comment": []interface{}{"A true/false value. Technically, boolean values are described using strings.", "However, the tell, json, and generated go code all expect literal true/false values", "wherever this bool type is detected. Therefore, only the specs need to use this type."},
+		"comment": []interface{}{"A true or false value.", "Even though the definition here uses a string,", "the tell loading code ( and the go generated code )", "have shortcuts which understand how to handle unquoted ( literal ) values."},
 	},
 }
 
