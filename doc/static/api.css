@@ -1,4 +1,5 @@
 
+/** slots and terms header **/
 h4 {
   display: inline;
 }
@@ -20,13 +21,11 @@ h4 {
   content: "";
 }
 
-.commandTerms {
-  list-style: "- ";
+/** idl index list **/
+.indexList {
+  list-style: none;
 }
 
-ul.commandTerms {
-  margin: 0.25em;
-}
 /** str types **/ 
 ul.optionsList li {
     display: inline;
@@ -40,19 +39,3 @@ ul.optionsList li:last-child::before {
 ul.optionsList li:last-child::after {
   content: ".";
 }
-
-/** idl index list **/
-.indexList {
-  list-style: none;
-}
-
-.cmdSpec { 
-  margin-left:0px;
-  padding: 0.8rem;
-}
-
-
-.argComment p {
-  margin-block: 0.25em;
-}
-

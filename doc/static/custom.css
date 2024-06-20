@@ -4,27 +4,33 @@
 /* Light mode theming */
 :root,
 :root[color-theme="light"] {
-  --accent-color-lite: white;
-  --link-color: #518169;
-  --link-color-visited: #518169;
+  --accent-color-lite: inherit;
+  --link-color-visited:var(--link-color);
 }
 
 :root[color-theme="dark"] {
-    --link-color: #6ea8d4;
-    --link-color-visited: #6ea8d4;
+ --accent-color-lite: inherit;
+ --link-color-visited: var(--link-color);
 }
 
 @media (prefers-color-scheme: light) {
   :root {   
-    --accent-color-lite: white;
-    --link-color: #518169;
-    --link-color-visited: #518169;
+    --accent-color-lite: inherit;
+    --link-color-visited: var(--link-color);
   }
 }
 @media (prefers-color-scheme: dark) {
   :root {   
-    --link-color: #6ea8d4;
-    --link-color-visited: #6ea8d4;
+    --accent-color-lite: inherit;
+    --link-color-visited: var(--link-color);
   }
 }
 
+.gdoc-markdown table:not(.lntable):not(.highlight) tr { 
+  border-top: 1.5px solid var(--accent-color);
+}
+
+div.active > h3::before { 
+  content: '> ';
+  padding-right: 1rem;
+}
