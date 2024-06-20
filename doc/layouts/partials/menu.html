@@ -20,3 +20,24 @@ https://github.com/thegeeklab/hugo-geekdoc/blob/main/layouts/partials/menu.html
     {{ end }}
   </section>
 </nav>
+<script type="text/javascript">
+{{/*
+https://stackoverflow.com/questions/62466427/highlight-active-anchor-link-without-using-jquery 
+*/}} 
+function navHelper() {
+  // query currently active item
+  const currentActiveItem = document.querySelector('div.active');
+  // remove active class
+  if (currentActiveItem) {
+    currentActiveItem.classList.remove("active");
+  }
+  // query new active item
+  const newActiveItem = document.getElementById(window.location.hash.substring(1));
+  // add active class to new entry
+  if (newActiveItem) { 
+    newActiveItem.classList.add("active");
+  }
+}
+window.addEventListener("load", navHelper);
+window.addEventListener("hashchange", navHelper);
+</script>
