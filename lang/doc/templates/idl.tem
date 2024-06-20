@@ -47,7 +47,7 @@ summary: "{{ Snippet .Types.Comment }}"
 {{ end }}
 
 {{/* ---------- slots ----------------------- */}}
-{{ if .Types.Slot }}
+{{ if .HasPublicSlots }}
 <section>
 <h3>
   Slots:

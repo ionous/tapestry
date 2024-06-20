@@ -42,7 +42,7 @@ func (op *Address_Slots) Repeats() bool {
 var Zt_Assignment = typeinfo.Slot{
 	Name: "assignment",
 	Markup: map[string]any{
-		"comment": []interface{}{"Provides access to values in a generic way.", "For example, when the type of a value isn't known in advance.", "See also package assign. ( ex. [assign.FromBool] )"},
+		"comment": []interface{}{"Provides access to values in a generic way", "when the type of a value isn't known in advance.", "See also package assign. ( ex. [assign.FromBool] )"},
 	},
 }
 

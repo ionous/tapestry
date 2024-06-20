@@ -3,13 +3,16 @@
 # https://geekdocs.de/features/icon-sets/
 # https://geekdocs.de/usage/menus/
 more:
-
-  - name: Release History
-    ref: "https://github.com/thegeeklab/hugo-geekdoc/releases"
-    external: true
+ 
+  - name: "Releases"
+    ref: "/releases"
     icon: "gdoc_path"
 
-  - name: "View Source"
+  - name: "License"
+    ref: "/license"
+    icon: "gdoc_copy"
+
+  - name: "Source"
     ref: "https://sr.ht/~ionous/Tapestry/"
     external: true
     icon: "gdoc_git"

@@ -1,6 +1,6 @@
 // Game world modeling using Tapestry commands. These commands include the description of scenes, kinds of objects, specific nouns and their properties, the placement and relation between nouns, and so on.
 //
-// Most authors will probably prefer the jess plain english style of modeling over these, more explicit, commands. However, there are some commands -- like defining scenes -- which don't currently have a corollary within jess.
+// Most authors will probably prefer the "jess" plain English style of modeling over these more explicit commands. However, there are some commands -- like defining scenes -- which don't have a corollary within jess.
 package story
 
 //
@@ -22,7 +22,7 @@ var Zt_StoryStatement = typeinfo.Slot{
 	Markup: map[string]any{
 		"blockly-color": "VARIABLES_HUE",
 		"blockly-stack": true,
-		"comment":       "Commands for modeling a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.",
+		"comment":       "Story commands model the game world. Story files ( .tell ) are essentially just a list of story commands. Certain story commands specify slots for other types of commands including those for running scripts, parsing the player's input, and more.",
 	},
 }
 
@@ -2538,7 +2538,7 @@ var Z_Types = typeinfo.TypeSet{
 	Comment: []string{
 		"Game world modeling using Tapestry commands. These commands include the description of scenes, kinds of objects, specific nouns and their properties, the placement and relation between nouns, and so on.",
 		"",
-		"Most authors will probably prefer the jess plain english style of modeling over these, more explicit, commands. However, there are some commands -- like defining scenes -- which don't currently have a corollary within jess.",
+		"Most authors will probably prefer the \"jess\" plain English style of modeling over these more explicit commands. However, there are some commands -- like defining scenes -- which don't have a corollary within jess.",
 	},
 
 	Slot:       z_slot_list,
