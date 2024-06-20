@@ -1,5 +1,8 @@
-{{/* a page for all the slots implemented by a command */}}
-<h1>{{ Title .Slot.Name }} Slot</h1>
+---
+{{ AutoNotice }}
+title: "{{ Title .Name }}"
+summary: "{{ Snippet .Slot.Markup }}"
+---
 {{ Comment .Slot.Markup }} 
 <div>
 	Defined by idl <a href="{{ LinkByIdl .Slot.Idl }}">{{ .Slot.Idl }}</a>.

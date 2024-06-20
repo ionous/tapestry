@@ -1,3 +1,12 @@
+---
+title: Tapestry
+type: homepage
+summary: Tapestry documentation.
+params:
+  hideindex: true # w/o this, the list template will generate bad content
+---
+A story engine for games.
+
 # Premise
 
 Modern game engines -- while providing amazing support for graphics and game play -- don't have great tools for **building stories**. Game scripting is integrated deeply into the engine. Story development, while simple at the start, quickly becomes time consuming and error prone.

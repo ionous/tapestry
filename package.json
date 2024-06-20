@@ -18,7 +18,7 @@
   },
   "scripts": {
     "doc": "concurrently -m 1 -k \"npm:doc-*\"",
-    "doc-api": "go run ./cmd/tap doc -out bin/static/api",
+    "doc-build-api": "go run ./cmd/tap doc -out ./bin/docextra/api",
     "doc-schema": "go run ./cmd/tap gen -in idl -schema ./bin/static/schema/tap.schema.json",
     "doc-copy": "cp -f ./README.md ./doc/content/_index.md",
     "doc-hugo": "exec-bin ./bin/hugo/hugo -s doc -d ../bin/doc",

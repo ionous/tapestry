@@ -1,0 +1,5 @@
+---
+{{ AutoNotice }}
+geekdocCollapseSection: true
+---
+This is the list of all {{ .Title }} files.

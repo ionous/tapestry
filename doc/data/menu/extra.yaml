@@ -1,0 +1,8 @@
+---
+# this adds an icon to the nav bar
+# https://geekdocs.de/usage/menus/
+header:
+  - name: Source
+    ref: "https://sr.ht/~ionous/Tapestry/"
+    icon: gdoc_git
+    external: true

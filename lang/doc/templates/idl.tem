@@ -1,165 +1,171 @@
-<h1>{{ Title .Name }} Definitions</h1>
+---
+{{ AutoNotice }}
+title: "{{ Title .Name }}"
+summary: "{{ Snippet .Types.Comment }}"
+---
+<link type="text/css" rel="stylesheet" href="/api.css">
+
 {{ Comment .Types.Comment }} 
 
-{{/* -------------------------------------------------
-									index 
--------------------------------------------------	*/}}
-<h2>Index</h2>
-
-{{/* ---------- num -----------------------	*/}}
+<section>
+<h2>
+  Definitions:
+</h2>
+</section>
+{{/* ---------- num ----------------------- */}}
 {{ if .Types.Num  }}
 <section>
 <h3>
-	Numeric Types:
+  Numeric Types:
 </h3>
 </section>
-	<ul class="indexList">
-	{{ range .Types.Num }}
-		<li>
-			<a class="code" href="#{{ .Name }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
-		</li>
-	{{ end }}
-	</ul>
+  <ul class="indexList">
+  {{ range .Types.Num }}
+    <li>
+      <a class="code" href="#{{ .Name }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
+    </li>
+  {{ end }}
+  </ul>
 </section>
 {{ end }}
 
-{{/* ---------- str -----------------------	*/}}
+{{/* ---------- str ----------------------- */}}
 {{ if .Types.Str  }}
 <section>
 <h3>
-	String Types:
+  String Types:
 </h3>
 </section>
-	<ul class="indexList">
-	{{ range .Types.Str }}
-		<li>
-			<a class="code" href="#{{ .Name }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
-		</li>
-	{{ end }}
-	</ul>
+  <ul class="indexList">
+  {{ range .Types.Str }}
+    <li>
+      <a class="code" href="#{{ .Name }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
+    </li>
+  {{ end }}
+  </ul>
 </section>
 {{ end }}
 
-{{/* ---------- slots -----------------------	*/}}
+{{/* ---------- slots ----------------------- */}}
 {{ if .Types.Slot }}
 <section>
 <h3>
-	Slots:
+  Slots:
 </h3>
-	<ul class="indexList">
-		{{ range .Types.Slot }}{{ if not .Markup.internal }}
-		<li>
-			<a href="{{ LinkByType . }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
-		</li>
-		{{ end }}{{ end }}
-	</ul>
+  <ul class="indexList">
+    {{ range .Types.Slot }}{{ if not .Markup.internal }}
+    <li>
+      <a href="{{ LinkByType . }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
+    </li>
+    {{ end }}{{ end }}
+  </ul>
 </section>
 {{ end }}
 
-{{/* ---------- commands -----------------------	*/}}
+{{/* ---------- commands -----------------------  */}}
 {{ if .Commands }}
 <section>
 <h3>
-	Commands:
+  Commands:
 </h3>
-	<ul class="indexList">
-	{{ range  .Commands }}{{ if not .Markup.internal }}
-		<li>
-			<a class="code" href="#{{ .Name }}">{{ .Spec }}</a> {{ Snippet .Markup }}
-		</li>
-	{{ end }}{{ end }}
-	</ul>
+  <ul class="indexList">
+  {{ range  .Commands }}{{ if not .Markup.internal }}
+    <li>
+      <a class="code" href="#{{ .Name }}">{{ .Spec }}</a> {{ Snippet .Markup }}
+    </li>
+  {{ end }}{{ end }}
+  </ul>
 </section>
 {{ end }}
 
 {{/* -------------------------------------------------
-									body 
--------------------------------------------------	*/}}
-{{/* ---------- num -----------------------	*/}}
+                  body 
+------------------------------------------------- */}}
+{{/* ---------- num ----------------------- */}}
 {{ if .Types.Num  }}
 <section>
 <h1>Number Types</h1>
-	{{ range .Types.Num }}
-	<h2 id="{{ .Name }}">
-		{{ Title .Name }}</a>
-	</h2>
-	{{ Comment .Markup }}
-	{{ end }}
+  {{ range .Types.Num }}
+  <h2 id="{{ .Name }}">
+    {{ Title .Name }}</a>
+  </h2>
+  {{ Comment .Markup }}
+  {{ end }}
 </section>
 {{ end }}
 
-{{/* ---------- str -----------------------	*/}}
+{{/* ---------- str ----------------------- */}}
 {{ if .Types.Str  }}
 <section><h1>String Types</h1>
-	{{ range .Types.Str }}
-	<h2 id="{{ .Name }}">
-		{{ Title .Name }}</a>
-	</h2>
-	{{ Comment .Markup }}
-	{{ if .Options }}
-	The options are:
-		<ul class="optionsList">
-			{{ range .Options }}
-			<li>
-				"{{ . }}"
-			</li>
-			{{ end }}
-		</ul>
-	{{ end }}{{/* options */}}
-	{{ end }}
+  {{ range .Types.Str }}
+  <h2 id="{{ .Name }}">
+    {{ Title .Name }}</a>
+  </h2>
+  {{ Comment .Markup }}
+  {{ if .Options }}
+  The options are:
+    <ul class="optionsList">
+      {{ range .Options }}
+      <li>
+        "{{ . }}"
+      </li>
+      {{ end }}
+    </ul>
+  {{ end }}{{/* options */}}
+  {{ end }}
 </section>
 {{ end }}
 
 
-{{/* ---------- commands -----------------------	*/}}
+{{/* ---------- commands -----------------------  */}}
 {{ if .Commands }}
 <section>
 <h1>Commands</h1>
 {{- range $i, $cmd := .Commands }}
-	<div id="{{$cmd.Name}}">
-		<pre class="cmdSpec"><a href="{{ .SourceLink }}">
-			{{- $cmd.Spec -}}
-		</a></pre>
-	</div>
-	<div class="cmdComment">
-		{{ Comment $cmd.Markup }}
-	</div>
-	{{ if $cmd.Slots }}
-	<section>
-	<h4>Slots:</h4>
-		<ul class="commandSlots">
-			{{ range $cmd.Slots }}
-			<li><a href="{{ LinkByType . }}">{{ Pascal .Name }}</a></li>
-			{{ end }}{{/* range slots */}}
-		</ul>
-	</section>
-	{{ end }}{{/* if slots */}}
-	<section>
-	<h4>Terms:</h4>
-		{{ if not $cmd.Terms -}}None.
-		{{- else }}
-		<ul class="commandTerms">
-			{{- range $cmd.Terms }}
-			<li>
-				<span class="code">
-					{{- if .Label}}{{ Camel .Label }}{{ else }}
-					{{ Pascal $cmd.Lede }}
-					{{- end -}}:
-				</span>
-				<span class="argType">
-					<a href="{{ LinkByType .Type }}">
-						{{- Pascal .Type.TypeName -}}
-						{{- if .Repeats -}}, ...{{- end -}}
-					</a>
-				</span>
-				<span class="argComment">
-					{{- Comment .Markup }}
-				</span>
-			</li>
-			{{- end }}{{/* public terms  */}}
-		</ul>
-		{{- end }}
-	</section>
+  <div id="{{$cmd.Name}}">
+    <h3><a href="{{ .SourceLink }}">
+      {{- $cmd.Spec -}}
+    </a></h3>
+  </div>
+  <div class="cmdComment">
+    {{ Comment $cmd.Markup }}
+  </div>
+  {{ if $cmd.Slots }}
+  <section>
+  <h4>Slots:</h4>
+    <ul class="commandSlots">
+      {{ range $cmd.Slots }}
+      <li><a href="{{ LinkByType . }}">{{ Pascal .Name }}</a></li>
+      {{ end }}{{/* range slots */}}
+    </ul>
+  </section>
+  {{ end }}{{/* if slots */}}
+  <section>
+  <h4>Terms:</h4>
+    {{ if not $cmd.Terms -}}None.
+    {{- else }}
+    <ul class="commandTerms">
+      {{- range $cmd.Terms }}
+      <li>
+        <span class="code">
+          {{- if .Label}}{{ Camel .Label }}{{ else }}
+          {{ Pascal $cmd.Lede }}
+          {{- end -}}:
+        </span>
+        <span class="argType">
+          <a href="{{ LinkByType .Type }}">
+            {{- Pascal .Type.TypeName -}}
+            {{- if .Repeats -}}, ...{{- end -}}
+          </a>
+        </span>
+        <span class="argComment">
+          {{- Comment .Markup }}
+        </span>
+      </li>
+      {{- end }}{{/* public terms  */}}
+    </ul>
+    {{- end }}
+  </section>
 {{- end }}{{/* range over types */}}
 </section>
 {{ end }}

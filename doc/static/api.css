@@ -1,38 +1,6 @@
 
-.gdoc-brand__img {
-  margin-right: 1rem;
-  width: 2rem;
-  height: 2rem;
-  vertical-align: middle;
-}
-.top-heading a {
-  color: white;
-  font-family: Metropolis, sans-serif;
-  letter-spacing: 0.33px;
-  text-decoration: none;
-}
-
-div#topbar {
-  color: white;
-  background: #8AB0CD;
-  height: 4rem;
-  overflow: hidden;
-}
-
-div#footer {
-  border-top: thin solid #ccc;
-  padding-top: 1.5rem;
-  margin: 2rem;
-}
-
 h4 {
   display: inline;
-}
-
-.code {
-  min-width: 8em;
-  font-family: Menlo, monospace;
-  font-size: 0.875rem;
 }
 
 .commandSlots  {
@@ -81,14 +49,8 @@ ul.optionsList li:last-child::after {
 .cmdSpec { 
   margin-left:0px;
   padding: 0.8rem;
-  background: #E0EBF5;
 }
 
-div.cmdComment pre {
-  background-color:  #394955;
-  border-left: solid thin grey;
-  color: whitesmoke;
-}
 
 .argComment p {
   margin-block: 0.25em;

@@ -1,0 +1,22 @@
+{{/*
+branched from the theme's version in order to add a "Home" button
+
+https://github.com/thegeeklab/hugo-geekdoc/blob/main/layouts/partials/menu.html
+*/}}
+<nav>
+  {{ partial "search" . }}
+
+  <section class="gdoc-nav--main">
+    <span>{{ partial "icon" "gdoc_home" }} <a href="/" class="gdoc-nav__entry"><b>Home</b></a></span>
+    <p></p>
+
+      {{ partial "menu-filetree" . }}
+  </section>
+
+  <section class="gdoc-nav--more">
+    {{ if .Site.Data.menu.more.more }}
+      <h2>{{ i18n "nav_more" }}</h2>
+      {{ partial "menu-bundle" (dict "current" . "source" .Site.Data.menu.more.more) }}
+    {{ end }}
+  </section>
+</nav>

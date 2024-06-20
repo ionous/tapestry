@@ -1,7 +1,13 @@
-<h1>API Reference</h1>
+---
+{{ AutoNotice }}
+title: "API Reference"
+weight: 500 # keep below all the regular pages
+params:
+  hideindex: true # w/o this, the list template will generate bad content
+---
 
 <p>
-You've found the documentation for the commands used in <i>.tell</i> story files. For the Go language reference, see <a href="{{ .SourceUrl }}">pkg.go.dev</a>. For more descriptive documentation, see the <a href="/">Tapestry guide.</a>
+This documents the commands used in <code>.tell</code> story files. For the Go language reference, see <a href="{{ .SourceUrl }}">pkg.go.dev</a>
 
 <section>
 <h2>Slots</h2>

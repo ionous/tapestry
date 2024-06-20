@@ -1,0 +1,15 @@
+---
+# this adds extra items to the nav menu
+# https://geekdocs.de/features/icon-sets/
+# https://geekdocs.de/usage/menus/
+more:
+
+  - name: Release History
+    ref: "https://github.com/thegeeklab/hugo-geekdoc/releases"
+    external: true
+    icon: "gdoc_path"
+
+  - name: "View Source"
+    ref: "https://sr.ht/~ionous/Tapestry/"
+    external: true
+    icon: "gdoc_git"
