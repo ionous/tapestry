@@ -3,7 +3,6 @@ package cmdweave
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"io/fs"
 	"log"
@@ -17,27 +16,40 @@ import (
 )
 
 func runWeave(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	log.Println("reading:", weaveFlags.stories)
-	log.Println("writing:", weaveFlags.outFile)
-
-	stories := os.DirFS(weaveFlags.stories)
-	shared := os.DirFS(weaveFlags.shared) // use the embedded stdlib if the shared folder doesn't exist
-	if _, e := fs.Stat(shared, "."); errors.Is(e, fs.ErrNotExist) {
-		shared = content.Shared
+	var paths []fs.FS
+	if pathExists(weaveFlags.shared) {
+		paths = append(paths, os.DirFS(weaveFlags.shared))
+		log.Println("reading:", weaveFlags.shared)
+	} else {
+		paths = append(paths, content.Shared) // use the embedded stdlib if the shared folder doesn't exist
+		log.Println("using shared static content")
 	}
+	if pathExists(weaveFlags.stories) {
+		log.Println("reading:", weaveFlags.stories)
+		paths = append(paths, os.DirFS(weaveFlags.shared))
+	}
+
 	if outFile, e := filepath.Abs(weaveFlags.outFile); e != nil {
 		err = e
-	} else if e := WeavePaths(outFile, shared, stories); e != nil {
-		err = e
-	} else if weaveFlags.checkAll || len(weaveFlags.checkOne) > 0 {
-		opt := qna.NewOptions()
-		if cnt, e := cmdcheck.CheckFile(outFile, weaveFlags.checkOne, opt); e != nil {
+	} else {
+		log.Println("writing:", outFile)
+		if e := WeavePaths(outFile, paths...); e != nil {
 			err = e
-		} else {
-			log.Println("Checked", cnt, outFile)
+		} else if weaveFlags.checkAll || len(weaveFlags.checkOne) > 0 {
+			opt := qna.NewOptions()
+			if cnt, e := cmdcheck.CheckFile(outFile, weaveFlags.checkOne, opt); e != nil {
+				err = e
+			} else {
+				log.Println("Checked", cnt, outFile)
+			}
 		}
 	}
 	return
+}
+
+func pathExists(str string) bool {
+	stat, e := os.Stat(str)
+	return e == nil && stat.IsDir()
 }
 
 var CmdWeave = &base.Command{

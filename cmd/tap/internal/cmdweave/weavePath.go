@@ -113,7 +113,7 @@ func importDir(cat *weave.Catalog, fsys fs.FS, dirs []string) (err error) {
 				err = importDir(cat, fsys, append(dirs, name))
 			} else {
 				if shortName, ext := files.SplitExt(name); ext.Story() {
-					fullpath := path.Join(name)
+					fullpath := path.Join(dir, name)
 					if fp, e := fsys.Open(fullpath); e != nil {
 						err = e
 					} else {
