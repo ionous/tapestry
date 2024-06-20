@@ -22,3 +22,4 @@ doc/.hugo_build.lock
 doc/themes
 www/dist
 *.zip
+.DS_Store

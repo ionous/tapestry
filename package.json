@@ -18,6 +18,7 @@
   },
   "scripts": {
     "doc": "concurrently -m 1 -k \"npm:doc-*\"",
+    "doc-gen": "go run ./cmd/tap gen -in ./idl -out ./dl",
     "doc-build-api": "go run ./cmd/tap doc -out ./bin/docextra/api",
     "doc-schema": "go run ./cmd/tap gen -in idl -schema ./bin/static/schema/tap.schema.json",
     "doc-copy": "cp -f ./README.md ./doc/content/_index.md",
@@ -25,8 +26,12 @@
     "doc-tar": "tar -C ./bin/doc -cvz . > ./bin/site.tar.gz",
     "publish": "hut pages publish -d tapestry.ionous.net ./bin/site.tar.gz",
     "mosaic": "npm run -w www dev",
-    "hugo": "exec-bin ./bin/hugo/hugo server -s doc -d ../bin/doc",
-    "postinstall": "hugo-installer --version 0.125.7"
+    "hugo": "exec-bin ./bin/hugo/hugo server -s ./doc -d ../bin/doc",
+    "postinstall": "concurrently -m 1 -k \"npm:post-*\"",
+    "post-hugo": "hugo-installer --version 0.125.7",
+    "post-theme-1": "mkdir -p ./doc/themes/hugo-geekdoc/",
+    "post-theme-2": "curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/download/v0.45.0/hugo-geekdoc.tar.gz | tar -xz -C ./doc/themes/hugo-geekdoc/ --strip-components=1"
+
   },
   "version": "1.0.0",
   "workspaces": [
