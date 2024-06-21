@@ -2,10 +2,19 @@
   "name": "wasm",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "serve": "serve"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "http-server -g",
+    "build-wasm": "GOOS=js GOARCH=wasm go build -o ./public/tap.wasm ./wasm.go"
   },
   "dependencies": {
-    "serve": "^14.2.3"
+    "vue": "^3.4.29"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "vite": "^5.3.1"
   }
 }

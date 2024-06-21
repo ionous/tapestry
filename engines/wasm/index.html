@@ -1,13 +1,22 @@
-<html>
-    <head>
-        <meta charset="utf-8"/>
-        <script src="wasm_exec.js"></script>
-        <script>
-            const go = new Go();
-            WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
-                go.run(result.instance);
-            });
-        </script>
-    </head>
-    <body></body>
-</html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/catalog/catalog.css">
+    <link rel="stylesheet" href="/play/play.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tapestry</title>
+    <script src="/wasm_exec.js"></script>
+    <script>
+        const go = new Go();
+        WebAssembly.instantiateStreaming(fetch("/tap.wasm"), go.importObject).then((result) => {
+            go.run(result.instance);
+        });
+    </script>
+</head>
+ <body>
+    <div id="play" class="lv-play"></div>
+    <script type="module" src="/play/play.js"></script>
+  </body>
+</html> 

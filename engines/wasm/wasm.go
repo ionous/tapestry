@@ -1,6 +1,12 @@
 // Experimental wasm version
-// use `npm run wasm` to build
-// or GOOS=js GOARCH=wasm go build -o main.wasm wasm.go
+//
+// use `npm run wasm-build` to build
+// use `npm run wasm-serve` to serve
+//
+// https://go.dev/wiki/WebAssembly
+// https://codeberg.org/meta/gzipped
+// can strip symbols with -ldflags='-s -w'
+// can compress and .gz files will be served by http-server
 package main
 
 import (

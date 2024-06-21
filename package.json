@@ -30,7 +30,7 @@
     "post-hugo": "hugo-installer --version 0.125.7",
     "post-theme-1": "mkdir -p ./doc/themes/hugo-geekdoc/",
     "post-theme-2": "curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/download/v0.45.0/hugo-geekdoc.tar.gz | tar -xz -C ./doc/themes/hugo-geekdoc/ --strip-components=1",
-    "wasm": "GOOS=js GOARCH=wasm go build --o ./engines/wasm/main.wasm ./engines/wasm/wasm.go",
+    "wasm-build": "npm run -w wasm wasm",
     "wasm-serve": "npm run -w wasm serve"
   },
   "version": "1.0.0",
