@@ -3,13 +3,14 @@ package qna
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"github.com/ionous/errutil"
 )
 
 // get the rules from the cache, or build them and add them to the cache
 func (run *Runner) getRules(pat string) (ret pattern.RuleSet, err error) {
-	key := makeKey("rules", pat, "")
-	if c, e := run.constVals.ensure(key, func() (any, error) {
+	key := query.MakeKey("rules", pat, "")
+	if c, e := run.constVals.Ensure(key, func() (any, error) {
 		return run.buildRules(pat)
 	}); e != nil {
 		err = e

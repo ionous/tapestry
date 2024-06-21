@@ -7,8 +7,8 @@ import (
 
 // given an id, return the (a) name defined for it by the author
 func (run *Runner) getObjectName(id string) (ret string, err error) {
-	key := makeKey("objectName", id, "")
-	if c, e := run.constVals.ensure(key, func() (ret any, err error) {
+	key := query.MakeKey("objectName", id, "")
+	if c, e := run.constVals.Ensure(key, func() (ret any, err error) {
 		ret, err = run.query.NounName(id)
 		return
 	}); e != nil {
@@ -21,8 +21,8 @@ func (run *Runner) getObjectName(id string) (ret string, err error) {
 
 // given an id, return the names defined for it by the author
 func (run *Runner) getObjectNames(id string) (ret []string, err error) {
-	key := makeKey("objectAliases", id, "")
-	if c, e := run.constVals.ensure(key, func() (ret any, err error) {
+	key := query.MakeKey("objectAliases", id, "")
+	if c, e := run.constVals.Ensure(key, func() (ret any, err error) {
 		ret, err = run.query.NounNames(id)
 		return
 	}); e != nil {
@@ -35,8 +35,8 @@ func (run *Runner) getObjectNames(id string) (ret []string, err error) {
 
 // given an object name, return its id and kind.
 func (run *Runner) getObjectInfo(name string) (ret query.NounInfo, err error) {
-	key := makeKey("objectInfo", name, "")
-	if c, e := run.constVals.ensure(key, func() (ret any, err error) {
+	key := query.MakeKey("objectInfo", name, "")
+	if c, e := run.constVals.Ensure(key, func() (ret any, err error) {
 		if info, e := run.query.NounInfo(name); e != nil {
 			err = e
 		} else if !info.IsValid() {

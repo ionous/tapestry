@@ -79,9 +79,9 @@ func (run *Runner) writeNounValue(obj query.NounInfo, field rt.Field, val rt.Val
 	if aff := val.Affinity(); aff != field.Affinity {
 		err = errutil.Fmt(`mismatched affinity "%s.%s(%s)" writing %s`, obj, field.Name, field.Affinity, aff)
 	} else {
-		key := makeKey(obj.Domain, obj.Id, field.Name)
+		key := query.MakeKey(obj.Domain, obj.Id, field.Name)
 		userVal := UserValue{rt.CopyValue(val)}
-		run.dynamicVals.store[key] = userVal
+		run.dynamicVals.Store(key, userVal)
 	}
 	return
 }
@@ -89,11 +89,11 @@ func (run *Runner) writeNounValue(obj query.NounInfo, field rt.Field, val rt.Val
 // return the (cached) value of a noun's field
 // if the noun's field contains an assignment it's evaluated each time.
 func (run *Runner) readNounValue(obj query.NounInfo, ft rt.Field) (ret rt.Value, err error) {
-	key := makeKey(obj.Domain, obj.Id, ft.Name)
+	key := query.MakeKey(obj.Domain, obj.Id, ft.Name)
 
 	// kind of ugly: first ensure its in the cache
 	// by generating a Value or Assignment
-	if _, e := run.dynamicVals.ensure(key, func() (ret any, err error) {
+	if _, e := run.dynamicVals.Ensure(key, func() (ret any, err error) {
 		// a record can have multiple path/values
 		if vs, e := run.query.NounValues(obj.Id, ft.Name); e != nil {
 			err = e

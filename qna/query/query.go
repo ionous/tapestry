@@ -64,6 +64,10 @@ type Query interface {
 	ReciprocalsOf(rel, id string) ([]string, error)
 	RelativesOf(rel, id string) ([]string, error)
 	Relate(rel, noun, otherNoun string) error
+	//
+	LoadGame(path string) (CacheMap, error)
+	SaveGame(path string, dynamicValues CacheMap) error
+	Random(inclusiveMin, exclusiveMax int) int
 }
 
 func (n *NounInfo) IsValid() bool {

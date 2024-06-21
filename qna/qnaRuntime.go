@@ -1,12 +1,10 @@
 package qna
 
 import (
-	"database/sql"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -25,44 +23,35 @@ type Notifier struct {
 	ChangedRelative func(a, b, rel string)
 }
 
-func NewRuntime(db *sql.DB, d decoder.Decoder) (*Runner, error) {
-	return NewRuntimeOptions(db, d, NewOptions())
+func NewRuntime(q query.Query, d decoder.Decoder) *Runner {
+	return NewRuntimeOptions(q, d, NewOptions())
 }
 
-func NewRuntimeOptions(db *sql.DB, d decoder.Decoder, opt Options) (ret *Runner, err error) {
+func NewRuntimeOptions(q query.Query, d decoder.Decoder, opt Options) *Runner {
 	cacheErrors := opt.cacheErrors()
-	if q, e := qdb.NewQueries(db); e != nil {
-		err = e
-	} else {
-		if d == nil {
-			d = decoder.DecodeNone("unsupported decoder")
-		}
-		ret = &Runner{
-			db:          db,
-			query:       q,
-			decode:      d,
-			constVals:   makeCache(cacheErrors),
-			dynamicVals: dynamicVals{makeCache(cacheErrors)},
-			options:     opt,
-			scope:       scope.Chain{Scope: scope.Empty{}},
-			rand:        RandomizedTime(),
-		}
-		ret.SetWriter(log.Writer())
+	if d == nil {
+		d = decoder.DecodeNone("unsupported decoder")
 	}
-	return
+	return &Runner{
+		query:       q,
+		decode:      d,
+		constVals:   query.MakeCache(cacheErrors),
+		dynamicVals: query.MakeCache(cacheErrors),
+		options:     opt,
+		scope:       scope.Chain{Scope: scope.Empty{}},
+		Sink:        writer.Sink{Output: log.Writer()},
+	}
 }
 
 // an implementation of rt.Runtime
 type Runner struct {
-	db              *sql.DB         // mdl and rt databases
 	query           query.Query     // various helpful db queries
 	decode          decoder.Decoder // helper to interpret db binary data
 	notify          Notifier        // callbacks to listen for changes
-	constVals       cache           // readonly info cached from the db
-	dynamicVals     dynamicVals     // noun values and counters
+	constVals       query.Cache     // readonly info cached from the db
+	dynamicVals     query.Cache     // noun values and counters
 	options         Options         // runtime customization
 	scope           scope.Chain     // meta.Variable lookup
-	rand            Randomizer      // random number generator
 	writer.Sink                     // target for game output
 	currentPatterns                 // stack of patterns currently in progress
 }
@@ -72,7 +61,7 @@ func (run *Runner) SetNotifier(n Notifier) {
 }
 
 func (run *Runner) Random(inclusiveMin, exclusiveMax int) int {
-	return run.rand.Random(inclusiveMin, exclusiveMax)
+	return run.query.Random(inclusiveMin, exclusiveMax)
 }
 
 func (run *Runner) reportError(e error) error {
@@ -94,9 +83,9 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 				notify(ends)
 			}
 		}
-		run.constVals.reset() // fix? focus cache clear to just the domains that became inactive?
+		run.constVals.Reset() // fix? focus cache clear to just the domains that became inactive?
 		if len(domain) == 0 {
-			run.dynamicVals.reset()
+			run.dynamicVals.Reset()
 		}
 		if len(begins) > 0 {
 			if e := run.domainChanged(begins, "begins"); e != nil {

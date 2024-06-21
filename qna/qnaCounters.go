@@ -2,13 +2,14 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"github.com/ionous/errutil"
 )
 
-func counterKey(name string) qkey {
-	return makeKey("", meta.Counter, name)
+func counterKey(name string) query.Key {
+	return query.MakeKey("", meta.Counter, name)
 }
 
 // returns 0 if the counter doesnt exist
@@ -30,7 +31,7 @@ func (run *Runner) setCounter(name string, val rt.Value) (err error) {
 		err = errutil.Fmt("counter %q expected a number got %s", name, aff)
 	} else {
 		key := counterKey(name) // no need to copy: numbers are primitives
-		run.dynamicVals.store[key] = UserValue{val}
+		run.dynamicVals.Store(key, UserValue{val})
 	}
 	return
 }

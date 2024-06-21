@@ -14,7 +14,8 @@ import (
 
 // Read various data from the play database.
 type Query struct {
-	db *sql.DB
+	db   *sql.DB
+	rand query.Randomizer
 	activeDomains,
 	domainActivate,
 	domainChange,
@@ -286,10 +287,15 @@ func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
 	return
 }
 
-func NewQueries(db *sql.DB) (ret *Query, err error) {
+func NewQueries(db *sql.DB) (*Query, error) {
+	return NewQueryOptions(db, query.RandomizedTime())
+}
+
+func NewQueryOptions(db *sql.DB, rand query.Randomizer) (ret *Query, err error) {
 	var ps tables.Prep
 	q := &Query{
-		db: db,
+		db:   db,
+		rand: rand,
 		activeDomains: ps.Prep(db,
 			`select domain 
 			from active_domains

@@ -7,7 +7,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/files"
-	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 // produces undefined results if called in the middle of a turn
@@ -15,23 +14,10 @@ import (
 func (run *Runner) SaveGame(scene string) (ret string, err error) {
 	if saveDir, e := getSaveDir(run); e != nil {
 		err = e
-	} else if e := writeValues(run.db, func(w writeCb) (err error) {
-		if e := run.rand.writeRandomizeer(w); e != nil {
-			err = e
-		} else if e := run.dynamicVals.writeValues(w); e != nil {
-			err = e
-		}
-		return
-	}); e != nil {
-		err = e
 	} else {
 		name := files.NameWithTime(scene, files.SaveFileExtension)
 		outPath := filepath.Join(saveDir, name)
-		if e := tables.SaveFile(outPath, false, run.db); e != nil {
-			err = e
-		} else {
-			ret = outPath
-		}
+		err = run.query.SaveGame(outPath, run.dynamicVals.CacheMap)
 	}
 	return
 }
@@ -52,15 +38,6 @@ func (run *Runner) LoadGame(scene string) (ret string, err error) {
 				err = fmt.Errorf("%w for %s", err, outPath)
 			}
 		}()
-		if e := tables.LoadFile(run.db, outPath); e != nil {
-			err = e
-		} else if e := run.dynamicVals.readValues(run.db); e != nil {
-			err = e
-		} else if e := run.rand.readRandomizer(run.db); e != nil {
-			err = e
-		} else {
-			ret = outPath
-		}
 	}
 	return
 }

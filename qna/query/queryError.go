@@ -82,3 +82,19 @@ func (q QueryNone) RelativesOf(rel, id string) (_ []string, _ error) {
 func (q QueryNone) Relate(rel, noun, otherNoun string) error {
 	return NotImplemented(q)
 }
+
+// Random implements Query.
+func (q QueryNone) Random(inclusiveMin int, exclusiveMax int) int {
+	return inclusiveMin
+}
+
+// LoadGame implements Query.
+func (q QueryNone) LoadGame(path string) (ret CacheMap, err error) {
+	err = NotImplemented(q)
+	return
+}
+
+// SaveGame implements Query.
+func (q QueryNone) SaveGame(path string, dynamicValues CacheMap) error {
+	return NotImplemented(q)
+}
