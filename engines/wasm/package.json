@@ -1,0 +1,11 @@
+{
+  "name": "wasm",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "serve": "serve"
+  },
+  "dependencies": {
+    "serve": "^14.2.3"
+  }
+}
