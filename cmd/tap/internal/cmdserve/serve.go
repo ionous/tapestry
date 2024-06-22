@@ -2,6 +2,7 @@ package cmdserve
 
 import (
 	"context"
+	"database/sql"
 	"io"
 	"log"
 	"net/http"
@@ -9,16 +10,24 @@ import (
 	"net/url"
 	"strconv"
 
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/support/shuttle"
+	"git.sr.ht/~ionous/tapestry/qna/decode"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/support/play"
+	"git.sr.ht/~ionous/tapestry/support/player"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web"
 )
 
 func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int) (ret int, err error) {
-	if ctx, e := shuttle.NewShuttle(inFile, opts); e != nil {
+	if db, e := tables.CreateRunTime(inFile); e != nil {
+		err = e
+	} else if ctx, e := makeShuttle(db, opts); e != nil {
 		err = e
 	} else {
-		defer ctx.Close()
+		defer db.Close()
 		mux := http.NewServeMux()
 		// our main command service:
 		mux.HandleFunc("/shuttle/", newServer("shuttle", ctx))
@@ -30,6 +39,23 @@ func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int
 		// note: on windows the localhost is required in order to avoid the windows firewall popup
 		where := "localhost:" + strconv.Itoa(listenTo)
 		err = http.ListenAndServe(where, mux)
+	}
+	return
+}
+
+func makeShuttle(db *sql.DB, opts qna.Options) (ret *frame.Shuttle, err error) {
+	// fix: merge with others and put in package player?
+	decoder := decode.NewDecoder(tapestry.AllSignatures)
+	if grammar, e := player.MakeGrammar(db); e != nil {
+		err = e
+	} else if q, e := qdb.NewQueries(db); e != nil {
+		err = e
+	} else {
+		run := qna.NewRuntimeOptions(q, decoder, opts)
+		survey := play.MakeDefaultSurveyor(run)
+		pt := play.NewPlaytime(run, survey, grammar)
+		play.CaptureInput(pt)
+		ret = frame.NewShuttle(pt, decoder)
 	}
 	return
 }
@@ -53,7 +79,7 @@ func proxyToVite(mux *http.ServeMux, port int) {
 	})
 }
 
-func newServer(path string, ctx shuttle.Shuttle) http.HandlerFunc {
+func newServer(path string, ctx *frame.Shuttle) http.HandlerFunc {
 	return web.HandleResource(&web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
 			if name == path {

@@ -60,3 +60,6 @@ func (PanicRuntime) Writer() io.Writer {
 func (PanicRuntime) Random(inclusiveMin, exclusiveMax int) int {
 	panic("Runtime panic")
 }
+func (PanicRuntime) SetNotifier(rt.Notifier) rt.Notifier {
+	panic("Runtime panic")
+}

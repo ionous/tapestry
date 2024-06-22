@@ -15,14 +15,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Callbacks to listen for system level changes
-type Notifier struct {
-	StartedScene    func(domains []string)
-	EndedScene      func(domains []string)
-	ChangedState    func(noun, aspect, oldState, newState string)
-	ChangedRelative func(a, b, rel string)
-}
-
 func NewRuntime(q query.Query, d decoder.Decoder) *Runner {
 	return NewRuntimeOptions(q, d, NewOptions())
 }
@@ -47,7 +39,7 @@ func NewRuntimeOptions(q query.Query, d decoder.Decoder, opt Options) *Runner {
 type Runner struct {
 	query           query.Query     // various helpful db queries
 	decode          decoder.Decoder // helper to interpret db binary data
-	notify          Notifier        // callbacks to listen for changes
+	notify          rt.Notifier     // callbacks to listen for changes
 	constVals       query.Cache     // readonly info cached from the db
 	dynamicVals     query.Cache     // noun values and counters
 	options         Options         // runtime customization
@@ -56,8 +48,10 @@ type Runner struct {
 	currentPatterns                 // stack of patterns currently in progress
 }
 
-func (run *Runner) SetNotifier(n Notifier) {
+func (run *Runner) SetNotifier(n rt.Notifier) (prev rt.Notifier) {
+	prev = run.notify
 	run.notify = n
+	return
 }
 
 func (run *Runner) Random(inclusiveMin, exclusiveMax int) int {

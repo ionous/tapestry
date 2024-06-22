@@ -34,7 +34,7 @@ func PlayWithOptions(mdlFile, testString, scene string, opts qna.Options) (err e
 		err = e
 	} else {
 		defer db.Close()
-		if grammar, e := play.MakeGrammar(db); e != nil {
+		if grammar, e := MakeGrammar(db); e != nil {
 			err = e
 		} else if q, e := qdb.NewQueries(db); e != nil {
 			err = e

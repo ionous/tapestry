@@ -1,8 +1,8 @@
-package shuttle
+package frame
 
 // Destinations for POST
-// ( different State(s) may respond to in different ways to the same endpoint
-//  not very RESTful... fine for now )
+// the same endpoint may respond in different ways depending on the game State(s)
+//
 //go:generate stringer -type=Endpoint -linecomment
 type Endpoint int
 

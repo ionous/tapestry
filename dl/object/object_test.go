@@ -36,55 +36,55 @@ func TestObjectCommands(t *testing.T) {
 	nothing := object.Object("nothing")
 
 	t.Run("exists", func(t *testing.T) {
-		if e := testTrue(t, &run, this); e != nil {
+		if e := testTrue(&run, this); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &logic.Not{Test: nothing}); e != nil {
+		if e := testTrue(&run, &logic.Not{Test: nothing}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &math.CompareText{
+		if e := testTrue(&run, &math.CompareText{
 			A: &object.KindOf{Target: this}, Compare: math.C_Comparison_EqualTo, B: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &math.CompareText{
+		if e := testTrue(&run, &math.CompareText{
 			A: &object.KindOf{Target: that}, Compare: math.C_Comparison_EqualTo, B: derived}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("is_kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &object.IsKindOf{Target: this, KindName: base}); e != nil {
+		if e := testTrue(&run, &object.IsKindOf{Target: this, KindName: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &object.IsKindOf{Target: that, KindName: base}); e != nil {
+		if e := testTrue(&run, &object.IsKindOf{Target: that, KindName: base}); e != nil {
 			t.Fatal(e)
 		}
 
-		if e := testTrue(t, &run, &object.IsKindOf{Target: that, KindName: derived}); e != nil {
+		if e := testTrue(&run, &object.IsKindOf{Target: that, KindName: derived}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &logic.Not{Test: &object.IsKindOf{Target: this, KindName: derived}}); e != nil {
+		if e := testTrue(&run, &logic.Not{Test: &object.IsKindOf{Target: this, KindName: derived}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("is_exact_kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &object.IsExactKindOf{Target: this, KindName: base}); e != nil {
+		if e := testTrue(&run, &object.IsExactKindOf{Target: this, KindName: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &logic.Not{Test: &object.IsExactKindOf{Target: that, KindName: base}}); e != nil {
+		if e := testTrue(&run, &logic.Not{Test: &object.IsExactKindOf{Target: that, KindName: base}}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &object.IsExactKindOf{Target: that, KindName: derived}); e != nil {
+		if e := testTrue(&run, &object.IsExactKindOf{Target: that, KindName: derived}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &logic.Not{Test: &object.IsExactKindOf{Target: this, KindName: derived}}); e != nil {
+		if e := testTrue(&run, &logic.Not{Test: &object.IsExactKindOf{Target: this, KindName: derived}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 }
 
-func testTrue(t *testing.T, run rt.Runtime, eval rt.BoolEval) (err error) {
+func testTrue(run rt.Runtime, eval rt.BoolEval) (err error) {
 	if ok, e := safe.GetBool(run, eval); e != nil {
 		err = e
 	} else if !ok.Bool() {

@@ -1,13 +1,22 @@
+function objField(obj, field) {
+  return {
+    "Object:dot:": [ 
+      obj, {
+        "At field:": field
+      }
+    ]
+  }
+}
 // queries for title, score, etc.
 const locationOfPlayer = {
   "FromText:": {
     "Determine:args:": [
-      "location_of", {
+      "location_of",
+      {
         "Arg:from:": [
-          "obj", {
-            "FromText:": {
-              "Object:field:": ["story", "actor"]
-            }
+          "obj",
+          {
+            "FromText:": objField("story", "actor")
           }
         ]
       }
@@ -19,7 +28,8 @@ export default {
   currentObjects: {
     "FromRecord:": {
       "Determine:args:": [
-        "collect_objects", {
+        "collect_objects",
+        {
           "Arg:from:": [
             "obj", locationOfPlayer
           ]
@@ -30,17 +40,21 @@ export default {
   currentScore: {
     "FromNumber:": {
       "Num if:then:else:": [
-        { "Is domain:": "scoring" },
-        {"Object:field:": ["story", "score"]},
+        {
+          "Is scene:": "scoring"
+        }, 
+        objField("story", "score"),
         -1
       ]
     }
   },
-  currentTurn:{
+  currentTurn: {
     "FromNumber:": {
       "Num if:then:else:": [
-        { "Is domain:": "scoring" },
-        {"Object:field:": ["story", "turn count"]},
+        {
+          "Is scene:": "scoring"
+        },
+        objField("story", "turn count"),
         -1
       ]
     }
@@ -57,21 +71,20 @@ export default {
     // it'd help if we could use the implicit pattern call decoder :/
     // maybe change "print name" to some "get name"
     // and, if possible, get rid of From(s)
-      "FromText:": {
-        "Buffers do:": {
-          "Determine:args:": [
-            "print_name", {
-              "Arg:from:": [
-                "obj",  locationOfPlayer
-              ]
-            }
-          ]
-        }
-      }
-   },
-   storyTitle: {
     "FromText:": {
-      "Object:field:": ["story", "title"]
+      "Buffers:": {
+        "Determine:args:": [
+          "print_name",
+          {
+            "Arg:from:": [
+              "obj",  locationOfPlayer
+            ]
+          }
+        ]
+      }
     }
+  },
+   storyTitle: {
+    "FromText:": objField("story", "title")
   }
 }

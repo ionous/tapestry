@@ -30,8 +30,12 @@
     "post-hugo": "hugo-installer --version 0.125.7",
     "post-theme-1": "mkdir -p ./doc/themes/hugo-geekdoc/",
     "post-theme-2": "curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/download/v0.45.0/hugo-geekdoc.tar.gz | tar -xz -C ./doc/themes/hugo-geekdoc/ --strip-components=1",
-    "wasm-build": "npm run -w wasm wasm",
-    "wasm-serve": "npm run -w wasm serve"
+    "wasm-serve": "npm run -w wasm dev",
+    "build": "concurrently -m 1 -k \"npm:build-*\"",
+    "build-go": "go build ./...",
+    "build-tap": "go build ./cmd/tap",
+    "build-wasm": "npm run -w wasm build-wasm",
+    "build-godot": "go build -C ./engines/godot/ext/src -o taplib.so -buildmode=c-shared taplib.go"
   },
   "version": "1.0.0",
   "workspaces": [

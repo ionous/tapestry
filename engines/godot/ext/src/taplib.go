@@ -4,15 +4,22 @@ package main
 import "C"
 
 import (
+	"database/sql"
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime/debug"
 	"strings"
 	"unsafe"
 
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/support/shuttle"
-	"github.com/ionous/errutil"
+	"git.sr.ht/~ionous/tapestry/qna/decode"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/support/play"
+	"git.sr.ht/~ionous/tapestry/support/player"
+	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 //export Post
@@ -33,13 +40,13 @@ func Post(endpoint, msg string) (ret *C.char) {
 func post(endpoint, msg string) (ret string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			err = errutil.Fmt("Recovered %s:\n%s", r, debug.Stack())
+			err = fmt.Errorf("Recovered %s:\n%s", r, debug.Stack())
 		}
 	}()
 	var buf strings.Builder
-	if n, e := getShuttle(); e != nil {
+	if c, e := getShuttle(); e != nil {
 		err = e
-	} else if e := n.Post(&buf, endpoint, []byte(msg)); e != nil {
+	} else if e := c.Post(&buf, endpoint, []byte(msg)); e != nil {
 		err = e
 	} else {
 		ret = buf.String()
@@ -51,7 +58,7 @@ func post(endpoint, msg string) (ret string, err error) {
 func main() {}
 
 // fix: defer ctx.Close()
-func getShuttle() (ret *shuttle.Shuttle, err error) {
+func getShuttle() (ret *frame.Shuttle, err error) {
 	if savedCtx != nil {
 		ret = savedCtx
 	} else {
@@ -59,15 +66,33 @@ func getShuttle() (ret *shuttle.Shuttle, err error) {
 		if home, e := os.UserHomeDir(); e == nil {
 			inFile = filepath.Join(home, "Documents", "Tapestry", "build", "play.db")
 		}
-		if n, e := shuttle.NewShuttle(inFile, qna.NewOptions()); e != nil {
+		if db, e := tables.CreateRunTime(inFile); e != nil {
+			err = e
+		} else if c, e := makeShuttle(db, qna.NewOptions()); e != nil {
 			err = e
 		} else {
-			savedCtx = &n
+			savedCtx = c
 			ret = savedCtx
 		}
 	}
 	return
 }
 
-var savedCtx *shuttle.Shuttle
+func makeShuttle(db *sql.DB, opts qna.Options) (ret *frame.Shuttle, err error) {
+	decoder := decode.NewDecoder(tapestry.AllSignatures)
+	if grammar, e := player.MakeGrammar(db); e != nil {
+		err = e
+	} else if q, e := qdb.NewQueries(db); e != nil {
+		err = e
+	} else {
+		run := qna.NewRuntimeOptions(q, decoder, opts)
+		survey := play.MakeDefaultSurveyor(run)
+		pt := play.NewPlaytime(run, survey, grammar)
+		play.CaptureInput(pt)
+		ret = frame.NewShuttle(pt, decoder)
+	}
+	return
+}
+
+var savedCtx *frame.Shuttle
 var lastResult unsafe.Pointer

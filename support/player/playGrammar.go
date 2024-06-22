@@ -1,4 +1,4 @@
-package play
+package player
 
 import (
 	"database/sql"

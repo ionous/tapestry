@@ -8,12 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tapestry</title>
     <script src="/wasm_exec.js"></script>
-    <script>
-        const go = new Go();
-        WebAssembly.instantiateStreaming(fetch("/tap.wasm"), go.importObject).then((result) => {
-            go.run(result.instance);
-        });
-    </script>
 </head>
  <body>
     <div id="play" class="lv-play"></div>

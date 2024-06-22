@@ -7,7 +7,12 @@ export default function(url, cb) {
                new Wasm(cb) : 
                new Http(url, cb);
    return {
-    post: io.post,
+    // assumes an endpoint and some data for that endpoint
+    // ex. the query endpoint takes an array of json commands
+    post: io.post.bind(io),
+    // assumes an array of alternating commands and callbacks.
+    // [n]   = a tapestry command ( not serialized yet )
+    // [n+1] = the callback to process that result of that command.
     query(...msgCalls) {
       if (msgCalls & 1) {
         throw new Error("expected an equal number of queries and calls");
@@ -23,15 +28,26 @@ export default function(url, cb) {
       // send an array of send; expects an array back.
       return io.post("query", sends, calls);
     }
-   }
+  }
 }
 
 class Wasm {
   constructor(msgcb) {
-     this.msgcb= msgcb;
+    if (!tapestry) {
+      throw Error("couldn't find the global tapestry object");
+    }
+    this.tapestry= tapestry;
+    this.msgcb= msgcb;
   }
-  post(endpoint, send, calls) {
-    return new Promise(() => {});
+  // data is some pod-like json data.
+  // calls is a matching array of callbacks for those commands
+  post(endpoint, data, calls) {
+    const send = JSON.stringify(data);
+    return this.tapestry.post(endpoint, send).then((frames) => {
+      return this.msgcb(frames, calls || []);
+    }).catch((e)  => {
+      console.warn("io error", e);
+    });
   }
 };
 
