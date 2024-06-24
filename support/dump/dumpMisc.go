@@ -4,13 +4,14 @@ import (
 	"database/sql"
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 // fix? this is a little different than the way the normal player works
 // this includes kinds
-func QueryPlurals(db *sql.DB, scene string) (ret []Plural, err error) {
-	var p Plural
+func QueryPlurals(db *sql.DB, scene string) (ret []raw.Plural, err error) {
+	var p raw.Plural
 	if rows, e := db.Query(must("plurals"), scene); e != nil {
 		err = fmt.Errorf("%w while querying plurals", e)
 	} else {

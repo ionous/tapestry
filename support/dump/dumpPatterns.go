@@ -6,10 +6,11 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryPatterns(db *sql.DB, scene string) (ret []PatternData, err error) {
+func QueryPatterns(db *sql.DB, scene string) (ret []raw.PatternData, err error) {
 	if ps, e := QueryInnerPatterns(db, scene); e != nil {
 		err = fmt.Errorf("%w while querying inner patterns", e)
 	} else if e := QueryRules(db, scene, ps); e != nil {
@@ -20,8 +21,8 @@ func QueryPatterns(db *sql.DB, scene string) (ret []PatternData, err error) {
 	return
 }
 
-func QueryInnerPatterns(db *sql.DB, scene string) (ret []PatternData, err error) {
-	var p PatternData
+func QueryInnerPatterns(db *sql.DB, scene string) (ret []raw.PatternData, err error) {
+	var p raw.PatternData
 	var labels string
 	if rows, e := db.Query(must("patterns"), scene); e != nil {
 		err = e
@@ -35,7 +36,7 @@ func QueryInnerPatterns(db *sql.DB, scene string) (ret []PatternData, err error)
 	return
 }
 
-func QueryRules(db *sql.DB, scene string, ps []PatternData) (err error) {
+func QueryRules(db *sql.DB, scene string, ps []raw.PatternData) (err error) {
 	q := must("rules")
 	for i, n := range ps {
 		if rows, e := db.Query(q, scene, n.Id); e != nil {

@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryNames(db *sql.DB, scene string) (ret []NounName, err error) {
-	var n NounName
+func QueryNames(db *sql.DB, scene string) (ret []raw.NounName, err error) {
+	var n raw.NounName
 	var last string
 	if rows, e := db.Query(must("names"), scene); e != nil {
 		err = fmt.Errorf("%w while querying names", e)
@@ -25,7 +26,7 @@ func QueryNames(db *sql.DB, scene string) (ret []NounName, err error) {
 	return
 }
 
-func QueryNouns(db *sql.DB, scene string) (ret []NounData, err error) {
+func QueryNouns(db *sql.DB, scene string) (ret []raw.NounData, err error) {
 	if ns, e := QueryInnerNouns(db, scene); e != nil {
 		err = fmt.Errorf("%w while querying ids", e)
 	} else if e := QueryValues(db, ns); e != nil {
@@ -36,8 +37,8 @@ func QueryNouns(db *sql.DB, scene string) (ret []NounData, err error) {
 	return
 }
 
-func QueryInnerNouns(db *sql.DB, scene string) (ret []NounData, err error) {
-	var n NounData
+func QueryInnerNouns(db *sql.DB, scene string) (ret []raw.NounData, err error) {
+	var n raw.NounData
 	if rows, e := db.Query(must("nouns"), scene); e != nil {
 		err = e
 	} else {
@@ -49,7 +50,7 @@ func QueryInnerNouns(db *sql.DB, scene string) (ret []NounData, err error) {
 	return
 }
 
-func QueryValues(db *sql.DB, ns []NounData) (err error) {
+func QueryValues(db *sql.DB, ns []raw.NounData) (err error) {
 	q := must("values")
 	for i, n := range ns {
 		if rows, e := db.Query(q, n.Id); e != nil {

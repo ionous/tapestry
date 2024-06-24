@@ -4,10 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryRelatives(db *sql.DB, scene string) (ret []RelativeData, err error) {
+func QueryRelatives(db *sql.DB, scene string) (ret []raw.RelativeData, err error) {
 	if rs, e := QueryInnerRelations(db, scene); e != nil {
 		err = fmt.Errorf("%w while querying relations", e)
 	} else if e := QueryPairs(db, scene, rs); e != nil {
@@ -19,8 +20,8 @@ func QueryRelatives(db *sql.DB, scene string) (ret []RelativeData, err error) {
 }
 
 // build a list of relations
-func QueryInnerRelations(db *sql.DB, scene string) (ret []RelativeData, err error) {
-	var rel RelativeData
+func QueryInnerRelations(db *sql.DB, scene string) (ret []raw.RelativeData, err error) {
+	var rel raw.RelativeData
 	if rows, e := db.Query(must("relations"), scene); e != nil {
 		err = e
 	} else {
@@ -33,7 +34,7 @@ func QueryInnerRelations(db *sql.DB, scene string) (ret []RelativeData, err erro
 }
 
 // build a list of pairs per relation
-func QueryPairs(db *sql.DB, scene string, rs []RelativeData) (err error) {
+func QueryPairs(db *sql.DB, scene string, rs []raw.RelativeData) (err error) {
 	q := must("pairs")
 	for i, rel := range rs {
 		if rows, e := db.Query(q, scene, rel.Id); e != nil {
@@ -47,8 +48,8 @@ func QueryPairs(db *sql.DB, scene string, rs []RelativeData) (err error) {
 	return
 }
 
-func queryPairs(rows *sql.Rows) (ret []Pair, err error) {
-	var p Pair
+func queryPairs(rows *sql.Rows) (ret []raw.Pair, err error) {
+	var p raw.Pair
 	err = tables.ScanAll(rows, func() (_ error) {
 		ret = append(ret, p)
 		return

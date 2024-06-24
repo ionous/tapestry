@@ -5,10 +5,11 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryKinds(db *sql.DB, scene string) (ret []KindData, err error) {
+func QueryKinds(db *sql.DB, scene string) (ret []raw.KindData, err error) {
 	if ks, e := QueryInnerKinds(db, scene); e != nil {
 		err = fmt.Errorf("%w while querying inner kinds", e)
 	} else if e := QueryAncestors(db, ks); e != nil {
@@ -23,8 +24,8 @@ func QueryKinds(db *sql.DB, scene string) (ret []KindData, err error) {
 
 // build a list of kinds active in this scene
 // only includes the most basic data for the kinds: name and id.
-func QueryInnerKinds(db *sql.DB, scene string) (ret []KindData, err error) {
-	var k KindData
+func QueryInnerKinds(db *sql.DB, scene string) (ret []raw.KindData, err error) {
+	var k raw.KindData
 	if rows, e := db.Query(must("kinds"), scene); e != nil {
 		err = e
 	} else {
@@ -37,7 +38,7 @@ func QueryInnerKinds(db *sql.DB, scene string) (ret []KindData, err error) {
 }
 
 // get ancestors for every kind in ks
-func QueryAncestors(db *sql.DB, ks []KindData) (err error) {
+func QueryAncestors(db *sql.DB, ks []raw.KindData) (err error) {
 	q := must("ancestors")
 	for _, k := range ks {
 		if ps, e := tables.QueryStrings(db, q, k.Id); e != nil {
@@ -51,7 +52,7 @@ func QueryAncestors(db *sql.DB, ks []KindData) (err error) {
 }
 
 // get ancestors for every kind in ks
-func QueryFields(db *sql.DB, ks []KindData) (err error) {
+func QueryFields(db *sql.DB, ks []raw.KindData) (err error) {
 	q := must("fields")
 	for i, k := range ks {
 		if rows, e := db.Query(q, k.Id); e != nil {
