@@ -5,6 +5,7 @@
 select distinct name
 from mdl_name 
 where noun=?1
+and rank <= 0
 -- parser aliases are always rank -1
 -- the default friendly name is rank 0
 order by rank desc, rowid
