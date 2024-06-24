@@ -58,5 +58,5 @@ type Pair struct {
 
 type Grammar struct {
 	Name string
-	Prog query.Bytes `json:",omitempty"`
+	Prog query.Bytes `json:",omitempty"` // a grammar.Directive
 }

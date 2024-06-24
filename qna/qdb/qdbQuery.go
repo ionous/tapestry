@@ -44,6 +44,11 @@ type Query struct {
 	activation int // number of domain activation requests ( to find new domains in run_domain )
 }
 
+// implements closer
+func (q *Query) Close() {
+	q.db.Close()
+}
+
 func (q *Query) IsDomainActive(name string) (okay bool, err error) {
 	// no rows just nothing was found -- that name isnt active
 	// fix? would it be worth it to check the name is a valid domain?

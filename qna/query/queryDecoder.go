@@ -1,5 +1,5 @@
 // Package decode unpacks stored programs and values from byte slices
-package decode
+package query
 
 import (
 	"encoding/json"
@@ -15,17 +15,18 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Decoder decode.Decoder
+// wraps the base decoder with some additional method
+type QueryDecoder decode.Decoder
 
-func NewDecoder(signatures decode.SignatureTable) *Decoder {
+func NewDecoder(signatures decode.SignatureTable) *QueryDecoder {
 	// fix: doesnt really have to be a pointer...
 	dec := new(decode.Decoder).
 		Signatures(signatures...).
 		Customize(shortcut.Decoder)
-	return (*Decoder)(dec)
+	return (*QueryDecoder)(dec)
 }
 
-func (d *Decoder) DecodeField(a affine.Affinity, b []byte, fieldType string) (ret literal.LiteralValue, err error) {
+func (d *QueryDecoder) DecodeField(a affine.Affinity, b []byte, fieldType string) (ret literal.LiteralValue, err error) {
 	var val any // any json type
 	if e := json.Unmarshal(b, &val); e != nil {
 		err = e
@@ -35,7 +36,7 @@ func (d *Decoder) DecodeField(a affine.Affinity, b []byte, fieldType string) (re
 	return
 }
 
-func (d *Decoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
+func (d *QueryDecoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
 	var act rtti.Execute_Slots
 	if e := d.decodeValue(&act, b); e != nil {
 		err = e
@@ -48,7 +49,7 @@ func (d *Decoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
 // matches with mdl.marshalAssignment
 // the expected eval depends on the affinity (a) of the destination field.
 // fix? merge somehow with express.newAssignment? with compact decoding.
-func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Assignment, err error) {
+func (d *QueryDecoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Assignment, err error) {
 	switch a {
 	case affine.None:
 		var v rtti.Assignment_Slot
@@ -112,7 +113,7 @@ func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Assignme
 	return
 }
 
-func (d *Decoder) decodeValue(out typeinfo.Instance, b []byte) (err error) {
+func (d *QueryDecoder) decodeValue(out typeinfo.Instance, b []byte) (err error) {
 	if len(b) > 0 {
 		var val any
 		if e := json.Unmarshal(b, &val); e != nil {

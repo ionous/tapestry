@@ -12,7 +12,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt/print"
@@ -36,11 +35,11 @@ func CheckFile(inFile, testName string, opt qna.Options) (ret int, err error) {
 }
 
 func checkAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]typeinfo.Instance) (ret int, err error) {
-	if query, e := qdb.NewQueries(db); e != nil {
+	if q, e := qdb.NewQueries(db); e != nil {
 		err = e
 	} else if grammar, e := player.MakeGrammar(db); e != nil {
 		err = e
-	} else if checks, e := query.ReadChecks(actuallyJustThisOne); e != nil {
+	} else if checks, e := q.ReadChecks(actuallyJustThisOne); e != nil {
 		err = e
 	} else if len(checks) == 0 {
 		err = errutil.New("no matching checks found")
@@ -51,8 +50,8 @@ func checkAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 			} else {
 				log.Printf("-- Checking: %q\n", check.Name)
 				w := print.NewLineSentences(markup.ToText(os.Stdout))
-				d := decode.NewDecoder(signatures)
-				run := qna.NewRuntimeOptions(query, d, options)
+				d := query.NewDecoder(signatures)
+				run := qna.NewRuntimeOptions(q, d, options)
 
 				run.SetWriter(w)
 				survey := play.MakeDefaultSurveyor(run)
@@ -70,7 +69,7 @@ func checkAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 	return
 }
 
-func checkOne(d *decode.Decoder, play *play.Playtime, check query.CheckData, pret *int) (err error) {
+func checkOne(d *query.QueryDecoder, play *play.Playtime, check query.CheckData, pret *int) (err error) {
 	if act, e := d.DecodeProg(check.Prog); e != nil {
 		err = e
 	} else if expect, e := readLegacyExpectation(check); e != nil {

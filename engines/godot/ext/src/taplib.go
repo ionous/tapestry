@@ -15,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/support/play"
 	"git.sr.ht/~ionous/tapestry/support/player"

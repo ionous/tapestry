@@ -14,6 +14,10 @@ func (e NotImplemented) Error() string {
 	return string(e)
 }
 
+func (q QueryNone) Close() {
+	return
+}
+
 func (q QueryNone) IsDomainActive(name string) (_ bool, _ error) {
 	return
 }

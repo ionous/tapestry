@@ -9,15 +9,15 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
-	"git.sr.ht/~ionous/tapestry/qna/decode"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/files"
 )
 
-func NewShuttle(run rt.Runtime, decoder *decode.Decoder) *Shuttle {
+func NewShuttle(run rt.Runtime, dec *query.QueryDecoder) *Shuttle {
 	c := &Shuttle{
-		run:     run,
-		decoder: decoder,
+		run: run,
+		dec: dec,
 	}
 	note := rt.Notifier{
 		StartedScene:    c.out.onStartScene,
@@ -33,9 +33,9 @@ func NewShuttle(run rt.Runtime, decoder *decode.Decoder) *Shuttle {
 // Shuttle uses json commands to talk back and forth to a runtime.
 // see: idl frame.
 type Shuttle struct {
-	decoder *decode.Decoder // used to decode queries
-	run     rt.Runtime
-	out     Collector
+	dec *query.QueryDecoder // used to decode queries
+	run rt.Runtime
+	out Collector
 }
 
 func (c *Shuttle) Restart(scene string) (err error) {
@@ -76,7 +76,7 @@ func (c *Shuttle) Post(w io.Writer, endpoint string, msg json.RawMessage) (err e
 			var frames []Frame // output
 			for _, q := range qs {
 				var f Frame
-				if a, e := c.decoder.DecodeAssignment(affine.None, q); e != nil {
+				if a, e := c.dec.DecodeAssignment(affine.None, q); e != nil {
 					f.Error = e.Error()
 				} else if v, e := a.GetAssignedValue(c.run); e != nil {
 					f.Error = e.Error()

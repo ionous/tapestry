@@ -13,8 +13,8 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/support/play"
 	"git.sr.ht/~ionous/tapestry/support/player"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -45,7 +45,7 @@ func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int
 
 func makeShuttle(db *sql.DB, opts qna.Options) (ret *frame.Shuttle, err error) {
 	// fix: merge with others and put in package player?
-	decoder := decode.NewDecoder(tapestry.AllSignatures)
+	decoder := query.NewDecoder(tapestry.AllSignatures)
 	if grammar, e := player.MakeGrammar(db); e != nil {
 		err = e
 	} else if q, e := qdb.NewQueries(db); e != nil {

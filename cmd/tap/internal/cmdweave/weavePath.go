@@ -11,8 +11,8 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/support/flex"
@@ -42,7 +42,7 @@ func WeavePaths(outFile string, stories ...fs.FS) (err error) {
 			if q, e := qdb.NewQueries(db); e != nil {
 				err = e
 			} else {
-				run := qna.NewRuntime(q, decode.NewDecoder(story.AllSignatures))
+				run := qna.NewRuntime(q, query.NewDecoder(story.AllSignatures))
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				if e := cat.DomainStart("tapestry", nil); e != nil {
 					err = e

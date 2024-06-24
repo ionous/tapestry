@@ -19,6 +19,11 @@ func (e NotImplemented) Error() string {
 	return string(e)
 }
 
+func (q *Data) Close() {
+	*q = Data{} // sure, why not.
+	return
+}
+
 func (q *Data) IsDomainActive(name string) (okay bool, err error) {
 	okay = slices.Contains(q.Scenes, name)
 	return

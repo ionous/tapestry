@@ -77,6 +77,8 @@ type Query interface {
 	LoadGame(path string) (CacheMap, error)
 	SaveGame(path string, dynamicValues CacheMap) error
 	Random(inclusiveMin, exclusiveMax int) int
+	// release all resource
+	Close()
 }
 
 func (n *NounInfo) IsValid() bool {
