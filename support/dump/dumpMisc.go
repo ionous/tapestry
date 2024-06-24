@@ -18,7 +18,20 @@ func QueryPlurals(db *sql.DB, scene string) (ret []raw.Plural, err error) {
 		err = tables.ScanAll(rows, func() (_ error) {
 			ret = append(ret, p)
 			return
-		}, &p.One, &p.Other)
+		}, &p.One, &p.Many)
+	}
+	return
+}
+
+func QueryGrammar(db *sql.DB, scene string) (ret []raw.Grammar, err error) {
+	var p raw.Grammar
+	if rows, e := db.Query(must("grammar"), scene); e != nil {
+		err = fmt.Errorf("%w while querying plurals", e)
+	} else {
+		err = tables.ScanAll(rows, func() (_ error) {
+			ret = append(ret, p)
+			return
+		}, &p.Name, &p.Prog)
 	}
 	return
 }

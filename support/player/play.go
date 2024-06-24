@@ -6,16 +6,21 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/game"
+	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/support/play"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web/markup"
@@ -23,13 +28,21 @@ import (
 
 // open db, select tests, de-gob and run them each in turn.
 // print the results, only error on critical errors
-func PlayGame(mdlFile, testString, scene string) (err error) {
+func PlayGame(mdlFile, testString, scene string) error {
 	opts := qna.NewOptions()
 	return PlayWithOptions(mdlFile, testString, scene, opts)
 }
 
 func PlayWithOptions(mdlFile, testString, scene string, opts qna.Options) (err error) {
-	const prompt = "> "
+	if path.Ext(mdlFile) == ".json" {
+		err = PlayWithRaw(mdlFile, testString, scene, opts)
+	} else {
+		err = PlayWithSql(mdlFile, testString, scene, opts)
+	}
+	return
+}
+
+func PlayWithSql(mdlFile, testString, scene string, opts qna.Options) (err error) {
 	if db, e := tables.CreateRunTime(mdlFile); e != nil {
 		err = e
 	} else {
@@ -39,41 +52,58 @@ func PlayWithOptions(mdlFile, testString, scene string, opts qna.Options) (err e
 		} else if q, e := qdb.NewQueries(db); e != nil {
 			err = e
 		} else {
-			d := decode.NewDecoder(tapestry.AllSignatures)
-			run := qna.NewRuntimeOptions(q, d, opts)
-			w := print.NewLineSentences(markup.ToText(os.Stdout))
-			run.SetWriter(w)
-			if e := run.ActivateDomain(scene); e != nil {
-				err = e
-			} else {
-				survey := play.MakeDefaultSurveyor(run)
-				play := play.NewPlaytime(run, survey, grammar)
-				if _, e := play.Call("start game", affine.None, nil, []rt.Value{survey.GetFocalObject()}); e != nil {
-					err = e
-				} else if len(testString) > 0 {
-					for _, cmd := range strings.Split(testString, ";") {
-						fmt.Println(prompt, cmd)
-						if step(play, scene, cmd) {
-							// some sort of thing about ending early if so?
-							break
-						}
-					}
+			err = goPlay(scene, q, grammar, opts, testString)
+		}
+	}
+	return
+}
+
+func PlayWithRaw(mdlFile, testString, scene string, opts qna.Options) (err error) {
+	var data raw.Data
+	if e := files.LoadJson(mdlFile, &data); e != nil {
+		err = e
+	} else {
+		var grammar parser.AlwaysError // fix
+		err = goPlay(scene, &data, grammar, opts, testString)
+	}
+	return
+}
+
+func goPlay(scene string, q query.Query, grammar parser.Scanner, opts qna.Options, testString string) (err error) {
+	const prompt = "> "
+	d := decode.NewDecoder(tapestry.AllSignatures)
+	run := qna.NewRuntimeOptions(q, d, opts)
+	w := print.NewLineSentences(markup.ToText(os.Stdout))
+	run.SetWriter(w)
+	if e := run.ActivateDomain(scene); e != nil {
+		err = e
+	} else {
+		survey := play.MakeDefaultSurveyor(run)
+		play := play.NewPlaytime(run, survey, grammar)
+		if _, e := play.Call("start game", affine.None, nil, []rt.Value{survey.GetFocalObject()}); e != nil {
+			err = e
+		} else if len(testString) > 0 {
+			for _, cmd := range strings.Split(testString, ";") {
+				fmt.Println(prompt, cmd)
+				if step(play, scene, cmd) {
+
+					break
+				}
+			}
+		} else {
+			reader := bufio.NewReader(os.Stdin)
+		Out:
+			for {
+				if len(prompt) > 0 {
+					fmt.Print(prompt)
+				}
+				if in, _ := reader.ReadString('\n'); len(in) <= 1 {
+					break
 				} else {
-					reader := bufio.NewReader(os.Stdin)
-				Out:
-					for {
-						if len(prompt) > 0 {
-							fmt.Print(prompt)
-						}
-						if in, _ := reader.ReadString('\n'); len(in) <= 1 {
-							break
-						} else {
-							words := in[:len(in)-1] // strip the newline.
-							for _, cmd := range strings.Split(words, ";") {
-								if step(play, scene, cmd) {
-									break Out
-								}
-							}
+					words := in[:len(in)-1]
+					for _, cmd := range strings.Split(words, ";") {
+						if step(play, scene, cmd) {
+							break Out
 						}
 					}
 				}

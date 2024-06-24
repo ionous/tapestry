@@ -40,12 +40,12 @@ func QueryInnerKinds(db *sql.DB, scene string) (ret []raw.KindData, err error) {
 // get ancestors for every kind in ks
 func QueryAncestors(db *sql.DB, ks []raw.KindData) (err error) {
 	q := must("ancestors")
-	for _, k := range ks {
+	for i, k := range ks {
 		if ps, e := tables.QueryStrings(db, q, k.Id); e != nil {
 			err = e
 			break
 		} else {
-			k.Ancestors = ps
+			ks[i].Ancestors = ps
 		}
 	}
 	return

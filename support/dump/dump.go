@@ -17,19 +17,21 @@ var queries embed.FS
 
 func DumpAll(db *sql.DB, scene string) (ret raw.Data, err error) {
 	if scenes, e := QueryScenes(db, scene); e != nil {
-		err = fmt.Errorf("%w while querying scenes", e)
+		err = fmt.Errorf("%w for scenes", e)
 	} else if plurals, e := QueryPlurals(db, scene); e != nil {
-		err = fmt.Errorf("%w while querying plurals", e)
+		err = fmt.Errorf("%w for plurals", e)
 	} else if kinds, e := QueryKinds(db, scene); e != nil {
-		err = fmt.Errorf("%w while querying kinds", e)
+		err = fmt.Errorf("%w for kinds", e)
 	} else if names, e := QueryNames(db, scene); e != nil {
-		err = fmt.Errorf("%w while querying names", e)
+		err = fmt.Errorf("%w for names", e)
 	} else if nouns, e := QueryNouns(db, scene); e != nil {
-		err = fmt.Errorf("%w while querying nouns", e)
+		err = fmt.Errorf("%w for nouns", e)
 	} else if patterns, e := QueryPatterns(db, scene); e != nil {
-		err = fmt.Errorf("%w while querying patterns", e)
+		err = fmt.Errorf("%w for patterns", e)
 	} else if relatives, e := QueryRelatives(db, scene); e != nil {
-		err = fmt.Errorf("%w while querying relatives", e)
+		err = fmt.Errorf("%w for relatives", e)
+	} else if grammar, e := QueryGrammar(db, scene); e != nil {
+		err = fmt.Errorf("%w for grammar", e)
 	} else {
 		ret = raw.Data{
 			Scenes:    scenes,
@@ -39,6 +41,7 @@ func DumpAll(db *sql.DB, scene string) (ret raw.Data, err error) {
 			Nouns:     nouns,
 			Patterns:  patterns,
 			Relatives: relatives,
+			Grammar:   grammar,
 		}
 	}
 	return

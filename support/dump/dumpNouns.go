@@ -21,7 +21,7 @@ func QueryNames(db *sql.DB, scene string) (ret []raw.NounName, err error) {
 				last = n.Name
 			}
 			return
-		}, &n.Id, &n.Name)
+		}, &n.Name, &n.Noun)
 	}
 	return
 }
@@ -29,6 +29,8 @@ func QueryNames(db *sql.DB, scene string) (ret []raw.NounName, err error) {
 func QueryNouns(db *sql.DB, scene string) (ret []raw.NounData, err error) {
 	if ns, e := QueryInnerNouns(db, scene); e != nil {
 		err = fmt.Errorf("%w while querying ids", e)
+	} else if e := QueryAliases(db, ns); e != nil {
+		err = fmt.Errorf("%w while querying aliases", e)
 	} else if e := QueryValues(db, ns); e != nil {
 		err = fmt.Errorf("%w while querying values", e)
 	} else {
@@ -59,6 +61,18 @@ func QueryValues(db *sql.DB, ns []raw.NounData) (err error) {
 			err = e
 		} else {
 			ns[i].Values = vs
+		}
+	}
+	return
+}
+
+func QueryAliases(db *sql.DB, ns []raw.NounData) (err error) {
+	q := must("aliases")
+	for i, n := range ns {
+		if str, e := tables.QueryStrings(db, q, n.Id); e != nil {
+			err = e
+		} else {
+			ns[i].Aliases = str
 		}
 	}
 	return

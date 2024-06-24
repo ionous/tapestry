@@ -11,9 +11,13 @@
   union all  
   select ?1
 )
-select oneNoun, otherNoun
+select one.noun as oneName, other.noun as otherName
 from mdl_pair mp
 join domains md
   using (domain)
+join mdl_noun one
+  on (one.rowid = mp.oneNoun)
+join mdl_noun other
+  on (other.rowid = mp.otherNoun)
 where mp.relKind = ?2
 order by mp.rowid

@@ -4,13 +4,14 @@ package raw
 import "git.sr.ht/~ionous/tapestry/qna/query"
 
 type Data struct {
-	Scenes    []string   // in order with root ( tapestry ) first
-	Plurals   []Plural   // pairs of one, many; sorted by one
-	Kinds     []KindData // sorted by .Kind
-	Names     []NounName // sorted by .Name
-	Nouns     []NounData
-	Patterns  []PatternData
+	Scenes    []string       // in order with root ( tapestry ) first
+	Plurals   []Plural       // pairs of one, many; sorted by one
+	Kinds     []KindData     // sorted by .Kind
+	Names     []NounName     // sorted by .Name
+	Nouns     []NounData     // sorted by .Noun
+	Patterns  []PatternData  // sorted by .Pattern
 	Relatives []RelativeData // sorted by .Relation
+	Grammar   []Grammar      // sorted by .Name
 }
 
 type KindData struct {
@@ -22,17 +23,16 @@ type KindData struct {
 }
 
 type NounName struct {
-	Id   int
-	Name string
+	Name, Noun string // shortname, fullname
 }
 
 type NounData struct {
-	Id     int // mdl_noun
-	Domain string
-	Noun   string // unique id
-	Kind   string // or would id be better?
-	// Name list? or best name maybe?
-	Values []query.ValueData
+	Id      int // mdl_noun
+	Domain  string
+	Noun    string            // fullname
+	Kind    string            // or would id be better?
+	Aliases []string          // the friendly name is first, followed by specification order
+	Values  []query.ValueData // sorted by field
 }
 
 type PatternData struct {
@@ -50,9 +50,14 @@ type RelativeData struct {
 }
 
 type Plural struct {
-	One, Other string
+	One, Many string
 }
 
 type Pair struct {
-	One, Other int // mdl_noun
+	One, Other string // noun fullname
+}
+
+type Grammar struct {
+	Name string
+	Prog query.Bytes `json:",omitempty"`
 }

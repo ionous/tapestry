@@ -418,12 +418,13 @@ order by mf.rowid, mv.kind desc, mv.final desc`,
 		),
 		// does a noun have some specific name?
 		nounAliases: ps.Prep(db,
-			`select my.name
+			`select distinct my.name
 			from mdl_name my
 			join active_nouns ns
 				using (noun)
 			where ns.name=?1
-			order by my.name`,
+			and rank <= 0
+			order by my.rank desc, my.rowid`,
 		),
 		// given the fullname of a noun, find the best short name
 		nounName: ps.Prep(db,

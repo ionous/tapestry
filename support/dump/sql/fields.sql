@@ -4,13 +4,13 @@
 --
 -- fix? merge with query fieldsOf ( ex. using a cte )
 -- 
-select mf.field, mf.affinity, ifnull(mt.kind, '') as type, mv.value
+select mf.field, mf.affinity, coalesce(mt.kind, '') as type, mv.value
 from mdl_kind ks 
 join mdl_kind ma
   -- is Y (is their name) a part of X (our path)
   on instr(',' || ks.path, 
            ',' || ma.rowid || ',' )
-  or (ks.kind = ma.rowid) 
+  or (ks.rowid = ma.rowid) -- merge ancestors and the kind itself
 join mdl_field mf
   on (ma.rowid = mf.kind)
 -- pull in all values of any matching field

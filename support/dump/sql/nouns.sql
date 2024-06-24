@@ -1,4 +1,4 @@
--- list of names and the nouns they represent
+-- list of nouns, sorted by noun names
 -- params:
 --   ?1: id of scene
 --
@@ -15,3 +15,4 @@ join domains
   using (domain)
 join mdl_kind mk 
   on (mk.rowid = mn.kind)
+order by mn.noun
