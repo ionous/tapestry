@@ -22,16 +22,16 @@ func QueryPatterns(db *sql.DB, scene string) (ret []raw.PatternData, err error) 
 }
 
 func QueryInnerPatterns(db *sql.DB, scene string) (ret []raw.PatternData, err error) {
-	var p raw.PatternData
-	var labels string
 	if rows, e := db.Query(must("patterns"), scene); e != nil {
 		err = e
 	} else {
+		var p raw.PatternData
+		var labels string
 		err = tables.ScanAll(rows, func() (_ error) {
 			p.Labels = strings.Split(labels, ",")
 			ret = append(ret, p)
 			return
-		}, &p.Id, &p.Pattern, &labels, &p.Result)
+		}, &p.Id, &p.Pattern, &labels)
 	}
 	return
 }

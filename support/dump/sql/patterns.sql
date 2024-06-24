@@ -1,4 +1,5 @@
 -- list of all possible patterns in alphabetical order
+-- with their id, name, labels + result
 -- params:
 --   ?1: base domain name
 with domains as (
@@ -10,8 +11,8 @@ with domains as (
 )
 select mk.rowid,  -- rules are stored associated with the kind, not the pattern
        mk.kind, 
-       coalesce(mp.labels, ''), 
-       coalesce(mp.result, '') 
+       coalesce(labels || ',', '') || -- null concat results in null
+       coalesce(result, '') as lres
 from mdl_kind mk
 join domains md
   using (domain)

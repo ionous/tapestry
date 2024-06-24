@@ -246,8 +246,10 @@ func (q *Query) PatternLabels(pat string) (ret []string, err error) {
 	case sql.ErrNoRows:
 		// returns blank with no error
 	case nil:
-		parts := strings.Split(labels.String, ",")
-		ret = append(parts, result.String)
+		if labels.Valid {
+			ret = strings.Split(labels.String, ",")
+		}
+		ret = append(ret, result.String)
 	default:
 		err = e
 	}

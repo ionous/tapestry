@@ -38,8 +38,7 @@ type NounData struct {
 type PatternData struct {
 	Id      int // mdl_pat
 	Pattern string
-	Labels  []string
-	Result  string
+	Labels  []string // the last value is the result, even if blank
 	Rules   []query.RuleData
 }
 

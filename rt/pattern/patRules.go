@@ -34,7 +34,11 @@ func (rs *RuleSet) Calls(run rt.Runtime, rec *rt.Record, resultField int) (res R
 		}
 	}
 	if err == nil {
-		res = Result{rec: rec, resultField: resultField, hasResult: stopJump.runCount > 0}
+		res = Result{
+			rec:         rec,
+			resultField: resultField,
+			hasResult:   stopJump.runCount > 0,
+		}
 	}
 	return
 }
