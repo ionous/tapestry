@@ -168,7 +168,8 @@ func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
 		var last string
 		var field query.FieldData
 		err = tables.ScanAll(rows, func() (err error) {
-			// the same field might be a final value ( listed first )
+			// the same field might be listed twice:
+			// the final value ( listed first )
 			// and a non final value ( listed second )
 			if last != field.Name {
 				ret = append(ret, field)
@@ -192,9 +193,9 @@ func (q *Query) KindOfAncestors(kind string) (ret []string, err error) {
 	return
 }
 
-// given a name, find a noun ( and some useful other context )
+// given a short name, find a noun ( and some useful other context )
 func (q *Query) NounInfo(name string) (ret query.NounInfo, err error) {
-	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Id, &ret.Kind); e != nil && e != sql.ErrNoRows {
+	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Noun, &ret.Kind); e != nil && e != sql.ErrNoRows {
 		err = e
 	}
 	return

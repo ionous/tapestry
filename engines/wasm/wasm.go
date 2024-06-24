@@ -1,7 +1,8 @@
 // Experimental wasm version
+// http://localhost:5173/
 //
-// use `npm run wasm-build` to build
-// use `npm run wasm-serve` to serve
+// use `npm run build-wasm` to build
+// use `npm run dev` to serve
 //
 // https://go.dev/wiki/WebAssembly
 // https://codeberg.org/meta/gzipped
@@ -110,8 +111,8 @@ func PlayWithOptions(opts qna.Options) (ret *frame.Shuttle) {
 	//
 	decoder := decode.NewDecoder(tapestry.AllSignatures)
 	run := qna.NewRuntimeOptions(q, decoder, opts)
-	survey := play.MakeDefaultSurveyor(run)
+	survey := play.MakeDefaultSurveyor(run) // fix: this should live in play.NewPlaytime; maybe an options?
 	pt := play.NewPlaytime(run, survey, grammar)
-	play.CaptureInput(pt)
+	play.CaptureInput(pt) // fix: can shuttle capture input?
 	return frame.NewShuttle(pt, decoder)
 }

@@ -149,7 +149,7 @@ func (run *Runner) RelateTo(a, b, rel string) (err error) {
 			err = e
 		} else if _, e := run.getKindOf(nb.Kind, fb.Type); e != nil {
 			err = e
-		} else if e := run.query.Relate(k.Name(), na.Id, nb.Id); e != nil {
+		} else if e := run.query.Relate(k.Name(), na.Noun, nb.Noun); e != nil {
 			err = e
 		} else if notify := run.notify.ChangedRelative; notify != nil {
 			notify(a, b, rel)
@@ -165,7 +165,7 @@ func (run *Runner) RelativesOf(a, rel string) (ret rt.Value, err error) {
 		err = e
 	} else if k, e := run.getKindOf(rel, kindsOf.Relation.String()); e != nil {
 		err = e
-	} else if vs, e := run.query.RelativesOf(k.Name(), n.Id); e != nil {
+	} else if vs, e := run.query.RelativesOf(k.Name(), n.Noun); e != nil {
 		err = e // doesnt cache because relateTo would have to clear the cache.
 	} else {
 		fb := k.Field(1)
@@ -181,7 +181,7 @@ func (run *Runner) ReciprocalsOf(b, rel string) (ret rt.Value, err error) {
 		err = e
 	} else if k, e := run.getKindOf(rel, kindsOf.Relation.String()); e != nil {
 		err = e
-	} else if vs, e := run.query.ReciprocalsOf(k.Name(), n.Id); e != nil {
+	} else if vs, e := run.query.ReciprocalsOf(k.Name(), n.Noun); e != nil {
 		err = e
 	} else {
 		fa := k.Field(0)
@@ -284,7 +284,7 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else {
-				ret = rt.StringFrom(ok.Id, ok.Kind)
+				ret = rt.StringFrom(ok.Noun, ok.Kind)
 			}
 
 		// type of a game object

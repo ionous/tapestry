@@ -11,6 +11,7 @@ import (
 )
 
 // usage:
+// 0. brew install graphviz
 // 1. chart [-d=tapestry] -in play.db [-out chart.dot]
 // 2. dot -Tpng chart.dot -o chart.png
 // example:

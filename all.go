@@ -18,12 +18,13 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// all important runtime signatures
+// all serialized runtime signatures
 var AllSignatures = []map[uint64]typeinfo.Instance{
 	call.Z_Types.Signatures,
 	debug.Z_Types.Signatures,
+	format.Z_Types.Signatures,
 	// frame.Z_Types.Signatures,
-	// game.Z_Types.Signatures,
+	game.Z_Types.Signatures,
 	grammar.Z_Types.Signatures,
 	// jess.Z_Types.Signatures,
 	list.Z_Types.Signatures,
@@ -33,10 +34,8 @@ var AllSignatures = []map[uint64]typeinfo.Instance{
 	object.Z_Types.Signatures,
 	// play.Z_Types.Signatures,
 	prim.Z_Types.Signatures,
-	format.Z_Types.Signatures,
 	rel.Z_Types.Signatures,
 	render.Z_Types.Signatures,
-	game.Z_Types.Signatures,
 	// rtti.Z_Types.Signatures,
 	// story.Z_Types.Signatures,
 	// testdl.Z_Types.Signatures,

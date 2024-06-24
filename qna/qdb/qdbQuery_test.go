@@ -191,9 +191,9 @@ func TestQueries(t *testing.T) {
 		t.Fatal(pairs, e) // should be out of scope
 	} else if name, e := q.NounName("empire apple"); e != nil || name != "empire apple" {
 		t.Fatal(name, e)
-	} else if id, e := q.NounInfo("apple"); e != nil || id != (query.NounInfo{Domain: domain, Id: "apple", Kind: kind}) {
+	} else if id, e := q.NounInfo("apple"); e != nil || id != (query.NounInfo{Domain: domain, Noun: "apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if id, e := q.NounInfo("empire"); e != nil || id != (query.NounInfo{Domain: domain, Id: "empire apple", Kind: kind}) {
+	} else if id, e := q.NounInfo("empire"); e != nil || id != (query.NounInfo{Domain: domain, Noun: "empire apple", Kind: kind}) {
 		t.Fatal(e, id)
 	} else if id, e := q.NounInfo("table"); e != nil || id != (query.NounInfo{}) {
 		t.Fatal(id, e) // should be blank because the table is out of scope

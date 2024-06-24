@@ -22,7 +22,7 @@ type FieldData struct {
 }
 
 type NounInfo struct {
-	Domain, Id, Kind string // id is the string identifier for the noun, unique within the domain.
+	Domain, Noun, Kind string // noun is unique identifier within the domain.
 }
 
 type RuleData struct {
@@ -48,6 +48,7 @@ type Query interface {
 	// given a plural or singular kind
 	// return all ancestors starting with the kind itself
 	KindOfAncestors(kind string) ([]string, error)
+	// finds noun based on short name
 	NounInfo(name string) (NounInfo, error)
 	NounName(id string) (string, error)
 	NounNames(id string) ([]string, error)
@@ -71,14 +72,14 @@ type Query interface {
 }
 
 func (n *NounInfo) IsValid() bool {
-	return len(n.Id) != 0
+	return len(n.Noun) != 0
 }
 
 func (n *NounInfo) String() (ret string) {
 	if !n.IsValid() {
 		ret = "<unknown object>"
 	} else {
-		ret = strings.Join([]string{n.Domain, n.Id}, "::")
+		ret = strings.Join([]string{n.Domain, n.Noun}, "::")
 	}
 	return
 }
