@@ -6,9 +6,9 @@
 select mk.kind 
 from mdl_kind ks
 join mdl_kind mk
-  -- is Y (is their name) a part of X (our path)
-  on instr(',' || ks.path, 
+   -- if their id (Y) is in our path (X)
+  -- then they are an ancestor
+  on instr(',' || ks.rowid || ',' || ks.path, -- our full path
            ',' || mk.rowid || ',' )
-  or (ks.rowid == mk.rowid)  -- to include the kind itself
 where (ks.rowid = ?1) 
 order by mk.rowid desc

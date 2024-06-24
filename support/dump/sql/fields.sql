@@ -7,10 +7,10 @@
 select mf.field, mf.affinity, coalesce(mt.kind, '') as type, mv.value
 from mdl_kind ks 
 join mdl_kind ma
-  -- is Y (is their name) a part of X (our path)
-  on instr(',' || ks.path, 
+  -- if their id (Y) is in our path (X)
+  -- then they are an ancestor
+  on instr(',' || ks.rowid || ',' || ks.path,  -- our full path
            ',' || ma.rowid || ',' )
-  or (ks.rowid = ma.rowid) -- merge ancestors and the kind itself
 join mdl_field mf
   on (ma.rowid = mf.kind)
 -- pull in all values of any matching field
@@ -20,7 +20,7 @@ left join mdl_value_kind mv
   on (mv.field = mf.rowid)
   -- so filter initializers by the requested kind's fullpath
   and instr(
-   ',' || ks.kind || ',' || ks.path, -- full path
+   ',' || ks.rowid || ',' || ks.path, -- full path
    ',' || mv.kind || ',')
 -- finally determine the name of the field's type
 left join mdl_kind mt 
