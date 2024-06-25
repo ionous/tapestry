@@ -430,8 +430,7 @@ order by mf.rowid, mv.kind desc, mv.final desc`,
 			join active_nouns ns
 				using (noun)
 			where ns.name=?1
-			and rank <= 0
-			order by my.rank desc, my.rowid`,
+			order by my.name`,
 		),
 		// given the fullname of a noun, find the best short name
 		nounName: ps.Prep(db,
