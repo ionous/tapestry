@@ -62,6 +62,7 @@ with newPairs as (
 // zero out and mismatched pairs, and then write the new pairs
 var relatePair = string(`
 insert or replace into run_pair
+	-- zero out the domain to hide the pair from future queries.
 	select null, prev.relKind, prev.oneNoun, prev.otherNoun
 	from newPairs
 	join run_pair prev

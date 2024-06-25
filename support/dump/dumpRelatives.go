@@ -28,7 +28,7 @@ func QueryInnerRelations(db *sql.DB, scene string) (ret []raw.RelativeData, err 
 		err = tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, rel)
 			return
-		}, &rel.Id, &rel.Relation)
+		}, &rel.Id, &rel.Relation, &rel.OneKind, &rel.OtherKind, &rel.Cardinality)
 	}
 	return
 }

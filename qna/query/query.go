@@ -17,8 +17,8 @@ type CheckData struct {
 type FieldData struct {
 	Name     string
 	Affinity affine.Affinity
-	Class    string
-	Init     Bytes `json:",omitempty"`
+	Class    string `json:",omitempty"`
+	Init     Bytes  `json:",omitempty"`
 }
 
 type NounInfo struct {
@@ -35,8 +35,8 @@ type RuleData struct {
 
 type ValueData struct {
 	Field string
-	Path  string
-	Value Bytes `json:",omitempty"` // a serialized assignment or literal
+	Path  string `json:",omitempty"`
+	Value Bytes  `json:",omitempty"` // a serialized assignment or literal
 }
 
 type Query interface {
@@ -53,6 +53,7 @@ type Query interface {
 	// return the friendly name of the exact named noun
 	NounName(fullname string) (string, error)
 	// find the parser aliases for this noun
+	// warning: the  parser expects these to be in alphabetical order.
 	NounNames(fullname string) ([]string, error)
 	// a single field can contain a set of recursive spare values;
 	// so this returns pairs of path, value.
@@ -69,7 +70,9 @@ type Query interface {
 	RulesFor(pat string) ([]RuleData, error)
 	ReciprocalsOf(rel, id string) ([]string, error)
 	RelativesOf(rel, id string) ([]string, error)
-	// errors if nothing changed
+	// relations can be cleared by passing a blank string on the opposite side
+	// but -- fix -- there is no way to clear many-many relations.
+	// errors if nothing changed.
 	// doesnt check to see if the relation is valid;
 	// the caller should do that.
 	Relate(rel, noun, otherNoun string) error

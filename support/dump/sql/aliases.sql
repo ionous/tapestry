@@ -5,7 +5,17 @@
 -- params:
 --  ?1: id of noun
 --
-select distinct name
-from mdl_name
-where noun=?1 -- int id
-order by (rank=0) desc, sign(rank), rowid
+with names as (
+  select name, rank
+  from mdl_name
+  where noun=?1 -- int id
+  -- we need alpha order
+  -- order by (rank=0) desc, sign(rank), rowid
+), lowernames as (
+  select distinct lower(name) as lname from names 
+  order by lname  
+)
+select name from names
+where rank = 0
+union all 
+select lname from lowernames

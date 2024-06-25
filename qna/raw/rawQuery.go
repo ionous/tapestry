@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/qna/query"
 )
@@ -72,9 +73,9 @@ func (q *Data) KindOfAncestors(singleOrPlural string) (ret []string, err error) 
 
 // search using short name
 func (q *Data) NounInfo(short string) (ret query.NounInfo, err error) {
-	if noun, e := q.findbyShort(short); e != nil {
+	if noun, e := q.findFullName(short); e != nil {
 		err = e
-	} else if n, e := q.findByFull(noun); e != nil {
+	} else if n, e := q.findNounData(noun); e != nil {
 		err = e
 	} else {
 		ret = query.NounInfo{
@@ -88,18 +89,20 @@ func (q *Data) NounInfo(short string) (ret query.NounInfo, err error) {
 
 // the best short name for the passed full name
 func (q *Data) NounName(full string) (ret string, err error) {
-	if noun, e := q.findByFull(full); e != nil {
+	if noun, e := q.findNounData(full); e != nil {
 		err = e
-	} else if as := noun.Aliases; len(as) == 0 {
-		ret = full
 	} else {
-		ret = as[0]
+		if name := noun.CommonName; len(name) > 0 {
+			ret = name
+		} else {
+			ret = noun.Noun
+		}
 	}
 	return
 }
 
 func (q *Data) NounNames(full string) (ret []string, err error) {
-	if noun, e := q.findByFull(full); e != nil {
+	if noun, e := q.findNounData(full); e != nil {
 		err = e
 	} else {
 		ret = noun.Aliases
@@ -108,7 +111,7 @@ func (q *Data) NounNames(full string) (ret []string, err error) {
 }
 
 func (q *Data) NounValues(full, field string) (ret []query.ValueData, err error) {
-	if noun, e := q.findByFull(full); e != nil {
+	if noun, e := q.findNounData(full); e != nil {
 		err = e
 	} else {
 		start, end := -1, len(noun.Values)
@@ -179,7 +182,7 @@ func (q *Data) ReciprocalsOf(rel, noun string) (ret []string, err error) {
 		err = e
 	} else {
 		for _, el := range p.Pairs {
-			if el.Other == noun {
+			if el.Other == noun && len(el.One) > 0 {
 				ret = append(ret, el.One)
 			}
 		}
@@ -192,7 +195,7 @@ func (q *Data) RelativesOf(rel, noun string) (ret []string, err error) {
 		err = e
 	} else {
 		for _, el := range p.Pairs {
-			if el.One == noun {
+			if el.One == noun && len(el.Other) > 0 {
 				ret = append(ret, el.Other)
 			}
 		}
@@ -200,19 +203,31 @@ func (q *Data) RelativesOf(rel, noun string) (ret []string, err error) {
 	return
 }
 
-// FIX!
-func (q *Data) Relate(rel, noun, otherNoun string) error {
-	// if p, e := q.findRelation(rel); e != nil {
-	// 	err = e
-	// } else {
-	// 	for _, el := range p.Pairs {
-	// 		if el.One == noun {
-	// 			ret = append(ret, el.Other)
-	// 		}
-	// 	}
-	// }
-	// return
-	panic("not implemented")
+func (q *Data) Relate(rel, noun, otherNoun string) (err error) {
+	if p, e := q.findRelation(rel); e != nil {
+		err = e
+	} else if one, other := len(noun) > 0, len(otherNoun) > 0; !one && !other {
+		err = errors.New("nothing to relate")
+	} else {
+		// follows from the sqlite version: relatePair
+		suffix := strings.HasSuffix(p.Cardinality, "one")
+		prefix := strings.HasPrefix(p.Cardinality, "one")
+		if (!suffix && !prefix) && (!one || !other) {
+			err = errors.New("not implemented: erasing from many-many relationships needs more thought")
+		} else {
+			els := slices.DeleteFunc(p.Pairs, func(prev Pair) bool {
+				return (suffix && prev.One == noun) ||
+					(prefix && prev.Other == otherNoun)
+			})
+			// if both sides exist: we're adding a new pair
+			if one && other {
+				els = append(els, Pair{noun, otherNoun})
+			}
+			// find relation returns a pointer
+			p.Pairs = els
+		}
+	}
+	return
 }
 
 // Random implements Query.
@@ -245,7 +260,7 @@ func (q *Data) getPluralKind(singleOrPlural string) (ret string, err error) {
 }
 
 // shortname to id
-func (q *Data) findbyShort(shortname string) (ret string, err error) {
+func (q *Data) findFullName(shortname string) (ret string, err error) {
 	if i, ok := slices.BinarySearchFunc(q.Names, shortname, func(n NounName, _ string) int {
 		return cmp.Compare(n.Name, shortname)
 	}); !ok {
@@ -257,7 +272,7 @@ func (q *Data) findbyShort(shortname string) (ret string, err error) {
 }
 
 // fullname to NounData
-func (q *Data) findByFull(fullname string) (ret NounData, err error) {
+func (q *Data) findNounData(fullname string) (ret NounData, err error) {
 	if i, ok := slices.BinarySearchFunc(q.Nouns, fullname, func(n NounData, _ string) int {
 		return cmp.Compare(n.Noun, fullname)
 	}); !ok {
@@ -279,13 +294,13 @@ func (q *Data) findPattern(name string) (ret PatternData, err error) {
 	return
 }
 
-func (q *Data) findRelation(name string) (ret RelativeData, err error) {
+func (q *Data) findRelation(name string) (ret *RelativeData, err error) {
 	if i, ok := slices.BinarySearchFunc(q.Relatives, name, func(p RelativeData, _ string) int {
 		return cmp.Compare(p.Relation, name)
 	}); !ok {
 		err = fmt.Errorf("couldnt find relation %q", name)
 	} else {
-		ret = q.Relatives[i]
+		ret = &(q.Relatives[i])
 	}
 	return
 }

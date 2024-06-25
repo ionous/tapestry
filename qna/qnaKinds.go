@@ -67,11 +67,12 @@ func (run *Runner) getKind(k string) (ret *rt.Kind, err error) {
 	return
 }
 
+// fix: can this be removed?
 // tbd: maybe macros and actions shouldnt have the parent  "pattern";
 // it would simplify this, and re: Categorize the base shouldnt be needed anymore.
 func (run *Runner) ensureBaseKinds() (err error) {
 	key := query.MakeKey("kinds", kindsOf.Kind.String(), "")
-	if _, ok := run.constVals.Get(key) ; !ok {
+	if _, ok := run.constVals.Get(key); !ok {
 		for _, k := range kindsOf.DefaultKinds {
 			name := k.String()
 			// note: responses have fields, even though the other base kinds dont
@@ -82,7 +83,7 @@ func (run *Runner) ensureBaseKinds() (err error) {
 				// base kinds are never more than one layer deep.
 				path := []string{name, k.Parent().String()}
 				key := query.MakeKey("kinds", name, "")
-				run.constVals.Store(key,  &rt.Kind{Path: path, Fields: fs})
+				run.constVals.Store(key, &rt.Kind{Path: path, Fields: fs})
 			}
 		}
 	}

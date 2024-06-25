@@ -69,10 +69,13 @@ func QueryValues(db *sql.DB, ns []raw.NounData) (err error) {
 func QueryAliases(db *sql.DB, ns []raw.NounData) (err error) {
 	q := must("aliases")
 	for i, n := range ns {
-		if str, e := tables.QueryStrings(db, q, n.Id); e != nil {
+		if as, e := tables.QueryStrings(db, q, n.Id); e != nil {
 			err = e
 		} else {
-			ns[i].Aliases = str
+			if cn := as[0]; cn != n.Noun {
+				ns[i].CommonName = cn
+			}
+			ns[i].Aliases = as[1:]
 		}
 	}
 	return

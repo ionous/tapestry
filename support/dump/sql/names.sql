@@ -1,4 +1,9 @@
--- list of nouns and their names, sorted by name
+-- nouns and short names, sorted by the latter.
+--
+-- note: parser names include short names, but not the other way around.
+-- ie. "understandings" don't influence the names in a story,
+-- mirroring inform's behavior. ( tbd: is it a good thing? )
+--
 -- params:
 --   ?1: id of scene
 --

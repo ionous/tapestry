@@ -3,6 +3,14 @@ package raw
 
 import "git.sr.ht/~ionous/tapestry/qna/query"
 
+// cardinality
+const (
+	ONE_TO_ONE   = "one_one"
+	ONE_TO_MANY  = "one_any"
+	MANY_TO_ONE  = "any_one"
+	MANY_TO_MANY = "any_any"
+)
+
 type Data struct {
 	Scenes    []string       // in order with root ( tapestry ) first
 	Plurals   []Plural       // pairs of one, many; sorted by one
@@ -27,12 +35,13 @@ type NounName struct {
 }
 
 type NounData struct {
-	Id      int // mdl_noun
-	Domain  string
-	Noun    string            // fullname
-	Kind    string            // or would id be better?
-	Aliases []string          // the friendly name is first, followed by specification order
-	Values  []query.ValueData // sorted by field
+	Id         int // mdl_noun
+	Domain     string
+	Noun       string            // full, unique name
+	Kind       string            // or would id be better?
+	CommonName string            `json:",omitempty"` // author defined name
+	Aliases    []string          // alpha order for parser
+	Values     []query.ValueData // sorted by field
 }
 
 type PatternData struct {
@@ -43,9 +52,11 @@ type PatternData struct {
 }
 
 type RelativeData struct {
-	Id       int    // mdl_rel
-	Relation string // a kind
-	Pairs    []Pair // can be empty
+	Id                 int    // mdl_rel
+	Relation           string // a kind
+	OneKind, OtherKind string // primary and secondary types
+	Cardinality        string // ( these also are recorded in the kind data )
+	Pairs              []Pair // can be empty
 }
 
 type Plural struct {
