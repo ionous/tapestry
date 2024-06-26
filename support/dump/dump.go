@@ -54,8 +54,13 @@ type kindDecoder struct {
 	ks []rt.Kind
 }
 
-func (q kindDecoder) GetKindByName(exactKind string) (*rt.Kind, error) {
-	return raw.FindKind(q.ks, exactKind)
+func (q kindDecoder) GetKindByName(exactKind string) (ret *rt.Kind, err error) {
+	if k, ok := raw.FindKind(q.ks, exactKind); !ok {
+		err = fmt.Errorf("couldnt find kind %q", exactKind)
+	} else {
+		ret = k
+	}
+	return
 }
 
 func QueryScenes(db *sql.DB, scene string) (ret []string, err error) {

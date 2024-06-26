@@ -36,7 +36,7 @@ type NounData struct {
 	Kind       string     // or would id be better?
 	CommonName string     // author defined name
 	Aliases    []string   // alpha order for parser
-	Values     []EvalData // sparse field values, sorted by field name and path
+	Values     []EvalData // sparse field values, sorted by field name
 	Records    []RecordData
 }
 
@@ -45,6 +45,8 @@ type EvalData struct {
 	Value rt.Assignment
 }
 
+// record data is json serialized ( via pack/unpack )
+// because otherwise gobbing would need a way to store variant values
 type RecordData struct {
 	Field  string
 	Packed []byte // json serialized for now

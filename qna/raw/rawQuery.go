@@ -1,7 +1,6 @@
 package raw
 
 import (
-	"cmp"
 	"errors"
 	"fmt"
 	"slices"
@@ -10,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/pack"
 )
 
 // verify that query none implements every method
@@ -111,25 +111,32 @@ func (q RawQuery) NounNames(full string) (ret []string, err error) {
 }
 
 func (q RawQuery) NounValue(full, field string) (ret rt.Assignment, err error) {
-	panic("fix")
-	// if noun, e := q.findNounData(full); e != nil {
-	// 	err = e
-	// } else {
-	// 	start, end := -1, len(noun.Values)
-	// 	for i, nv := range noun.Values {
-	// 		at := nv.Field == field
-	// 		if at && start < 0 {
-	// 			start = i
-	// 		} else if !at && start >= 0 {
-	// 			end = i
-	// 			break
-	// 		}
-	// 	}
-	// 	if start >= 0 {
-	// 		ret = noun.Values[start:end]
-	// 	}
-	// }
-	// return
+	if noun, e := q.findNounData(full); e != nil {
+		err = e
+	} else if a, ok := FindValueField(noun.Values, field); ok {
+		ret = a.Value
+	} else {
+		// otherwise, get the field data
+		if k, e := q.GetKindByName(noun.Kind); e != nil {
+			err = e
+		} else if i := k.FieldIndex(field); i < 0 {
+			err = fmt.Errorf("couldnt find field %q in kind %q", field, k.Name())
+		} else {
+			ft := k.Field(i)
+			if a, ok := FindRecordField(noun.Records, field); !ok {
+				// if no record: then default value
+				ret, err = zeroAssignment(ft, i)
+			} else {
+				// otherwise, unpack the record and return it
+				if rec, e := pack.UnpackRecord(q, a.Packed, ft.Type); e != nil {
+					err = e
+				} else {
+					ret = rt.AssignValue(rt.RecordOf(rec))
+				}
+			}
+		}
+	}
+	return
 }
 
 func (q RawQuery) NounsByKind(kind string) (ret []string, _ error) {
@@ -152,10 +159,8 @@ func (q RawQuery) PluralToSingular(plural string) (ret string, _ error) {
 }
 
 func (q RawQuery) PluralFromSingular(singular string) (ret string, _ error) {
-	if i, ok := slices.BinarySearchFunc(q.Plurals, singular, func(n Plural, _ string) int {
-		return cmp.Compare(n.One, singular)
-	}); ok {
-		ret = q.Plurals[i].Many
+	if a, ok := FindPlural(q.Plurals, singular); ok {
+		ret = a.Many
 	}
 	return
 }
@@ -263,52 +268,55 @@ func (q RawQuery) getPluralKind(singleOrPlural string) (ret string, err error) {
 	return
 }
 
-func (q *Data) GetKindByName(exactKind string) (*rt.Kind, error) {
-	return FindKind(q.Kinds, exactKind)
+// fix? calls are not consistent about which name they use
+// see also BuildKind
+func (q *Data) GetKindByName(kind string) (ret *rt.Kind, err error) {
+	if k, ok := FindKind(q.Kinds, kind); ok {
+		ret = k
+	} else if plural, ok := FindPlural(q.Plurals, kind); !ok {
+		err = fmt.Errorf("couldnt find kind %q", kind)
+	} else if k, ok := FindKind(q.Kinds, plural.Many); ok {
+		ret = k
+	} else {
+		err = fmt.Errorf("couldnt find kind %q or %q", kind, plural.Many)
+	}
+	return
 }
 
 // shortname to id
 func (q RawQuery) findFullName(shortname string) (ret string, err error) {
-	if i, ok := slices.BinarySearchFunc(q.Names, shortname, func(n NounName, _ string) int {
-		return cmp.Compare(n.Name, shortname)
-	}); !ok {
+	if a, ok := FindName(q.Names, shortname); !ok {
 		err = fmt.Errorf("couldnt find noun with shortname %q", shortname)
 	} else {
-		ret = q.Names[i].Noun
+		ret = a.Noun
 	}
 	return
 }
 
 // fullname to NounData
 func (q RawQuery) findNounData(fullname string) (ret NounData, err error) {
-	if i, ok := slices.BinarySearchFunc(q.Nouns, fullname, func(n NounData, _ string) int {
-		return cmp.Compare(n.Noun, fullname)
-	}); !ok {
+	if a, ok := FindNoun(q.Nouns, fullname); !ok {
 		err = fmt.Errorf("couldnt find noun with fullname %q", fullname)
 	} else {
-		ret = q.Nouns[i]
+		ret = a
 	}
 	return
 }
 
 func (q RawQuery) findPattern(name string) (ret PatternData, err error) {
-	if i, ok := slices.BinarySearchFunc(q.Patterns, name, func(p PatternData, _ string) int {
-		return cmp.Compare(p.Pattern, name)
-	}); !ok {
+	if a, ok := FindPattern(q.Patterns, name); !ok {
 		err = fmt.Errorf("couldnt find pattern %q", name)
 	} else {
-		ret = q.Patterns[i]
+		ret = a
 	}
 	return
 }
 
 func (q RawQuery) findRelation(name string) (ret *RelativeData, err error) {
-	if i, ok := slices.BinarySearchFunc(q.Relatives, name, func(p RelativeData, _ string) int {
-		return cmp.Compare(p.Relation, name)
-	}); !ok {
+	if a, ok := FindRelation(q.Relatives, name); !ok {
 		err = fmt.Errorf("couldnt find relation %q", name)
 	} else {
-		ret = &(q.Relatives[i])
+		ret = a
 	}
 	return
 }

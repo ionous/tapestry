@@ -30,6 +30,7 @@ func IsNilRecord(e error) bool {
 	return errors.As(e, &z)
 }
 
+// tell package errutil this is a non-critical error.
 func (e NilRecord) NoPanic() {}
 
 func (e NilRecord) Error() string {

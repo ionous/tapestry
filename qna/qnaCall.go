@@ -14,7 +14,7 @@ import (
 // can return both a both meaningful value *and* an error
 func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []rt.Value) (ret rt.Value, err error) {
 	// create a container to hold results of args, locals, and the pending return value
-	if pat, e := run.getKind(name); e != nil {
+	if pat, e := run.GetKindByName(name); e != nil {
 		err = e
 	} else if rec, e := pattern.InitRecord(run, pat, keys, vals); e != nil {
 		err = e
@@ -38,7 +38,7 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 			if tgt, e := rec.GetIndexedField(target); e != nil {
 				err = e
 			} else {
-				ret, err = run.send(name, rec, tgt)
+				ret, err = run.send(pat.Name(), rec, tgt)
 			}
 
 		default:
