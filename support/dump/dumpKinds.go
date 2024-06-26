@@ -2,81 +2,60 @@ package dump
 
 import (
 	"database/sql"
-	"fmt"
+	"slices"
 
-	"git.sr.ht/~ionous/tapestry/qna/raw"
+	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryKinds(db *sql.DB, scene string) (ret []raw.KindData, err error) {
-	if ks, e := QueryInnerKinds(db, scene); e != nil {
-		err = fmt.Errorf("%w while querying inner kinds", e)
-	} else if e := QueryAncestors(db, ks); e != nil {
-		err = fmt.Errorf("%w while querying ancestors", e)
-	} else if e := QueryFields(db, ks); e != nil {
-		err = fmt.Errorf("%w while querying fields", e)
-	} else {
-		ret = ks
-	}
-	return
-}
-
-// build a list of kinds active in this scene
-// only includes the most basic data for the kinds: name and id.
-func QueryInnerKinds(db *sql.DB, scene string) (ret []raw.KindData, err error) {
-	var k raw.KindData
-	if rows, e := db.Query(must("kinds"), scene); e != nil {
+func QueryKinds(db *sql.DB, dec decoder.Decoder, scene string) (ret []rt.Kind, err error) {
+	if ks, e := tables.QueryStrings(db, must("kinds"), scene); e != nil {
 		err = e
 	} else {
-		err = tables.ScanAll(rows, func() (err error) {
-			ret = append(ret, k)
-			return
-		}, &k.Id, &k.Domain, &k.Kind)
-	}
-	return
-}
-
-// get ancestors for every kind in ks
-func QueryAncestors(db *sql.DB, ks []raw.KindData) (err error) {
-	q := must("ancestors")
-	for i, k := range ks {
-		if ps, e := tables.QueryStrings(db, q, k.Id); e != nil {
-			err = e
-			break
-		} else {
-			ks[i].Ancestors = ps
+		kb := kindBuilder{db, dec, make(fieldCache)}
+		ret = make([]rt.Kind, len(ks))
+		for i, k := range ks {
+			if rk, e := decoder.BuildKind(kb, k); e != nil {
+				err = e
+				break
+			} else {
+				ret[i] = rk
+			}
 		}
 	}
 	return
 }
 
-// get ancestors for every kind in ks
-func QueryFields(db *sql.DB, ks []raw.KindData) (err error) {
-	q := must("fields")
-	for i, k := range ks {
-		if rows, e := db.Query(q, k.Id); e != nil {
-			err = e
-		} else if fs, e := queryFields(rows); e != nil {
-			err = e
-		} else {
-			ks[i].Fields = fs
-		}
+type kindBuilder struct {
+	db    *sql.DB
+	dec   decoder.Decoder
+	cache fieldCache
+}
+
+type fieldCache map[string][]rt.Field
+
+func (kb kindBuilder) KindOfAncestors(k string) (ret []string, err error) {
+	return tables.QueryStrings(kb.db, must("ancestors"), k)
+}
+
+func (kb kindBuilder) FieldsOf(k string) (ret []rt.Field, err error) {
+	if fs, ok := kb.cache[k]; ok {
+		ret = fs
+	} else if rows, e := kb.db.Query(must("fields"), k); e != nil {
+		err = e
+	} else if fs, e := qdb.ScanFields(rows, kb.dec); e != nil {
+		err = e
+	} else {
+		kb.cache[k] = fs
+		ret = fs
 	}
 	return
 }
 
-func queryFields(rows *sql.Rows) (ret []raw.FieldData, err error) {
-	var last string
-	var field raw.FieldData
-	err = tables.ScanAll(rows, func() (_ error) {
-		// the same field might be listed twice:
-		// the final value ( listed first )
-		// and a non final value ( listed second )
-		if last != field.Name {
-			ret = append(ret, field)
-			last = field.Name
-		}
-		return
-	}, &field.Name, &field.Affinity, &field.Class, &field.Init)
-	return
+func findField(k *rt.Kind, name string, last int) int {
+	return slices.IndexFunc(k.Fields[last:], func(n rt.Field) bool {
+		return n.Name == name
+	})
 }

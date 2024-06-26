@@ -1,5 +1,6 @@
--- id, name for every kind
--- in alphabetical order
+-- name for every kind in alphabetical order
+-- fix: its not quite right to use names 
+-- because the current names are only unique with a domain set.
 -- params:
 --   ?1: base domain name
   with domains as (
@@ -9,7 +10,7 @@
   union all  
   select ?1
 )
-select mk.rowid, mk.domain, mk.kind
+select mk.kind
 from mdl_kind mk
 join domains md
   using (domain)

@@ -1,6 +1,6 @@
 -- lists complete field set of a given kind
 -- params:
---   ?1: id of kind
+--   ?1: name kind
 --
 -- fix? merge with query fieldsOf ( ex. using a cte )
 -- 
@@ -25,7 +25,7 @@ left join mdl_value_kind mv
 -- finally determine the name of the field's type
 left join mdl_kind mt 
   on (mt.rowid = mf.type)
-where (ks.rowid = ?1)
+where (ks.kind = ?1)
 -- sort to get fields in definition order
 -- ( that's implicitly also kind order: all fields in earlier kinds are defined first )
 -- then by the initializer nearest to our requested kind 

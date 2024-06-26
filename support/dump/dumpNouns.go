@@ -4,33 +4,17 @@ import (
 	"database/sql"
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryNames(db *sql.DB, scene string) (ret []raw.NounName, err error) {
-	var n raw.NounName
-	var last string
-	if rows, e := db.Query(must("names"), scene); e != nil {
-		err = fmt.Errorf("%w while querying names", e)
-	} else {
-		err = tables.ScanAll(rows, func() (err error) {
-			if last != n.Name {
-				ret = append(ret, n)
-				last = n.Name
-			}
-			return
-		}, &n.Name, &n.Noun)
-	}
-	return
-}
-
-func QueryNouns(db *sql.DB, scene string) (ret []raw.NounData, err error) {
+func QueryNouns(db *sql.DB, kd decoder.KindDecoder, scene string) (ret []raw.NounData, err error) {
 	if ns, e := QueryInnerNouns(db, scene); e != nil {
 		err = fmt.Errorf("%w while querying ids", e)
 	} else if e := QueryAliases(db, ns); e != nil {
 		err = fmt.Errorf("%w while querying aliases", e)
-	} else if e := QueryValues(db, ns); e != nil {
+	} else if e := QueryValues(db, kd, ns); e != nil {
 		err = fmt.Errorf("%w while querying values", e)
 	} else {
 		ret = ns
@@ -51,15 +35,27 @@ func QueryInnerNouns(db *sql.DB, scene string) (ret []raw.NounData, err error) {
 	return
 }
 
-func QueryValues(db *sql.DB, ns []raw.NounData) (err error) {
-	q := must("values")
+func QueryValues(db *sql.DB, kd decoder.KindDecoder, ns []raw.NounData) (err error) {
+	vals, recs := must("values"), must("records")
 	for i, n := range ns {
-		if rows, e := db.Query(q, n.Id); e != nil {
+		if k, e := kd.GetKindByName(n.Kind); e != nil {
 			err = e
-		} else if vs, e := queryValues(rows); e != nil {
-			err = e
+			break
 		} else {
-			ns[i].Values = vs
+			read := makeValueReader(&ns[i], k, kd)
+			if rows, e := db.Query(vals, n.Id); e != nil {
+				err = e
+				break
+			} else if e := read.values(rows); e != nil {
+				err = e
+				break
+			} else if rows, e := db.Query(recs, n.Id); e != nil {
+				err = e
+				break
+			} else if e := read.records(rows); e != nil {
+				err = e
+				break
+			}
 		}
 	}
 	return
@@ -77,18 +73,5 @@ func QueryAliases(db *sql.DB, ns []raw.NounData) (err error) {
 			ns[i].Aliases = as[1:]
 		}
 	}
-	return
-}
-
-func queryValues(rows *sql.Rows) (ret []raw.ValueData, err error) {
-	var last string
-	var v raw.ValueData
-	err = tables.ScanAll(rows, func() (_ error) {
-		if last != v.Field {
-			ret = append(ret, v)
-			last = v.Field
-		}
-		return
-	}, &v.Field, &v.Path, &v.Value)
 	return
 }

@@ -38,7 +38,7 @@ func (d *QueryDecoder) DecodeField(a affine.Affinity, b []byte, fieldType string
 
 func (d *QueryDecoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
 	var act rtti.Execute_Slots
-	if e := d.decodeValue(&act, b); e != nil {
+	if e := d.DecodeValue(&act, b); e != nil {
 		err = e
 	} else {
 		ret = act
@@ -53,56 +53,56 @@ func (d *QueryDecoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Ass
 	switch a {
 	case affine.None:
 		var v rtti.Assignment_Slot
-		if e := d.decodeValue(&v, b); e != nil {
+		if e := d.DecodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = v.Value
 		}
 	case affine.Bool:
 		var v rtti.BoolEval_Slot
-		if e := d.decodeValue(&v, b); e != nil {
+		if e := d.DecodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &call.FromBool{Value: v.Value}
 		}
 	case affine.Num:
 		var v rtti.NumEval_Slot
-		if e := d.decodeValue(&v, b); e != nil {
+		if e := d.DecodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &call.FromNum{Value: v.Value}
 		}
 	case affine.Text:
 		var v rtti.TextEval_Slot
-		if e := d.decodeValue(&v, b); e != nil {
+		if e := d.DecodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &call.FromText{Value: v.Value}
 		}
 	case affine.NumList:
 		var v rtti.NumListEval_Slot
-		if e := d.decodeValue(&v, b); e != nil {
+		if e := d.DecodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &call.FromNumList{Value: v.Value}
 		}
 	case affine.TextList:
 		var v rtti.TextListEval_Slot
-		if e := d.decodeValue(&v, b); e != nil {
+		if e := d.DecodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &call.FromTextList{Value: v.Value}
 		}
 	case affine.Record:
 		var v rtti.RecordEval_Slot
-		if e := d.decodeValue(&v, b); e != nil {
+		if e := d.DecodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &call.FromRecord{Value: v.Value}
 		}
 	case affine.RecordList:
 		var v rtti.RecordListEval_Slot
-		if e := d.decodeValue(&v, b); e != nil {
+		if e := d.DecodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &call.FromRecordList{Value: v.Value}
@@ -113,7 +113,7 @@ func (d *QueryDecoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Ass
 	return
 }
 
-func (d *QueryDecoder) decodeValue(out typeinfo.Instance, b []byte) (err error) {
+func (d *QueryDecoder) DecodeValue(out typeinfo.Instance, b []byte) (err error) {
 	if len(b) > 0 {
 		var val any
 		if e := json.Unmarshal(b, &val); e != nil {

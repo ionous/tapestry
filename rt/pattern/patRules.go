@@ -10,8 +10,8 @@ import (
 )
 
 type RuleSet struct {
-	rules     []rt.Rule
-	updateAll bool
+	Rules     []rt.Rule
+	UpdateAll bool
 }
 
 func MakeRules(rs []rt.Rule, updateAll bool) RuleSet {
@@ -20,14 +20,14 @@ func MakeRules(rs []rt.Rule, updateAll bool) RuleSet {
 
 // backcompat
 func (rs *RuleSet) AddRule(rule rt.Rule) {
-	rs.rules = append(rs.rules, rule)
-	rs.updateAll = rule.Updates
+	rs.Rules = append(rs.Rules, rule)
+	rs.UpdateAll = rule.Updates
 }
 
 // assumes scope is initialized
 func (rs *RuleSet) Calls(run rt.Runtime, rec *rt.Record, resultField int) (res Result, err error) {
 	stopJump := stopJump{jump: rt.JumpLater}
-	for i := range rs.rules {
+	for i := range rs.Rules {
 		if res, e := rs.tryRule(run, i); e != nil {
 			err = e
 			break
@@ -71,7 +71,7 @@ func (rs *RuleSet) Sends(run rt.Runtime, evtObj *rt.Record, chain []string) (oka
 // event handlers dont have return values, so whenever they match it may be the end
 // ( depending on values in the db determined during weave based on phase )
 func (rs *RuleSet) send(run rt.Runtime, evtObj *rt.Record, stopJump *stopJump) (err error) {
-	for i := range rs.rules {
+	for i := range rs.Rules {
 		if res, e := rs.tryRule(run, i); e != nil {
 			err = e
 			break
@@ -85,7 +85,7 @@ func (rs *RuleSet) send(run rt.Runtime, evtObj *rt.Record, stopJump *stopJump) (
 func (rs *RuleSet) tryRule(run rt.Runtime, i int) (ret stopJump, err error) {
 	var pushes int
 	var prog []rt.Execute
-	rule := rs.rules[i] // copies
+	rule := rs.Rules[i] // copies
 	// scan for the first matching case
 	// if none apply then the rule isn't considered to have been run
 	if tree := logic.PickTree(rule.Exe); tree == nil {

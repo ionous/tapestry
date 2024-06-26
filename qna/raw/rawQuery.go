@@ -22,6 +22,8 @@ func (e NotImplemented) Error() string {
 	return string(e)
 }
 
+// fix: still needs the decoder for record values
+// but it could be minimized to the literal decoder
 func MakeQuery(data *Data, dec decoder.Decoder) RawQuery {
 	return RawQuery{data, dec}
 }
@@ -58,30 +60,13 @@ func (q RawQuery) ReadChecks(actuallyJustThisOne string) (_ []query.CheckData, _
 	return // none
 }
 
-func (q RawQuery) GetKindByName(k string) (ret *rt.Kind, err error) {
-	panic("fix")
-}
-
-func (q RawQuery) fieldsOf(exactKind string) (ret []FieldData, err error) {
-	if i, ok := slices.BinarySearchFunc(q.Kinds, exactKind, func(k KindData, _ string) int {
-		return cmp.Compare(k.Kind, exactKind)
-	}); !ok {
-		err = fmt.Errorf("fields of %q not found", exactKind)
-	} else {
-		ret = q.Kinds[i].Fields
-	}
-	return
-}
-
 func (q RawQuery) KindOfAncestors(singleOrPlural string) (ret []string, err error) {
-	if kind, e := q.getPluralKind(singleOrPlural); e != nil {
+	if exactKind, e := q.getPluralKind(singleOrPlural); e != nil {
 		err = e
-	} else if i, ok := slices.BinarySearchFunc(q.Kinds, kind, func(k KindData, _ string) int {
-		return cmp.Compare(k.Kind, kind)
-	}); !ok {
-		err = fmt.Errorf("fields of %q not found", kind)
+	} else if k, e := q.GetKindByName(exactKind); e != nil {
+		err = e
 	} else {
-		ret = q.Kinds[i].Ancestors
+		ret = k.Ancestors()
 	}
 	return
 }
@@ -188,30 +173,9 @@ func (q RawQuery) RulesFor(pat string) (ret query.RuleSet, err error) {
 	if p, e := q.findPattern(pat); e != nil {
 		err = e
 	} else {
-		var out []rt.Rule
-		var updateAll bool
-		for _, rule := range p.Rules {
-			if prog, e := q.dec.DecodeProg(rule.Prog); e != nil {
-				err = e
-				break
-			} else {
-				if rule.Updates {
-					updateAll = true
-				}
-				out = append(out, rt.Rule{
-					Name:    rule.Name,
-					Stop:    rule.Stop,
-					Jump:    rt.Jump(rule.Jump),
-					Updates: rule.Updates,
-					Exe:     prog,
-				})
-			}
-		}
-		if err == nil {
-			ret = query.RuleSet{
-				Rules:     out,
-				UpdateAll: updateAll,
-			}
+		ret = query.RuleSet{
+			Rules:     p.Rules,
+			UpdateAll: p.UpdateAll,
 		}
 	}
 	return
@@ -297,6 +261,10 @@ func (q RawQuery) getPluralKind(singleOrPlural string) (ret string, err error) {
 		ret = n
 	}
 	return
+}
+
+func (q *Data) GetKindByName(exactKind string) (*rt.Kind, error) {
+	return FindKind(q.Kinds, exactKind)
 }
 
 // shortname to id

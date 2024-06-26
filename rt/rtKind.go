@@ -16,10 +16,10 @@ type Kind struct {
 	// holds the accumulated fields of all ancestors.
 	// parent fields to the *left*, more derived fields to the right. ( the reverse of path. )
 	// descendant kinds can have different initial assignments for the same named field.
-	Fields []Field
+	Fields []Field `json:",omitempty"`
 	// a subset of fields for those containing traits
 	// see MakeAspects.
-	Aspects []Aspect
+	Aspects []Aspect `json:",omitempty"`
 	// a cache of last accessed field
 	lastField int
 }
@@ -28,8 +28,8 @@ type Kind struct {
 type Field struct {
 	Name     string          // name of the field, unique within the kind
 	Affinity affine.Affinity // one of the built in data types
-	Type     string          // subtype; ex. kind for text types
-	Init     Assignment      // default initialization
+	Type     string          `json:",omitempty"` // subtype; ex. kind for text types
+	Init     Assignment      `json:",omitempty"` // default initialization
 }
 
 // the traits of any aspects behave like separate boolean fields;
@@ -97,35 +97,20 @@ func (k *Kind) Aspect(i int) (ret Aspect) {
 }
 
 func (k *Kind) AspectIndex(aspect string) (ret int) {
-	ret = -1 // provisionally
-	for i, at := range k.Aspects {
-		if at.Name == aspect {
-			ret = i
-			break
-		}
-	}
-	return
+	return slices.IndexFunc(k.Aspects, func(a Aspect) bool {
+		return a.Name == aspect
+	})
 }
 
 // return the index of the aspect containing the passed trait
-func (k *Kind) FindAspectByTrait(trait string) (ret int) {
-	ret = -1 // provisionally
-	for i, a := range k.Aspects {
-		if slices.Contains(a.Traits, trait) {
-			ret = i
-			break
-		}
-	}
-	return
+func (k *Kind) FindAspectByTrait(trait string) int {
+	return slices.IndexFunc(k.Aspects, func(a Aspect) bool {
+		return slices.Contains(a.Traits, trait)
+	})
 }
 
 func findField(field string, fields []Field) (ret int) {
-	ret = -1 // provisionally
-	for i, f := range fields {
-		if f.Name == field {
-			ret = i
-			break
-		}
-	}
-	return
+	return slices.IndexFunc(fields, func(f Field) bool {
+		return f.Name == field
+	})
 }

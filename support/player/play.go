@@ -12,7 +12,6 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/game"
-	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -55,19 +54,21 @@ func createContext(mdlFile string, d *query.QueryDecoder) (ret context, err erro
 }
 
 type context struct {
-	grammar parser.Scanner
 	q       query.Query
+	grammar []parser.Scanner
 }
 
 func createRawContext(mdlFile string, dec *query.QueryDecoder) (ret context, err error) {
 	var data raw.Data
 	if e := files.LoadJson(mdlFile, &data); e != nil {
 		err = e
-	} else if gram, e := readRawGrammar((*decode.Decoder)(dec), data.Grammar); e != nil {
-		err = e
 	} else {
 		q := raw.MakeQuery(&data, dec)
-		ret = context{gram, q}
+		scan := make([]parser.Scanner, len(data.Grammar))
+		for i, d := range data.Grammar {
+			scan[i] = d.MakeScanners()
+		}
+		ret = context{q, scan}
 	}
 	return
 }
@@ -76,12 +77,12 @@ func createSqlContext(mdlFile string, dec *query.QueryDecoder) (ret context, err
 	if db, e := tables.CreateRunTime(mdlFile); e != nil {
 		err = e
 	} else {
-		if grammar, e := ReadGrammar(db, (*decode.Decoder)(dec)); e != nil {
+		if grammar, e := ReadGrammar(db, dec); e != nil {
 			err = e
 		} else if q, e := qdb.NewQueries(db, dec); e != nil {
 			err = e
 		} else {
-			ret = context{grammar, q}
+			ret = context{q, grammar}
 		}
 		if err != nil { // otherwise query will take care of it
 			defer db.Close()

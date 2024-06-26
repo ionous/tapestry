@@ -8,29 +8,31 @@ import (
 	"fmt"
 	"io/fs"
 
+	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 //go:embed sql/*.sql
 var queries embed.FS
 
-func DumpAll(db *sql.DB, scene string) (ret raw.Data, err error) {
+func DumpAll(db *sql.DB, dec decoder.Decoder, scene string) (ret raw.Data, err error) {
 	if scenes, e := QueryScenes(db, scene); e != nil {
 		err = fmt.Errorf("%w for scenes", e)
 	} else if plurals, e := QueryPlurals(db, scene); e != nil {
 		err = fmt.Errorf("%w for plurals", e)
-	} else if kinds, e := QueryKinds(db, scene); e != nil {
+	} else if kinds, e := QueryKinds(db, dec, scene); e != nil {
 		err = fmt.Errorf("%w for kinds", e)
 	} else if names, e := QueryNames(db, scene); e != nil {
 		err = fmt.Errorf("%w for names", e)
-	} else if nouns, e := QueryNouns(db, scene); e != nil {
+	} else if nouns, e := QueryNouns(db, kindDecoder{dec, kinds}, scene); e != nil {
 		err = fmt.Errorf("%w for nouns", e)
-	} else if patterns, e := QueryPatterns(db, scene); e != nil {
+	} else if patterns, e := QueryPatterns(db, dec, scene); e != nil {
 		err = fmt.Errorf("%w for patterns", e)
 	} else if relatives, e := QueryRelatives(db, scene); e != nil {
 		err = fmt.Errorf("%w for relatives", e)
-	} else if grammar, e := QueryGrammar(db, scene); e != nil {
+	} else if grammar, e := QueryGrammar(db, dec, scene); e != nil {
 		err = fmt.Errorf("%w for grammar", e)
 	} else {
 		ret = raw.Data{
@@ -45,6 +47,15 @@ func DumpAll(db *sql.DB, scene string) (ret raw.Data, err error) {
 		}
 	}
 	return
+}
+
+type kindDecoder struct {
+	decoder.Decoder
+	ks []rt.Kind
+}
+
+func (q kindDecoder) GetKindByName(exactKind string) (*rt.Kind, error) {
+	return raw.FindKind(q.ks, exactKind)
 }
 
 func QueryScenes(db *sql.DB, scene string) (ret []string, err error) {

@@ -415,14 +415,14 @@ order by mf.rowid, mv.kind desc, mv.final desc`,
 		// query the db for the value(s) of a given field for a given noun
 		// fix: future, we will want to save values to a "run_value" table and union those in here.
 		nounValues: ps.Prep(db,
-			`select mv.dot, mv.value
+			`select coalesce(mv.dot,'') as dot, mv.value
 			from mdl_value mv
 			join active_nouns ns
 				using (noun)
 			join mdl_field mf
 				on (mf.rowid = mv.field)
 			where (ns.name = ?1) and (mf.field = ?2) and (mv.noun = ns.noun)
-			order by length(mv.dot), mv.final desc`,
+			order by length(dot), mv.final desc`,
 		),
 		// find the names of a given pattern ( kind's ) args and results
 		patternOf: ps.Prep(db,

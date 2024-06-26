@@ -19,8 +19,9 @@ type Playtime struct {
 	survey  Survey
 }
 
-func NewPlaytime(run rt.Runtime, survey Survey, grammar parser.Scanner) *Playtime {
-	return &Playtime{Runtime: run, grammar: grammar, survey: survey}
+func NewPlaytime(run rt.Runtime, survey Survey, grammar []parser.Scanner) *Playtime {
+	g := &parser.AnyOf{Match: grammar}
+	return &Playtime{Runtime: run, grammar: g, survey: survey}
 }
 
 func (p *Playtime) Survey() *Survey {
