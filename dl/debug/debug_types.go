@@ -435,12 +435,12 @@ var z_str_list = []*typeinfo.Str{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(DoNothing{})
-	reg(Expect{})
-	reg(ExpectText{})
-	reg(Fabricate{})
-	reg(LogValue{})
-	reg(Note{})
+	reg((*DoNothing)(nil))
+	reg((*Expect)(nil))
+	reg((*ExpectText)(nil))
+	reg((*Fabricate)(nil))
+	reg((*LogValue)(nil))
+	reg((*Note)(nil))
 }
 
 // a list of all command signatures

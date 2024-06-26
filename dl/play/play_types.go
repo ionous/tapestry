@@ -281,9 +281,9 @@ var z_str_list = []*typeinfo.Str{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(PlayLog{})
-	reg(PlayMode{})
-	reg(PlayOut{})
+	reg((*PlayLog)(nil))
+	reg((*PlayMode)(nil))
+	reg((*PlayOut)(nil))
 }
 
 // a list of all command signatures

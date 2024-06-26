@@ -366,11 +366,11 @@ var z_flow_list = []*typeinfo.Flow{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(RelativeOf{})
-	reg(RelativesOf{})
-	reg(ReciprocalOf{})
-	reg(ReciprocalsOf{})
-	reg(Relate{})
+	reg((*RelativeOf)(nil))
+	reg((*RelativesOf)(nil))
+	reg((*ReciprocalOf)(nil))
+	reg((*ReciprocalsOf)(nil))
+	reg((*Relate)(nil))
 }
 
 // a list of all command signatures

@@ -464,12 +464,12 @@ var z_flow_list = []*typeinfo.Flow{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(Frame{})
-	reg(FrameOutput{})
-	reg(SceneStarted{})
-	reg(SceneEnded{})
-	reg(StateChanged{})
-	reg(PairChanged{})
+	reg((*Frame)(nil))
+	reg((*FrameOutput)(nil))
+	reg((*SceneStarted)(nil))
+	reg((*SceneEnded)(nil))
+	reg((*StateChanged)(nil))
+	reg((*PairChanged)(nil))
 }
 
 // a list of all command signatures

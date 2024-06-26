@@ -11,7 +11,9 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/support/dump"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
@@ -30,7 +32,7 @@ func runDump(ctx context.Context, cmd *base.Command, args []string) (err error) 
 		if data, e := dump.DumpAll(db, dec, args[0]); e != nil {
 			err = e
 		} else {
-			tapestry.Register(gob.Register)
+			files.SaveJson(outFile+".json", data, true)
 			err = SaveGob(outFile, data)
 		}
 	}
@@ -38,13 +40,14 @@ func runDump(ctx context.Context, cmd *base.Command, args []string) (err error) 
 }
 
 // serialize to the passed path
-func SaveGob(outPath string, data any) (err error) {
+func SaveGob(outPath string, data raw.Data) (err error) {
+	tapestry.Register(gob.Register)
 	if fp, e := os.Create(outPath); e != nil {
 		err = e
 	} else {
-		defer fp.Close()
 		enc := gob.NewEncoder(fp)
 		err = enc.Encode(data)
+		fp.Close()
 	}
 	return
 }

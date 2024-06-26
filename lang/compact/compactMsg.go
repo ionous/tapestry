@@ -29,7 +29,7 @@ func (op *Message) AddMarkup(k string, v any) {
 		if str, ok := SliceStrings(v); !ok {
 			// this eats the source pos elements that are encoded into the db
 			// they shouldnt even be there really
-			log.Printf("unhandled markup %s: %T %v", k, v, v)
+			// log.Printf("unhandled markup %s: %T %v", k, v, v)
 			// panic("unhandled markup")
 		} else {
 			op.Markup[k] = str

@@ -56,7 +56,7 @@ var Z_Types = typeinfo.TypeSet{
 func Register(reg func(any)) {
 {{- range .Types }}{{ if and (eq .Type "flow") .List }}
 {{- range .List }}
-	reg({{Pascal .Name}}{})
+	reg((*{{Pascal .Name}})(nil))
 {{- end }}
 {{- end }}{{- end }}
 }

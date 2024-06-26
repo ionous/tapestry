@@ -2,6 +2,7 @@ package player
 
 import (
 	"bufio"
+	"encoding/gob"
 	"errors"
 	"fmt"
 	"log"
@@ -19,7 +20,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
-	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/support/play"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web/markup"
@@ -45,7 +45,7 @@ func PlayWithOptions(mdlFile, testString, scene string, opts qna.Options) (err e
 }
 
 func createContext(mdlFile string, d *query.QueryDecoder) (ret context, err error) {
-	if path.Ext(mdlFile) == ".json" {
+	if path.Ext(mdlFile) == ".gob" {
 		ret, err = createRawContext(mdlFile, d)
 	} else {
 		ret, err = createSqlContext(mdlFile, d)
@@ -60,7 +60,7 @@ type context struct {
 
 func createRawContext(mdlFile string, dec *query.QueryDecoder) (ret context, err error) {
 	var data raw.Data
-	if e := files.LoadJson(mdlFile, &data); e != nil {
+	if e := LoadGob(mdlFile, &data); e != nil {
 		err = e
 	} else {
 		q := raw.MakeQuery(&data, dec)
@@ -69,6 +69,19 @@ func createRawContext(mdlFile string, dec *query.QueryDecoder) (ret context, err
 			scan[i] = d.MakeScanners()
 		}
 		ret = context{q, scan}
+	}
+	return
+}
+
+// serialize to the passed path
+func LoadGob(inPath string, pd *raw.Data) (err error) {
+	tapestry.Register(gob.Register)
+	if fp, e := os.Open(inPath); e != nil {
+		err = e
+	} else {
+		dec := gob.NewDecoder(fp)
+		err = dec.Decode(pd)
+		defer fp.Close()
 	}
 	return
 }

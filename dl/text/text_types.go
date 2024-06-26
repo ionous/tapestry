@@ -954,21 +954,21 @@ var z_flow_list = []*typeinfo.Flow{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(TextLen{})
-	reg(FindText{})
-	reg(TextStartsWith{})
-	reg(TextEndsWith{})
-	reg(IsNothing{})
-	reg(Matches{})
-	reg(Capitalize{})
-	reg(Join{})
-	reg(MakeLowercase{})
-	reg(MakeReversed{})
-	reg(MakeSentenceCase{})
-	reg(MakeTitleCase{})
-	reg(MakeUppercase{})
-	reg(Pluralize{})
-	reg(Singularize{})
+	reg((*TextLen)(nil))
+	reg((*FindText)(nil))
+	reg((*TextStartsWith)(nil))
+	reg((*TextEndsWith)(nil))
+	reg((*IsNothing)(nil))
+	reg((*Matches)(nil))
+	reg((*Capitalize)(nil))
+	reg((*Join)(nil))
+	reg((*MakeLowercase)(nil))
+	reg((*MakeReversed)(nil))
+	reg((*MakeSentenceCase)(nil))
+	reg((*MakeTitleCase)(nil))
+	reg((*MakeUppercase)(nil))
+	reg((*Pluralize)(nil))
+	reg((*Singularize)(nil))
 }
 
 // a list of all command signatures

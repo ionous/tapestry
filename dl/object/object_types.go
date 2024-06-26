@@ -1122,21 +1122,21 @@ var z_flow_list = []*typeinfo.Flow{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(SetValue{})
-	reg(SetState{})
-	reg(ObjectDot{})
-	reg(VariableDot{})
-	reg(AtField{})
-	reg(AtIndex{})
-	reg(ObjectName{})
-	reg(ObjectStates{})
-	reg(IsExactKindOf{})
-	reg(IsKindOf{})
-	reg(KindOf{})
-	reg(KindsOf{})
-	reg(FieldsOfKind{})
-	reg(IncrementAspect{})
-	reg(DecrementAspect{})
+	reg((*SetValue)(nil))
+	reg((*SetState)(nil))
+	reg((*ObjectDot)(nil))
+	reg((*VariableDot)(nil))
+	reg((*AtField)(nil))
+	reg((*AtIndex)(nil))
+	reg((*ObjectName)(nil))
+	reg((*ObjectStates)(nil))
+	reg((*IsExactKindOf)(nil))
+	reg((*IsKindOf)(nil))
+	reg((*KindOf)(nil))
+	reg((*KindsOf)(nil))
+	reg((*FieldsOfKind)(nil))
+	reg((*IncrementAspect)(nil))
+	reg((*DecrementAspect)(nil))
 }
 
 // a list of all command signatures

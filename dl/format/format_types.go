@@ -985,21 +985,21 @@ var z_flow_list = []*typeinfo.Flow{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(ParagraphBreak{})
-	reg(SoftBreak{})
-	reg(LineBreak{})
-	reg(CycleText{})
-	reg(ShuffleText{})
-	reg(StoppingText{})
-	reg(BufferText{})
-	reg(PrintText{})
-	reg(PrintWords{})
-	reg(PrintBrackets{})
-	reg(PrintCommas{})
-	reg(PrintRows{})
-	reg(PrintRow{})
-	reg(PrintNum{})
-	reg(PrintCount{})
+	reg((*ParagraphBreak)(nil))
+	reg((*SoftBreak)(nil))
+	reg((*LineBreak)(nil))
+	reg((*CycleText)(nil))
+	reg((*ShuffleText)(nil))
+	reg((*StoppingText)(nil))
+	reg((*BufferText)(nil))
+	reg((*PrintText)(nil))
+	reg((*PrintWords)(nil))
+	reg((*PrintBrackets)(nil))
+	reg((*PrintCommas)(nil))
+	reg((*PrintRows)(nil))
+	reg((*PrintRow)(nil))
+	reg((*PrintNum)(nil))
+	reg((*PrintCount)(nil))
 }
 
 // a list of all command signatures

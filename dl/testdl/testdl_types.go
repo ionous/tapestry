@@ -286,8 +286,8 @@ var z_num_list = []*typeinfo.Num{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(TestEmbed{})
-	reg(TestFlow{})
+	reg((*TestEmbed)(nil))
+	reg((*TestFlow)(nil))
 }
 
 // a list of all command signatures

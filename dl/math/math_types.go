@@ -829,17 +829,17 @@ var z_str_list = []*typeinfo.Str{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg(AddValue{})
-	reg(SubtractValue{})
-	reg(MultiplyValue{})
-	reg(DivideValue{})
-	reg(ModValue{})
-	reg(AbsValue{})
-	reg(Increment{})
-	reg(Decrement{})
-	reg(CompareValue{})
-	reg(CompareNum{})
-	reg(CompareText{})
+	reg((*AddValue)(nil))
+	reg((*SubtractValue)(nil))
+	reg((*MultiplyValue)(nil))
+	reg((*DivideValue)(nil))
+	reg((*ModValue)(nil))
+	reg((*AbsValue)(nil))
+	reg((*Increment)(nil))
+	reg((*Decrement)(nil))
+	reg((*CompareValue)(nil))
+	reg((*CompareNum)(nil))
+	reg((*CompareText)(nil))
 }
 
 // a list of all command signatures
