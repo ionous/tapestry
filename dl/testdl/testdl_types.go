@@ -284,6 +284,12 @@ var z_num_list = []*typeinfo.Num{
 	&Zt_TestNum,
 }
 
+// gob like registration
+func Register(reg func(any)) {
+	reg(TestEmbed{})
+	reg(TestFlow{})
+}
+
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{

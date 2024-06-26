@@ -39,10 +39,10 @@ func (n *DesiredNoun) appendArticle(a *Article) {
 		// if proper named, it's neither indefinite nor plural
 		n.ArticleTrait = ProperNameTrait
 	} else {
-		if a.Flags.Plural {
+		if a.flags.Plural {
 			n.ArticleTrait = PluralNamedTrait
 		}
-		if a.Flags.Indefinite {
+		if a.flags.Indefinite {
 			n.IndefiniteArticle = a.Text
 		}
 	}

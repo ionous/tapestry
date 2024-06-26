@@ -87,7 +87,7 @@ func (op *NounBuilder_Slots) Repeats() bool {
 //   - Using "some"  (ex. "some coins") will set nouns as "plural named".
 type Article struct {
 	Text   string
-	Flags  ArticleFlags
+	flags  ArticleFlags
 	Markup map[string]any
 }
 
@@ -313,7 +313,7 @@ func (op *Name_Slice) Repeats() bool {
 type Noun struct {
 	Article    *Article
 	Matched    Matched
-	ActualNoun ActualNoun
+	actualNoun ActualNoun
 	Markup     map[string]any
 }
 
@@ -562,7 +562,7 @@ func (op *CountedKind_Slice) Repeats() bool {
 type Kind struct {
 	Article    *Article
 	Matched    Matched
-	ActualKind ActualKind
+	actualKind ActualKind
 	Markup     map[string]any
 }
 
@@ -1802,7 +1802,7 @@ func (op *AdditionalText_Slice) Repeats() bool {
 // Matches rule prefixes:
 // before, instead of, when, after, report
 type RulePrefix struct {
-	PrefixValue PrefixValue
+	prefixValue PrefixValue
 	Markup      map[string]any
 }
 
@@ -1840,7 +1840,7 @@ func (op *RulePrefix_Slice) Repeats() bool {
 // and "begins", "ends" ( for domain rules )
 // with an optional leading comma.
 type RuleSuffix struct {
-	SuffixValue SuffixValue
+	suffixValue SuffixValue
 	Markup      map[string]any
 }
 
@@ -2399,7 +2399,7 @@ func init() {
 			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"One of a predefined set of determiners: the, a/n, some, our.", "This only matches if the first letter is lowercase, or uppercase at the start of a sentence;", "otherwise, the article gets treated as part of the name.", "", "Also note:", "  - The lack of a recognized article makes something proper-named.", "  - See 'counted_kind' for names with leading numbers: (ex. five or 27).", "  - Using \"some\"  (ex. \"some coins\") will set nouns as \"plural named\"."},
+			"comment": []string{"One of a predefined set of determiners: the, a/n, some, our.", "This only matches if the first letter is lowercase, or uppercase at the start of a sentence;", "otherwise, the article gets treated as part of the name.", "", "Also note:", "  - The lack of a recognized article makes something proper-named.", "  - See 'counted_kind' for names with leading numbers: (ex. five or 27).", "  - Using \"some\"  (ex. \"some coins\") will set nouns as \"plural named\"."},
 		},
 	}
 	Zt_CommaAnd = typeinfo.Flow{
@@ -2411,7 +2411,7 @@ func init() {
 			Type:  &Zt_Matched,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"This matches commas, \"and\", or \", and\".", "It relies on the fact package match treats commas and the word \"and\" each as their own words."},
+			"comment": []string{"This matches commas, \"and\", or \", and\".", "It relies on the fact package match treats commas and the word \"and\" each as their own words."},
 		},
 	}
 	Zt_CommaAndOr = typeinfo.Flow{
@@ -2423,7 +2423,7 @@ func init() {
 			Type:  &Zt_Matched,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Matches commas, \"and\", or \"or\".", "relies on the fact package match treats commas and ands each as their own words."},
+			"comment": []string{"Matches commas, \"and\", or \"or\".", "relies on the fact package match treats commas and ands each as their own words."},
 		},
 	}
 	Zt_Are = typeinfo.Flow{
@@ -2467,7 +2467,7 @@ func init() {
 			&Zt_NounBuilder,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Specifies a name who's meaning depends on context.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "the \"chest\" implies the noun \"treasure chest.\"", "In other cases, the name might be a kind, or trait, or pretty much anything else.", "", "To optimizing matching the words \"is/are/comma/and\" are never part of name names.", "", "Future: allow quoted \"titles\" ( which are then allowed to break those assumptions )"},
+			"comment": []string{"Specifies a name who's meaning depends on context.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "the \"chest\" implies the noun \"treasure chest.\"", "In other cases, the name might be a kind, or trait, or pretty much anything else.", "", "To optimizing matching the words \"is/are/comma/and\" are never part of name names.", "", "Future: allow quoted \"titles\" ( which are then allowed to break those assumptions )"},
 		},
 	}
 	Zt_Noun = typeinfo.Flow{
@@ -2494,7 +2494,7 @@ func init() {
 			&Zt_NounBuilder,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Matches an existing noun", "( by checking multiple words for the best match )."},
+			"comment": []string{"Matches an existing noun", "( by checking multiple words for the best match )."},
 		},
 	}
 	Zt_NamedNoun = typeinfo.Flow{
@@ -2526,7 +2526,7 @@ func init() {
 			Label:    "traits",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"note: doesn't use 'adjectives' because this doesn't allow", "repetitions of the traits and kind."},
+				"comment": []string{"note: doesn't use 'adjectives' because this doesn't allow", "repetitions of the traits and kind."},
 			},
 			Type: &Zt_Traits,
 		}, {
@@ -2543,7 +2543,7 @@ func init() {
 			Type:  &Zt_NamedNoun,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines a name and its kind in a single phrase.", "Matches: (traits) kind \"called\" {the name}.", "For example:", "   The closed container called the trunk is in the lobby.", "As per inform, the name includes all text after the word \"called\"", "until \"is\", \"are\", or the end of the sentence;", "and specifying \"called the/our ...\" gives the noun an indefinite article."},
+			"comment": []string{"Defines a name and its kind in a single phrase.", "Matches: (traits) kind \"called\" {the name}.", "For example:", "   The closed container called the trunk is in the lobby.", "As per inform, the name includes all text after the word \"called\"", "until \"is\", \"are\", or the end of the sentence;", "and specifying \"called the/our ...\" gives the noun an indefinite article."},
 		},
 	}
 	Zt_Names = typeinfo.Flow{
@@ -2559,7 +2559,7 @@ func init() {
 			Label:    "kind_called",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"note that because this phrase is greedy", "once used, no additional names will match."},
+				"comment": []string{"note that because this phrase is greedy", "once used, no additional names will match."},
 			},
 			Type: &Zt_KindCalled,
 		}, {
@@ -2575,7 +2575,7 @@ func init() {
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"used primarily for anonymous nouns: ex. \"the container\"", "note that anonymous nouns are prohibited from starting a sentence."},
+				"comment": []string{"used primarily for anonymous nouns: ex. \"the container\"", "note that anonymous nouns are prohibited from starting a sentence."},
 			},
 			Type: &Zt_Kind,
 		}, {
@@ -2593,7 +2593,7 @@ func init() {
 			&Zt_NounBuilder,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Specifies one or more nouns, in full or in part.", "Only one of the options, plus possibly 'additional_names', will match.", "Not all options are valid in all contexts."},
+			"comment": []string{"Specifies one or more nouns, in full or in part.", "Only one of the options, plus possibly 'additional_names', will match.", "Not all options are valid in all contexts."},
 		},
 	}
 	Zt_AdditionalNames = typeinfo.Flow{
@@ -2640,7 +2640,7 @@ func init() {
 			&Zt_NounBuilder,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Provides English specification of a number of objects.", "( yes, `the five the containers` is permitted. )"},
+			"comment": []string{"Provides English specification of a number of objects.", "( yes, `the five the containers` is permitted. )"},
 		},
 	}
 	Zt_Kind = typeinfo.Flow{
@@ -2651,7 +2651,7 @@ func init() {
 			Label:    "article",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"while an article can precede every kind", "it doesn't influence which kind gets matched."},
+				"comment": []string{"while an article can precede every kind", "it doesn't influence which kind gets matched."},
 			},
 			Type: &Zt_Article,
 		}, {
@@ -2670,7 +2670,7 @@ func init() {
 			&Zt_NounBuilder,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Matches the name of an existing kind.", "Can generate a single anonymous noun."},
+			"comment": []string{"Matches the name of an existing kind.", "Can generate a single anonymous noun."},
 		},
 	}
 	Zt_Kinds = typeinfo.Flow{
@@ -2681,7 +2681,7 @@ func init() {
 			Label:    "traits",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"inform uses traits specified here to select", "matching nouns; jess is not that clever."},
+				"comment": []string{"inform uses traits specified here to select", "matching nouns; jess is not that clever."},
 			},
 			Type: &Zt_Traits,
 		}, {
@@ -2703,7 +2703,7 @@ func init() {
 			Type:     &Zt_AdditionalKinds,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Matches a set of possible kinds as part of kinds_are_traits.", "jess looks for but prohibits leading traits."},
+			"comment": []string{"Matches a set of possible kinds as part of kinds_are_traits.", "jess looks for but prohibits leading traits."},
 		},
 	}
 	Zt_AdditionalKinds = typeinfo.Flow{
@@ -2750,7 +2750,7 @@ func init() {
 			Label:    "article",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"while an article can precede every trait", "it doesn't influence which trait gets matched."},
+				"comment": []string{"while an article can precede every trait", "it doesn't influence which trait gets matched."},
 			},
 			Type: &Zt_Article,
 		}, {
@@ -2817,7 +2817,7 @@ func init() {
 			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Matches one or more predefined verbs.", "( verbs are nouns of the verb kind )"},
+			"comment": []string{"Matches one or more predefined verbs.", "( verbs are nouns of the verb kind )"},
 		},
 	}
 	Zt_MatchedPhrase = typeinfo.Flow{
@@ -2885,7 +2885,7 @@ func init() {
 			Type:  &Zt_NamesAreLikeVerbs,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"This is the union of all possible matching phrases.", "For any given plain text sentence,", "jess tries each of these looking for the first to succeed.", "Different phrases belong to different scheduled phases;", "scheduling is handled manually.", "( tbd: an alternative might be slots and some scheduling metadata;", "this is fine for now )"},
+			"comment": []string{"This is the union of all possible matching phrases.", "For any given plain text sentence,", "jess tries each of these looking for the first to succeed.", "Different phrases belong to different scheduled phases;", "scheduling is handled manually.", "( tbd: an alternative might be slots and some scheduling metadata;", "this is fine for now )"},
 		},
 	}
 	Zt_KindsAreKind = typeinfo.Flow{
@@ -2895,7 +2895,7 @@ func init() {
 			Name:  "names",
 			Label: "names",
 			Markup: map[string]any{
-				"comment": []interface{}{"can match plain names and existing kinds;", "only allows a leading kind called, and errors on all counted kinds."},
+				"comment": []string{"can match plain names and existing kinds;", "only allows a leading kind called, and errors on all counted kinds."},
 			},
 			Type: &Zt_Names,
 		}, {
@@ -2914,19 +2914,19 @@ func init() {
 			Label:    "traits",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"inform doesnt allow commas or ands here,", "jess reuses the traits list here, so it does allow comma/and."},
+				"comment": []string{"inform doesnt allow commas or ands here,", "jess reuses the traits list here, so it does allow comma/and."},
 			},
 			Type: &Zt_Traits,
 		}, {
 			Name:  "name",
 			Label: "name",
 			Markup: map[string]any{
-				"comment": []interface{}{"inform (weirdly) allows multiple kinds on the rhs:", "`A box is a kind of container and things.`", "but not if traits are specified, suggesting a switch there;", "possibly to detect and reject `A box is a kind of closed and openable container.`", "which it wants written as `A box is a kind of closed openable container.`", "this doesnt switch to special traits, and doesnt allow multiple kinds."},
+				"comment": []string{"inform (weirdly) allows multiple kinds on the rhs:", "`A box is a kind of container and things.`", "but not if traits are specified, suggesting a switch there;", "possibly to detect and reject `A box is a kind of closed and openable container.`", "which it wants written as `A box is a kind of closed openable container.`", "this doesnt switch to special traits, and doesnt allow multiple kinds."},
 			},
 			Type: &Zt_Name,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Names are \"a kind of\"/\"kinds of\" traits kind:any.", "Interesting to note that inform allows \"some kind/s of\", but", "this is more strict.", "Like inform `The animals called kittens are a kind of things.` is legal."},
+			"comment": []string{"Names are \"a kind of\"/\"kinds of\" traits kind:any.", "Interesting to note that inform allows \"some kind/s of\", but", "this is more strict.", "Like inform `The animals called kittens are a kind of things.` is legal."},
 		},
 	}
 	Zt_KindsAreTraits = typeinfo.Flow{
@@ -2950,7 +2950,7 @@ func init() {
 			Type:  &Zt_Traits,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Assigns default traits to a kind.", "kinds:objects are \"usually\" traits.", "Inform doesn't require the \"usually\", but i like it as a way to differentiate phrases about kinds vs. phrases about nouns.", "", "Future: allow limiting traits to kinds with other traits.", "For example, in Inform:", " The closed containers are fixed in place.", "makes any containers that are *initially* closed also immovable."},
+			"comment": []string{"Assigns default traits to a kind.", "kinds:objects are \"usually\" traits.", "Inform doesn't require the \"usually\", but i like it as a way to differentiate phrases about kinds vs. phrases about nouns.", "", "Future: allow limiting traits to kinds with other traits.", "For example, in Inform:", " The closed containers are fixed in place.", "makes any containers that are *initially* closed also immovable."},
 		},
 	}
 	Zt_AspectsAreTraits = typeinfo.Flow{
@@ -2970,7 +2970,7 @@ func init() {
 			Type:  &Zt_Names,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines traits for aspects that can be (re)used by various other kinds.", "ex.", "  The colors are a kind of aspect. The colors are red, blue, and greasy green.", "The commands aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing."},
+			"comment": []string{"Defines traits for aspects that can be (re)used by various other kinds.", "ex.", "  The colors are a kind of aspect. The colors are red, blue, and greasy green.", "The commands aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing."},
 		},
 	}
 	Zt_VerbNamesAreNames = typeinfo.Flow{
@@ -2994,7 +2994,7 @@ func init() {
 			Type:  &Zt_Names,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Verb names are (other) names.", "ex.", "  In the coffin are some coins, a notebook, and the gripping hand.", "This intentionally doesn't recognize adjectives attached to named names.", "\"In the closed coffin\" generates a name with the name \"closed coffin\"", "not a coffin in an initially closed state."},
+			"comment": []string{"Verb names are (other) names.", "ex.", "  In the coffin are some coins, a notebook, and the gripping hand.", "This intentionally doesn't recognize adjectives attached to named names.", "\"In the closed coffin\" generates a name with the name \"closed coffin\"", "not a coffin in an initially closed state."},
 		},
 	}
 	Zt_NamesVerbNames = typeinfo.Flow{
@@ -3018,7 +3018,7 @@ func init() {
 			Type:  &Zt_Names,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Names are verb (other) names.", "ex.", " The thing called the stake is on the supporter called the altar."},
+			"comment": []string{"Names are verb (other) names.", "ex.", " The thing called the stake is on the supporter called the altar."},
 		},
 	}
 	Zt_NamesAreLikeVerbs = typeinfo.Flow{
@@ -3036,7 +3036,7 @@ func init() {
 			Name:  "adjectives",
 			Label: "adjectives",
 			Markup: map[string]any{
-				"comment": []interface{}{"adjectives are *not* optional.", "if there are no adjectives present,", "then 'names_verb_names' (might) match instead."},
+				"comment": []string{"adjectives are *not* optional.", "if there are no adjectives present,", "then 'names_verb_names' (might) match instead."},
 			},
 			Type: &Zt_Adjectives,
 		}, {
@@ -3046,7 +3046,7 @@ func init() {
 			Type:     &Zt_VerbPhrase,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Names are adjectives [verb names].", "ex.", "   The bottle is a transparent, open, container.", "   The coffin is a closed container [in the antechamber].", "This is the *only* way of assigning names initial states directly.", "All other phrases require a kind to be involved, here the kind is optional."},
+			"comment": []string{"Names are adjectives [verb names].", "ex.", "   The bottle is a transparent, open, container.", "   The coffin is a closed container [in the antechamber].", "This is the *only* way of assigning names initial states directly.", "All other phrases require a kind to be involved, here the kind is optional."},
 		},
 	}
 	Zt_VerbPhrase = typeinfo.Flow{
@@ -3062,7 +3062,7 @@ func init() {
 			Type:  &Zt_Names,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"A phrase, starting with a verb, that ends a sentence.", "ex.", "  ... in the kitchen.", "  ... carries the football and sousaphone."},
+			"comment": []string{"A phrase, starting with a verb, that ends a sentence.", "ex.", "  ... in the kitchen.", "  ... carries the football and sousaphone."},
 		},
 	}
 	Zt_Adjectives = typeinfo.Flow{
@@ -3078,7 +3078,7 @@ func init() {
 			Label:    "comma_and",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"exists to support phrases like:", "`the box is transparent and a container.`"},
+				"comment": []string{"exists to support phrases like:", "`the box is transparent and a container.`"},
 			},
 			Type: &Zt_CommaAnd,
 		}, {
@@ -3093,7 +3093,7 @@ func init() {
 			Type:     &Zt_AdditionalAdjectives,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"One or more phrases consisting of traits and a kind.", "while all parts are marked as optional, matching expects", "there will be at least one trait or one kind", "and that there can only be additional adjective phrases", "if the previous one ended with a kind.", "ex.", "  a container", "  closed and fixed in place", "  a closed container and a fixed in place thing"},
+			"comment": []string{"One or more phrases consisting of traits and a kind.", "while all parts are marked as optional, matching expects", "there will be at least one trait or one kind", "and that there can only be additional adjective phrases", "if the previous one ended with a kind.", "ex.", "  a container", "  closed and fixed in place", "  a closed container and a fixed in place thing"},
 		},
 	}
 	Zt_AdditionalAdjectives = typeinfo.Flow{
@@ -3151,7 +3151,7 @@ func init() {
 			Type:     &Zt_QuotedTexts,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Assigns a default value to a noun.", "ex.", "  The description of the pen is \"mightier than the sword.", "As a special case this also allows a list of quoted text", "indicated with \"are\" ( versus \"is\" )"},
+			"comment": []string{"Assigns a default value to a noun.", "ex.", "  The description of the pen is \"mightier than the sword.", "As a special case this also allows a list of quoted text", "indicated with \"are\" ( versus \"is\" )"},
 		},
 	}
 	Zt_NounPropertyValue = typeinfo.Flow{
@@ -3188,7 +3188,7 @@ func init() {
 			Type:  &Zt_SingleValue,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Assigns a default value to a noun.", "ex.", "  The pen has (the) description (of) \"mightier than the sword.\"", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
+			"comment": []string{"Assigns a default value to a noun.", "ex.", "  The pen has (the) description (of) \"mightier than the sword.\"", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
 		},
 	}
 	Zt_SingleValue = typeinfo.Flow{
@@ -3216,7 +3216,7 @@ func init() {
 			Type:     &Zt_Kind,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"This matches only one of its options.", "( The options could be represented as a slot; this feels easier for now )."},
+			"comment": []string{"This matches only one of its options.", "( The options could be represented as a slot; this feels easier for now )."},
 		},
 	}
 	Zt_QuotedText = typeinfo.Flow{
@@ -3228,7 +3228,7 @@ func init() {
 			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Text that begins and ends with double quotes.", "The quotes themselves are not part of the matched text."},
+			"comment": []string{"Text that begins and ends with double quotes.", "The quotes themselves are not part of the matched text."},
 		},
 	}
 	Zt_MatchingNum = typeinfo.Flow{
@@ -3240,7 +3240,7 @@ func init() {
 			Type:  &prim.Zt_Num,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Reads a number specified in words or as digits.", "Stores the result as the parsed number."},
+			"comment": []string{"Reads a number specified in words or as digits.", "Stores the result as the parsed number."},
 		},
 	}
 	Zt_KindsHaveProperties = typeinfo.Flow{
@@ -3275,7 +3275,7 @@ func init() {
 			Type:     &Zt_CalledName,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Kinds \"have\" a (\"list of\") type (\"called\" name).", "ex.", "  Things have some text called a description."},
+			"comment": []string{"Kinds \"have\" a (\"list of\") type (\"called\" name).", "ex.", "  Things have some text called a description."},
 		},
 	}
 	Zt_CalledName = typeinfo.Flow{
@@ -3291,7 +3291,7 @@ func init() {
 			Type:  &Zt_Name,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Used for kinds_have_properties.", "like kind_called, specifying \"called the/our ...\" gives the noun an indefinite article."},
+			"comment": []string{"Used for kinds_have_properties.", "like kind_called, specifying \"called the/our ...\" gives the noun an indefinite article."},
 		},
 	}
 	Zt_PropertyType = typeinfo.Flow{
@@ -3312,7 +3312,7 @@ func init() {
 			Type: &Zt_Kind,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Matches text, number, kind ( kind|aspect|record )", "as part of 'kinds_have_properties'.", "Exactly one member can match."},
+			"comment": []string{"Matches text, number, kind ( kind|aspect|record )", "as part of 'kinds_have_properties'.", "Exactly one member can match."},
 		},
 	}
 	Zt_KindsAreEither = typeinfo.Flow{
@@ -3332,7 +3332,7 @@ func init() {
 			Type:  &Zt_NewTrait,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Kinds (\"can be\"|\"are either\") new_trait [or new_trait...].", "ex.", " A thing can be open or closed."},
+			"comment": []string{"Kinds (\"can be\"|\"are either\") new_trait [or new_trait...].", "ex.", " A thing can be open or closed."},
 		},
 	}
 	Zt_NewTrait = typeinfo.Flow{
@@ -3349,7 +3349,7 @@ func init() {
 			Type:     &Zt_NewTrait,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"One or more new trait names,", "separated by the word \"or\"."},
+			"comment": []string{"One or more new trait names,", "separated by the word \"or\"."},
 		},
 	}
 	Zt_QuotedTexts = typeinfo.Flow{
@@ -3366,7 +3366,7 @@ func init() {
 			Type:     &Zt_AdditionalText,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"One or more strings of quoted text", "separated by the words \"and\", \"comma\", or \"or\"."},
+			"comment": []string{"One or more strings of quoted text", "separated by the words \"and\", \"comma\", or \"or\"."},
 		},
 	}
 	Zt_AdditionalText = typeinfo.Flow{
@@ -3394,7 +3394,7 @@ func init() {
 			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Matches rule prefixes:", "before, instead of, when, after, report"},
+			"comment": []string{"Matches rule prefixes:", "before, instead of, when, after, report"},
 		},
 	}
 	Zt_RuleSuffix = typeinfo.Flow{
@@ -3406,7 +3406,7 @@ func init() {
 			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Controls what to do after matching a rule.", "Matches \"then continue\", \"then stop\", \"then skip phase\",", "and \"begins\", \"ends\" ( for domain rules )", "with an optional leading comma."},
+			"comment": []string{"Controls what to do after matching a rule.", "Matches \"then continue\", \"then stop\", \"then skip phase\",", "and \"begins\", \"ends\" ( for domain rules )", "with an optional leading comma."},
 		},
 	}
 	Zt_RuleName = typeinfo.Flow{
@@ -3439,7 +3439,7 @@ func init() {
 			Type: &prim.Zt_Bool,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Specific names can follow rule declarations.", "ex.", " ( this is the witness light rule )"},
+			"comment": []string{"Specific names can follow rule declarations.", "ex.", " ( this is the witness light rule )"},
 		},
 	}
 	Zt_RuleTarget = typeinfo.Flow{
@@ -3466,7 +3466,7 @@ func init() {
 			Type:  &rtti.Zt_Assignment,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Phrases can break out of plain text and into structured tell docs.", "The documents start with a colon (:) followed by a newline", "the next line is assumed to be an indented tell mapping or sequence", "which ends with the first unindented line.", "Sequences are treated as execute blocks;", "Mappings are assumed to be a valid eval", "( ie. an implementation of one of the rtti interfaces. )"},
+			"comment": []string{"Phrases can break out of plain text and into structured tell docs.", "The documents start with a colon (:) followed by a newline", "the next line is assumed to be an indented tell mapping or sequence", "which ends with the first unindented line.", "Sequences are treated as execute blocks;", "Mappings are assumed to be a valid eval", "( ie. an implementation of one of the rtti interfaces. )"},
 		},
 	}
 	Zt_TimedRule = typeinfo.Flow{
@@ -3485,7 +3485,7 @@ func init() {
 			Name:  "pattern",
 			Label: "pattern",
 			Markup: map[string]any{
-				"comment": []interface{}{"the pattern this rule targets.", "the pattern must exist for this phrase to generate successfully.", "ex. \"instead of traveling\""},
+				"comment": []string{"the pattern this rule targets.", "the pattern must exist for this phrase to generate successfully.", "ex. \"instead of traveling\""},
 			},
 			Type: &Zt_Kind,
 		}, {
@@ -3538,7 +3538,7 @@ func init() {
 			Label:    "article",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"inform is smart enough to *not* allow articles before actions.", "i am lazy."},
+				"comment": []string{"inform is smart enough to *not* allow articles before actions.", "i am lazy."},
 			},
 			Type: &Zt_Article,
 		}, {
@@ -3546,14 +3546,14 @@ func init() {
 			Label:    "plural_of",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"ex. Understand \"birds\" and \"ruddy ducks\" as the plural of duck.", "fix? in jess this (also) influences the story interpretation."},
+				"comment": []string{"ex. Understand \"birds\" and \"ruddy ducks\" as the plural of duck.", "fix? in jess this (also) influences the story interpretation."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "names",
 			Label: "names",
 			Markup: map[string]any{
-				"comment": []interface{}{"this matches one or more nouns or kinds:", "generation susses out what to do with those nouns or kinds.", "* aliases for nouns: Understand \"floor\" or \"sawdust\" as the message.", "* aliases for kinds: Understand \"cupboard\" or \"cupboards\" or \"cabinets\" as a cabinet.", "* grammar for actions: Understand \"reach underneath/under/beneath/-- [something]\" as looking under.", "jess doesn't permit aliases for kinds, those generate errors."},
+				"comment": []string{"this matches one or more nouns or kinds:", "generation susses out what to do with those nouns or kinds.", "* aliases for nouns: Understand \"floor\" or \"sawdust\" as the message.", "* aliases for kinds: Understand \"cupboard\" or \"cupboards\" or \"cabinets\" as a cabinet.", "* grammar for actions: Understand \"reach underneath/under/beneath/-- [something]\" as looking under.", "jess doesn't permit aliases for kinds, those generate errors."},
 			},
 			Type: &Zt_Names,
 		}},
@@ -3583,7 +3583,7 @@ func init() {
 			Type:     &Zt_AdditionalDirections,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"A mapping declaration starting with a room or door.", "ex.", "  A dead end called the Airport is west of the Road and north of the Farm."},
+			"comment": []string{"A mapping declaration starting with a room or door.", "ex.", "  A dead end called the Airport is west of the Road and north of the Farm."},
 		},
 	}
 	Zt_AdditionalDirections = typeinfo.Flow{
@@ -3604,7 +3604,7 @@ func init() {
 			Type:     &Zt_AdditionalDirections,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Matches additional directions.", "only used by map_locations."},
+			"comment": []string{"Matches additional directions.", "only used by map_locations."},
 		},
 	}
 	Zt_MapDirections = typeinfo.Flow{
@@ -3665,7 +3665,7 @@ func init() {
 			Type:  &Zt_Linking,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"A mapping declaration to set the destination of doors.", "ex.", " Through the long slide is the cellar.", " Through the blue door and the red door is the kitchen.", "The destination of a door is always treated as a room or nowhere.", "( Inform doesn't allow nowhere, but it seems like a good idea. )"},
+			"comment": []string{"A mapping declaration to set the destination of doors.", "ex.", " Through the long slide is the cellar.", " Through the blue door and the red door is the kitchen.", "The destination of a door is always treated as a room or nowhere.", "( Inform doesn't allow nowhere, but it seems like a good idea. )"},
 		},
 	}
 	Zt_DirectionOfLinking = typeinfo.Flow{
@@ -3728,7 +3728,7 @@ func init() {
 			Type:     &Zt_Name,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Generates a room, a door, or nowhere.", "( This i similar to, but distinct from other noun matching phrases. )"},
+			"comment": []string{"Generates a room, a door, or nowhere.", "( This i similar to, but distinct from other noun matching phrases. )"},
 		},
 	}
 	Zt_AdditionalLinks = typeinfo.Flow{
@@ -3749,7 +3749,7 @@ func init() {
 			Type:     &Zt_AdditionalLinks,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Partial phrase used for map connections.", "This allows multiple doors, etc. on the lhs."},
+			"comment": []string{"Partial phrase used for map connections.", "This allows multiple doors, etc. on the lhs."},
 		},
 	}
 }
@@ -3842,6 +3842,68 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Direction,
 	&Zt_Linking,
 	&Zt_AdditionalLinks,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(Article{})
+	reg(CommaAnd{})
+	reg(CommaAndOr{})
+	reg(Are{})
+	reg(Called{})
+	reg(Name{})
+	reg(Noun{})
+	reg(NamedNoun{})
+	reg(KindCalled{})
+	reg(Names{})
+	reg(AdditionalNames{})
+	reg(CountedKind{})
+	reg(Kind{})
+	reg(Kinds{})
+	reg(AdditionalKinds{})
+	reg(Property{})
+	reg(Trait{})
+	reg(Traits{})
+	reg(AdditionalTraits{})
+	reg(Words{})
+	reg(Verb{})
+	reg(MatchedPhrase{})
+	reg(KindsAreKind{})
+	reg(KindsAreTraits{})
+	reg(AspectsAreTraits{})
+	reg(VerbNamesAreNames{})
+	reg(NamesVerbNames{})
+	reg(NamesAreLikeVerbs{})
+	reg(VerbPhrase{})
+	reg(Adjectives{})
+	reg(AdditionalAdjectives{})
+	reg(PropertyNounValue{})
+	reg(NounPropertyValue{})
+	reg(SingleValue{})
+	reg(QuotedText{})
+	reg(MatchingNum{})
+	reg(KindsHaveProperties{})
+	reg(CalledName{})
+	reg(PropertyType{})
+	reg(KindsAreEither{})
+	reg(NewTrait{})
+	reg(QuotedTexts{})
+	reg(AdditionalText{})
+	reg(RulePrefix{})
+	reg(RuleSuffix{})
+	reg(RuleName{})
+	reg(RuleTarget{})
+	reg(SubAssignment{})
+	reg(TimedRule{})
+	reg(Understand{})
+	reg(MapLocations{})
+	reg(AdditionalDirections{})
+	reg(MapDirections{})
+	reg(MapConnections{})
+	reg(DirectionOfLinking{})
+	reg(Direction{})
+	reg(Linking{})
+	reg(AdditionalLinks{})
 }
 
 // a list of all command signatures

@@ -830,7 +830,7 @@ func init() {
 			Label:    "front",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Whether to remove from the front or the back of the list.", "If not specified, removes from the back."},
+				"comment": []string{"Whether to remove from the front or the back of the list.", "If not specified, removes from the back."},
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -855,7 +855,7 @@ func init() {
 			Label:    "index",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The one-based index at which to start removing values.", "If not specified, starts with the first value."},
+				"comment": []string{"The one-based index at which to start removing values.", "If not specified, starts with the first value."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -863,7 +863,7 @@ func init() {
 			Label:    "count",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The number of values to remove.", "If not specified, removes one value."},
+				"comment": []string{"The number of values to remove.", "If not specified, removes one value."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -888,7 +888,7 @@ func init() {
 			Label:    "index",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The one-based index at which to start removing values.", "If not specified, starts with the first value."},
+				"comment": []string{"The one-based index at which to start removing values.", "If not specified, starts with the first value."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -896,7 +896,7 @@ func init() {
 			Label:    "count",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The number of values to remove.", "If not specified, removes one value."},
+				"comment": []string{"The number of values to remove.", "If not specified, removes one value."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -911,7 +911,7 @@ func init() {
 			Label:   "do",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The statements to call with the erased values.", "If no \"else\" branch is specified, and no values were removed,", "this will be called with an empty list."},
+				"comment": []string{"The statements to call with the erased values.", "If no \"else\" branch is specified, and no values were removed,", "this will be called with an empty list."},
 			},
 			Type: &rtti.Zt_Execute,
 		}, {
@@ -927,7 +927,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Remove a number of values from a list starting at a specified index.", "Run a series of statements, giving them a new local variable", "containing a list of removed values."},
+			"comment": []string{"Remove a number of values from a list starting at a specified index.", "Run a series of statements, giving them a new local variable", "containing a list of removed values."},
 		},
 	}
 	Zt_ListPopping = typeinfo.Flow{
@@ -944,14 +944,14 @@ func init() {
 			Label:    "front",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Control whether to remove from the front or the back of the list.", "If not specified, removes from the back."},
+				"comment": []string{"Control whether to remove from the front or the back of the list.", "If not specified, removes from the back."},
 			},
 			Type: &rtti.Zt_BoolEval,
 		}, {
 			Name:  "as",
 			Label: "as",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of a new local variable to receive the removed value.", "The variable is only in scope for the duration of the \"do\" statements."},
+				"comment": []string{"The name of a new local variable to receive the removed value.", "The variable is only in scope for the duration of the \"do\" statements."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -967,7 +967,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Optional statements to run if the specified list was empty.", "There are no special local variables defined when this is called."},
+				"comment": []string{"Optional statements to run if the specified list was empty.", "There are no special local variables defined when this is called."},
 			},
 			Type: &logic.Zt_Brancher,
 		}},
@@ -975,7 +975,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Remove a value from the end ( or the start ) of a list.", "Run a series of statements, giving them a new local variable", "containing the removed value."},
+			"comment": []string{"Remove a value from the end ( or the start ) of a list.", "Run a series of statements, giving them a new local variable", "containing the removed value."},
 		},
 	}
 	Zt_ListRepeat = typeinfo.Flow{
@@ -992,7 +992,7 @@ func init() {
 			Name:  "as",
 			Label: "as",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of a (new) variable, given to the \"do\" statements,", "filled with the values from the list, one at a time."},
+				"comment": []string{"The name of a (new) variable, given to the \"do\" statements,", "filled with the values from the list, one at a time."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -1008,7 +1008,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Optional statements to run if the specified list was empty.", "There are no special local variables defined when this is called."},
+				"comment": []string{"Optional statements to run if the specified list was empty.", "There are no special local variables defined when this is called."},
 			},
 			Type: &logic.Zt_Brancher,
 		}},
@@ -1016,7 +1016,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Run a series of statements for each value in a list.", "Several local variables are available to those statements:", "  1. the value in the list, named as specified.", "  2. \"index\", the one-based index of the current value in the list.", "  3. \"first\", a boolean indicating if this is the first value", "  4. \"last\", a boolean indicating if this is the last value.", "If the list was empty, this runs the else branch instead."},
+			"comment": []string{"Run a series of statements for each value in a list.", "Several local variables are available to those statements:", "  1. the value in the list, named as specified.", "  2. \"index\", the one-based index of the current value in the list.", "  3. \"first\", a boolean indicating if this is the first value", "  4. \"last\", a boolean indicating if this is the last value.", "If the list was empty, this runs the else branch instead."},
 		},
 	}
 	Zt_ListFind = typeinfo.Flow{
@@ -1041,7 +1041,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Search a list for a specific value.", "", "The [rt.NumEval] version returns the index of the value in the list."},
+			"comment": []string{"Search a list for a specific value.", "", "The [rt.NumEval] version returns the index of the value in the list."},
 		},
 	}
 	Zt_ListLength = typeinfo.Flow{
@@ -1134,7 +1134,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Collect one or more records into a list.", "All of the records must be of the same type."},
+			"comment": []string{"Collect one or more records into a list.", "All of the records must be of the same type."},
 		},
 	}
 	Zt_ListMap = typeinfo.Flow{
@@ -1143,7 +1143,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Markup: map[string]any{
-				"comment": []interface{}{"The list to push new values into.", "The type of this list needs to match the type of the list being evaluated."},
+				"comment": []string{"The list to push new values into.", "The type of this list needs to match the type of the list being evaluated."},
 			},
 			Type: &rtti.Zt_Address,
 		}, {
@@ -1157,7 +1157,7 @@ func init() {
 			Name:  "list",
 			Label: "list",
 			Markup: map[string]any{
-				"comment": []interface{}{"The list being evaluated. Every value in this list will be sent to the mapping pattern.", "The type of this list needs to match the type of the list being written to."},
+				"comment": []string{"The list being evaluated. Every value in this list will be sent to the mapping pattern.", "The type of this list needs to match the type of the list being written to."},
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -1165,7 +1165,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Transform the values from one list and append the results to another.", "The designated pattern is called with each value, one value at a time."},
+			"comment": []string{"Transform the values from one list and append the results to another.", "The designated pattern is called with each value, one value at a time."},
 		},
 	}
 	Zt_ListReduce = typeinfo.Flow{
@@ -1196,7 +1196,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Pack the values of a list down into a single value.", "The designated pattern is called with a pair of parameters for each value in the list:", "  1. the current value from the list;", "  2. the value being packed.", "The pattern is expected to return the newly updated value."},
+			"comment": []string{"Pack the values of a list down into a single value.", "The designated pattern is called with a pair of parameters for each value in the list:", "  1. the current value from the list;", "  2. the value being packed.", "The pattern is expected to return the newly updated value."},
 		},
 	}
 	Zt_ListReverse = typeinfo.Flow{
@@ -1214,7 +1214,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Reverse the order of the values in a list.", "The first becomes last, the weak become strong, the list gets reversed,", "all that."},
+			"comment": []string{"Reverse the order of the values in a list.", "The first becomes last, the weak become strong, the list gets reversed,", "all that."},
 		},
 	}
 	Zt_ListSlice = typeinfo.Flow{
@@ -1231,7 +1231,7 @@ func init() {
 			Label:    "start",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The one-based index to start copying from.", "See the command documentation for full details."},
+				"comment": []string{"The one-based index to start copying from.", "See the command documentation for full details."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1239,7 +1239,7 @@ func init() {
 			Label:    "end",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The one-based index of the last value to copy.", "See the command documentation for full details."},
+				"comment": []string{"The one-based index of the last value to copy.", "See the command documentation for full details."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -1249,7 +1249,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Create a new list from part of another list.", "Start is optional, if omitted slice starts at the beginning.", "If start is greater the length, an empty array is returned.", "Slice doesn't include the ending index.", "Negatives indices indicates an offset from the end.", "When end is omitted, or if its greater than the the length of the list,", "the slice will include everything from start up to and including the last value."},
+			"comment": []string{"Create a new list from part of another list.", "Start is optional, if omitted slice starts at the beginning.", "If start is greater the length, an empty array is returned.", "Slice doesn't include the ending index.", "Negatives indices indicates an offset from the end.", "When end is omitted, or if its greater than the the length of the list,", "the slice will include everything from start up to and including the last value."},
 		},
 	}
 	Zt_ListSort = typeinfo.Flow{
@@ -1266,7 +1266,7 @@ func init() {
 			Label:    "field",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Use the specified field to compare values.", "Optional, and only makes sense for lists containing records or objects."},
+				"comment": []string{"Use the specified field to compare values.", "Optional, and only makes sense for lists containing records or objects."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -1274,7 +1274,7 @@ func init() {
 			Label:    "descending",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"When true, reorder the list by decreasing value: largest value first.", "Otherwise, reorder the list by increasing value: smallest value first."},
+				"comment": []string{"When true, reorder the list by decreasing value: largest value first.", "Otherwise, reorder the list by increasing value: smallest value first."},
 			},
 			Type: &rtti.Zt_BoolEval,
 		}, {
@@ -1282,7 +1282,7 @@ func init() {
 			Label:    "case",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"When sorting text this indicates whether the lower case letters should be considered different than upper case letters.", "By default, they are considered the same.", "( This uses ascii comparisons, so uppercase 'A' is considered less than lowercase 'a' )"},
+				"comment": []string{"When sorting text this indicates whether the lower case letters should be considered different than upper case letters.", "By default, they are considered the same.", "( This uses ascii comparisons, so uppercase 'A' is considered less than lowercase 'a' )"},
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -1307,7 +1307,7 @@ func init() {
 			Label:    "start",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The one-based index to start cutting from.", "See the command documentation for full details."},
+				"comment": []string{"The one-based index to start cutting from.", "See the command documentation for full details."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1315,7 +1315,7 @@ func init() {
 			Label:    "count",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The number of values to cut.", "See the command documentation for full details."},
+				"comment": []string{"The number of values to cut.", "See the command documentation for full details."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1323,7 +1323,7 @@ func init() {
 			Label:    "insert",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Optionally, a set of new values to inject into the list,", "starting at the location that was cut.", "See the command documentation for full details."},
+				"comment": []string{"Optionally, a set of new values to inject into the list,", "starting at the location that was cut.", "See the command documentation for full details."},
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -1334,7 +1334,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Modify a list by adding and removing values.", "The type of the values being added must match the type of the list.", "( ie. Text cant be added to a list of numbers, and numbers cant be added to a list of text. )", "If the starting index is negative, this begins that many values from the end of the array;", "if list's length plus the start is less than zero, this begins from index zero.", "If the remove count is missing, this removes all values from the start to the end;", "if the remove count is zero or negative, no values are removed."},
+			"comment": []string{"Modify a list by adding and removing values.", "The type of the values being added must match the type of the list.", "( ie. Text cant be added to a list of numbers, and numbers cant be added to a list of text. )", "If the starting index is negative, this begins that many values from the end of the array;", "if list's length plus the start is less than zero, this begins from index zero.", "If the remove count is missing, this removes all values from the start to the end;", "if the remove count is zero or negative, no values are removed."},
 		},
 	}
 	Zt_ListPush = typeinfo.Flow{
@@ -1358,7 +1358,7 @@ func init() {
 			Label:    "front",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Control whether to add the new value to the front or to the back of the list.", "If not specified, adds to the back."},
+				"comment": []string{"Control whether to add the new value to the front or to the back of the list.", "If not specified, adds to the back."},
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -1383,7 +1383,7 @@ func init() {
 			Label:    "start",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The first number generated.", "Defaults to one(1) if not specified."},
+				"comment": []string{"The first number generated.", "Defaults to one(1) if not specified."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1391,7 +1391,7 @@ func init() {
 			Label:    "by",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The step to reach the next number.", "Defaults to one(1), errors if zero."},
+				"comment": []string{"The step to reach the next number.", "Defaults to one(1), errors if zero."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -1399,7 +1399,7 @@ func init() {
 			&rtti.Zt_NumListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Generate a list of numbers r[i] = (start + step*i) where i>=0.", "Inputs are truncated to produce whole numbers.", "A positive step ends the series when the returned value would exceed stop.", "A negative step ends before generating a value less than stop."},
+			"comment": []string{"Generate a list of numbers r[i] = (start + step*i) where i>=0.", "Inputs are truncated to produce whole numbers.", "A positive step ends the series when the returned value would exceed stop.", "A negative step ends before generating a value less than stop."},
 		},
 	}
 }
@@ -1441,6 +1441,29 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_ListSplice,
 	&Zt_ListPush,
 	&Zt_Range,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(ListPop{})
+	reg(ListErase{})
+	reg(ListErasing{})
+	reg(ListPopping{})
+	reg(ListRepeat{})
+	reg(ListFind{})
+	reg(ListLength{})
+	reg(ListEmpty{})
+	reg(MakeTextList{})
+	reg(MakeNumList{})
+	reg(MakeRecordList{})
+	reg(ListMap{})
+	reg(ListReduce{})
+	reg(ListReverse{})
+	reg(ListSlice{})
+	reg(ListSort{})
+	reg(ListSplice{})
+	reg(ListPush{})
+	reg(Range{})
 }
 
 // a list of all command signatures

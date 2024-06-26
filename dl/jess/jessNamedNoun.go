@@ -8,7 +8,7 @@ import (
 
 func (op *NamedNoun) GetNormalizedName() (ret string, err error) {
 	if n := op.Noun; n != nil {
-		ret = n.ActualNoun.Name // the actual name is already normalized
+		ret = n.actualNoun.Name // the actual name is already normalized
 	} else if n := op.Name; n != nil {
 		ret, err = match.NormalizeAll(n.Matched)
 	} else {

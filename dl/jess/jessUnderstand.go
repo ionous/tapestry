@@ -113,9 +113,9 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 	for it := op.Names.GetNames(); it.HasNext(); {
 		next := it.GetNext()
 		if n := next.Noun; n != nil {
-			nouns = append(nouns, n.ActualNoun.Name)
-		} else if k := next.Kind; k != nil && k.ActualKind.BaseKind == kindsOf.Action {
-			actions = append(actions, k.ActualKind.Name)
+			nouns = append(nouns, n.actualNoun.Name)
+		} else if k := next.Kind; k != nil && k.actualKind.BaseKind == kindsOf.Action {
+			actions = append(actions, k.actualKind.Name)
 		} else if n := next.Name; n == nil {
 			err = errors.New("understandings can only match existing nouns or existing actions")
 			break
@@ -140,7 +140,7 @@ Loop:
 		if n := as.GetNext(); n.Noun == nil {
 			err = errors.New("unknown name, expected the name of an existing noun")
 		} else {
-			name := n.Noun.ActualNoun.Name
+			name := n.Noun.actualNoun.Name
 			for it := op.QuotedTexts.Iterate(); it.HasNext(); {
 				plural := it.GetNext()
 				if e := w.AddPlural(plural, name); e != nil {

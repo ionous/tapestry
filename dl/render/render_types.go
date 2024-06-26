@@ -273,7 +273,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
+			"comment":  []string{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
 			"internal": true,
 		},
 	}
@@ -301,7 +301,7 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "This gets used by text templates when processing names.", "The templates don't attempt to determine which names are objects and which names are variables.", "For instance:", "  - Say: \"{.story.title} by {.story.author}\"", "uses UnknownDot for accessing \"story\"."},
+			"comment":  []string{"Pull a value from name that might refer either to a variable, or to an object.", "This gets used by text templates when processing names.", "The templates don't attempt to determine which names are objects and which names are variables.", "For instance:", "  - Say: \"{.story.title} by {.story.author}\"", "uses UnknownDot for accessing \"story\"."},
 			"internal": true,
 		},
 	}
@@ -338,7 +338,7 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
+			"comment":  []string{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
 			"internal": true,
 		},
 	}
@@ -393,6 +393,15 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RenderValue,
 	&Zt_RenderPattern,
 	&Zt_RenderResponse,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(RenderName{})
+	reg(UnknownDot{})
+	reg(RenderValue{})
+	reg(RenderPattern{})
+	reg(RenderResponse{})
 }
 
 // a list of all command signatures

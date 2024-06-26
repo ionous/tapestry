@@ -298,7 +298,7 @@ func init() {
 			Label:    "error",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Any critical server errors.", "Returned to the client as a string", "so that it can be displayed to the player."},
+				"comment": []string{"Any critical server errors.", "Returned to the client as a string", "so that it can be displayed to the player."},
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -460,6 +460,16 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_SceneEnded,
 	&Zt_StateChanged,
 	&Zt_PairChanged,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(Frame{})
+	reg(FrameOutput{})
+	reg(SceneStarted{})
+	reg(SceneEnded{})
+	reg(StateChanged{})
+	reg(PairChanged{})
 }
 
 // a list of all command signatures

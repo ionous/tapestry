@@ -645,7 +645,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Markup: map[string]any{
-				"comment": []interface{}{"A reference to the value to increase.", "This reads and writes to that value."},
+				"comment": []string{"A reference to the value to increase.", "This reads and writes to that value."},
 			},
 			Type: &rtti.Zt_Address,
 		}, {
@@ -671,7 +671,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Markup: map[string]any{
-				"comment": []interface{}{"A reference to the value to decrease.", "This reads and writes to that value."},
+				"comment": []string{"A reference to the value to decrease.", "This reads and writes to that value."},
 			},
 			Type: &rtti.Zt_Address,
 		}, {
@@ -697,7 +697,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": []interface{}{"The first value.", "If needed, the second value will coerced to match the type of the first."},
+				"comment": []string{"The first value.", "If needed, the second value will coerced to match the type of the first."},
 			},
 			Type: &rtti.Zt_Assignment,
 		}, {
@@ -711,7 +711,7 @@ func init() {
 			Name:  "b",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": []interface{}{"The first value.", "If needed, this value will coerced to match the type of the first value."},
+				"comment": []string{"The first value.", "If needed, this value will coerced to match the type of the first value."},
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -719,7 +719,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Compare two values.", "If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.", "", "Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.", "Otherwise, the types of the values must match exactly.", "", "Numbers are compared using an internally determined default tolerance.", "To control the tolerance between numbers, use [CompareNum]."},
+			"comment": []string{"Compare two values.", "If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.", "", "Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.", "Otherwise, the types of the values must match exactly.", "", "Numbers are compared using an internally determined default tolerance.", "To control the tolerance between numbers, use [CompareNum]."},
 		},
 	}
 	Zt_CompareNum = typeinfo.Flow{
@@ -825,6 +825,21 @@ var z_flow_list = []*typeinfo.Flow{
 // A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_Comparison,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(AddValue{})
+	reg(SubtractValue{})
+	reg(MultiplyValue{})
+	reg(DivideValue{})
+	reg(ModValue{})
+	reg(AbsValue{})
+	reg(Increment{})
+	reg(Decrement{})
+	reg(CompareValue{})
+	reg(CompareNum{})
+	reg(CompareText{})
 }
 
 // a list of all command signatures

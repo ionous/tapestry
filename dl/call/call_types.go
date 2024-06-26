@@ -735,7 +735,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether a pattern is running.", "", "The [rtti.num_eval] version returns the distance to the pattern."},
+			"comment": []string{"Determine whether a pattern is running.", "", "The [rtti.num_eval] version returns the distance to the pattern."},
 		},
 	}
 	Zt_Arg = typeinfo.Flow{
@@ -771,7 +771,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Provide one or more execute commands for an assignment.", "Used internally for jess rules."},
+			"comment":  []string{"Provide one or more execute commands for an assignment.", "Used internally for jess rules."},
 			"internal": true,
 		},
 	}
@@ -925,7 +925,7 @@ func init() {
 			Label:   "args",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
+				"comment": []string{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
 			},
 			Type: &Zt_Arg,
 		}},
@@ -940,7 +940,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed when using the blockly editor."},
+			"comment": []string{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed when using the blockly editor."},
 		},
 	}
 	Zt_CallTrigger = typeinfo.Flow{
@@ -962,7 +962,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Runtime version of count_of.", "A guard which returns true based on a counter."},
+			"comment":  []string{"Runtime version of count_of.", "A guard which returns true based on a counter."},
 			"internal": true,
 		},
 	}
@@ -1042,6 +1042,27 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_TriggerCycle,
 	&Zt_TriggerOnce,
 	&Zt_TriggerSwitch,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(ActiveScene{})
+	reg(ActivePattern{})
+	reg(Arg{})
+	reg(FromExe{})
+	reg(FromAddress{})
+	reg(FromBool{})
+	reg(FromNum{})
+	reg(FromText{})
+	reg(FromRecord{})
+	reg(FromNumList{})
+	reg(FromTextList{})
+	reg(FromRecordList{})
+	reg(CallPattern{})
+	reg(CallTrigger{})
+	reg(TriggerCycle{})
+	reg(TriggerOnce{})
+	reg(TriggerSwitch{})
 }
 
 // a list of all command signatures

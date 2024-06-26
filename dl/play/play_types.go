@@ -279,6 +279,13 @@ var z_str_list = []*typeinfo.Str{
 	&Zt_PlayModes,
 }
 
+// gob like registration
+func Register(reg func(any)) {
+	reg(PlayLog{})
+	reg(PlayMode{})
+	reg(PlayOut{})
+}
+
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{

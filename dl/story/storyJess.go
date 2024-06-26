@@ -2,6 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/jessdb"
@@ -11,6 +12,14 @@ import (
 
 // private member of DeclareStatement
 type JessMatches jess.Paragraph
+
+func MakeDeclaration(str string, tail rt.Assignment, ks JessMatches) *DeclareStatement {
+	return &DeclareStatement{
+		Text:    &literal.TextValue{Value: str},
+		Assign:  tail,
+		matches: ks,
+	}
+}
 
 // todo: move into jess/dl
 func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
@@ -34,7 +43,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 }
 
 func (op *DeclareStatement) newParagraph(run rt.Runtime) (ret jess.Paragraph, err error) {
-	if m := op.Matches; len(m) > 0 {
+	if m := op.matches; len(m) > 0 {
 		ret = jess.Paragraph(m)
 	} else if txt, e := safe.GetText(run, op.Text); e != nil {
 		err = e

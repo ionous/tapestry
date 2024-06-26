@@ -12,9 +12,9 @@ func (op *Article) Match(q Query, input *InputState) (okay bool) {
 			// build flags:
 			article := ws[:width]
 			if match.FindExactMatch(article, pluralNamed) >= 0 {
-				op.Flags.Plural = true
+				op.flags.Plural = true
 			} else if useIndefinite(q) && match.FindExactMatch(article, indefinite) >= 0 {
-				op.Flags.Indefinite = true
+				op.flags.Indefinite = true
 			}
 			// return okay:
 			op.Text, *input = m.String(), input.Skip(width)

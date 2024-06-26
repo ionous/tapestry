@@ -46,7 +46,7 @@ var Zt_Bool = typeinfo.Str{
 		"true",
 	},
 	Markup: map[string]any{
-		"comment": []interface{}{"A true or false value.", "Even though the definition here uses a string,", "the tell loading code ( and the go generated code )", "have shortcuts which understand how to handle unquoted ( literal ) values."},
+		"comment": []string{"A true or false value.", "Even though the definition here uses a string,", "the tell loading code ( and the go generated code )", "have shortcuts which understand how to handle unquoted ( literal ) values."},
 	},
 }
 
@@ -95,4 +95,8 @@ var z_str_list = []*typeinfo.Str{
 // A list of all nums in this this package.
 var z_num_list = []*typeinfo.Num{
 	&Zt_Num,
+}
+
+// gob like registration
+func Register(reg func(any)) {
 }

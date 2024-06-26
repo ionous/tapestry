@@ -18,8 +18,9 @@ func genTemplates(p *groupSearch) (*template.Template, error) {
 		//
 		// common functions:
 		//
-		"Pascal": Pascal,
-		"Title":  Titlecase,
+		"Pascal":   Pascal,
+		"Title":    Titlecase,
+		"Camelize": Camelize,
 		//
 		// for schema
 		//

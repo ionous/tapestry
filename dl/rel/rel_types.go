@@ -235,7 +235,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the relative of a noun.", "For example: the right-hand noun in a one-to-one pairing."},
+			"comment": []string{"Return the relative of a noun.", "For example: the right-hand noun in a one-to-one pairing."},
 		},
 	}
 	Zt_RelativesOf = typeinfo.Flow{
@@ -259,7 +259,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the relatives of a noun as a list of names.", "For example: the right-hand nouns in a set of one-to-many pairing."},
+			"comment": []string{"Return the relatives of a noun as a list of names.", "For example: the right-hand nouns in a set of one-to-many pairing."},
 		},
 	}
 	Zt_ReciprocalOf = typeinfo.Flow{
@@ -283,7 +283,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the implied relative of a noun.", "For example: the left-hand noun in a one-to-many relation."},
+			"comment": []string{"Return the implied relative of a noun.", "For example: the left-hand noun in a one-to-many relation."},
 		},
 	}
 	Zt_ReciprocalsOf = typeinfo.Flow{
@@ -307,7 +307,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the implied relatives of a noun.", "For example: the left-hand nouns in a set of one-to-many pairing."},
+			"comment": []string{"Return the implied relatives of a noun.", "For example: the left-hand nouns in a set of one-to-many pairing."},
 		},
 	}
 	Zt_Relate = typeinfo.Flow{
@@ -338,7 +338,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Relate two nouns.", "Removes any previous pairings that might conflict with this one."},
+			"comment": []string{"Relate two nouns.", "Removes any previous pairings that might conflict with this one."},
 		},
 	}
 }
@@ -362,6 +362,15 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_ReciprocalOf,
 	&Zt_ReciprocalsOf,
 	&Zt_Relate,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(RelativeOf{})
+	reg(RelativesOf{})
+	reg(ReciprocalOf{})
+	reg(ReciprocalsOf{})
+	reg(Relate{})
 }
 
 // a list of all command signatures

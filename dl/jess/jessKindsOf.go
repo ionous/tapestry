@@ -68,7 +68,7 @@ func (op *KindsAreKind) Generate(ctx Context) error {
 					var kind string
 					if k := at.Kind; k != nil {
 						// if it was a known kind, then that's easy.
-						kind = k.ActualKind.Name
+						kind = k.actualKind.Name
 					} else {
 						// otherwise, get the specified name
 						if n := getKindOfName(at); isAspect && isPlural {

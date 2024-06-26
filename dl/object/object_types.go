@@ -712,7 +712,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Store a value into a variable or object.", "Values are specified as a generic [Assignment].", "The various \"From\" commands exist to cast specific value types into an assignment.", "", "WARNING: This doesn't convert values from one type to another.", "For example:", "  Set:value:", "  - \"@some_local_variable\"", "  - FromText: \"a piece of text to store.\"", "will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error."},
+			"comment": []string{"Store a value into a variable or object.", "Values are specified as a generic [Assignment].", "The various \"From\" commands exist to cast specific value types into an assignment.", "", "WARNING: This doesn't convert values from one type to another.", "For example:", "  Set:value:", "  - \"@some_local_variable\"", "  - FromText: \"a piece of text to store.\"", "will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error."},
 		},
 	}
 	Zt_SetState = typeinfo.Flow{
@@ -728,7 +728,7 @@ func init() {
 			Name:  "state_name",
 			Label: "state",
 			Markup: map[string]any{
-				"comment": []interface{}{"Name of the state to set.", "Only one state in a state set is considered active at a time so this implicitly deactivates the other states in its set.", "Errors if the state wasn't declared as part of the object's kind."},
+				"comment": []string{"Name of the state to set.", "Only one state in a state set is considered active at a time so this implicitly deactivates the other states in its set.", "Errors if the state wasn't declared as part of the object's kind."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -736,7 +736,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Set the state of an object or record.", "See also: story `Define state:names:`."},
+			"comment": []string{"Set the state of an object or record.", "See also: story `Define state:names:`."},
 		},
 	}
 	Zt_ObjectDot = typeinfo.Flow{
@@ -769,7 +769,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.", "In .tell files, this command is often specified with a shortcut. For example:", "  \"#my_object.some_field\"", "is a shorter way to say:", "  Object:dot:", "  - \"my object\"", "  - \"some field\"", "WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean."},
+			"comment": []string{"Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.", "In .tell files, this command is often specified with a shortcut. For example:", "  \"#my_object.some_field\"", "is a shorter way to say:", "  Object:dot:", "  - \"my object\"", "  - \"some field\"", "WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean."},
 		},
 	}
 	Zt_VariableDot = typeinfo.Flow{
@@ -787,7 +787,7 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The field or path within the variable to read from.", "Specifying a dot only makes sense when the variable contains", "a record, a list, or the id an object.", "When this isn't specified, the command returns the value of the variable itself."},
+				"comment": []string{"The field or path within the variable to read from.", "Specifying a dot only makes sense when the variable contains", "a record, a list, or the id an object.", "When this isn't specified, the command returns the value of the variable itself."},
 			},
 			Type: &Zt_Dot,
 		}},
@@ -803,7 +803,7 @@ func init() {
 		},
 		Markup: map[string]any{
 			"blockly-color": "MATH_HUE",
-			"comment":       []interface{}{"Read a value from a variable.", "In .tell files, this command is often specified with a shortcut. For example:", "  \"@some_local_variable\"", "is a shorter way to say:", "  Variable:dot: \"some local variable\"", "WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean."},
+			"comment":       []string{"Read a value from a variable.", "In .tell files, this command is often specified with a shortcut. For example:", "  \"@some_local_variable\"", "is a shorter way to say:", "  Variable:dot: \"some local variable\"", "WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean."},
 		},
 	}
 	Zt_AtField = typeinfo.Flow{
@@ -813,7 +813,7 @@ func init() {
 			Name:  "field_name",
 			Label: "field",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of the field to read or write.", "The field must exist in the object or record being accessed."},
+				"comment": []string{"The name of the field to read or write.", "The field must exist in the object or record being accessed."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -831,7 +831,7 @@ func init() {
 			Name:  "index",
 			Label: "index",
 			Markup: map[string]any{
-				"comment": []interface{}{"The one-based index to read or write.", "The index must exist within the list being targeted."},
+				"comment": []string{"The one-based index to read or write.", "The index must exist within the list being targeted."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -849,7 +849,7 @@ func init() {
 			Name:  "target",
 			Label: "name",
 			Markup: map[string]any{
-				"comment": []interface{}{"The object in question.", "( Records don't have names. )"},
+				"comment": []string{"The object in question.", "( Records don't have names. )"},
 			},
 			Type: &rtti.Zt_Address,
 		}},
@@ -857,7 +857,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"The full name of an object as originally specified by the author.", "Generates an error for unknown objects except", "it returns empty text when given empty text.", "See also [ObjectDot] which can return the object's unique id."},
+			"comment": []string{"The full name of an object as originally specified by the author.", "Generates an error for unknown objects except", "it returns empty text when given empty text.", "See also [ObjectDot] which can return the object's unique id."},
 		},
 	}
 	Zt_ObjectStates = typeinfo.Flow{
@@ -875,7 +875,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"All of an object's current states as a list of text.", "( Despite the name, can also be used on records. )"},
+			"comment": []string{"All of an object's current states as a list of text.", "( Despite the name, can also be used on records. )"},
 		},
 	}
 	Zt_IsExactKindOf = typeinfo.Flow{
@@ -900,7 +900,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether an object (or record) is of exactly the named kind.", "For example, all containers are a kind of prop.", "Asking if a container is exactly a prop would return false.", "See also [IsKindOf]."},
+			"comment": []string{"Determine whether an object (or record) is of exactly the named kind.", "For example, all containers are a kind of prop.", "Asking if a container is exactly a prop would return false.", "See also [IsKindOf]."},
 		},
 	}
 	Zt_IsKindOf = typeinfo.Flow{
@@ -925,7 +925,7 @@ func init() {
 			Label:    "nothing",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Check whether the requested text of the object is empty", "but the type of the requested text is still of requested kind."},
+				"comment": []string{"Check whether the requested text of the object is empty", "but the type of the requested text is still of requested kind."},
 			},
 			Type: &prim.Zt_Bool,
 		}},
@@ -933,7 +933,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether an object (or record) is compatible with the named kind.", "For example, all containers are a kind of prop.", "Asking if a container is a kind of a prop would return true.", "See also [IsExactKindOf]."},
+			"comment": []string{"Determine whether an object (or record) is compatible with the named kind.", "For example, all containers are a kind of prop.", "Asking if a container is a kind of a prop would return true.", "See also [IsExactKindOf]."},
 		},
 	}
 	Zt_KindOf = typeinfo.Flow{
@@ -951,7 +951,7 @@ func init() {
 			Label:    "nothing",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Check whether the requested text of the object is empty", "but the type of the requested text is still of requested kind."},
+				"comment": []string{"Check whether the requested text of the object is empty", "but the type of the requested text is still of requested kind."},
 			},
 			Type: &prim.Zt_Bool,
 		}},
@@ -1011,7 +1011,7 @@ func init() {
 			Name:  "aspect_name",
 			Label: "state",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of the set of states in question.", "See also [DefineState]."},
+				"comment": []string{"The name of the set of states in question.", "See also [DefineState]."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -1036,7 +1036,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change to the next state in some particular set of states for a given object ( or record. )", "Optionally, returns the new value of the state.", "Uses the order of the states where as they were originally defined.", "See [DefineState]."},
+			"comment": []string{"Change to the next state in some particular set of states for a given object ( or record. )", "Optionally, returns the new value of the state.", "Uses the order of the states where as they were originally defined.", "See [DefineState]."},
 		},
 	}
 	Zt_DecrementAspect = typeinfo.Flow{
@@ -1052,7 +1052,7 @@ func init() {
 			Name:  "aspect_name",
 			Label: "state",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of the set of states in question.", "See also [DefineState]."},
+				"comment": []string{"The name of the set of states in question.", "See also [DefineState]."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -1077,7 +1077,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change to the previous state in some particular set of states for a given object ( or record. )", "Optionally, returns the new value of the state.", "Uses the order of the states where as they were originally defined.", "See [DefineState]."},
+			"comment": []string{"Change to the previous state in some particular set of states for a given object ( or record. )", "Optionally, returns the new value of the state.", "Uses the order of the states where as they were originally defined.", "See [DefineState]."},
 		},
 	}
 }
@@ -1118,6 +1118,25 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_FieldsOfKind,
 	&Zt_IncrementAspect,
 	&Zt_DecrementAspect,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(SetValue{})
+	reg(SetState{})
+	reg(ObjectDot{})
+	reg(VariableDot{})
+	reg(AtField{})
+	reg(AtIndex{})
+	reg(ObjectName{})
+	reg(ObjectStates{})
+	reg(IsExactKindOf{})
+	reg(IsKindOf{})
+	reg(KindOf{})
+	reg(KindsOf{})
+	reg(FieldsOfKind{})
+	reg(IncrementAspect{})
+	reg(DecrementAspect{})
 }
 
 // a list of all command signatures

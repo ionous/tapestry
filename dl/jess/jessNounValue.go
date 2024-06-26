@@ -135,7 +135,7 @@ func (op *NounPropertyValue) Generate(ctx Context) error {
 
 func namedKind(named NamedNoun) (ret string) {
 	if n := named.Noun; n != nil {
-		ret = n.ActualNoun.Kind
+		ret = n.actualNoun.Kind
 	} else if n := named.Name; n != nil {
 		ret = Things // if it hasn't matched this is the default that will be generated
 	} else {

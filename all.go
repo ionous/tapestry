@@ -41,3 +41,21 @@ var AllSignatures = []map[uint64]typeinfo.Instance{
 	// testdl.Z_Types.Signatures,
 	text.Z_Types.Signatures,
 }
+
+// gob like registration
+func Register(reg func(any)) {
+	call.Register(reg)
+	debug.Register(reg)
+	format.Register(reg)
+	game.Register(reg)
+	grammar.Register(reg)
+	list.Register(reg)
+	literal.Register(reg)
+	logic.Register(reg)
+	math.Register(reg)
+	object.Register(reg)
+	prim.Register(reg)
+	rel.Register(reg)
+	render.Register(reg)
+	text.Register(reg)
+}

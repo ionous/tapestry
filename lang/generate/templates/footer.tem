@@ -31,7 +31,6 @@ func init() {
 }
 {{- end }}{{- end }}
 
-
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:  "{{.Name}}",
@@ -52,6 +51,16 @@ var Z_Types = typeinfo.TypeSet{
 {{- range .Types }}{{ if .List }}
 {{ template "types.tem" . }}
 {{- end }}{{ end }}
+
+// gob like registration
+func Register(reg func(any)) {
+{{- range .Types }}{{ if and (eq .Type "flow") .List }}
+{{- range .List }}
+	reg({{Pascal .Name}}{})
+{{- end }}
+{{- end }}{{- end }}
+}
+
 {{- if .Signatures }}
 // a list of all command signatures
 // ( for processing and verifying story files )

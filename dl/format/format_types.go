@@ -199,7 +199,7 @@ func (op *CycleText_Slice) Repeats() bool {
 type ShuffleText struct {
 	Name    string
 	Parts   []rtti.TextEval
-	Indices Shuffler
+	indices Shuffler
 	Markup  map[string]any
 }
 
@@ -651,7 +651,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Add a single blank line ( unless a blank line was just written ).", "See also the <p> markup."},
+			"comment": []string{"Add a single blank line ( unless a blank line was just written ).", "See also the <p> markup."},
 		},
 	}
 	Zt_SoftBreak = typeinfo.Flow{
@@ -662,7 +662,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Start a new line ( if not already at a new line ).", "See also the <wbr> markup."},
+			"comment": []string{"Start a new line ( if not already at a new line ).", "See also the <wbr> markup."},
 		},
 	}
 	Zt_LineBreak = typeinfo.Flow{
@@ -673,7 +673,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Start a new line.", "See also the <br> markup."},
+			"comment": []string{"Start a new line.", "See also the <br> markup."},
 		},
 	}
 	Zt_CycleText = typeinfo.Flow{
@@ -761,7 +761,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.", "", "As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after."},
+			"comment": []string{"Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.", "", "As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after."},
 		},
 	}
 	Zt_BufferText = typeinfo.Flow{
@@ -797,7 +797,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Display some text to the player.", "The default runtime will format the text according to the rules specified by the Tapestry markup package:", "https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup"},
+			"comment": []string{"Display some text to the player.", "The default runtime will format the text according to the rules specified by the Tapestry markup package:", "https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup"},
 		},
 	}
 	Zt_PrintWords = typeinfo.Flow{
@@ -844,7 +844,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Collect printed text and surround the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
+			"comment": []string{"Collect printed text and surround the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
 		},
 	}
 	Zt_PrintCommas = typeinfo.Flow{
@@ -901,7 +901,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
+			"comment": []string{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
 		},
 	}
 	Zt_PrintNum = typeinfo.Flow{
@@ -920,7 +920,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Express a number using digits.", "For example, given the number `12` return the text \"12\".", "", "The [story.Execute] version prints the text for the player."},
+			"comment": []string{"Express a number using digits.", "For example, given the number `12` return the text \"12\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 	Zt_PrintCount = typeinfo.Flow{
@@ -939,7 +939,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Express an integer in plain english ( aka a cardinal number ).", "For example, given the number `12` return the text \"tweleve\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
+			"comment": []string{"Express an integer in plain english ( aka a cardinal number ).", "For example, given the number `12` return the text \"tweleve\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 }
@@ -981,6 +981,25 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_PrintRow,
 	&Zt_PrintNum,
 	&Zt_PrintCount,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(ParagraphBreak{})
+	reg(SoftBreak{})
+	reg(LineBreak{})
+	reg(CycleText{})
+	reg(ShuffleText{})
+	reg(StoppingText{})
+	reg(BufferText{})
+	reg(PrintText{})
+	reg(PrintWords{})
+	reg(PrintBrackets{})
+	reg(PrintCommas{})
+	reg(PrintRows{})
+	reg(PrintRow{})
+	reg(PrintNum{})
+	reg(PrintCount{})
 }
 
 // a list of all command signatures

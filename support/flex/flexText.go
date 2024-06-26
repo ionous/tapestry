@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/call"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
@@ -169,11 +168,7 @@ func (pt *PlainText) flushPhrases(tail rt.Assignment) (err error) {
 		str := pt.str.String()
 		pt.str.Reset()
 		// write the declare statement
-		out := &story.DeclareStatement{
-			Text:    &literal.TextValue{Value: str},
-			Assign:  tail,
-			Matches: ks,
-		}
+		out := story.MakeDeclaration(str, tail, ks)
 		pt.out = append(pt.out, out)
 	}
 	return

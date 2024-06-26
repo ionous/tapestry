@@ -26,15 +26,15 @@ func (op *Matches) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 }
 
 func (op *Matches) getRegexp() (ret *regexp.Regexp, err error) {
-	if e := op.Cache.err; e != nil {
+	if e := op.cache.err; e != nil {
 		err = e
-	} else if exp := op.Cache.exp; exp != nil {
+	} else if exp := op.cache.exp; exp != nil {
 		ret = exp
 	} else if exp, e := regexp.Compile(op.Match); e != nil {
-		op.Cache.err = err
+		op.cache.err = err
 		err = e
 	} else {
-		op.Cache.exp = exp
+		op.cache.exp = exp
 		ret = exp
 	}
 	return

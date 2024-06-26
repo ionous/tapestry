@@ -34,7 +34,7 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 				var ks kindsOf.Kinds
 				if k, w := q.FindKind(span, &ks); w == index && ks == kindsOf.Aspect {
 					// fix: clean this up some.
-					op.Aspect.ActualKind = ActualKind{k, ks}
+					op.Aspect.actualKind = ActualKind{k, ks}
 					op.Aspect.Matched = org
 					//
 					next := next.Skip(w)         // skip the kind

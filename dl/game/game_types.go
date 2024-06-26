@@ -276,6 +276,15 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_PrintVersion,
 }
 
+// gob like registration
+func Register(reg func(any)) {
+	reg(QuitGame{})
+	reg(SaveGame{})
+	reg(LoadGame{})
+	reg(UndoTurn{})
+	reg(PrintVersion{})
+}
+
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{

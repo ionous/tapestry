@@ -245,7 +245,7 @@ func (op *TextList_Slice) Repeats() bool {
 type RecordValue struct {
 	KindName string
 	Fields   []FieldValue
-	Cache    RecordCache
+	cache    RecordCache
 	Markup   map[string]any
 }
 
@@ -286,7 +286,7 @@ func (op *RecordValue_Slice) Repeats() bool {
 type RecordList struct {
 	KindName string
 	Records  []FieldList
-	Cache    RecordsCache
+	cache    RecordsCache
 	Markup   map[string]any
 }
 
@@ -466,7 +466,7 @@ func init() {
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Optionally, when the text represents the name of an (existing) object,", "the kind of the object in question."},
+				"comment": []string{"Optionally, when the text represents the name of an (existing) object,", "the kind of the object in question."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -493,7 +493,7 @@ func init() {
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Optionally, when the text represents the names of (existing) objects,", "the kind of the objects in question."},
+				"comment": []string{"Optionally, when the text represents the names of (existing) objects,", "the kind of the objects in question."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -519,7 +519,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "kind_name",
 			Markup: map[string]any{
-				"comment": []interface{}{"The kind of the record being constructed.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
+				"comment": []string{"The kind of the record being constructed.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -527,7 +527,7 @@ func init() {
 			Label:   "value",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
+				"comment": []string{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
 			},
 			Type: &Zt_FieldValue,
 		}, {
@@ -549,7 +549,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "kind_name",
 			Markup: map[string]any{
-				"comment": []interface{}{"The kind of the records being constructed.", "All of the records in the list must be of the same kind.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
+				"comment": []string{"The kind of the records being constructed.", "All of the records in the list must be of the same kind.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -581,7 +581,7 @@ func init() {
 			Label:   "list",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
+				"comment": []string{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
 			},
 			Type: &Zt_FieldValue,
 		}},
@@ -598,14 +598,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "field_name",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of a field in a record to initialize.", "New field names cannot be added to records at runtime;", "the field names must be part of the original declaration of the kind."},
+				"comment": []string{"The name of a field in a record to initialize.", "New field names cannot be added to records at runtime;", "the field names must be part of the original declaration of the kind."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": []interface{}{"The literal value of the field.", "The type of value must match the original declaration of the field.", "( ex. If the field was declared as a number, only a number can be used to initialize it. )"},
+				"comment": []string{"The literal value of the field.", "The type of value must match the original declaration of the field.", "( ex. If the field was declared as a number, only a number can be used to initialize it. )"},
 			},
 			Type: &Zt_LiteralValue,
 		}},
@@ -648,6 +648,19 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RecordList,
 	&Zt_FieldList,
 	&Zt_FieldValue,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg(BoolValue{})
+	reg(NumValue{})
+	reg(NumList{})
+	reg(TextValue{})
+	reg(TextList{})
+	reg(RecordValue{})
+	reg(RecordList{})
+	reg(FieldList{})
+	reg(FieldValue{})
 }
 
 // a list of all command signatures
