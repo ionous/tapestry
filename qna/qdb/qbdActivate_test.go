@@ -1,12 +1,12 @@
 package qdb_test
 
 import (
+	"fmt"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
-	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
@@ -69,7 +69,7 @@ func TestActivate(t *testing.T) {
 func isActive(q *qdb.QueryTest, want bool, names ...string) (err error) {
 	for _, n := range names {
 		if ok, e := q.IsDomainActive(n); e != nil || ok != want {
-			err = errutil.New("expected", n, "active", want, e)
+			err = fmt.Errorf("expected %q active %v %v", n, ok, e)
 			break
 		}
 	}
@@ -78,9 +78,9 @@ func isActive(q *qdb.QueryTest, want bool, names ...string) (err error) {
 
 func activate(q *qdb.QueryTest, name string, expect ...string) (err error) {
 	if els, e := q.InnerActivate(name); e != nil {
-		err = errutil.New("couldnt activate", name, e)
+		err = fmt.Errorf("couldnt activate %q %s", name, e)
 	} else if diff := pretty.Diff(els, expect); len(diff) > 0 {
-		err = errutil.New("diff", name, els, diff)
+		err = fmt.Errorf("diff %q %v %v", name, els, diff)
 	}
 	return
 }

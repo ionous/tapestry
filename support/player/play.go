@@ -55,7 +55,6 @@ func createContext(mdlFile string, d *query.QueryDecoder) (ret context, err erro
 }
 
 type context struct {
-	d       *query.QueryDecoder
 	grammar parser.Scanner
 	q       query.Query
 }
@@ -67,7 +66,8 @@ func createRawContext(mdlFile string, dec *query.QueryDecoder) (ret context, err
 	} else if gram, e := readRawGrammar((*decode.Decoder)(dec), data.Grammar); e != nil {
 		err = e
 	} else {
-		ret = context{dec, gram, &data}
+		q := raw.MakeQuery(&data, dec)
+		ret = context{gram, q}
 	}
 	return
 }
@@ -78,10 +78,10 @@ func createSqlContext(mdlFile string, dec *query.QueryDecoder) (ret context, err
 	} else {
 		if grammar, e := ReadGrammar(db, (*decode.Decoder)(dec)); e != nil {
 			err = e
-		} else if q, e := qdb.NewQueries(db); e != nil {
+		} else if q, e := qdb.NewQueries(db, dec); e != nil {
 			err = e
 		} else {
-			ret = context{dec, grammar, q}
+			ret = context{grammar, q}
 		}
 		if err != nil { // otherwise query will take care of it
 			defer db.Close()
@@ -92,7 +92,7 @@ func createSqlContext(mdlFile string, dec *query.QueryDecoder) (ret context, err
 
 func goPlay(ctx context, scene string, opts qna.Options, testString string) (err error) {
 	const prompt = "> "
-	run := qna.NewRuntimeOptions(ctx.q, ctx.d, opts)
+	run := qna.NewRuntimeOptions(ctx.q, opts)
 	w := print.NewLineSentences(markup.ToText(os.Stdout))
 	run.SetWriter(w)
 	if e := run.ActivateDomain(scene); e != nil {

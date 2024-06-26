@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -66,9 +65,9 @@ func QueryFields(db *sql.DB, ks []raw.KindData) (err error) {
 	return
 }
 
-func queryFields(rows *sql.Rows) (ret []query.FieldData, err error) {
+func queryFields(rows *sql.Rows) (ret []raw.FieldData, err error) {
 	var last string
-	var field query.FieldData
+	var field raw.FieldData
 	err = tables.ScanAll(rows, func() (_ error) {
 		// the same field might be listed twice:
 		// the final value ( listed first )

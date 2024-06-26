@@ -48,10 +48,10 @@ func makeShuttle(db *sql.DB, opts qna.Options) (ret *frame.Shuttle, err error) {
 	decoder := query.NewDecoder(tapestry.AllSignatures)
 	if grammar, e := player.MakeGrammar(db); e != nil {
 		err = e
-	} else if q, e := qdb.NewQueries(db); e != nil {
+	} else if q, e := qdb.NewQueries(db, decoder); e != nil {
 		err = e
 	} else {
-		run := qna.NewRuntimeOptions(q, decoder, opts)
+		run := qna.NewRuntimeOptions(q, opts)
 		survey := play.MakeDefaultSurveyor(run)
 		pt := play.NewPlaytime(run, survey, grammar)
 		play.CaptureInput(pt)

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -50,8 +49,8 @@ func QueryRules(db *sql.DB, scene string, ps []raw.PatternData) (err error) {
 	return
 }
 
-func queryRules(rows *sql.Rows) (ret []query.RuleData, err error) {
-	var rule query.RuleData
+func queryRules(rows *sql.Rows) (ret []raw.RuleData, err error) {
+	var rule raw.RuleData
 	err = tables.ScanAll(rows, func() (_ error) {
 		ret = append(ret, rule)
 		return

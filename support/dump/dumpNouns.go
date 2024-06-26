@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -81,9 +80,9 @@ func QueryAliases(db *sql.DB, ns []raw.NounData) (err error) {
 	return
 }
 
-func queryValues(rows *sql.Rows) (ret []query.ValueData, err error) {
+func queryValues(rows *sql.Rows) (ret []raw.ValueData, err error) {
 	var last string
-	var v query.ValueData
+	var v raw.ValueData
 	err = tables.ScanAll(rows, func() (_ error) {
 		if last != v.Field {
 			ret = append(ret, v)

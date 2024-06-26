@@ -14,6 +14,11 @@ type RuleSet struct {
 	updateAll bool
 }
 
+func MakeRules(rs []rt.Rule, updateAll bool) RuleSet {
+	return RuleSet{rs, updateAll}
+}
+
+// backcompat
 func (rs *RuleSet) AddRule(rule rt.Rule) {
 	rs.rules = append(rs.rules, rule)
 	rs.updateAll = rule.Updates

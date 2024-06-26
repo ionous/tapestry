@@ -1,5 +1,7 @@
 package query
 
+import "git.sr.ht/~ionous/tapestry/rt"
+
 // QueryNone - implements Query by returning empty results for all reads,
 // and the NotImplemented error for mutating methods.
 type QueryNone string
@@ -18,6 +20,11 @@ func (q QueryNone) Close() {
 	return
 }
 
+func (q QueryNone) GetKindByName(rawName string) (_ *rt.Kind, err error) {
+	err = NotImplemented(q)
+	return
+}
+
 func (q QueryNone) IsDomainActive(name string) (_ bool, _ error) {
 	return
 }
@@ -28,10 +35,6 @@ func (q QueryNone) ActivateDomains(name string) (_, _ []string, err error) {
 }
 
 func (q QueryNone) ReadChecks(actuallyJustThisOne string) (_ []CheckData, _ error) {
-	return
-}
-
-func (q QueryNone) FieldsOf(kind string) (_ []FieldData, _ error) {
 	return
 }
 
@@ -51,7 +54,7 @@ func (q QueryNone) NounNames(id string) (_ []string, _ error) {
 	return
 }
 
-func (q QueryNone) NounValues(id, field string) (_ []ValueData, _ error) {
+func (q QueryNone) NounValue(id, field string) (_ rt.Assignment, _ error) {
 	return
 }
 
@@ -71,7 +74,7 @@ func (q QueryNone) PatternLabels(pat string) (_ []string, _ error) {
 	return
 }
 
-func (q QueryNone) RulesFor(pat string) (_ []RuleData, _ error) {
+func (q QueryNone) RulesFor(pat string) (_ RuleSet, _ error) {
 	return
 }
 

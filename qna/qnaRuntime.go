@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -15,19 +14,14 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func NewRuntime(q query.Query, d decoder.Decoder) *Runner {
-	return NewRuntimeOptions(q, d, NewOptions())
+func NewRuntime(q query.Query) *Runner {
+	return NewRuntimeOptions(q, NewOptions())
 }
 
-func NewRuntimeOptions(q query.Query, d decoder.Decoder, opt Options) *Runner {
+func NewRuntimeOptions(q query.Query, opt Options) *Runner {
 	cacheErrors := opt.cacheErrors()
-	if d == nil {
-		d = decoder.DecodeNone("unsupported decoder")
-	}
 	return &Runner{
 		query:       q,
-		decode:      d,
-		constVals:   query.MakeCache(cacheErrors),
 		dynamicVals: query.MakeCache(cacheErrors),
 		options:     opt,
 		scope:       scope.Chain{Scope: scope.Empty{}},
@@ -37,15 +31,13 @@ func NewRuntimeOptions(q query.Query, d decoder.Decoder, opt Options) *Runner {
 
 // an implementation of rt.Runtime
 type Runner struct {
-	query           query.Query     // various helpful db queries
-	decode          decoder.Decoder // helper to interpret db binary data
-	notify          rt.Notifier     // callbacks to listen for changes
-	constVals       query.Cache     // readonly info cached from the db
-	dynamicVals     query.Cache     // noun values and counters
-	options         Options         // runtime customization
-	scope           scope.Chain     // meta.Variable lookup
-	writer.Sink                     // target for game output
-	currentPatterns                 // stack of patterns currently in progress
+	query           query.Query // various helpful db queries
+	notify          rt.Notifier // callbacks to listen for changes
+	dynamicVals     query.Cache // noun values and counters
+	options         Options     // runtime customization
+	scope           scope.Chain // meta.Variable lookup
+	writer.Sink                 // target for game output
+	currentPatterns             // stack of patterns currently in progress
 }
 
 func (run *Runner) SetNotifier(n rt.Notifier) (prev rt.Notifier) {
@@ -77,7 +69,6 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 				notify(ends)
 			}
 		}
-		run.constVals.Reset() // fix? focus cache clear to just the domains that became inactive?
 		if len(domain) == 0 {
 			run.dynamicVals.Reset()
 		}

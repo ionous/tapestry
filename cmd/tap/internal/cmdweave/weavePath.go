@@ -39,10 +39,10 @@ func WeavePaths(outFile string, stories ...fs.FS) (err error) {
 			err = fmt.Errorf("couldn't create output file %q because %s", outFile, e)
 		} else {
 			defer db.Close()
-			if q, e := qdb.NewQueries(db); e != nil {
+			if q, e := qdb.NewQueries(db, query.NewDecoder(story.AllSignatures)); e != nil {
 				err = e
 			} else {
-				run := qna.NewRuntime(q, query.NewDecoder(story.AllSignatures))
+				run := qna.NewRuntime(q)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				if e := cat.DomainStart("tapestry", nil); e != nil {
 					err = e

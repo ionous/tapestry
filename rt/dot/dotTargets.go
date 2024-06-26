@@ -46,14 +46,14 @@ func (c rootCursor) SetAtField(field string, val rt.Value) error {
 }
 
 type valCursor struct {
-	run rt.Runtime // targeted
-	val rt.Value   // possibly a record or a list
+	ks  rt.Kinds // targeted
+	val rt.Value // possibly a record or a list
 }
 
 // supports requesting fields from a record
 // uses the runtime to create sub-records when needed.
-func MakeValueCursor(run rt.Runtime, val rt.Value) Cursor {
-	return valCursor{run, val}
+func MakeValueCursor(ks rt.Kinds, val rt.Value) Cursor {
+	return valCursor{ks, val}
 }
 
 func (c valCursor) CurrentValue() rt.Value {
@@ -80,7 +80,7 @@ func (c valCursor) GetAtIndex(i int) (ret Cursor, err error) {
 		err = e
 	} else {
 		next := c.val.Index(i)
-		ret = valCursor{c.run, next}
+		ret = valCursor{c.ks, next}
 	}
 	return
 }
@@ -100,10 +100,10 @@ func (c valCursor) SetAtField(field string, newValue rt.Value) (err error) {
 func (c valCursor) GetAtField(field string) (ret Cursor, err error) {
 	if aff := c.val.Affinity(); aff != affine.Record {
 		err = fmt.Errorf("%s doesn't have fields", aff)
-	} else if v, e := safe.EnsureField(c.run, c.val.Record(), field); e != nil {
+	} else if v, e := safe.EnsureField(c.ks, c.val.Record(), field); e != nil {
 		err = e
 	} else {
-		ret = valCursor{c.run, v}
+		ret = valCursor{c.ks, v}
 	}
 	return
 }

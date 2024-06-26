@@ -3,48 +3,31 @@ package query
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 type CheckData struct {
 	Name   string
 	Domain string
-	Aff    affine.Affinity
-	Prog   Bytes `json:",omitempty"` // a serialized rt.Execute_Slice
-	Value  Bytes `json:",omitempty"` // a serialized literal.Value
-}
-
-type FieldData struct {
-	Name     string
-	Affinity affine.Affinity
-	Class    string `json:",omitempty"`
-	Init     Bytes  `json:",omitempty"`
+	Expect string // all tests generate text right now; fix: need to handle comparison of literal values
+	Test   []rt.Execute
 }
 
 type NounInfo struct {
 	Domain, Noun, Kind string // noun is unique identifier within the domain.
 }
 
-type RuleData struct {
-	Name    string
-	Stop    bool
-	Jump    int
-	Updates bool
-	Prog    Bytes `json:",omitempty"` // a serialized rt.Execute_Slice
-}
-
-type ValueData struct {
-	Field string
-	Path  string `json:",omitempty"`
-	Value Bytes  `json:",omitempty"` // a serialized assignment or literal
+type RuleSet struct {
+	Rules     []rt.Rule
+	UpdateAll bool // true if any of the rules have update ste
 }
 
 type Query interface {
 	IsDomainActive(name string) (bool, error)
 	ActivateDomains(name string) (prev, next []string, err error)
 	ReadChecks(actuallyJustThisOne string) ([]CheckData, error)
-	// every field used by the passed kind
-	FieldsOf(exactKind string) ([]FieldData, error)
+	//
+	GetKindByName(rawName string) (*rt.Kind, error)
 	// given a plural or singular kind
 	// return all ancestors starting with the kind itself.
 	KindOfAncestors(kindOrKinds string) ([]string, error)
@@ -56,8 +39,8 @@ type Query interface {
 	// warning: the  parser expects these to be in alphabetical order.
 	NounNames(fullname string) ([]string, error)
 	// a single field can contain a set of recursive spare values;
-	// so this returns pairs of path, value.
-	NounValues(fullname, field string) ([]ValueData, error)
+	// so this returns "pairs" of paths and values.
+	NounValue(fullname, field string) (rt.Assignment, error)
 	// all nouns of the indicated kind
 	NounsByKind(exactKind string) ([]string, error)
 	// the empty string if not found
@@ -67,7 +50,7 @@ type Query interface {
 	// includes the parameters, followed by the result
 	// the result can be a blank string for execute statements
 	PatternLabels(pat string) ([]string, error)
-	RulesFor(pat string) ([]RuleData, error)
+	RulesFor(pat string) (RuleSet, error)
 	ReciprocalsOf(rel, id string) ([]string, error)
 	RelativesOf(rel, id string) ([]string, error)
 	// relations can be cleared by passing a blank string on the opposite side

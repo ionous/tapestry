@@ -7,11 +7,13 @@ import (
 	"slices"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // verify that query none implements every method
-var _ query.Query = (*Data)(nil)
+var _ query.Query = (*RawQuery)(nil)
 
 // NotImplemented - generic error used returned by QueryNone
 type NotImplemented string
@@ -20,17 +22,26 @@ func (e NotImplemented) Error() string {
 	return string(e)
 }
 
-func (q *Data) Close() {
-	*q = Data{} // sure, why not.
+func MakeQuery(data *Data, dec decoder.Decoder) RawQuery {
+	return RawQuery{data, dec}
+}
+
+type RawQuery struct {
+	*Data
+	dec decoder.Decoder
+}
+
+func (q RawQuery) Close() {
+	*q.Data = Data{} // sure, why not.
 	return
 }
 
-func (q *Data) IsDomainActive(name string) (okay bool, err error) {
+func (q RawQuery) IsDomainActive(name string) (okay bool, err error) {
 	okay = slices.Contains(q.Scenes, name)
 	return
 }
 
-func (q *Data) ActivateDomains(name string) (prev, next []string, err error) {
+func (q RawQuery) ActivateDomains(name string) (prev, next []string, err error) {
 	if cnt := len(q.Scenes); cnt == 0 {
 		err = errors.New("data has no domains")
 	} else if len(name) == 0 {
@@ -43,11 +54,15 @@ func (q *Data) ActivateDomains(name string) (prev, next []string, err error) {
 	return
 }
 
-func (q *Data) ReadChecks(actuallyJustThisOne string) (_ []query.CheckData, _ error) {
+func (q RawQuery) ReadChecks(actuallyJustThisOne string) (_ []query.CheckData, _ error) {
 	return // none
 }
 
-func (q *Data) FieldsOf(exactKind string) (ret []query.FieldData, err error) {
+func (q RawQuery) GetKindByName(k string) (ret *rt.Kind, err error) {
+	panic("fix")
+}
+
+func (q RawQuery) fieldsOf(exactKind string) (ret []FieldData, err error) {
 	if i, ok := slices.BinarySearchFunc(q.Kinds, exactKind, func(k KindData, _ string) int {
 		return cmp.Compare(k.Kind, exactKind)
 	}); !ok {
@@ -58,7 +73,7 @@ func (q *Data) FieldsOf(exactKind string) (ret []query.FieldData, err error) {
 	return
 }
 
-func (q *Data) KindOfAncestors(singleOrPlural string) (ret []string, err error) {
+func (q RawQuery) KindOfAncestors(singleOrPlural string) (ret []string, err error) {
 	if kind, e := q.getPluralKind(singleOrPlural); e != nil {
 		err = e
 	} else if i, ok := slices.BinarySearchFunc(q.Kinds, kind, func(k KindData, _ string) int {
@@ -72,7 +87,7 @@ func (q *Data) KindOfAncestors(singleOrPlural string) (ret []string, err error) 
 }
 
 // search using short name
-func (q *Data) NounInfo(short string) (ret query.NounInfo, err error) {
+func (q RawQuery) NounInfo(short string) (ret query.NounInfo, err error) {
 	if noun, e := q.findFullName(short); e != nil {
 		err = e
 	} else if n, e := q.findNounData(noun); e != nil {
@@ -88,7 +103,7 @@ func (q *Data) NounInfo(short string) (ret query.NounInfo, err error) {
 }
 
 // the best short name for the passed full name
-func (q *Data) NounName(full string) (ret string, err error) {
+func (q RawQuery) NounName(full string) (ret string, err error) {
 	if noun, e := q.findNounData(full); e != nil {
 		err = e
 	} else {
@@ -101,7 +116,7 @@ func (q *Data) NounName(full string) (ret string, err error) {
 	return
 }
 
-func (q *Data) NounNames(full string) (ret []string, err error) {
+func (q RawQuery) NounNames(full string) (ret []string, err error) {
 	if noun, e := q.findNounData(full); e != nil {
 		err = e
 	} else {
@@ -110,28 +125,29 @@ func (q *Data) NounNames(full string) (ret []string, err error) {
 	return
 }
 
-func (q *Data) NounValues(full, field string) (ret []query.ValueData, err error) {
-	if noun, e := q.findNounData(full); e != nil {
-		err = e
-	} else {
-		start, end := -1, len(noun.Values)
-		for i, nv := range noun.Values {
-			at := nv.Field == field
-			if at && start < 0 {
-				start = i
-			} else if !at && start >= 0 {
-				end = i
-				break
-			}
-		}
-		if start >= 0 {
-			ret = noun.Values[start:end]
-		}
-	}
-	return
+func (q RawQuery) NounValue(full, field string) (ret rt.Assignment, err error) {
+	panic("fix")
+	// if noun, e := q.findNounData(full); e != nil {
+	// 	err = e
+	// } else {
+	// 	start, end := -1, len(noun.Values)
+	// 	for i, nv := range noun.Values {
+	// 		at := nv.Field == field
+	// 		if at && start < 0 {
+	// 			start = i
+	// 		} else if !at && start >= 0 {
+	// 			end = i
+	// 			break
+	// 		}
+	// 	}
+	// 	if start >= 0 {
+	// 		ret = noun.Values[start:end]
+	// 	}
+	// }
+	// return
 }
 
-func (q *Data) NounsByKind(kind string) (ret []string, _ error) {
+func (q RawQuery) NounsByKind(kind string) (ret []string, _ error) {
 	for _, n := range q.Nouns { // tbd: record nouns per kind?
 		if n.Kind == kind {
 			ret = append(ret, n.Noun)
@@ -140,7 +156,7 @@ func (q *Data) NounsByKind(kind string) (ret []string, _ error) {
 	return
 }
 
-func (q *Data) PluralToSingular(plural string) (ret string, _ error) {
+func (q RawQuery) PluralToSingular(plural string) (ret string, _ error) {
 	for _, p := range q.Plurals {
 		if plural == p.Many {
 			ret = p.One
@@ -150,7 +166,7 @@ func (q *Data) PluralToSingular(plural string) (ret string, _ error) {
 	return
 }
 
-func (q *Data) PluralFromSingular(singular string) (ret string, _ error) {
+func (q RawQuery) PluralFromSingular(singular string) (ret string, _ error) {
 	if i, ok := slices.BinarySearchFunc(q.Plurals, singular, func(n Plural, _ string) int {
 		return cmp.Compare(n.One, singular)
 	}); ok {
@@ -159,7 +175,7 @@ func (q *Data) PluralFromSingular(singular string) (ret string, _ error) {
 	return
 }
 
-func (q *Data) PatternLabels(pat string) (ret []string, err error) {
+func (q RawQuery) PatternLabels(pat string) (ret []string, err error) {
 	if p, e := q.findPattern(pat); e != nil {
 		err = e
 	} else {
@@ -168,16 +184,40 @@ func (q *Data) PatternLabels(pat string) (ret []string, err error) {
 	return
 }
 
-func (q *Data) RulesFor(pat string) (ret []query.RuleData, err error) {
+func (q RawQuery) RulesFor(pat string) (ret query.RuleSet, err error) {
 	if p, e := q.findPattern(pat); e != nil {
 		err = e
 	} else {
-		ret = p.Rules
+		var out []rt.Rule
+		var updateAll bool
+		for _, rule := range p.Rules {
+			if prog, e := q.dec.DecodeProg(rule.Prog); e != nil {
+				err = e
+				break
+			} else {
+				if rule.Updates {
+					updateAll = true
+				}
+				out = append(out, rt.Rule{
+					Name:    rule.Name,
+					Stop:    rule.Stop,
+					Jump:    rt.Jump(rule.Jump),
+					Updates: rule.Updates,
+					Exe:     prog,
+				})
+			}
+		}
+		if err == nil {
+			ret = query.RuleSet{
+				Rules:     out,
+				UpdateAll: updateAll,
+			}
+		}
 	}
 	return
 }
 
-func (q *Data) ReciprocalsOf(rel, noun string) (ret []string, err error) {
+func (q RawQuery) ReciprocalsOf(rel, noun string) (ret []string, err error) {
 	if p, e := q.findRelation(rel); e != nil {
 		err = e
 	} else {
@@ -190,7 +230,7 @@ func (q *Data) ReciprocalsOf(rel, noun string) (ret []string, err error) {
 	return
 }
 
-func (q *Data) RelativesOf(rel, noun string) (ret []string, err error) {
+func (q RawQuery) RelativesOf(rel, noun string) (ret []string, err error) {
 	if p, e := q.findRelation(rel); e != nil {
 		err = e
 	} else {
@@ -203,7 +243,7 @@ func (q *Data) RelativesOf(rel, noun string) (ret []string, err error) {
 	return
 }
 
-func (q *Data) Relate(rel, noun, otherNoun string) (err error) {
+func (q RawQuery) Relate(rel, noun, otherNoun string) (err error) {
 	if p, e := q.findRelation(rel); e != nil {
 		err = e
 	} else if one, other := len(noun) > 0, len(otherNoun) > 0; !one && !other {
@@ -231,24 +271,24 @@ func (q *Data) Relate(rel, noun, otherNoun string) (err error) {
 }
 
 // Random implements Query.
-func (q *Data) Random(inclusiveMin int, exclusiveMax int) int {
+func (q RawQuery) Random(inclusiveMin int, exclusiveMax int) int {
 	// FIX!!!!
 	return inclusiveMin
 }
 
 // LoadGame implements Query.
-func (q *Data) LoadGame(path string) (ret query.CacheMap, err error) {
+func (q RawQuery) LoadGame(path string) (ret query.CacheMap, err error) {
 	err = NotImplemented("load game")
 	return
 }
 
 // SaveGame implements Query.
-func (q *Data) SaveGame(path string, dynamicValues query.CacheMap) error {
+func (q RawQuery) SaveGame(path string, dynamicValues query.CacheMap) error {
 	return NotImplemented("save game")
 }
 
 // normalize plural name
-func (q *Data) getPluralKind(singleOrPlural string) (ret string, err error) {
+func (q RawQuery) getPluralKind(singleOrPlural string) (ret string, err error) {
 	if n, e := q.PluralFromSingular(singleOrPlural); e != nil {
 		err = e
 	} else if len(n) == 0 {
@@ -260,7 +300,7 @@ func (q *Data) getPluralKind(singleOrPlural string) (ret string, err error) {
 }
 
 // shortname to id
-func (q *Data) findFullName(shortname string) (ret string, err error) {
+func (q RawQuery) findFullName(shortname string) (ret string, err error) {
 	if i, ok := slices.BinarySearchFunc(q.Names, shortname, func(n NounName, _ string) int {
 		return cmp.Compare(n.Name, shortname)
 	}); !ok {
@@ -272,7 +312,7 @@ func (q *Data) findFullName(shortname string) (ret string, err error) {
 }
 
 // fullname to NounData
-func (q *Data) findNounData(fullname string) (ret NounData, err error) {
+func (q RawQuery) findNounData(fullname string) (ret NounData, err error) {
 	if i, ok := slices.BinarySearchFunc(q.Nouns, fullname, func(n NounData, _ string) int {
 		return cmp.Compare(n.Noun, fullname)
 	}); !ok {
@@ -283,7 +323,7 @@ func (q *Data) findNounData(fullname string) (ret NounData, err error) {
 	return
 }
 
-func (q *Data) findPattern(name string) (ret PatternData, err error) {
+func (q RawQuery) findPattern(name string) (ret PatternData, err error) {
 	if i, ok := slices.BinarySearchFunc(q.Patterns, name, func(p PatternData, _ string) int {
 		return cmp.Compare(p.Pattern, name)
 	}); !ok {
@@ -294,7 +334,7 @@ func (q *Data) findPattern(name string) (ret PatternData, err error) {
 	return
 }
 
-func (q *Data) findRelation(name string) (ret *RelativeData, err error) {
+func (q RawQuery) findRelation(name string) (ret *RelativeData, err error) {
 	if i, ok := slices.BinarySearchFunc(q.Relatives, name, func(p RelativeData, _ string) int {
 		return cmp.Compare(p.Relation, name)
 	}); !ok {
