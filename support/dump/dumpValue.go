@@ -72,6 +72,8 @@ func (vr *valueReader) records(rows *sql.Rows) (err error) {
 		vs = append(vs, next.SparseValue)
 		return
 	}, &next.Field, &next.Path, &next.Bytes); e != nil {
+		err = e
+	} else {
 		err = vr.flushRecord(lastField, vs)
 	}
 	vr.ff.Reset()
@@ -84,9 +86,9 @@ func (vr *valueReader) flushRecord(field string, vs []decoder.SparseValue) (err 
 			err = e
 		} else if rec, e := decoder.DecodeSparseRecord(vr.kd, ft.Type, vs); e != nil {
 			err = e
-		} else if packed, e := pack.PackRecord(rec); e != nil {
-			err = e
 		} else {
+			packed := pack.PackRecord(rec)
+			// println(packed)
 			vr.n.Records = append(vr.n.Records, raw.RecordData{
 				Field:  field,
 				Packed: []byte(packed),

@@ -19,9 +19,9 @@ type UserValue struct {
 }
 
 // implements TextMarshaler
-func (u UserValue) MarshalText() ( []byte,  error) {
-	res, e := pack.PackValue(u.Value)
-	return []byte(res), e  // fix this cast?
+func (u UserValue) MarshalText() ([]byte, error) {
+	res := pack.PackValue(u.Value)
+	return []byte(res), nil // fix this cast?
 }
 
 var errMissing = errors.New("not in cache")
