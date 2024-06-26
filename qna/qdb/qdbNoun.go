@@ -14,7 +14,9 @@ import (
 
 // interpreting the value is left to the caller ( re: field affinity )
 func (q *Query) NounValue(noun, field string) (ret rt.Assignment, err error) {
-	if k, e := q.getKindByNoun(noun); e != nil {
+	if k, e := scanString(q.nounKind, noun); e != nil {
+		err = e
+	} else if k, e := q.GetKindByName(k); e != nil {
 		err = e
 	} else if i := k.FieldIndex(field); i < 0 {
 		err = fmt.Errorf("couldnt find field %q in kind %q", field, k.Name())
