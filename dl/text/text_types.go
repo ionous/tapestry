@@ -14,7 +14,7 @@ import (
 // Count the number of characters in some text.
 type TextLen struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // text_len, a type of flow.
@@ -56,7 +56,7 @@ func (op *TextLen_Slice) Repeats() bool {
 type FindText struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // find_text, a type of flow.
@@ -96,7 +96,7 @@ func (op *FindText_Slice) Repeats() bool {
 type TextStartsWith struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // text_starts_with, a type of flow.
@@ -135,7 +135,7 @@ func (op *TextStartsWith_Slice) Repeats() bool {
 type TextEndsWith struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // text_ends_with, a type of flow.
@@ -176,7 +176,7 @@ func (op *TextEndsWith_Slice) Repeats() bool {
 // The text " " is considered something.
 type IsNothing struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // is_nothing, a type of flow.
@@ -219,7 +219,7 @@ type Matches struct {
 	Text   rtti.TextEval
 	Match  string
 	cache  MatchCache
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // matches, a type of flow.
@@ -257,7 +257,7 @@ func (op *Matches_Slice) Repeats() bool {
 // Copy some text, changing its first letter to uppercase.
 type Capitalize struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // capitalize, a type of flow.
@@ -296,7 +296,7 @@ func (op *Capitalize_Slice) Repeats() bool {
 type Join struct {
 	Sep    rtti.TextEval
 	Parts  []rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // join, a type of flow.
@@ -335,7 +335,7 @@ func (op *Join_Slice) Repeats() bool {
 // For example, turns "QUIET" into "quiet.
 type MakeLowercase struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_lowercase, a type of flow.
@@ -374,7 +374,7 @@ func (op *MakeLowercase_Slice) Repeats() bool {
 // For example, turns "Tapestry" into 'yrtsepaT'.
 type MakeReversed struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_reversed, a type of flow.
@@ -413,7 +413,7 @@ func (op *MakeReversed_Slice) Repeats() bool {
 // For example, "see the doctor run. run doctor. run." into "See the doctor run. Run doctor. Run."
 type MakeSentenceCase struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_sentence_case, a type of flow.
@@ -452,7 +452,7 @@ func (op *MakeSentenceCase_Slice) Repeats() bool {
 // For example, turns "empire apple" into "Empire Apple".
 type MakeTitleCase struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_title_case, a type of flow.
@@ -491,7 +491,7 @@ func (op *MakeTitleCase_Slice) Repeats() bool {
 // For example, transforms "loud" into "LOUD".
 type MakeUppercase struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_uppercase, a type of flow.
@@ -535,7 +535,7 @@ func (op *MakeUppercase_Slice) Repeats() bool {
 // The story command [DefinePlural] can add new mappings.
 type Pluralize struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // pluralize, a type of flow.
@@ -576,7 +576,7 @@ func (op *Pluralize_Slice) Repeats() bool {
 // See [pluralize] for more information.
 type Singularize struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // singularize, a type of flow.

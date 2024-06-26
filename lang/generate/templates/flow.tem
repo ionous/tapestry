@@ -9,7 +9,7 @@ type {{Pascal .Name}} struct {
 	}}{{ Camelize $t.Name
 	}}{{ end }} {{TermType $t}}
 {{- end }}
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // {{.Name}}, a type of flow.

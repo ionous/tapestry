@@ -55,7 +55,7 @@ func (op *Dot_Slots) Repeats() bool {
 type SetValue struct {
 	Target rtti.Address
 	Value  rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // set_value, a type of flow.
@@ -95,7 +95,7 @@ func (op *SetValue_Slice) Repeats() bool {
 type SetState struct {
 	Target    rtti.Address
 	StateName rtti.TextEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // set_state, a type of flow.
@@ -145,7 +145,7 @@ func (op *SetState_Slice) Repeats() bool {
 type ObjectDot struct {
 	NounName rtti.TextEval
 	Dot      []Dot
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // object_dot, a type of flow.
@@ -200,7 +200,7 @@ func (op *ObjectDot_Slice) Repeats() bool {
 type VariableDot struct {
 	VariableName rtti.TextEval
 	Dot          []Dot
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // variable_dot, a type of flow.
@@ -245,7 +245,7 @@ func (op *VariableDot_Slice) Repeats() bool {
 // Select a named field from a record, or a named property from an object.
 type AtField struct {
 	FieldName rtti.TextEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // at_field, a type of flow.
@@ -283,7 +283,7 @@ func (op *AtField_Slice) Repeats() bool {
 // Select a value from a list of values.
 type AtIndex struct {
 	Index  rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // at_index, a type of flow.
@@ -324,7 +324,7 @@ func (op *AtIndex_Slice) Repeats() bool {
 // See also [ObjectDot] which can return the object's unique id.
 type ObjectName struct {
 	Target rtti.Address
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // object_name, a type of flow.
@@ -363,7 +363,7 @@ func (op *ObjectName_Slice) Repeats() bool {
 // ( Despite the name, can also be used on records. )
 type ObjectStates struct {
 	Target rtti.Address
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // object_states, a type of flow.
@@ -405,7 +405,7 @@ func (op *ObjectStates_Slice) Repeats() bool {
 type IsExactKindOf struct {
 	Target   rtti.Address
 	KindName rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // is_exact_kind_of, a type of flow.
@@ -448,7 +448,7 @@ type IsKindOf struct {
 	Target   rtti.Address
 	KindName rtti.TextEval
 	Nothing  bool
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // is_kind_of, a type of flow.
@@ -487,7 +487,7 @@ func (op *IsKindOf_Slice) Repeats() bool {
 type KindOf struct {
 	Target  rtti.Address
 	Nothing bool
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // kind_of, a type of flow.
@@ -525,7 +525,7 @@ func (op *KindOf_Slice) Repeats() bool {
 // A list of all objects accessible by the current scene that compatible with the specified kind.
 type KindsOf struct {
 	KindName rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // kinds_of, a type of flow.
@@ -563,7 +563,7 @@ func (op *KindsOf_Slice) Repeats() bool {
 // A list of the fields of a given kind.
 type FieldsOfKind struct {
 	KindName rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // fields_of_kind, a type of flow.
@@ -607,7 +607,7 @@ type IncrementAspect struct {
 	AspectName rtti.TextEval
 	Step       rtti.NumEval
 	Clamp      rtti.BoolEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // increment_aspect, a type of flow.
@@ -652,7 +652,7 @@ type DecrementAspect struct {
 	AspectName rtti.TextEval
 	Step       rtti.NumEval
 	Clamp      rtti.BoolEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // decrement_aspect, a type of flow.

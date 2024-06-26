@@ -38,7 +38,7 @@ func (op *TestSlot_Slots) Repeats() bool {
 
 type TestEmbed struct {
 	TestFlow TestFlow
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // test_embed, a type of flow.
@@ -79,7 +79,7 @@ type TestFlow struct {
 	Num    float64
 	Bool   TestBool
 	Slots  []TestSlot
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // test_flow, a type of flow.

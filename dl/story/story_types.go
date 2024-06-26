@@ -79,7 +79,7 @@ func (op *FieldDefinition_Slots) Repeats() bool {
 // Used internally as the container for every .tell file.
 type StoryFile struct {
 	Statements []StoryStatement
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // story_file, a type of flow.
@@ -115,7 +115,7 @@ func (op *StoryFile_Slice) Repeats() bool {
 // are visible in the editor. Not needed when using .tell files.
 type StoryNote struct {
 	Text   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // story_note, a type of flow.
@@ -158,7 +158,7 @@ type DefineTest struct {
 	RequiredSceneNames rtti.TextListEval
 	Statements         []StoryStatement
 	Exe                []rtti.Execute
-	Markup             map[string]any
+	Markup             map[string]any `json:",omitempty"`
 }
 
 // define_test, a type of flow.
@@ -199,7 +199,7 @@ type DefineScene struct {
 	SceneName          rtti.TextEval
 	RequiredSceneNames rtti.TextListEval
 	Statements         []StoryStatement
-	Markup             map[string]any
+	Markup             map[string]any `json:",omitempty"`
 }
 
 // define_scene, a type of flow.
@@ -241,7 +241,7 @@ type DefineAction struct {
 	PatternName rtti.TextEval
 	Requires    []FieldDefinition
 	Provides    []FieldDefinition
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // define_action, a type of flow.
@@ -283,7 +283,7 @@ func (op *DefineAction_Slice) Repeats() bool {
 type DefineState struct {
 	AspectName rtti.TextEval
 	StateNames rtti.TextListEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_state, a type of flow.
@@ -324,7 +324,7 @@ func (op *DefineState_Slice) Repeats() bool {
 type DefineAlias struct {
 	Names    rtti.TextListEval
 	NounName rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // define_alias, a type of flow.
@@ -363,7 +363,7 @@ func (op *DefineAlias_Slice) Repeats() bool {
 type DefineLeadingGrammar struct {
 	Lede   []string
 	Scans  []grammar.ScannerMaker
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // define_leading_grammar, a type of flow.
@@ -403,7 +403,7 @@ func (op *DefineLeadingGrammar_Slice) Repeats() bool {
 type DefineNamedGrammar struct {
 	Name   string
 	Scans  []grammar.ScannerMaker
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // define_named_grammar, a type of flow.
@@ -444,7 +444,7 @@ type DeclareStatement struct {
 	Text    rtti.TextEval
 	Assign  rtti.Assignment
 	matches JessMatches
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // declare_statement, a type of flow.
@@ -487,7 +487,7 @@ type DefineRelation struct {
 	KindName      rtti.TextEval
 	OtherKindName rtti.TextEval
 	Cardinality   RelationCardinality
-	Markup        map[string]any
+	Markup        map[string]any `json:",omitempty"`
 }
 
 // define_relation, a type of flow.
@@ -528,7 +528,7 @@ func (op *DefineRelation_Slice) Repeats() bool {
 type DefineKind struct {
 	KindName         rtti.TextEval
 	AncestorKindName rtti.TextEval
-	Markup           map[string]any
+	Markup           map[string]any `json:",omitempty"`
 }
 
 // define_kind, a type of flow.
@@ -569,7 +569,7 @@ func (op *DefineKind_Slice) Repeats() bool {
 type DefineFields struct {
 	KindName   rtti.TextEval
 	FieldNames []FieldDefinition
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_fields, a type of flow.
@@ -615,7 +615,7 @@ func (op *DefineFields_Slice) Repeats() bool {
 type DefinePlural struct {
 	Singular rtti.TextEval
 	Plural   rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // define_plural, a type of flow.
@@ -654,7 +654,7 @@ func (op *DefinePlural_Slice) Repeats() bool {
 type DefineNounKind struct {
 	NounName rtti.TextEval
 	KindName rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // define_noun_kind, a type of flow.
@@ -694,7 +694,7 @@ type DefineNounValue struct {
 	NounName  rtti.TextEval
 	FieldName rtti.TextEval
 	Value     rtti.Assignment
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // define_noun_value, a type of flow.
@@ -733,7 +733,7 @@ func (op *DefineNounValue_Slice) Repeats() bool {
 type DefineNounStates struct {
 	NounName   rtti.TextEval
 	StateNames rtti.TextListEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_noun_states, a type of flow.
@@ -775,7 +775,7 @@ type DefinePattern struct {
 	Requires    []FieldDefinition
 	Provides    []FieldDefinition
 	Exe         []rtti.Execute
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // define_pattern, a type of flow.
@@ -814,7 +814,7 @@ func (op *DefinePattern_Slice) Repeats() bool {
 type DefinePatternProvides struct {
 	PatternName rtti.TextEval
 	Provides    []FieldDefinition
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // define_pattern_provides, a type of flow.
@@ -860,7 +860,7 @@ type DefineRule struct {
 	RuleTiming rtti.TextEval
 	RuleName   rtti.TextEval
 	Exe        []rtti.Execute
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_rule, a type of flow.
@@ -901,7 +901,7 @@ type DefineNounRule struct {
 	RuleTiming rtti.TextEval
 	RuleName   rtti.TextEval
 	Exe        []rtti.Execute
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_noun_rule, a type of flow.
@@ -942,7 +942,7 @@ type DefineKindRule struct {
 	RuleTiming rtti.TextEval
 	RuleName   rtti.TextEval
 	Exe        []rtti.Execute
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_kind_rule, a type of flow.
@@ -985,7 +985,7 @@ type DefineRelatives struct {
 	RelationName   rtti.TextEval
 	NounNames      rtti.TextListEval
 	OtherNounNames rtti.TextListEval
-	Markup         map[string]any
+	Markup         map[string]any `json:",omitempty"`
 }
 
 // define_relatives, a type of flow.
@@ -1024,7 +1024,7 @@ func (op *DefineRelatives_Slice) Repeats() bool {
 // See the Tapestry guide for more information.
 type SayTemplate struct {
 	Template string
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // say_template, a type of flow.
@@ -1070,7 +1070,7 @@ func (op *SayTemplate_Slice) Repeats() bool {
 type SayResponse struct {
 	ResponseName string
 	Text         rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // say_response, a type of flow.
@@ -1111,7 +1111,7 @@ func (op *SayResponse_Slice) Repeats() bool {
 type CountOf struct {
 	Trigger call.Trigger
 	Num     rtti.NumEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // count_of, a type of flow.
@@ -1149,7 +1149,7 @@ func (op *CountOf_Slice) Repeats() bool {
 // A valueless field.
 // Intended mainly as a way for patterns which don't return a value.
 type NothingField struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // nothing_field, a type of flow.
@@ -1188,7 +1188,7 @@ func (op *NothingField_Slice) Repeats() bool {
 // Aspects are defined using the {"Define state:names:"} command.
 type AspectField struct {
 	AspectName rtti.TextEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // aspect_field, a type of flow.
@@ -1230,7 +1230,7 @@ func (op *AspectField_Slice) Repeats() bool {
 type BoolField struct {
 	FieldName rtti.TextEval
 	Initially rtti.BoolEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // bool_field, a type of flow.
@@ -1269,7 +1269,7 @@ func (op *BoolField_Slice) Repeats() bool {
 type NumField struct {
 	FieldName rtti.TextEval
 	Initially rtti.NumEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // num_field, a type of flow.
@@ -1309,7 +1309,7 @@ type RecordField struct {
 	FieldName  rtti.TextEval
 	RecordName rtti.TextEval
 	Initially  rtti.RecordEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // record_field, a type of flow.
@@ -1350,7 +1350,7 @@ type TextField struct {
 	FieldName rtti.TextEval
 	KindName  rtti.TextEval
 	Initially rtti.TextEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // text_field, a type of flow.
@@ -1390,7 +1390,7 @@ type TextListField struct {
 	FieldName rtti.TextEval
 	KindName  rtti.TextEval
 	Initially rtti.TextListEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // text_list_field, a type of flow.
@@ -1429,7 +1429,7 @@ func (op *TextListField_Slice) Repeats() bool {
 type NumListField struct {
 	FieldName rtti.TextEval
 	Initially rtti.NumListEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // num_list_field, a type of flow.
@@ -1470,7 +1470,7 @@ type RecordListField struct {
 	FieldName  rtti.TextEval
 	RecordName rtti.TextEval
 	Initially  rtti.RecordListEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // record_list_field, a type of flow.

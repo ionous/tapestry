@@ -88,7 +88,7 @@ func (op *NounBuilder_Slots) Repeats() bool {
 type Article struct {
 	Text   string
 	flags  ArticleFlags
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // article, a type of flow.
@@ -124,7 +124,7 @@ func (op *Article_Slice) Repeats() bool {
 // It relies on the fact package match treats commas and the word "and" each as their own words.
 type CommaAnd struct {
 	Matched Matched
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // comma_and, a type of flow.
@@ -160,7 +160,7 @@ func (op *CommaAnd_Slice) Repeats() bool {
 // relies on the fact package match treats commas and ands each as their own words.
 type CommaAndOr struct {
 	Matched Matched
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // comma_and_or, a type of flow.
@@ -195,7 +195,7 @@ func (op *CommaAndOr_Slice) Repeats() bool {
 // Matches the words "is" or "are".
 type Are struct {
 	Matched Matched
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // are, a type of flow.
@@ -230,7 +230,7 @@ func (op *Are_Slice) Repeats() bool {
 // Matches the word "called".
 type Called struct {
 	Matched Matched
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // called, a type of flow.
@@ -273,7 +273,7 @@ func (op *Called_Slice) Repeats() bool {
 type Name struct {
 	Article *Article
 	Matched Matched
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // name, a type of flow.
@@ -314,7 +314,7 @@ type Noun struct {
 	Article    *Article
 	Matched    Matched
 	actualNoun ActualNoun
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // noun, a type of flow.
@@ -353,7 +353,7 @@ func (op *Noun_Slice) Repeats() bool {
 type NamedNoun struct {
 	Noun   *Noun
 	Name   *Name
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // named_noun, a type of flow.
@@ -402,7 +402,7 @@ type KindCalled struct {
 	Kind      Kind
 	Called    Called
 	NamedNoun NamedNoun
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // kind_called, a type of flow.
@@ -444,7 +444,7 @@ type Names struct {
 	Kind            *Kind
 	Name            *Name
 	AdditionalNames *AdditionalNames
-	Markup          map[string]any
+	Markup          map[string]any `json:",omitempty"`
 }
 
 // names, a type of flow.
@@ -483,7 +483,7 @@ func (op *Names_Slice) Repeats() bool {
 type AdditionalNames struct {
 	CommaAnd CommaAnd
 	Names    Names
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // additional_names, a type of flow.
@@ -522,7 +522,7 @@ type CountedKind struct {
 	MatchingNum MatchingNum
 	Kind        Kind
 	Matched     Matched
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // counted_kind, a type of flow.
@@ -563,7 +563,7 @@ type Kind struct {
 	Article    *Article
 	Matched    Matched
 	actualKind ActualKind
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // kind, a type of flow.
@@ -605,7 +605,7 @@ type Kinds struct {
 	Article         *Article
 	Matched         Matched
 	AdditionalKinds *AdditionalKinds
-	Markup          map[string]any
+	Markup          map[string]any `json:",omitempty"`
 }
 
 // kinds, a type of flow.
@@ -641,7 +641,7 @@ func (op *Kinds_Slice) Repeats() bool {
 type AdditionalKinds struct {
 	CommaAnd CommaAnd
 	Kinds    Kinds
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // additional_kinds, a type of flow.
@@ -677,7 +677,7 @@ func (op *AdditionalKinds_Slice) Repeats() bool {
 type Property struct {
 	Article *Article
 	Matched string
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // property, a type of flow.
@@ -713,7 +713,7 @@ func (op *Property_Slice) Repeats() bool {
 type Trait struct {
 	Article *Article
 	Matched string
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // trait, a type of flow.
@@ -749,7 +749,7 @@ func (op *Trait_Slice) Repeats() bool {
 type Traits struct {
 	Trait            Trait
 	AdditionalTraits *AdditionalTraits
-	Markup           map[string]any
+	Markup           map[string]any `json:",omitempty"`
 }
 
 // traits, a type of flow.
@@ -785,7 +785,7 @@ func (op *Traits_Slice) Repeats() bool {
 type AdditionalTraits struct {
 	CommaAnd *CommaAnd
 	Traits   Traits
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // additional_traits, a type of flow.
@@ -820,7 +820,7 @@ func (op *AdditionalTraits_Slice) Repeats() bool {
 // Matches one or more predefined words.
 type Words struct {
 	Matched Matched
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // words, a type of flow.
@@ -856,7 +856,7 @@ func (op *Words_Slice) Repeats() bool {
 // ( verbs are nouns of the verb kind )
 type Verb struct {
 	Text   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // verb, a type of flow.
@@ -911,7 +911,7 @@ type MatchedPhrase struct {
 	VerbNamesAreNames   VerbNamesAreNames
 	NamesVerbNames      NamesVerbNames
 	NamesAreLikeVerbs   NamesAreLikeVerbs
-	Markup              map[string]any
+	Markup              map[string]any `json:",omitempty"`
 }
 
 // matched_phrase, a type of flow.
@@ -953,7 +953,7 @@ type KindsAreKind struct {
 	KindsAreKind Words
 	Traits       *Traits
 	Name         Name
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // kinds_are_kind, a type of flow.
@@ -1000,7 +1000,7 @@ type KindsAreTraits struct {
 	Are     Are
 	Usually Words
 	Traits  Traits
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // kinds_are_traits, a type of flow.
@@ -1042,7 +1042,7 @@ type AspectsAreTraits struct {
 	Aspect     Kind
 	Are        Are
 	PlainNames Names
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // aspects_are_traits, a type of flow.
@@ -1087,7 +1087,7 @@ type VerbNamesAreNames struct {
 	Names      Names
 	Are        Are
 	OtherNames Names
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // verb_names_are_names, a type of flow.
@@ -1128,7 +1128,7 @@ type NamesVerbNames struct {
 	Are        Are
 	Verb       Verb
 	OtherNames Names
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // names_verb_names, a type of flow.
@@ -1173,7 +1173,7 @@ type NamesAreLikeVerbs struct {
 	Are        Are
 	Adjectives Adjectives
 	VerbPhrase *VerbPhrase
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // names_are_like_verbs, a type of flow.
@@ -1213,7 +1213,7 @@ func (op *NamesAreLikeVerbs_Slice) Repeats() bool {
 type VerbPhrase struct {
 	Verb       Verb
 	PlainNames Names
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // verb_phrase, a type of flow.
@@ -1260,7 +1260,7 @@ type Adjectives struct {
 	CommaAnd             *CommaAnd
 	Kind                 *Kind
 	AdditionalAdjectives *AdditionalAdjectives
-	Markup               map[string]any
+	Markup               map[string]any `json:",omitempty"`
 }
 
 // adjectives, a type of flow.
@@ -1296,7 +1296,7 @@ func (op *Adjectives_Slice) Repeats() bool {
 type AdditionalAdjectives struct {
 	CommaAnd   CommaAnd
 	Adjectives Adjectives
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // additional_adjectives, a type of flow.
@@ -1343,7 +1343,7 @@ type PropertyNounValue struct {
 	Are         Are
 	SingleValue *SingleValue
 	QuotedTexts *QuotedTexts
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // property_noun_value, a type of flow.
@@ -1388,7 +1388,7 @@ type NounPropertyValue struct {
 	Property    Property
 	Of          *Words
 	SingleValue SingleValue
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // noun_property_value, a type of flow.
@@ -1427,7 +1427,7 @@ type SingleValue struct {
 	MatchingNum *MatchingNum
 	Noun        *Noun
 	Kind        *Kind
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // single_value, a type of flow.
@@ -1463,7 +1463,7 @@ func (op *SingleValue_Slice) Repeats() bool {
 // The quotes themselves are not part of the matched text.
 type QuotedText struct {
 	Matched string
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // quoted_text, a type of flow.
@@ -1499,7 +1499,7 @@ func (op *QuotedText_Slice) Repeats() bool {
 // Stores the result as the parsed number.
 type MatchingNum struct {
 	Value  float64
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // matching_num, a type of flow.
@@ -1542,7 +1542,7 @@ type KindsHaveProperties struct {
 	ListOf       string
 	PropertyType PropertyType
 	CalledName   *CalledName
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // kinds_have_properties, a type of flow.
@@ -1579,7 +1579,7 @@ func (op *KindsHaveProperties_Slice) Repeats() bool {
 type CalledName struct {
 	Called Called
 	Name   Name
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // called_name, a type of flow.
@@ -1617,7 +1617,7 @@ func (op *CalledName_Slice) Repeats() bool {
 type PropertyType struct {
 	Primitive string
 	Kind      *Kind
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // property_type, a type of flow.
@@ -1657,7 +1657,7 @@ type KindsAreEither struct {
 	Kind   Kind
 	CanBe  Words
 	Traits NewTrait
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // kinds_are_either, a type of flow.
@@ -1694,7 +1694,7 @@ func (op *KindsAreEither_Slice) Repeats() bool {
 type NewTrait struct {
 	Matched  Matched
 	NewTrait *NewTrait
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // new_trait, a type of flow.
@@ -1731,7 +1731,7 @@ func (op *NewTrait_Slice) Repeats() bool {
 type QuotedTexts struct {
 	QuotedText     QuotedText
 	AdditionalText *AdditionalText
-	Markup         map[string]any
+	Markup         map[string]any `json:",omitempty"`
 }
 
 // quoted_texts, a type of flow.
@@ -1767,7 +1767,7 @@ func (op *QuotedTexts_Slice) Repeats() bool {
 type AdditionalText struct {
 	CommaAndOr  CommaAndOr
 	QuotedTexts QuotedTexts
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // additional_text, a type of flow.
@@ -1803,7 +1803,7 @@ func (op *AdditionalText_Slice) Repeats() bool {
 // before, instead of, when, after, report
 type RulePrefix struct {
 	prefixValue PrefixValue
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // rule_prefix, a type of flow.
@@ -1841,7 +1841,7 @@ func (op *RulePrefix_Slice) Repeats() bool {
 // with an optional leading comma.
 type RuleSuffix struct {
 	suffixValue SuffixValue
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // rule_suffix, a type of flow.
@@ -1882,7 +1882,7 @@ type RuleName struct {
 	Article string
 	Matched Matched
 	Suffix  bool
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // rule_name, a type of flow.
@@ -1917,7 +1917,7 @@ func (op *RuleName_Slice) Repeats() bool {
 type RuleTarget struct {
 	Kind   *Kind
 	Noun   *Noun
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // rule_target, a type of flow.
@@ -1958,7 +1958,7 @@ func (op *RuleTarget_Slice) Repeats() bool {
 // ( ie. an implementation of one of the rtti interfaces. )
 type SubAssignment struct {
 	Assignment rtti.Assignment
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // sub_assignment, a type of flow.
@@ -1999,7 +1999,7 @@ type TimedRule struct {
 	RuleSuffix    *RuleSuffix
 	RuleName      *RuleName
 	SubAssignment SubAssignment
-	Markup        map[string]any
+	Markup        map[string]any `json:",omitempty"`
 }
 
 // timed_rule, a type of flow.
@@ -2039,7 +2039,7 @@ type Understand struct {
 	Article     *Article
 	PluralOf    string
 	Names       Names
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // understand, a type of flow.
@@ -2080,7 +2080,7 @@ type MapLocations struct {
 	Are                  Are
 	DirectionOfLinking   DirectionOfLinking
 	AdditionalDirections *AdditionalDirections
-	Markup               map[string]any
+	Markup               map[string]any `json:",omitempty"`
 }
 
 // map_locations, a type of flow.
@@ -2118,7 +2118,7 @@ type AdditionalDirections struct {
 	CommaAnd             CommaAnd
 	DirectionOfLinking   DirectionOfLinking
 	AdditionalDirections *AdditionalDirections
-	Markup               map[string]any
+	Markup               map[string]any `json:",omitempty"`
 }
 
 // additional_directions, a type of flow.
@@ -2156,7 +2156,7 @@ type MapDirections struct {
 	Are                Are
 	Linking            *Linking
 	Redirect           *DirectionOfLinking
-	Markup             map[string]any
+	Markup             map[string]any `json:",omitempty"`
 }
 
 // map_directions, a type of flow.
@@ -2202,7 +2202,7 @@ type MapConnections struct {
 	AdditionalLinks *AdditionalLinks
 	Are             Are
 	Room            Linking
-	Markup          map[string]any
+	Markup          map[string]any `json:",omitempty"`
 }
 
 // map_connections, a type of flow.
@@ -2239,7 +2239,7 @@ type DirectionOfLinking struct {
 	Direction Direction
 	FromOf    Words
 	Linking   Linking
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // direction_of_linking, a type of flow.
@@ -2274,7 +2274,7 @@ func (op *DirectionOfLinking_Slice) Repeats() bool {
 // Matches some existing compass direction.
 type Direction struct {
 	Text   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // direction, a type of flow.
@@ -2313,7 +2313,7 @@ type Linking struct {
 	KindCalled *KindCalled
 	Noun       *Noun
 	Name       *Name
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // linking, a type of flow.
@@ -2351,7 +2351,7 @@ type AdditionalLinks struct {
 	CommaAnd        CommaAnd
 	Linking         Linking
 	AdditionalLinks *AdditionalLinks
-	Markup          map[string]any
+	Markup          map[string]any `json:",omitempty"`
 }
 
 // additional_links, a type of flow.

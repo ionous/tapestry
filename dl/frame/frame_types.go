@@ -45,7 +45,7 @@ type Frame struct {
 	Result string
 	Events []Notification
 	Error  string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // frame, a type of flow.
@@ -80,7 +80,7 @@ func (op *Frame_Slice) Repeats() bool {
 // Printed text that should be visible the player.
 type FrameOutput struct {
 	Text   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // frame_output, a type of flow.
@@ -118,7 +118,7 @@ func (op *FrameOutput_Slice) Repeats() bool {
 // One or more scenes ( aka domain ) have started.
 type SceneStarted struct {
 	Domains []string
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // scene_started, a type of flow.
@@ -156,7 +156,7 @@ func (op *SceneStarted_Slice) Repeats() bool {
 // One or more scenes ( aka domain ) have finished.
 type SceneEnded struct {
 	Domains []string
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // scene_ended, a type of flow.
@@ -197,7 +197,7 @@ type StateChanged struct {
 	Aspect string
 	Prev   string
 	Trait  string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // state_changed, a type of flow.
@@ -237,7 +237,7 @@ type PairChanged struct {
 	A      string
 	B      string
 	Rel    string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // pair_changed, a type of flow.

@@ -44,7 +44,7 @@ func (op *PlayMessage_Slots) Repeats() bool {
 // A log message that might be displayed to the client for debugging.
 type PlayLog struct {
 	Log    string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // play_log, a type of flow.
@@ -82,7 +82,7 @@ func (op *PlayLog_Slice) Repeats() bool {
 // An app level change in state.
 type PlayMode struct {
 	Mode   PlayModes
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // play_mode, a type of flow.
@@ -120,7 +120,7 @@ func (op *PlayMode_Slice) Repeats() bool {
 // Text that should be displayed to the player.
 type PlayOut struct {
 	Out    string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // play_out, a type of flow.

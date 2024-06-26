@@ -44,7 +44,7 @@ func (op *Counter_Slots) Repeats() bool {
 // Add a single blank line ( unless a blank line was just written ).
 // See also the <p> markup.
 type ParagraphBreak struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // paragraph_break, a type of flow.
@@ -82,7 +82,7 @@ func (op *ParagraphBreak_Slice) Repeats() bool {
 // Start a new line ( if not already at a new line ).
 // See also the <wbr> markup.
 type SoftBreak struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // soft_break, a type of flow.
@@ -120,7 +120,7 @@ func (op *SoftBreak_Slice) Repeats() bool {
 // Start a new line.
 // See also the <br> markup.
 type LineBreak struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // line_break, a type of flow.
@@ -159,7 +159,7 @@ func (op *LineBreak_Slice) Repeats() bool {
 type CycleText struct {
 	Name   string
 	Parts  []rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // cycle_text, a type of flow.
@@ -200,7 +200,7 @@ type ShuffleText struct {
 	Name    string
 	Parts   []rtti.TextEval
 	indices Shuffler
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // shuffle_text, a type of flow.
@@ -242,7 +242,7 @@ func (op *ShuffleText_Slice) Repeats() bool {
 type StoppingText struct {
 	Name   string
 	Parts  []rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // stopping_text, a type of flow.
@@ -281,7 +281,7 @@ func (op *StoppingText_Slice) Repeats() bool {
 // Capture any and all text printed by the game, and return it as a single string of continuous text. New lines are stored as line feeds ('\n').
 type BufferText struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // buffer_text, a type of flow.
@@ -321,7 +321,7 @@ func (op *BufferText_Slice) Repeats() bool {
 // https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup
 type PrintText struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_text, a type of flow.
@@ -360,7 +360,7 @@ func (op *PrintText_Slice) Repeats() bool {
 type PrintWords struct {
 	Separator rtti.TextEval
 	Exe       []rtti.Execute
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // print_words, a type of flow.
@@ -400,7 +400,7 @@ func (op *PrintWords_Slice) Repeats() bool {
 // If no text is printed, no parentheses are printed.
 type PrintBrackets struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_brackets, a type of flow.
@@ -439,7 +439,7 @@ func (op *PrintBrackets_Slice) Repeats() bool {
 // Separates words with commas, and 'and'.
 type PrintCommas struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_commas, a type of flow.
@@ -478,7 +478,7 @@ func (op *PrintCommas_Slice) Repeats() bool {
 // Group text into an unordered list <ul>.
 type PrintRows struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_rows, a type of flow.
@@ -518,7 +518,7 @@ func (op *PrintRows_Slice) Repeats() bool {
 // See also: 'rows'.
 type PrintRow struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_row, a type of flow.
@@ -560,7 +560,7 @@ func (op *PrintRow_Slice) Repeats() bool {
 // The [story.Execute] version prints the text for the player.
 type PrintNum struct {
 	Num    rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_num, a type of flow.
@@ -604,7 +604,7 @@ func (op *PrintNum_Slice) Repeats() bool {
 // The [story.Execute] version prints the text for the player.
 type PrintCount struct {
 	Num    rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_count, a type of flow.

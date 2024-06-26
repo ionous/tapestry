@@ -32,12 +32,12 @@ type NounName struct {
 type NounData struct {
 	Id         int // mdl_noun
 	Domain     string
-	Noun       string     // full, unique name
-	Kind       string     // or would id be better?
-	CommonName string     // author defined name
-	Aliases    []string   // alpha order for parser
-	Values     []EvalData // sparse field values, sorted by field name
-	Records    []RecordData
+	Noun       string       // full, unique name
+	Kind       string       // or would id be better?
+	CommonName string       // author defined name
+	Aliases    []string     // alpha order for parser
+	Values     []EvalData   `json:",omitempty"` // sparse field values, sorted by field name
+	Records    []RecordData `json:",omitempty"`
 }
 
 type EvalData struct {
@@ -47,6 +47,7 @@ type EvalData struct {
 
 // record data is json serialized ( via pack/unpack )
 // because otherwise gobbing would need a way to store variant values
+// package json says []byte encodes as a base64-encoded string,
 type RecordData struct {
 	Field  string
 	Packed []byte // json serialized for now
@@ -55,8 +56,8 @@ type RecordData struct {
 type PatternData struct {
 	Id        int // mdl_pat
 	Pattern   string
-	Labels    []string // the last value is the result, even if blank
-	Rules     []rt.Rule
+	Labels    []string  // the last value is the result, even if blank
+	Rules     []rt.Rule `json:",omitempty"`
 	UpdateAll bool
 }
 
@@ -65,7 +66,7 @@ type RelativeData struct {
 	Relation           string // a kind
 	OneKind, OtherKind string // primary and secondary types
 	Cardinality        string // ( these also are recorded in the kind data )
-	Pairs              []Pair
+	Pairs              []Pair `json:",omitempty"`
 }
 
 type Plural struct {

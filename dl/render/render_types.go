@@ -52,7 +52,7 @@ func (op *RenderEval_Slots) Repeats() bool {
 // otherwise, its an error.
 type RenderName struct {
 	Name   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // render_name, a type of flow.
@@ -97,7 +97,7 @@ func (op *RenderName_Slice) Repeats() bool {
 type UnknownDot struct {
 	Name   rtti.TextEval
 	Dot    []object.Dot
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // unknown_dot, a type of flow.
@@ -142,7 +142,7 @@ func (op *UnknownDot_Slice) Repeats() bool {
 // Pull a value from an assignment of unknown affinity.
 type RenderValue struct {
 	Value  rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // render_value, a type of flow.
@@ -182,7 +182,7 @@ func (op *RenderValue_Slice) Repeats() bool {
 type RenderPattern struct {
 	PatternName string
 	Render      []RenderEval
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // render_pattern, a type of flow.
@@ -223,7 +223,7 @@ func (op *RenderPattern_Slice) Repeats() bool {
 type RenderResponse struct {
 	Name   string
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // render_response, a type of flow.

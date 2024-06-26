@@ -16,7 +16,7 @@ import (
 type AddValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // add_value, a type of flow.
@@ -55,7 +55,7 @@ func (op *AddValue_Slice) Repeats() bool {
 type SubtractValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // subtract_value, a type of flow.
@@ -94,7 +94,7 @@ func (op *SubtractValue_Slice) Repeats() bool {
 type MultiplyValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // multiply_value, a type of flow.
@@ -133,7 +133,7 @@ func (op *MultiplyValue_Slice) Repeats() bool {
 type DivideValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // divide_value, a type of flow.
@@ -172,7 +172,7 @@ func (op *DivideValue_Slice) Repeats() bool {
 type ModValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // mod_value, a type of flow.
@@ -210,7 +210,7 @@ func (op *ModValue_Slice) Repeats() bool {
 // Remove the sign from a value and return its positive value.
 type AbsValue struct {
 	Value  rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // abs_value, a type of flow.
@@ -249,7 +249,7 @@ func (op *AbsValue_Slice) Repeats() bool {
 type Increment struct {
 	Target rtti.Address
 	Step   rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // increment, a type of flow.
@@ -289,7 +289,7 @@ func (op *Increment_Slice) Repeats() bool {
 type Decrement struct {
 	Target rtti.Address
 	Step   rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // decrement, a type of flow.
@@ -337,7 +337,7 @@ type CompareValue struct {
 	A       rtti.Assignment
 	Compare Comparison
 	B       rtti.Assignment
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // compare_value, a type of flow.
@@ -378,7 +378,7 @@ type CompareNum struct {
 	Compare   Comparison
 	B         rtti.NumEval
 	Tolerance float64
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // compare_num, a type of flow.
@@ -418,7 +418,7 @@ type CompareText struct {
 	A       rtti.TextEval
 	Compare Comparison
 	B       rtti.TextEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // compare_text, a type of flow.

@@ -47,7 +47,7 @@ func (op *LiteralValue_Slots) Repeats() bool {
 // Specify an explicit true or false.
 type BoolValue struct {
 	Value  bool
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // bool_value, a type of flow.
@@ -86,7 +86,7 @@ func (op *BoolValue_Slice) Repeats() bool {
 // Specify a particular number.
 type NumValue struct {
 	Value  float64
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // num_value, a type of flow.
@@ -125,7 +125,7 @@ func (op *NumValue_Slice) Repeats() bool {
 // Specify a list of literal numbers.
 type NumList struct {
 	Values []float64
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // num_list, a type of flow.
@@ -165,7 +165,7 @@ func (op *NumList_Slice) Repeats() bool {
 type TextValue struct {
 	KindName string
 	Value    string
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // text_value, a type of flow.
@@ -205,7 +205,7 @@ func (op *TextValue_Slice) Repeats() bool {
 type TextList struct {
 	KindName string
 	Values   []string
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // text_list, a type of flow.
@@ -246,7 +246,7 @@ type RecordValue struct {
 	KindName string
 	Fields   []FieldValue
 	cache    RecordCache
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // record_value, a type of flow.
@@ -287,7 +287,7 @@ type RecordList struct {
 	KindName string
 	Records  []FieldList
 	cache    RecordsCache
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // record_list, a type of flow.
@@ -326,7 +326,7 @@ func (op *RecordList_Slice) Repeats() bool {
 // A series of values used to build a record.
 type FieldList struct {
 	Fields []FieldValue
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // field_list, a type of flow.
@@ -365,7 +365,7 @@ func (op *FieldList_Slice) Repeats() bool {
 type FieldValue struct {
 	FieldName string
 	Value     LiteralValue
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // field_value, a type of flow.

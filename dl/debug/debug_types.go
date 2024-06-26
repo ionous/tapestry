@@ -16,7 +16,7 @@ import (
 //
 //	or rules which aren't supposed to do anything. )
 type DoNothing struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // do_nothing, a type of flow.
@@ -54,7 +54,7 @@ func (op *DoNothing_Slice) Repeats() bool {
 // Evaluate a boolean command and ensure it returns true.
 type Expect struct {
 	Value  rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // expect, a type of flow.
@@ -92,7 +92,7 @@ func (op *Expect_Slice) Repeats() bool {
 // Examine the most recent game output, and generate an error unless it matches the specified text.
 type ExpectText struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // expect_text, a type of flow.
@@ -134,7 +134,7 @@ func (op *ExpectText_Slice) Repeats() bool {
 //	Fabricate input: "s; jump; look"
 type Fabricate struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // fabricate, a type of flow.
@@ -174,7 +174,7 @@ func (op *Fabricate_Slice) Repeats() bool {
 type LogValue struct {
 	LogLevel LoggingLevel
 	Value    rtti.Assignment
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // log_value, a type of flow.
@@ -214,7 +214,7 @@ func (op *LogValue_Slice) Repeats() bool {
 type Note struct {
 	Text     rtti.TextEval
 	LogLevel LoggingLevel
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // note, a type of flow.

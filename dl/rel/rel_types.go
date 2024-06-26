@@ -15,7 +15,7 @@ import (
 type RelativeOf struct {
 	RelationName rtti.TextEval
 	NounName     rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // relative_of, a type of flow.
@@ -55,7 +55,7 @@ func (op *RelativeOf_Slice) Repeats() bool {
 type RelativesOf struct {
 	RelationName rtti.TextEval
 	NounName     rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // relatives_of, a type of flow.
@@ -95,7 +95,7 @@ func (op *RelativesOf_Slice) Repeats() bool {
 type ReciprocalOf struct {
 	RelationName rtti.TextEval
 	NounName     rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // reciprocal_of, a type of flow.
@@ -135,7 +135,7 @@ func (op *ReciprocalOf_Slice) Repeats() bool {
 type ReciprocalsOf struct {
 	RelationName rtti.TextEval
 	NounName     rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // reciprocals_of, a type of flow.
@@ -176,7 +176,7 @@ type Relate struct {
 	NounName      rtti.TextEval
 	OtherNounName rtti.TextEval
 	RelationName  rtti.TextEval
-	Markup        map[string]any
+	Markup        map[string]any `json:",omitempty"`
 }
 
 // relate, a type of flow.

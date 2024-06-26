@@ -20,7 +20,7 @@ import (
 type ListPop struct {
 	Target rtti.Address
 	Edge   rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_pop, a type of flow.
@@ -60,7 +60,7 @@ type ListErase struct {
 	Target rtti.Address
 	Index  rtti.NumEval
 	Count  rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_erase, a type of flow.
@@ -105,7 +105,7 @@ type ListErasing struct {
 	As     string
 	Exe    []rtti.Execute
 	Else   logic.Brancher
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_erasing, a type of flow.
@@ -149,7 +149,7 @@ type ListPopping struct {
 	As     string
 	Exe    []rtti.Execute
 	Else   logic.Brancher
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_popping, a type of flow.
@@ -197,7 +197,7 @@ type ListRepeat struct {
 	As     string
 	Exe    []rtti.Execute
 	Else   logic.Brancher
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_repeat, a type of flow.
@@ -238,7 +238,7 @@ func (op *ListRepeat_Slice) Repeats() bool {
 type ListFind struct {
 	List   rtti.Assignment
 	Value  rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_find, a type of flow.
@@ -277,7 +277,7 @@ func (op *ListFind_Slice) Repeats() bool {
 // Determine the number of values in a list.
 type ListLength struct {
 	List   rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_length, a type of flow.
@@ -315,7 +315,7 @@ func (op *ListLength_Slice) Repeats() bool {
 // Determine if the length of the list is zero.
 type ListEmpty struct {
 	List   rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_empty, a type of flow.
@@ -353,7 +353,7 @@ func (op *ListEmpty_Slice) Repeats() bool {
 // Collect one or more text values into a list.
 type MakeTextList struct {
 	Values []rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_text_list, a type of flow.
@@ -391,7 +391,7 @@ func (op *MakeTextList_Slice) Repeats() bool {
 // Collect one or more numbers into a list.
 type MakeNumList struct {
 	Values []rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_num_list, a type of flow.
@@ -430,7 +430,7 @@ func (op *MakeNumList_Slice) Repeats() bool {
 // All of the records must be of the same type.
 type MakeRecordList struct {
 	List   []rtti.RecordEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_record_list, a type of flow.
@@ -471,7 +471,7 @@ type ListMap struct {
 	Target      rtti.Address
 	PatternName string
 	List        rtti.Assignment
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // list_map, a type of flow.
@@ -516,7 +516,7 @@ type ListReduce struct {
 	Target      rtti.Address
 	PatternName string
 	List        rtti.Assignment
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // list_reduce, a type of flow.
@@ -556,7 +556,7 @@ func (op *ListReduce_Slice) Repeats() bool {
 // all that.
 type ListReverse struct {
 	Target rtti.Address
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_reverse, a type of flow.
@@ -602,7 +602,7 @@ type ListSlice struct {
 	List   rtti.Assignment
 	Start  rtti.NumEval
 	End    rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_slice, a type of flow.
@@ -645,7 +645,7 @@ type ListSort struct {
 	FieldName  rtti.TextEval
 	Descending rtti.BoolEval
 	Case       rtti.BoolEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // list_sort, a type of flow.
@@ -692,7 +692,7 @@ type ListSplice struct {
 	Start  rtti.NumEval
 	Count  rtti.NumEval
 	Insert rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_splice, a type of flow.
@@ -735,7 +735,7 @@ type ListPush struct {
 	Target rtti.Address
 	Value  rtti.Assignment
 	Edge   rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // list_push, a type of flow.
@@ -778,7 +778,7 @@ type Range struct {
 	To     rtti.NumEval
 	Start  rtti.NumEval
 	Step   rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // range, a type of flow.

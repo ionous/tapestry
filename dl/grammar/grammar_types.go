@@ -46,7 +46,7 @@ func (op *ScannerMaker_Slots) Repeats() bool {
 type Directive struct {
 	Name   string
 	Series []ScannerMaker
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // directive, a type of flow.
@@ -87,7 +87,7 @@ func (op *Directive_Slice) Repeats() bool {
 type Action struct {
 	Action    string
 	Arguments []call.Arg
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // action, a type of flow.
@@ -125,7 +125,7 @@ func (op *Action_Slice) Repeats() bool {
 // Require that all of its sub-scanners match.
 type Sequence struct {
 	Series []ScannerMaker
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // sequence, a type of flow.
@@ -165,7 +165,7 @@ func (op *Sequence_Slice) Repeats() bool {
 // stopping after the first successful match has occurred.
 type ChooseOne struct {
 	Options []ScannerMaker
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // choose_one, a type of flow.
@@ -206,7 +206,7 @@ func (op *ChooseOne_Slice) Repeats() bool {
 // objects are visible to the player.
 type Noun struct {
 	Kind   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // noun, a type of flow.
@@ -248,7 +248,7 @@ func (op *Noun_Slice) Repeats() bool {
 // refine would ensure that the book on the table was selected.
 type Refine struct {
 	Series []ScannerMaker
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // refine, a type of flow.
@@ -288,7 +288,7 @@ func (op *Refine_Slice) Repeats() bool {
 // them to an action.
 type Reverse struct {
 	Reverses []ScannerMaker
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // reverse, a type of flow.
@@ -336,7 +336,7 @@ func (op *Reverse_Slice) Repeats() bool {
 type Focus struct {
 	Player string
 	Series []ScannerMaker
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // focus, a type of flow.
@@ -381,7 +381,7 @@ func (op *Focus_Slice) Repeats() bool {
 //	  - One word: "off"
 type Words struct {
 	Words  []string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // words, a type of flow.
