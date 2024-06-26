@@ -25,8 +25,8 @@ func runWeave(ctx context.Context, cmd *base.Command, args []string) (err error)
 		log.Println("using shared static content")
 	}
 	if pathExists(weaveFlags.stories) {
-		log.Println("reading:", weaveFlags.stories)
-		paths = append(paths, os.DirFS(weaveFlags.shared))
+		log.Println("using local story content from", weaveFlags.stories)
+		paths = append(paths, os.DirFS(weaveFlags.stories))
 	}
 
 	if outFile, e := filepath.Abs(weaveFlags.outFile); e != nil {

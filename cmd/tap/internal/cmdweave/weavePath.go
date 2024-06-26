@@ -73,11 +73,9 @@ func addDefaultKinds(pen *mdl.Pen) (err error) {
 
 func importAll(cat *weave.Catalog, all ...fs.FS) (err error) {
 	for _, fsys := range all {
-		if fsys != nil {
-			if e := importDir(cat, loggingFS{fsys}, []string{"."}); e != nil {
-				err = e
-				break
-			}
+		if e := importDir(cat, loggingFS{fsys}, []string{"."}); e != nil {
+			err = e
+			break
 		}
 	}
 	return
