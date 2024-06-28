@@ -51,7 +51,6 @@ Instead of examining the message:
       FromBool: true
 
 # When multiple rules for the same action exist, later rules override earlier rules.
-# They acting as a "i may have said that before, but actually..."
 Instead of examining the message:
   - If:do:
     - "#message.trampled"
@@ -137,10 +136,15 @@ Instead of storing the cloak:
     - - Say: "This isn't the best place to leave such a nice piece of clothing."
 
 # -----------------------------------
-# Testing!
+# Tests for the story.
+#
+# Note: Tapestry files contain two formats: a plain-English format, and a command format.
+# Three dashes all on one line switch between the two modes.
+# The next three dashes switches to command format to define some tests.
 # -----------------------------------
-# Dropping the cloak of darkness should give you some points, but shouldn't let you win the game.
-- Define test:do:
+---
+- # Dropping the cloak should give you points, but shouldn't let you win the game.
+  Define test:do:
   - "cloak of dropping"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
@@ -153,8 +157,8 @@ Instead of storing the cloak:
         - "equal_to"
         - 1
 
-# Hanging the cloak on the hook. That's where it's at.
-- Define test:do:
+- # Hanging the cloak on the hook. That's where it's at.
+  Define test:do:
   - "cloak of perfection"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
@@ -167,8 +171,8 @@ Instead of storing the cloak:
         - "equal_to"
         - 2
 
-# Disturbing the message should fail the game.
-- Define test:do:
+- # Disturbing the message should fail the game.
+  Define test:do:
   - "cloak of failure"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
