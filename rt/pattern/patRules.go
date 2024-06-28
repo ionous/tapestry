@@ -21,7 +21,9 @@ func MakeRules(rs []rt.Rule, updateAll bool) RuleSet {
 // backcompat
 func (rs *RuleSet) AddRule(rule rt.Rule) {
 	rs.Rules = append(rs.Rules, rule)
-	rs.UpdateAll = rule.Updates
+	if rule.Updates {
+		rs.UpdateAll = true
+	}
 }
 
 // assumes scope is initialized
