@@ -1,5 +1,5 @@
 <template>
-<ol class="mk-folder-ctrl"
+<ul class="mk-folder-ctrl"
   ><mk-folder-item
     v-for="subFolder in folders"
     :key="subFolder.path"
@@ -20,7 +20,7 @@
     :depth="depth"
     @activated="onFile(file)"
   ></mk-file-item
-></ol>
+></ul>
 </template>
 <script>
 

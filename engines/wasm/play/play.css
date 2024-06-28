@@ -1,152 +1,13 @@
-
 @import 'normalize.css';
-
-/* body 100 is needed for blockly.... */
-html, body  { 
-  height: 100%;
-}
-
-/* hidden seems needed for wails.... */
-body {
-   overflow: hidden;
-}
-
-.mk-mosaic {
-  display: grid;
-  grid-template-rows: 3em 1fr 2em;
-  height: 100%;
-  font-family: ui-sans-serif, sans-serif;
-  grid-template-areas: "header" "view" "footer";
-}
-
-/* unused right now.
-.mk-mosaic--nosidebar {
-  grid-template-areas: 
-    "header tools"
-    "editor editor"
-    "context context";
-}*/
-
-/**
- * mk-blockly; note the workspace is floated separately
- * reload is needed after adjusting the column/row heights
- */
-.mk-blockly {
-  background-color: #EEEEEE;  /* the almost hidden frame to the right and bottom of the scrollbars */
-  grid-area: view;
-  height: 100%;
-}
-/** see Toolbar.vue **/
-.mk-tools {
-  grid-area: tools;
-  background-color:  #7986cb;
-  font-family: Roboto,sans-serif;
-  padding-top: 10px;
-}
-button {
-  border-style: hidden;
-  border-radius: 3px;
-  border-width: 1px;
-  background-color: #EEEEEE;
-}
-button:hover {
-  cursor: pointer;
-  background-color: #49599a;
-  color: white;
-}
-button:active {
-  color: black;
-}
-.mk-header {
-  grid-area: header;
-  background-color:  #7986cb;
-}
-.mk-header h1 {
-  margin: 0;
-  padding-left: 1rem;
-  padding-top: 0.2em;
-  color: white;
-  font-family: Roboto,sans-serif;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-}
-.mk-footer {
-  grid-area: footer;
-  background-color: black;
-  color: lightgray;
-  padding: 0.5em;
-}
-.blocklySvg {
-  background-color: #EEEEEE;
-}
-
-/**
- * mk-home
- */
-.mk-home {
-  grid-area: view;
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 200px 100px 300px;
-  grid-gap: 10px;
-  margin: 1em;
-  grid-template-areas:
-    "empty catalog" 
-    "actions catalog" 
-    "recent catalog"
-}
-
-.mk-homebox {
-  border-style: solid;
-  border-width: thin;
-  padding: 0.5em;
-  background-color: #EEEEEE;  
-}
-
-.mk-actions  {
-  grid-area: actions;
-}
-.mk-actions ul {
-  list-style-type: none;
-  padding: 0px;
-}
-.mk-action-item__button {
-   color: blue;
-}
-.mk-action-item__button:hover {
-  text-decoration: underline;
-}
-
-.mk-recent {
-  grid-area: recent;
-}
 
 /**
  * mk-catalog
  */
 .mk-catalog {
-  grid-area: catalog;
   overflow-y: scroll;
   border-style: solid;
   border-width: thin;
   padding: 0.5em;
-}
-.mk-folder-ctrl {
-  list-style-type: none;
-  padding-inline-start: 0px;
-}
-.mk-file-item__button::before {
-   content: "\1F4C4";
-   font-size: smaller;
-   padding-right: 3px;
-}
-.mk-folder-item__button--closed::before {
-   content: "\1F4C1"; 
-   padding-right: 3px;
-}
-.mk-folder-item__button--open::before {
-   content: "\1F4C2"; 
-   padding-right: 3px;
 }
 .mk-cat-button  {
   display: block;
@@ -159,33 +20,17 @@ button:active {
 h1 .mk-cat-button:hover {
    color: ghostwhite;
 }
-/**/
-.lv-play {
-  height:100%;
-}
-.lv-container {
-  display: grid;
-  grid-template-columns: 70% auto;
-  gap: 10px;
-  margin: 5px;
-  height: 100%;
-}
-.lv-container__play {
-  grid-column: 1;
-  grid-row: 1;
-  display: grid;
-  grid-template-rows: max-content 0.8fr max-content;
-}
 .lv-container__debug {
-  grid-column: 2;
-  grid-row: 1;
-}
+  margin-left: 1em;
 
+  height: 300px;
+}
 .lv-status {
   background-color: black;
   color: white;
-  grid-column: 1;
-  grid-row: 1;
+}
+.lv-selected-item {
+  font-weight: bold;
 }
 .lv-status__title {
   text-align: center;
@@ -199,31 +44,36 @@ h1 .mk-cat-button:hover {
   margin-right: 5px;
 }
 .lv-story {
-  grid-column: 1;
-  grid-row: 2;
-  overflow-y: scroll;
   padding: 0.25em;
   border-style: solid;
   border-width: 1px;
   border-color: black;
+  overflow-y: scroll;
+  height: 300px;
+}
+.lv-input {
+  display: flex;
+}
+.lv-debug {
+  width: 100px;
+}
+.lv-stub {
+   flex-grow: 1;
 }
 .lv-prompt {
-  margin-top: 0.25em;
-  grid-column: 1;
-  grid-row: 3;
- 
+  flex-grow: 1;
+  display: flex;
+  background-color: whitesmoke;
 }
 .lv-prompt input {
-  width: 90%;
+  flex-grow: 1;
+  background-color: whitesmoke
 }
 .lv-no-outline {
   border-style: none;
 }
 .lv-no-outline:focus {
   outline: none; 
-}
-.lv-prompt {
-  position: relative;
 }
 /* fake blinking cursor contains the same text as the prompt
 and this positions that text overlapping it. */
@@ -246,29 +96,9 @@ and this positions that text overlapping it. */
 }
 /* hide the fake blinking cursor when the input has the focus */
 .lv-prompt input:focus + i {
-    display: none;
+  display: none;
 }
 @keyframes blink {
   from { opacity: 1; }
   to { opacity: 0; }
-}
-
-/* an attempt to get the specificity up for mosaicTextField */
-.blocklyEditableText.placeholderText > text.blocklyText {
-  fill: dimgrey;
-  font-weight: bolder;
-  font-size: smaller;
-}
-
-/* try to match the sizing and alignment of the unedited text control */
-.blocklyHtmlInput {
-  padding: 1.2px 4px;
-  text-align: left;
-}
-
-.blocklyToolboxDiv {
-  background-color: rgba(0, 0, 0, .50);
-  color: white;
-  font-family: Roboto,sans-serif;
-  line-height: 1.25rem;
 }

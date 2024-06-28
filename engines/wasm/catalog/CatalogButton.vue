@@ -1,7 +1,6 @@
 <!-- a link that acts like a button. -->
 <template>
 <a class="mk-cat-button"
-  :style="{ paddingLeft: (10*depth)+'px' }"
   role="button"
   @click="onActivated"
   @keydown.prevent.space="onActivated"

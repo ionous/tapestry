@@ -38,7 +38,7 @@ export default {
     }
   },
   currentScore: {
-    "FromNumber:": {
+    "FromNum:": {
       "Num if:then:else:": [
         {
           "Is scene:": "scoring"
@@ -49,7 +49,7 @@ export default {
     }
   },
   currentTurn: {
-    "FromNumber:": {
+    "FromNum:": {
       "Num if:then:else:": [
         {
           "Is scene:": "scoring"
@@ -72,7 +72,7 @@ export default {
     // maybe change "print name" to some "get name"
     // and, if possible, get rid of From(s)
     "FromText:": {
-      "Buffers:": {
+      "Buffer:": {
         "Determine:args:": [
           "print_name",
           {

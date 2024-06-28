@@ -25,8 +25,8 @@ function processEvent(objCatalog, msg) {
 
     // object state change
     // fix: we need the prev state in order to be able to clear it
-    case "StateChanged noun:aspect:trait:":
-      const [noun, aspect, trait] = args;
+    case "StateChanged noun:aspect:prev:trait:":
+      const [noun, aspect, prev, trait] = args;
       console.log("state changed", noun, aspect, trait);
       break;
 
@@ -43,7 +43,7 @@ function processEvent(objCatalog, msg) {
           const oldParent = objCatalog.get(oldParentId);
           child.parentId = false;
           if (oldParent.contents) {
-            const wasAt = oldParent.contents.findIndex((el) => el.id === b);
+            const wasAt = oldParent.contents.findIndex((el) => el.data.id === b);
             if (wasAt >= 0) {
               oldParent.contents.splice(wasAt, 1);
             }
@@ -61,6 +61,7 @@ function processEvent(objCatalog, msg) {
             newParent.contents.push(child);
           }
         }
+        break; // handled whereabouts
       }
 
     default:

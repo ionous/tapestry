@@ -43,7 +43,8 @@ class Wasm {
   // calls is a matching array of callbacks for those commands
   post(endpoint, data, calls) {
     const send = JSON.stringify(data);
-    return this.tapestry.post(endpoint, send).then((frames) => {
+    return this.tapestry.post(endpoint, send).then((res) => {
+      const frames = JSON.parse(res);
       return this.msgcb(frames, calls || []);
     }).catch((e)  => {
       console.warn("io error", e);
