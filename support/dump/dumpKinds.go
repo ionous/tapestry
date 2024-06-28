@@ -4,20 +4,19 @@ import (
 	"database/sql"
 	"slices"
 
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryKinds(db *sql.DB, dec decoder.Decoder, scene string) (ret []rt.Kind, err error) {
+func QueryKinds(db *sql.DB, dec qdb.CommandDecoder, scene string) (ret []rt.Kind, err error) {
 	if ks, e := tables.QueryStrings(db, must("kinds"), scene); e != nil {
 		err = e
 	} else {
 		kb := kindBuilder{db, dec, make(fieldCache)}
 		ret = make([]rt.Kind, len(ks))
 		for i, k := range ks {
-			if rk, e := decoder.BuildKind(kb, k); e != nil {
+			if rk, e := qdb.BuildKind(kb, k); e != nil {
 				err = e
 				break
 			} else {
@@ -30,7 +29,7 @@ func QueryKinds(db *sql.DB, dec decoder.Decoder, scene string) (ret []rt.Kind, e
 
 type kindBuilder struct {
 	db    *sql.DB
-	dec   decoder.Decoder
+	dec   qdb.CommandDecoder
 	cache fieldCache
 }
 

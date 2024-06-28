@@ -4,14 +4,13 @@ import (
 	"database/sql"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 // given an query producing rows of field name, affinity, class, and init
 // build an rt.Field list
-func ScanFields(rows *sql.Rows, dec decoder.Decoder) (ret []rt.Field, err error) {
+func ScanFields(rows *sql.Rows, dec CommandDecoder) (ret []rt.Field, err error) {
 	var last string
 	var f struct {
 		Name     string
@@ -42,7 +41,7 @@ func ScanFields(rows *sql.Rows, dec decoder.Decoder) (ret []rt.Field, err error)
 }
 
 // decode the passed assignment, if it exists.
-func decodeInit(d decoder.Decoder, aff affine.Affinity, b []byte) (ret rt.Assignment, err error) {
+func decodeInit(d CommandDecoder, aff affine.Affinity, b []byte) (ret rt.Assignment, err error) {
 	if len(b) > 0 {
 		ret, err = d.DecodeAssignment(aff, b)
 	}

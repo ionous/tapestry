@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"io/fs"
 
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -17,7 +17,7 @@ import (
 //go:embed sql/*.sql
 var queries embed.FS
 
-func DumpAll(db *sql.DB, dec decoder.Decoder, scene string) (ret raw.Data, err error) {
+func DumpAll(db *sql.DB, dec qdb.CommandDecoder, scene string) (ret raw.Data, err error) {
 	if scenes, e := QueryScenes(db, scene); e != nil {
 		err = fmt.Errorf("%w for scenes", e)
 	} else if plurals, e := QueryPlurals(db, scene); e != nil {
@@ -50,7 +50,7 @@ func DumpAll(db *sql.DB, dec decoder.Decoder, scene string) (ret raw.Data, err e
 }
 
 type kindDecoder struct {
-	decoder.Decoder
+	qdb.CommandDecoder
 	ks []rt.Kind
 }
 

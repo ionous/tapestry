@@ -6,31 +6,20 @@ import (
 	"slices"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/pack"
 )
 
-// verify that query none implements every method
+// verify that raw implements every method of query
 var _ query.Query = (*RawQuery)(nil)
 
-// NotImplemented - generic error used returned by QueryNone
-type NotImplemented string
-
-func (e NotImplemented) Error() string {
-	return string(e)
-}
-
-// fix: still needs the decoder for record values
-// but it could be minimized to the literal decoder
-func MakeQuery(data *Data, dec decoder.Decoder) RawQuery {
-	return RawQuery{data, dec}
+func MakeQuery(data *Data) RawQuery {
+	return RawQuery{data}
 }
 
 type RawQuery struct {
 	*Data
-	dec decoder.Decoder
 }
 
 func (q RawQuery) Close() {
@@ -247,13 +236,13 @@ func (q RawQuery) Random(inclusiveMin int, exclusiveMax int) int {
 
 // LoadGame implements Query.
 func (q RawQuery) LoadGame(path string) (ret query.CacheMap, err error) {
-	err = NotImplemented("load game")
+	err = errors.New("load game not implemented")
 	return
 }
 
 // SaveGame implements Query.
 func (q RawQuery) SaveGame(path string, dynamicValues query.CacheMap) error {
-	return NotImplemented("save game")
+	return errors.New("load game not implemented")
 }
 
 // normalize plural name

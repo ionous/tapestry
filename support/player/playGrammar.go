@@ -9,7 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/parser"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -25,7 +25,7 @@ func MakeGrammar(db *sql.DB) (ret []parser.Scanner, err error) {
 // fix: domains: rebuild on domain changes, or:
 // add a special "AllOf" that does a db query / cache implicitly?
 // add scanners which check the database domain?
-func ReadGrammar(db *sql.DB, dec decoder.Decoder) (ret []parser.Scanner, err error) {
+func ReadGrammar(db *sql.DB, dec qdb.CommandDecoder) (ret []parser.Scanner, err error) {
 	if rows, e := db.Query(
 		`select name, prog  
 		from mdl_grammar
@@ -37,7 +37,7 @@ func ReadGrammar(db *sql.DB, dec decoder.Decoder) (ret []parser.Scanner, err err
 	return
 }
 
-func ScanGrammar(rows *sql.Rows, dec decoder.Decoder) (ret []parser.Scanner, err error) {
+func ScanGrammar(rows *sql.Rows, dec qdb.CommandDecoder) (ret []parser.Scanner, err error) {
 	var name string
 	var prog []byte
 	err = tables.ScanAll(rows, func() (err error) {

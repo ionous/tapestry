@@ -1,11 +1,9 @@
 package game
 
 import (
-	"io"
-
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
+	"io"
 )
 
 // error code for system commands
@@ -24,11 +22,11 @@ func (s Signal) Error() string {
 	return s.String()
 }
 
-// alt: hoist a global object with predefined fields
+// fix: need to think about this. requiring package files or even runtime debug seems iffy.
 func (*PrintVersion) Execute(run rt.Runtime) (_ error) {
-	details := false
-	version := files.GetVersion(details)
-	io.WriteString(run.Writer(), version)
+	//details := false
+	//version := files.GetVersion(details)
+	io.WriteString(run.Writer(), "???")
 	return
 }
 

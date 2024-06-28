@@ -90,7 +90,7 @@ Spec:requires:contains:
         - "buffer"
         - - # The statements to capture text output from.
             Term:name:type:repeats:
-              - "do"
+              - "_"
               - "exe"
               - "execute"
               - true

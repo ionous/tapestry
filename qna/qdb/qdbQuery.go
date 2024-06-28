@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -19,7 +18,7 @@ var _ query.Query = (*Query)(nil)
 // Read various data from the play database.
 type Query struct {
 	db   *sql.DB
-	dec  decoder.Decoder
+	dec  CommandDecoder
 	rand query.Randomizer
 	activeDomains,
 	domainActivate,
@@ -247,11 +246,11 @@ func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
 	return
 }
 
-func NewQueries(db *sql.DB, dec decoder.Decoder) (*Query, error) {
+func NewQueries(db *sql.DB, dec CommandDecoder) (*Query, error) {
 	return NewQueryOptions(db, dec, query.RandomizedTime(), true)
 }
 
-func NewQueryOptions(db *sql.DB, dec decoder.Decoder, rand query.Randomizer, cacheErrors bool) (ret *Query, err error) {
+func NewQueryOptions(db *sql.DB, dec CommandDecoder, rand query.Randomizer, cacheErrors bool) (ret *Query, err error) {
 	var ps tables.Prep
 	q := &Query{
 		db:        db,

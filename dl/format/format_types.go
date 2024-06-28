@@ -769,7 +769,6 @@ func init() {
 		Lede: "buffer",
 		Terms: []typeinfo.Term{{
 			Name:    "exe",
-			Label:   "do",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "The statements to capture text output from.",
@@ -1007,7 +1006,7 @@ func Register(reg func(any)) {
 var z_signatures = map[uint64]typeinfo.Instance{
 	6760736350978281265:  (*PrintBrackets)(nil),  /* execute=Bracket: */
 	7683154690772057430:  (*PrintBrackets)(nil),  /* text_eval=Bracket: */
-	9767668117811810575:  (*BufferText)(nil),     /* text_eval=Buffer do: */
+	14977888493551680556: (*BufferText)(nil),     /* text_eval=Buffer: */
 	16098131496381194958: (*CycleText)(nil),      /* counter=Cycle name:text: */
 	5355971188045229340:  (*CycleText)(nil),      /* text_eval=Cycle name:text: */
 	17596073119249480739: (*CycleText)(nil),      /* counter=Cycle text: */

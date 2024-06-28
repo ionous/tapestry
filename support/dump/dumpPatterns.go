@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryPatterns(db *sql.DB, dec decoder.Decoder, scene string) (ret []raw.PatternData, err error) {
+func QueryPatterns(db *sql.DB, dec qdb.CommandDecoder, scene string) (ret []raw.PatternData, err error) {
 	if ps, e := QueryInnerPatterns(db, scene); e != nil {
 		err = fmt.Errorf("%w while querying inner patterns", e)
 	} else if e := QueryRules(db, dec, scene, ps); e != nil {
@@ -37,7 +37,7 @@ func QueryInnerPatterns(db *sql.DB, scene string) (ret []raw.PatternData, err er
 	return
 }
 
-func QueryRules(db *sql.DB, dec decoder.Decoder, scene string, ps []raw.PatternData) (err error) {
+func QueryRules(db *sql.DB, dec qdb.CommandDecoder, scene string, ps []raw.PatternData) (err error) {
 	q := must("rules")
 	for i, n := range ps {
 		if rows, e := db.Query(q, scene, n.Id); e != nil {
@@ -59,7 +59,7 @@ type ruleData struct {
 	updateAll bool
 }
 
-func scanRules(rows *sql.Rows, dec decoder.Decoder) (ret ruleData, err error) {
+func scanRules(rows *sql.Rows, dec qdb.CommandDecoder) (ret ruleData, err error) {
 	var rule rt.Rule
 	var prog []byte
 	err = tables.ScanAll(rows, func() (err error) {

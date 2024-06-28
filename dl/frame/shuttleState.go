@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/files"
 )
 
 func NewShuttle(run rt.Runtime, dec *query.QueryDecoder) *Shuttle {
@@ -102,7 +101,9 @@ func writeFrames(w io.Writer, frames Frame_Slice) (err error) {
 	if d, e := enc.Encode(&frames); e != nil {
 		err = e
 	} else {
-		err = files.JsonEncoder(w, files.RawJson).Encode(d)
+		js := json.NewEncoder(w)
+		js.SetEscapeHTML(false)
+		err = js.Encode(d)
 	}
 	return
 }

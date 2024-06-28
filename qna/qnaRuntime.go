@@ -182,7 +182,6 @@ func (run *Runner) ReciprocalsOf(b, rel string) (ret rt.Value, err error) {
 }
 
 func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
-	// fix: pre-transform field name
 	if field := inflect.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
 	} else if target[0] != meta.Prefix {
@@ -217,7 +216,6 @@ func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 }
 
 func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
-	// fix: pre-transform field
 	if field := inflect.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("GetField given an empty field for target %q", target)
 	} else if target[0] != meta.Prefix {

@@ -33,8 +33,7 @@ func PlayGame(mdlFile, testString, scene string) error {
 }
 
 func PlayWithOptions(mdlFile, testString, scene string, opts qna.Options) (err error) {
-	d := query.NewDecoder(tapestry.AllSignatures)
-	if ctx, e := createContext(mdlFile, d); e != nil {
+	if ctx, e := createContext(mdlFile); e != nil {
 		err = e
 	} else if e := goPlay(ctx, scene, opts, testString); e != nil {
 		err = e
@@ -44,11 +43,13 @@ func PlayWithOptions(mdlFile, testString, scene string, opts qna.Options) (err e
 	return
 }
 
-func createContext(mdlFile string, d *query.QueryDecoder) (ret context, err error) {
+func createContext(mdlFile string) (ret context, err error) {
 	if path.Ext(mdlFile) == ".gob" {
-		ret, err = createRawContext(mdlFile, d)
+		ret, err = createRawContext(mdlFile)
+	} else if path.Ext(mdlFile) == ".db" {
+		ret, err = createSqlContext(mdlFile)
 	} else {
-		ret, err = createSqlContext(mdlFile, d)
+		err = fmt.Errorf("expected a db or gob file")
 	}
 	return
 }
@@ -58,12 +59,12 @@ type context struct {
 	grammar []parser.Scanner
 }
 
-func createRawContext(mdlFile string, dec *query.QueryDecoder) (ret context, err error) {
+func createRawContext(mdlFile string) (ret context, err error) {
 	var data raw.Data
 	if e := LoadGob(mdlFile, &data); e != nil {
 		err = e
 	} else {
-		q := raw.MakeQuery(&data, dec)
+		q := raw.MakeQuery(&data)
 		scan := make([]parser.Scanner, len(data.Grammar))
 		for i, d := range data.Grammar {
 			scan[i] = d.MakeScanners()
@@ -73,7 +74,7 @@ func createRawContext(mdlFile string, dec *query.QueryDecoder) (ret context, err
 	return
 }
 
-// serialize to the passed path
+// deserialize from the passed path
 func LoadGob(inPath string, pd *raw.Data) (err error) {
 	tapestry.Register(gob.Register)
 	if fp, e := os.Open(inPath); e != nil {
@@ -86,7 +87,8 @@ func LoadGob(inPath string, pd *raw.Data) (err error) {
 	return
 }
 
-func createSqlContext(mdlFile string, dec *query.QueryDecoder) (ret context, err error) {
+func createSqlContext(mdlFile string) (ret context, err error) {
+	dec := query.NewDecoder(tapestry.AllSignatures)
 	if db, e := tables.CreateRunTime(mdlFile); e != nil {
 		err = e
 	} else {

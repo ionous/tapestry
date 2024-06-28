@@ -4,7 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 
@@ -136,7 +135,7 @@ func TestQueries(t *testing.T) {
 	}
 
 	// start querying
-	if q, e := qdb.NewQueries(db, decoder.DecodeNone("testing")); e != nil {
+	if q, e := qdb.NewQueries(db, qdb.DecodeNone("testing")); e != nil {
 		t.Fatal(e)
 	} else if domainPoke, e := db.Prepare(
 		// turn on / off a domain regardless of hierarchy

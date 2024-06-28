@@ -9,8 +9,6 @@ import (
 
 // expects field to be a normalized name already.
 func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue rt.Value) (err error) {
-	// tbd: cache the kind in the object info?
-	// or even... cache the ( last n ) field info into "obj.field"?
 	if kind, e := run.getKind(obj.Kind); e != nil {
 		err = e
 	} else if fieldIndex := kind.FieldIndex(field); fieldIndex < 0 {
@@ -46,8 +44,6 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue rt.
 
 // expects field to be a normalized name already.
 func (run *Runner) getObjectField(obj query.NounInfo, field string) (ret rt.Value, err error) {
-	// tbd: cache the kind in the object info?
-	// or even... cache the ( last n ) field info into "obj.field"?
 	if kind, e := run.getKind(obj.Kind); e != nil {
 		err = e
 	} else if fieldIndex := kind.FieldIndex(field); fieldIndex < 0 {
@@ -72,7 +68,7 @@ func (run *Runner) getObjectField(obj query.NounInfo, field string) (ret rt.Valu
 }
 
 func (run *Runner) writeNounValue(obj query.NounInfo, field rt.Field, val rt.Value) (err error) {
-	// fix: convert when appropriate.
+	// fix: convert when appropriate?
 	if aff := val.Affinity(); aff != field.Affinity {
 		err = errutil.Fmt(`mismatched affinity "%s.%s(%s)" writing %s`, obj, field.Name, field.Affinity, aff)
 	} else {
@@ -97,6 +93,5 @@ func (run *Runner) readNounValue(obj query.NounInfo, ft rt.Field) (ret rt.Value,
 		// then ask for the value again to unpack it.
 		ret, err = run.unpackDynamicValue(key, ft.Affinity, ft.Type)
 	}
-
 	return
 }

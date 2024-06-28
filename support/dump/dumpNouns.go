@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func QueryNouns(db *sql.DB, kd decoder.KindDecoder, scene string) (ret []raw.NounData, err error) {
+func QueryNouns(db *sql.DB, kd qdb.KindDecoder, scene string) (ret []raw.NounData, err error) {
 	if ns, e := QueryInnerNouns(db, scene); e != nil {
 		err = fmt.Errorf("%w while querying ids", e)
 	} else if e := QueryAliases(db, ns); e != nil {
@@ -35,7 +35,7 @@ func QueryInnerNouns(db *sql.DB, scene string) (ret []raw.NounData, err error) {
 	return
 }
 
-func QueryValues(db *sql.DB, kd decoder.KindDecoder, ns []raw.NounData) (err error) {
+func QueryValues(db *sql.DB, kd qdb.KindDecoder, ns []raw.NounData) (err error) {
 	vals, recs := must("values"), must("records")
 	for i, n := range ns {
 		if k, e := kd.GetKindByName(n.Kind); e != nil {

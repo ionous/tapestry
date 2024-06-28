@@ -1,4 +1,4 @@
-package decoder
+package qdb
 
 import (
 	"database/sql"
@@ -10,7 +10,7 @@ import (
 )
 
 type KindDecoder interface {
-	Decoder
+	CommandDecoder
 	rt.Kinds
 }
 

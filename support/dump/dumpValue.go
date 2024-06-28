@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"slices"
 
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/pack"
@@ -13,13 +13,13 @@ import (
 )
 
 type valueReader struct {
-	kd decoder.KindDecoder
+	kd qdb.KindDecoder
 	n  *raw.NounData
 	k  *rt.Kind
 	ff fieldFinder
 }
 
-func makeValueReader(n *raw.NounData, k *rt.Kind, kd decoder.KindDecoder) valueReader {
+func makeValueReader(n *raw.NounData, k *rt.Kind, kd qdb.KindDecoder) valueReader {
 	return valueReader{kd, n, k, 0}
 }
 
@@ -58,10 +58,10 @@ func (vr *valueReader) decodeField(field string, b []byte) (err error) {
 func (vr *valueReader) records(rows *sql.Rows) (err error) {
 	var next struct {
 		Field string
-		decoder.SparseValue
+		qdb.SparseValue
 	}
 	var lastField string
-	var vs []decoder.SparseValue
+	var vs []qdb.SparseValue
 	if e := tables.ScanAll(rows, func() (err error) {
 		// FIX: also have to handle final? what does the runtime do?
 		if next.Field != lastField {
@@ -80,11 +80,11 @@ func (vr *valueReader) records(rows *sql.Rows) (err error) {
 	return
 }
 
-func (vr *valueReader) flushRecord(field string, vs []decoder.SparseValue) (err error) {
+func (vr *valueReader) flushRecord(field string, vs []qdb.SparseValue) (err error) {
 	if len(vs) > 0 {
 		if ft, e := vr.ff.FindField(vr.k, field); e != nil {
 			err = e
-		} else if rec, e := decoder.DecodeSparseRecord(vr.kd, ft.Type, vs); e != nil {
+		} else if rec, e := qdb.DecodeSparseRecord(vr.kd, ft.Type, vs); e != nil {
 			err = e
 		} else {
 			packed := pack.PackRecord(rec)

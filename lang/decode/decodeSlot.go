@@ -35,7 +35,7 @@ func (dec *Decoder) innerDecode(slot *typeinfo.Slot, data any) (ret typeinfo.Ins
 			ret, err = dec.patterns(dec, slot, msg)
 		} else {
 			// otherwise, an error
-			err = fmt.Errorf("unknown signature slot=%q flow=%q", slot, msg.Key)
+			err = fmt.Errorf("unknown signature slot=%q flow=%q", slot.Name, msg.Key)
 		}
 	}
 	return

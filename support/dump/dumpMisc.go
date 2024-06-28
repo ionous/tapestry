@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -26,7 +26,7 @@ func QueryPlurals(db *sql.DB, scene string) (ret []raw.Plural, err error) {
 }
 
 // directives produce scanners so that scanners can live separate from tapestry/commands
-func QueryGrammar(db *sql.DB, dec decoder.Decoder, scene string) (ret []grammar.Directive, err error) {
+func QueryGrammar(db *sql.DB, dec qdb.CommandDecoder, scene string) (ret []grammar.Directive, err error) {
 	if rows, e := db.Query(must("grammar"), scene); e != nil {
 		err = fmt.Errorf("%w while querying plurals", e)
 	} else {
@@ -35,7 +35,7 @@ func QueryGrammar(db *sql.DB, dec decoder.Decoder, scene string) (ret []grammar.
 	return
 }
 
-func scanGrammar(rows *sql.Rows, dec decoder.Decoder) (ret []grammar.Directive, err error) {
+func scanGrammar(rows *sql.Rows, dec qdb.CommandDecoder) (ret []grammar.Directive, err error) {
 	var name string
 	var prog []byte
 	err = tables.ScanAll(rows, func() (err error) {

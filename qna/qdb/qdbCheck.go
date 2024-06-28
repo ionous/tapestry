@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -41,7 +40,7 @@ func (q *Query) ReadChecks(actuallyJustThisOne string) (ret []query.CheckData, e
 	return
 }
 
-func readLegacyExpectation(dec decoder.Decoder, b []byte, aff affine.Affinity) (ret string, err error) {
+func readLegacyExpectation(dec CommandDecoder, b []byte, aff affine.Affinity) (ret string, err error) {
 	if len(b) > 0 {
 		if v, e := dec.DecodeField(aff, b, ""); e != nil {
 			err = e

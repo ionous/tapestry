@@ -3,8 +3,6 @@ package qdb
 import (
 	"database/sql"
 	"fmt"
-
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 )
 
 type QueryTest struct {
@@ -13,7 +11,7 @@ type QueryTest struct {
 }
 
 func NewQueryTest(db *sql.DB) (ret *QueryTest, err error) {
-	if q, e := NewQueries(db, decoder.DecodeNone("query test")); e != nil {
+	if q, e := NewQueries(db, DecodeNone("query test")); e != nil {
 		err = e
 	} else if scan, e := db.Prepare(
 		`select domain || ':' || active

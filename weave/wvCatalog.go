@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -40,7 +39,8 @@ func NewCatalog(db *sql.DB) *Catalog {
 
 func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
 	if run == nil {
-		dec := decoder.DecodeNone("unsupported decoder")
+		// fix: this only happens for tests; unwind the calls so that's explicit
+		dec := qdb.DecodeNone("unsupported decoder")
 		if q, e := qdb.NewQueries(db, dec); e != nil {
 			panic(e)
 		} else {

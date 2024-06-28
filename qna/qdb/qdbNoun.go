@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -18,13 +17,13 @@ func (q *Query) NounValue(noun, field string) (ret rt.Assignment, err error) {
 		ft := k.Field(i)
 		if rows, e := q.nounValues.Query(noun, field); e != nil {
 			err = e
-		} else if vals, e := decoder.ScanSparseValues(rows); e != nil {
+		} else if vals, e := ScanSparseValues(rows); e != nil {
 			err = e
 		} else if len(vals) == 0 {
 			ret, err = zeroAssignment(ft, i)
 		} else if ft.Affinity != affine.Record {
 			ret, err = decodeValue(q.dec, ft, vals)
-		} else if rec, e := decoder.DecodeSparseRecord(
+		} else if rec, e := DecodeSparseRecord(
 			kindDecoder{q, q.dec},
 			ft.Type, vals); e != nil {
 			err = e
@@ -38,7 +37,7 @@ func (q *Query) NounValue(noun, field string) (ret rt.Assignment, err error) {
 
 type kindDecoder struct {
 	rt.Kinds
-	decoder.Decoder
+	CommandDecoder
 }
 
 func (q *Query) GetKindByNoun(noun string) (ret *rt.Kind, err error) {
@@ -50,7 +49,7 @@ func (q *Query) GetKindByNoun(noun string) (ret *rt.Kind, err error) {
 	return
 }
 
-func decodeValue(dec decoder.Decoder, ft rt.Field, vals []decoder.SparseValue) (ret rt.Assignment, err error) {
+func decodeValue(dec CommandDecoder, ft rt.Field, vals []SparseValue) (ret rt.Assignment, err error) {
 	if cnt := len(vals); cnt != 1 {
 		err = fmt.Errorf("field %q of %s expected a single value, got %d", ft.Name, ft.Affinity, cnt)
 	} else if v := vals[0]; len(v.Path) > 0 {
