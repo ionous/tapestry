@@ -3,6 +3,8 @@ title: Tapestry
 type: homepage
 summary: Tapestry documentation.
 geekdocBreadcrumb: false
+params:
+  pageclass: "page-main"
 ---
 A story engine for games.
 
@@ -16,14 +18,11 @@ Developers should be able to work on the logic of their games separate from the 
 
 ## Working Example
 
-This is part of "Cloak of Darkness" story ( ported from [Robert Firth's original](https://www.ifwiki.org/Cloak_of_Darkness) ): 
+This is a port of the "Cloak of Darkness" originally by written by [Robert Firth](https://www.ifwiki.org/Cloak_of_Darkness): 
 
-> The Foyer of the Opera House is a room. You are in the foyer.
-> The description of the Foyer is "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and east." <br/><br/>
-> The entrance is a  door in the foyer. North from the foyer is the entrance. Through the entrance is the Street. Instead of traveling through the entrance:<br/>
-> &nbsp;&nbsp; - Say: "You've only just arrived and besides the weather outside is terrible."
+{{< include file="/static/_includes/cloak.tell" language="yaml" options="linenos=false" >}}
 
-Building this with Tapestry produces a playable story and a SQLite database containing the objects in the game, their interactions, and the game rules. The complete story can be found here: [cloak.tell](https://git.sr.ht/~ionous/tapestry/tree/main/item/content/stories/cloak.tell).
+Building this with Tapestry produces a playable story and a SQLite database containing the objects in the game, their interactions, and the game rules. You can play the story here: <br> {{< button href="/cloak-of-darkness" >}}Play ↗{{< /button >}}
 
 ## Relation to interactive fiction
 
