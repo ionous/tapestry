@@ -11,17 +11,24 @@
 package main
 
 import (
+	"bytes"
+	_ "embed"
 	"fmt"
 	"strings"
 	"syscall/js"
 
+	"encoding/gob"
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/qna/raw"
 	"git.sr.ht/~ionous/tapestry/support/play"
 )
+
+//go:embed data/play.gob
+var playData []byte
 
 func main() {
 	fmt.Println("hello")
@@ -105,13 +112,28 @@ func PlayGame() *frame.Shuttle {
 
 // aka. makeShuttle
 func PlayWithOptions(opts qna.Options) (ret *frame.Shuttle) {
-	var grammar parser.AlwaysError
-	var q query.QueryNone
+	data := LoadPlayData()
 	//
-	decoder := decode.NewDecoder(tapestry.AllSignatures)
-	run := qna.NewRuntimeOptions(q, decoder, opts)
+	q := raw.MakeQuery(&data)
+	scan := make([]parser.Scanner, len(data.Grammar))
+	for i, d := range data.Grammar {
+		scan[i] = d.MakeScanners()
+	}
+	//
+	run := qna.NewRuntimeOptions(q, opts)
 	survey := play.MakeDefaultSurveyor(run) // fix: this should live in play.NewPlaytime; maybe an options?
-	pt := play.NewPlaytime(run, survey, grammar)
+	pt := play.NewPlaytime(run, survey, scan)
 	play.CaptureInput(pt) // fix: can shuttle capture input?
+	decoder := query.NewDecoder(tapestry.AllSignatures)
 	return frame.NewShuttle(pt, decoder)
+}
+
+// deserialize from the passed path
+func LoadPlayData() (ret raw.Data) {
+	tapestry.Register(gob.Register)
+	dec := gob.NewDecoder(bytes.NewReader(playData))
+	if e := dec.Decode(&ret); e != nil {
+		panic("error loading data")
+	}
+	return
 }
