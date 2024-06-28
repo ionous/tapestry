@@ -20,4 +20,4 @@ Tapestry is open source, and all original source code is provided under a [BSD-3
 
 Black lives matter, and queer and trans lives matter. In that spirit, if you are interested in using Tapestry or contributing to the project, please refer to the [code of conduct](https://git.sr.ht/~ionous/tapestry/tree/main/item/CODE_OF_CONDUCT.md).
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](https://git.sr.ht/~ionous/tapestry/tree/main/item/CODE_OF_CONDUCT.md)
