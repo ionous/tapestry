@@ -33,14 +33,21 @@ type Result struct {
 	Nouns  []string
 }
 
+// for ending an error print
+// Println + a newline will generate linter warnings;
+// so Print with new two lines is needed.
+const commandBreak = "\n\n"
+
 // advance time
 func (pt *Playtime) Step(words string) (ret *Result, err error) {
+	w := pt.Writer()
 	switch res, e := pt.scan(words); e.(type) {
 	default:
 		err = errutil.New("unhandled error", e)
 
 	//"couldnt determine object", a.Nouns)
-	// case parser.AmbiguousObject:
+	case parser.AmbiguousObject:
+		fmt.Fprint(w, e, commandBreak)
 	// move to the next state
 	// prompt the user, and add whatever the user says into the original input for reparsing
 	// insert resolution into input.
@@ -51,25 +58,15 @@ func (pt *Playtime) Step(words string) (ret *Result, err error) {
 	// err = innerParse(log, pt, match, s, goals)
 
 	// "mismatched word %s != %s at %d", a.Have, a.Want, a.Depth)
-	// case parser.MismatchedWord:
+	case parser.MismatchedWord:
+		fmt.Fprint(w, "That's not anything i recognize.", commandBreak)
 
-	// "missing an object at %d"
-	// case parser.MissingObject:
-	// in this case, inform guesses at the object to fill.
+	case parser.MissingObject:
+		// in this case, inform guesses at the object to fill.
+		fmt.Fprint(w, e, commandBreak)
 
-	// "you cant see any such things"
-	// case parser.NoSuchObjects:
-
-	// "too many words"
-	// case parser.Overflow:
-
-	// "too few words"
-	// case parser.Underflow:
-
-	// "you can't see any such thing"
-	case parser.UnknownObject:
-		fmt.Println(e)
-		fmt.Println() // command break
+	case parser.NoSuchObjects, parser.Overflow, parser.Underflow, parser.UnknownObject:
+		fmt.Fprint(w, e, commandBreak)
 
 	case nil:
 		switch res := res.(type) {

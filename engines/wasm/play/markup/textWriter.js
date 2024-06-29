@@ -1,4 +1,6 @@
-
+/**
+ * mimics git.sr.ht/~ionous/tapestry/web/text
+ */
 import TextRender from './textRender.js'
 
 // tagTypes
@@ -15,8 +17,10 @@ class TextWriter {
   // write any text we've been accumulating to the output
   rejectTag() {
     this.tag= "";
-    this.out.writeString(this.buf);
-    this.buf= "";
+    if (this.buf) { // write any accumulated text as regular text.
+      this.out.writeString(this.buf);
+      this.buf= "";
+    }
   }
   // keep track of the passed character as potentially belonging to a tag
   // ex. "s" for <strike>
@@ -42,14 +46,16 @@ class TextWriter {
   }
 }
 
+// returns new vue html
 export default function writeText(msg) {
-  const c= new TextWriter();
-  let next= states.readingText;
+  const c = new TextWriter();
+  let next = states.readingText;
   for (const q of msg) {
-    next= next(c, q);
+    next = next(c, q); // advance states
   }
   c.rejectTag(); // if anything was pending
-  return c.out.finalize();
+  // mimic print.NewLineSentences()
+  return c.out.finalize( msg.match( /[\.!?]$/ ));
 }
 
 const tagFriendly= /[a-zA-Z]/;

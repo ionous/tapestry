@@ -63,7 +63,10 @@ type Runtime interface {
 	SingularOf(plural string) string
 	// Random - return a pseudo-random number.
 	Random(inclusiveMin, exclusiveMax int) int
-	// Writer - Return the built-in writer, or the current override.
+	// Writer which prints text to the player.
+	// It's tempting to have this be Write() -- so callers can print directly to the runtime.
+	// That doesn't work in practice because go interfaces aren't virtual functions.
+	// Any runtime wrapper can get stripped off, and wind up writing to an unexpected implementation.
 	Writer() io.Writer
 	// SetWriter - Override the current writer.
 	SetWriter(io.Writer) (prev io.Writer)

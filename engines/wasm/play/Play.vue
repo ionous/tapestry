@@ -51,7 +51,7 @@ export default {
   components: { lvOutput, lvPrompt, lvStatus, mkFolder },
   // props: {},
   setup(/*props*/) {
-    const narration = ref([]);
+    const narration = ref([]); // ultimately processed through textWriter.js & textRender.js
     const status = ref(new Status());
     const playing = ref(false);
     const showDebug = ref(false);
@@ -100,7 +100,6 @@ export default {
     onUnmounted(() => {
       document.body.removeEventListener("keydown", onkey);
     });
-    let first = true; 
     return {
       narration, // story output
       status,
@@ -130,13 +129,7 @@ export default {
         }
       },
       onPrompt(text) {
-        console.log("onPrompt");
-        if (!first) {
-          // patch for an errant space after the first set of text
-          // or there could always be a break
-          narration.value.push("<br>");
-        }
-        first = false;
+        // console.log("onPrompt");
         narration.value.push("> " + text);
         q.fabricate(text);
       },
