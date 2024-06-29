@@ -179,7 +179,7 @@ func createPrivateDoor(w weaver.Weaves, direction string, room, otherRoom *jessL
 		switch {
 		default:
 			err = e
-		case errors.Is(e, weaver.Conflict), errors.Is(e, weaver.Duplicate):
+		case errors.Is(e, weaver.ErrConflict), errors.Is(e, weaver.ErrDuplicate):
 			// eat silently
 		case e == nil:
 			if e := w.AddNounKind(door, Doors); e != nil {

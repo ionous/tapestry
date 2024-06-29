@@ -33,7 +33,7 @@ func (m *ProcessingList) Schedule(z weaver.Phase, p func(weaver.Weaves, rt.Runti
 func (m *ProcessingList) UpdatePhase(z weaver.Phase, w weaver.Weaves, run rt.Runtime) (ret int, err error) {
 	m.lastPhase = z //
 	if prev := m.pending[z]; len(prev) > 0 {
-		if next, e := updatePhase(w, run, prev); e != nil && !errors.Is(e, weaver.Missing) {
+		if next, e := updatePhase(w, run, prev); e != nil && !errors.Is(e, weaver.ErrMissing) {
 			err = e
 		} else {
 			ret = len(prev) - len(next) // how many were processed
@@ -51,7 +51,7 @@ func updatePhase(w weaver.Weaves, run rt.Runtime, pending []Process) (ret []Proc
 	var firstMissing error
 	for _, callback := range pending {
 		if e := callback(w, run); e != nil {
-			if !errors.Is(e, weaver.Missing) {
+			if !errors.Is(e, weaver.ErrMissing) {
 				err = e
 				break // return any critical errors
 			} else {

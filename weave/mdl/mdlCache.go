@@ -1,7 +1,7 @@
 package mdl
 
 import (
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 // used by fields to map field name to referenced class ( if any )
@@ -22,7 +22,7 @@ func (c *fieldCache) getClass(pen *Pen, field FieldInfo) (ret kindInfo, err erro
 		if a, ok := (*c)[clsName]; ok {
 			ret = a
 		} else if cls, e := pen.findOptionalKind(clsName); e != nil {
-			err = errutil.Fmt("%w trying to find field %q", e, field.Name)
+			err = fmt.Errorf("%w trying to find field %q", e, field.Name)
 		} else {
 			c.store(clsName, cls)
 			ret = cls

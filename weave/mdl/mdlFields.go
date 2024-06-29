@@ -2,7 +2,10 @@ package mdl
 
 import (
 	"database/sql"
+	"errors"
 	"strings"
+
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/call"
@@ -10,7 +13,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
 var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
@@ -78,7 +80,7 @@ from existingFields
 join pendingFields
 using(name)
 `, kid.fullpath(), field, cls.id, pen.getPath(kindsOf.Aspect)); e != nil {
-		err = errutil.New("database error", e)
+		err = fmt.Errorf("database error: %s", e)
 	} else {
 		var prev struct {
 			name   string          // trait or field causing a conflict
@@ -93,29 +95,29 @@ using(name)
 				// adding an aspect: the conflict reports the pending aspect so this case can be detected
 				if prev.aspect.String == cls.name {
 					// is there a way to determine whether the origin is a domain or aspect
-					err = errutil.Fmt("%w new field for kind %q of aspect %q conflicts with existing field %q from %s",
-						Conflict, kid.name, field, prev.name, prev.origin)
+					err = fmt.Errorf("%w new field for kind %q of aspect %q conflicts with existing field %q from %s",
+						ErrConflict, kid.name, field, prev.name, prev.origin)
 				} else if prev.aspect.Valid {
-					err = errutil.Fmt("%w new field for kind %q of aspect %q conflicts with trait %q from aspect %q",
-						Conflict, kid.name, field,
+					err = fmt.Errorf("%w new field for kind %q of aspect %q conflicts with trait %q from aspect %q",
+						ErrConflict, kid.name, field,
 						prev.name, prev.aspect.String)
 				} else {
 					// when does this show up?
-					err = errutil.Fmt("%w field %q for kind %q was %s(%s) from %s, now %s(%s) in %q",
-						Conflict, field, kid.name,
+					err = fmt.Errorf("%w field %q for kind %q was %s(%s) from %s, now %s(%s) in %q",
+						ErrConflict, field, kid.name,
 						prev.aff, prev.cls.String, prev.origin,
 						aff, cls.name, domain)
 				}
 			} else if aff == prev.aff && cls.name == prev.cls.String {
 				// if the affinity and typeName are the same, then its a duplicate
-				err = errutil.Fmt("%w field %q for kind %q of %s(%s) from %s and now domain %q",
-					Duplicate, field, kid.name,
+				err = fmt.Errorf("%w field %q for kind %q of %s(%s) from %s and now domain %q",
+					ErrDuplicate, field, kid.name,
 					aff, cls.name,
 					prev.origin, domain)
 			} else {
 				// otherwise, its a conflict
-				err = errutil.Fmt("%w field %q for kind %q of %s(%s) from %s was redefined as %s(%s) in domain %q",
-					Conflict, field, kid.name,
+				err = fmt.Errorf("%w field %q for kind %q of %s(%s) from %s was redefined as %s(%s) in domain %q",
+					ErrConflict, field, kid.name,
 					prev.aff, prev.cls.String, prev.origin,
 					aff, cls.name, domain)
 			}
@@ -130,9 +132,9 @@ using(name)
 			}
 			if aff == affine.Record && cls.id == 0 {
 				// this should never happen, but has during field development;
-				err = errutil.New("unexpected condition, records should always have a type")
+				err = errors.New("unexpected condition, records should always have a type")
 			} else if _, e := pen.db.Exec(mdl_field, domain, kid.id, field, aff, clsid, at); e != nil {
-				err = errutil.New("database error", e)
+				err = fmt.Errorf("database error: %s", e)
 			}
 		}
 	}
@@ -159,14 +161,14 @@ func (f *fieldInfo) rewriteTrait(name string, value rt.Assignment) (ret rt.Assig
 	} else {
 		switch v := value.(type) {
 		default:
-			err = errutil.Fmt("incompatible assignment to trait, got %T", value)
+			err = fmt.Errorf("incompatible assignment to trait, got %T", value)
 		case *call.FromBool:
 			switch b := v.Value.(type) {
 			default:
-				err = errutil.Fmt("traits only support literal bools, got %T", value)
+				err = fmt.Errorf("traits only support literal bools, got %T", value)
 			case *literal.BoolValue:
 				if !b.Value {
-					err = errutil.New("opposite trait assignment not supported")
+					err = errors.New("opposite trait assignment not supported")
 				} else {
 					ret = &call.FromText{Value: &literal.TextValue{Value: name}}
 				}
@@ -187,7 +189,7 @@ func (pen *Pen) digField(noun nounInfo, path []string) (retout, retin fieldInfo,
 		for i := 0; i < len(path) && err == nil; i++ {
 			subField := path[i]
 			if inner.aff != affine.Record {
-				err = errutil.Fmt("expected a field of type record for noun %q, kind %q, path %q(%d)",
+				err = fmt.Errorf("expected a field of type record for noun %q, kind %q, path %q(%d)",
 					noun.name, noun.kind, strings.Join(path, "."), i)
 			} else {
 				inner, err = pen.findField(inner.class(), subField)
@@ -210,7 +212,7 @@ func (pen *Pen) findDefaultTrait(kind classInfo) (ret string, err error) {
 		kind.id).Scan(&ret); e != sql.ErrNoRows {
 		err = e
 	} else {
-		err = errutil.Fmt("%w traits for %q in domain %q", Missing, kind.name, pen.domain)
+		err = fmt.Errorf("%w traits for %q in domain %q", ErrMissing, kind.name, pen.domain)
 	}
 	return
 }
@@ -260,15 +262,16 @@ select id, ma.aspect, ma.domain, 'text', 0, "", ""
 from allTraits ma
 join fieldsInKind fk
 	on (ma.kind = fk.typeId)
-where ma.name = @fieldName`,
+where ma.name = @fieldName
+limit 1`,
 		sql.Named("aspects", pen.getPath(kindsOf.Aspect)),
 		sql.Named("ancestry", kind.fullpath),
 		sql.Named("fieldName", field)).
 		Scan(&ret.id, &ret.name, &ret.domain, &ret.aff, &ret.cls.id, &ret.cls.name, &ret.cls.fullpath); e != nil {
 		if e == sql.ErrNoRows {
-			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind.name, pen.domain)
+			err = fmt.Errorf("%w field %q in kind %q domain %q", ErrMissing, field, kind.name, pen.domain)
 		} else {
-			err = errutil.New("database error", e)
+			err = fmt.Errorf("database error: %s", e)
 		}
 	}
 	return

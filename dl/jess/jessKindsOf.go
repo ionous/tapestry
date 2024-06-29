@@ -52,7 +52,7 @@ func (op *KindsAreKind) Generate(ctx Context) error {
 		var base kindsOf.Kinds
 		span := op.Name.Matched
 		if parent, width := ctx.FindKind(span, &base); width != len(span) {
-			err = fmt.Errorf("%w kind %s", weaver.Missing, span.DebugString())
+			err = fmt.Errorf("%w kind %s", weaver.ErrMissing, span.DebugString())
 		} else {
 			traits := op.GetTraits()
 			isPlural, isAspect := op.Are.IsPlural(), base == kindsOf.Aspect

@@ -3,22 +3,22 @@ package mdl
 import (
 	"database/sql"
 
+	"errors"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
 // when the definition would contradict existing information:
 // the returned error wraps this tag. errors.Is can be used to detect it.
-const Conflict = errutil.Error("Conflict")
+var ErrConflict = errors.New("Conflict")
 
 // when the definition would repeat existing information:
 // the returned error wraps this tag. errors.Is can be used to detect it.
-const Duplicate = errutil.NoPanicError("Duplicate")
+var ErrDuplicate = errors.New("Duplicate")
 
 // when the definition can't find some required information:
 // the returned error wraps this tag. errors.Is can be used to detect it.
-const Missing = errutil.NoPanicError("Missing")
+var ErrMissing = errors.New("Missing")
 
 /**
  *

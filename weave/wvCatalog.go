@@ -274,7 +274,7 @@ func (cat *Catalog) findRivals() (err error) {
 	var rivals error
 	if e := findRivals(cat.db, func(group, domain, key, value, at string) (_ error) {
 		rivals = errutil.Append(rivals, errutil.Fmt("%w in domain %q at %q for %s %q",
-			mdl.Conflict, domain, at, group, value))
+			mdl.ErrConflict, domain, at, group, value))
 		return
 	}); e != nil {
 		err = e

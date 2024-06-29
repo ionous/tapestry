@@ -44,7 +44,7 @@ func AddNamedNoun(pen NounMaker, longName, kind string) (ret string, err error) 
 	if e := pen.AddNounKind(noun, kind); e == nil {
 		names := MakeNames(longName)
 		err = AddNounNames(pen, noun, names)
-	} else if !errors.Is(e, Duplicate) {
+	} else if !errors.Is(e, ErrDuplicate) {
 		err = e
 	}
 	if err == nil {

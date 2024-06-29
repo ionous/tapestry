@@ -3,7 +3,7 @@ package mdl
 import (
 	"database/sql"
 
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 func (pen *Pen) checkPair(rel kindInfo, one, other nounInfo, reverse, multi bool) (err error) {
@@ -23,11 +23,11 @@ func (pen *Pen) checkPair(rel kindInfo, one, other nounInfo, reverse, multi bool
 		err = e
 	} else if prevId.Valid {
 		if prevId.Int64 == match.id {
-			err = errutil.Fmt("%w relation %q duplicated %q to %q in domain %q",
-				Duplicate, rel.name, one.name, other.name, domain)
+			err = fmt.Errorf("%w relation %q duplicated %q to %q in domain %q",
+				ErrDuplicate, rel.name, one.name, other.name, domain)
 		} else if !multi {
-			err = errutil.Fmt("%w new relation %q of %q to %q in domain %q; was %q to %q",
-				Conflict, rel.name, one.name, other.name, domain,
+			err = fmt.Errorf("%w new relation %q of %q to %q in domain %q; was %q to %q",
+				ErrConflict, rel.name, one.name, other.name, domain,
 				one.name, prevString.String)
 		}
 	}

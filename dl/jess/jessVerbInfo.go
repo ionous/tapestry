@@ -71,7 +71,7 @@ func (v *VerbDesc) getKinds() (lhs, rhs string) {
 
 func addKindToNouns(w weaver.Weaves, kind string, ns []DesiredNoun) (err error) {
 	for _, n := range ns {
-		if e := w.AddNounKind(n.Noun, kind); e != nil && !errors.Is(e, weaver.Duplicate) {
+		if e := w.AddNounKind(n.Noun, kind); e != nil && !errors.Is(e, weaver.ErrDuplicate) {
 			err = e
 			break
 		}
@@ -99,11 +99,11 @@ func readVerb(run rt.Runtime, verb string) (ret VerbDesc, err error) {
 		err = e
 	} else if subject, e := readString(run, verb, VerbSubject); e != nil {
 		err = e
-	} else if alternate, e := readString(run, verb, VerbAlternate); e != nil && !errors.Is(e, weaver.Missing) {
+	} else if alternate, e := readString(run, verb, VerbAlternate); e != nil && !errors.Is(e, weaver.ErrMissing) {
 		err = e // alternate subects(s) are optional
-	} else if implies, e := readStringList(run, verb, VerbImplies); e != nil && !errors.Is(e, weaver.Missing) {
+	} else if implies, e := readStringList(run, verb, VerbImplies); e != nil && !errors.Is(e, weaver.ErrMissing) {
 		err = e // implications are optional
-	} else if rev, revErr := readString(run, verb, VerbReversed); revErr != nil && !errors.Is(revErr, weaver.Missing) {
+	} else if rev, revErr := readString(run, verb, VerbReversed); revErr != nil && !errors.Is(revErr, weaver.ErrMissing) {
 		err = revErr // reverse is optional; false if not explicitly specified
 	} else {
 		ret = VerbDesc{

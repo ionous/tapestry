@@ -175,12 +175,12 @@ func generateFallbacks(u Scheduler, ns []DesiredNoun, kinds ...string) error {
 	Loop:
 		for _, n := range ns {
 			for _, k := range kinds {
-				if e := w.AddNounKind(n.Noun, k); e == nil || errors.Is(e, weaver.Duplicate) {
+				if e := w.AddNounKind(n.Noun, k); e == nil || errors.Is(e, weaver.ErrDuplicate) {
 					err = nil // applying a duplicate kind is considered a success
 					break Loop
 				} else {
 					err = e // keep one of the conflicts; only cleared on success
-					if !errors.Is(e, weaver.Conflict) {
+					if !errors.Is(e, weaver.ErrConflict) {
 						break Loop // some other error is an immediate problem
 					}
 				}
@@ -196,7 +196,7 @@ func tryAsThings(u Scheduler, ns []DesiredNoun) (err error) {
 	return u.Schedule(weaver.FallbackPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		for _, n := range ns {
 			e := w.AddNounKind(n.Noun, Things)
-			if e != nil && !errors.Is(e, weaver.Conflict) && !errors.Is(e, weaver.Duplicate) {
+			if e != nil && !errors.Is(e, weaver.ErrConflict) && !errors.Is(e, weaver.ErrDuplicate) {
 				err = e
 				break
 			}

@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 type fieldSet struct {
@@ -36,7 +36,7 @@ func (pen *Pen) writeFields(kind string, fields []FieldInfo) (err error) {
 		}
 	}
 	if err != nil {
-		err = errutil.Fmt("%w in kind %q domain %q", err, kind, pen.domain)
+		err = fmt.Errorf("%w in kind %q domain %q", err, kind, pen.domain)
 	}
 	return
 }
@@ -93,7 +93,7 @@ func (fs *fieldSet) addFields(pen *Pen, call fieldHandler) (err error) {
 			}
 		}
 		if err != nil {
-			err = errutil.Fmt("%w trying to write field %q", err, f.Name)
+			err = fmt.Errorf("%w trying to write field %q", err, f.Name)
 			break
 		}
 

@@ -2,9 +2,11 @@ package mdl
 
 import (
 	"database/sql"
+	"errors"
+
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
 type nounInfo struct {
@@ -69,7 +71,7 @@ func (n *nounInfo) class() classInfo {
 // 		if e != sql.ErrNoRows {
 // 			err = e
 // 		} else {
-// 			err = errutil.Fmt("%w noun %q value %q", Missing, noun, field)
+// 			err = fmt.Errorf("%w noun %q value %q", Missing, noun, field)
 // 		}
 // 	}
 // 	return
@@ -95,7 +97,7 @@ func (pen *Pen) GetClosestNoun(name string) (ret MatchedNoun, err error) {
 		Scan(&noun, &kind); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else if e != nil {
-		err = errutil.Fmt("%w closest noun %q in domain %q", Missing, name, pen.domain)
+		err = fmt.Errorf("%w closest noun %q in domain %q", ErrMissing, name, pen.domain)
 	} else {
 		ret = MatchedNoun{Name: noun, Kind: kind, Match: name}
 	}
@@ -107,7 +109,7 @@ func (pen *Pen) findRequiredNoun(noun string, q nounFinder) (ret nounInfo, err e
 	if out, e := pen.findNoun(noun, q); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else if out.id == 0 {
-		err = errutil.Fmt("%w required noun %q in domain %q", Missing, noun, pen.domain)
+		err = fmt.Errorf("%w required noun %q in domain %q", ErrMissing, noun, pen.domain)
 	} else {
 		ret = out
 	}
@@ -117,7 +119,7 @@ func (pen *Pen) findRequiredNoun(noun string, q nounFinder) (ret nounInfo, err e
 // if not specified errors, makes no assumptions about the results
 func (pen *Pen) findNoun(noun string, q nounFinder) (ret nounInfo, err error) {
 	if len(noun) == 0 {
-		err = errutil.New("empty name for noun")
+		err = errors.New("empty name for noun")
 	} else if out, e := q(pen.db, pen.domain, noun); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else {

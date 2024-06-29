@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 var LogWarning = func(e error) {
@@ -41,9 +41,9 @@ func (w *Warnings) All() (ret []error) {
 // error if there is none, or if warning doesnt start with the passed prefix.
 func (w *Warnings) Expect(prefix string) (err error) {
 	if e := w.pop(); e == nil {
-		err = errutil.Fmt("expected %q, received nothing.", prefix)
+		err = fmt.Errorf("expected %q, received nothing.", prefix)
 	} else if str := e.Error(); !strings.HasPrefix(str, prefix) {
-		err = errutil.Fmt("expected %q, received %q.", prefix, str)
+		err = fmt.Errorf("expected %q, received %q.", prefix, str)
 	}
 	return
 }
@@ -58,9 +58,9 @@ func (w *Warnings) pop() (err error) {
 // for testing: a generic field of the kind
 func (pen *Pen) AddTestField(kind, field string, aff affine.Affinity, cls string) (err error) {
 	if kid, e := pen.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to add field %q", e, field)
+		err = fmt.Errorf("%w trying to add field %q", e, field)
 	} else if cls, e := pen.findOptionalKind(cls); e != nil {
-		err = errutil.Fmt("%w trying to write field %q", e, field)
+		err = fmt.Errorf("%w trying to write field %q", e, field)
 	} else {
 		e := pen.addField(kid, cls, field, aff)
 		err = eatDuplicates(pen.warn, e)
@@ -70,9 +70,9 @@ func (pen *Pen) AddTestField(kind, field string, aff affine.Affinity, cls string
 
 func (pen *Pen) AddTestParameter(kind, field string, aff affine.Affinity, cls string) (err error) {
 	if kid, e := pen.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to add parameter %q", e, field)
+		err = fmt.Errorf("%w trying to add parameter %q", e, field)
 	} else if cls, e := pen.findOptionalKind(cls); e != nil {
-		err = errutil.Fmt("%w trying to write parameter %q", e, field)
+		err = fmt.Errorf("%w trying to write parameter %q", e, field)
 	} else {
 		err = pen.addParameter(kid, cls, field, aff)
 	}
@@ -81,9 +81,9 @@ func (pen *Pen) AddTestParameter(kind, field string, aff affine.Affinity, cls st
 
 func (pen *Pen) AddTestResult(kind, field string, aff affine.Affinity, cls string) (err error) {
 	if kid, e := pen.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to add parameter %q", e, field)
+		err = fmt.Errorf("%w trying to add parameter %q", e, field)
 	} else if cls, e := pen.findOptionalKind(cls); e != nil {
-		err = errutil.Fmt("%w trying to write parameter %q", e, field)
+		err = fmt.Errorf("%w trying to write parameter %q", e, field)
 	} else {
 		err = pen.addResult(kid, cls, field, aff)
 	}

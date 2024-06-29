@@ -6,7 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 // todo: test that traits write to their aspect's field
@@ -64,7 +64,7 @@ func TestValueWriting(t *testing.T) {
 
 	//
 	if m, e := NewModelerWithWarnings(db, func(fmt string, parts ...any) {
-		LogWarning(errutil.Fmt(fmt, parts...))
+		LogWarning(fmt.Errorf(fmt, parts...))
 	}); e != nil {
 		t.Fatal(e)
 	} else {

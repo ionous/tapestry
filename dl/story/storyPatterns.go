@@ -77,7 +77,7 @@ func (op *DefinePatternProvides) Weave(cat *weave.Catalog) (err error) {
 		} else if ks, e := run.GetField(meta.KindAncestry, act.String()); e != nil {
 			err = e // ^ verify the kind exists
 		} else if ks := ks.Strings(); len(ks) == 0 {
-			err = fmt.Errorf("%w kind %s", weaver.Missing, act)
+			err = fmt.Errorf("%w kind %s", weaver.ErrMissing, act)
 		} else {
 			pb := mdl.NewPatternSubtype(ks[0], kindsOf.Action.String())
 			pb.AddLocals(reduceFields(run, op.Provides))
@@ -143,7 +143,7 @@ func (op *DefineKindRule) Weave(cat *weave.Catalog) (err error) {
 		} else if ks, e := run.GetField(meta.KindAncestry, kind.String()); e != nil {
 			err = e // ^ verify the kind exists
 		} else if ks := ks.Strings(); len(ks) == 0 {
-			err = fmt.Errorf("%w kind %s", weaver.Missing, kind)
+			err = fmt.Errorf("%w kind %s", weaver.ErrMissing, kind)
 		} else if phrase, e := safe.GetText(run, op.RuleTiming); e != nil {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {

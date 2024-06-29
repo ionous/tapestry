@@ -53,11 +53,11 @@ func (n *DesiredNoun) appendArticle(a *Article) {
 func (n DesiredNoun) writeNounValues(w weaver.Weaves) (err error) {
 	if e := n.applyAliases(w); e != nil {
 		err = e
-	} else if e := n.applyArticleTrait(w); e != nil && !errors.Is(e, weaver.Missing) {
+	} else if e := n.applyArticleTrait(w); e != nil && !errors.Is(e, weaver.ErrMissing) {
 		err = e // article traits are considered optional because not all kinds have them.
 	} else if e := n.applyTraits(w); e != nil {
 		err = e
-	} else if e := n.applyArticleValue(w); e != nil && !errors.Is(e, weaver.Missing) {
+	} else if e := n.applyArticleValue(w); e != nil && !errors.Is(e, weaver.ErrMissing) {
 		err = e
 	} else if e := n.applyValues(w); e != nil {
 		err = e

@@ -44,7 +44,7 @@ type postGenOne func(a string) error
 
 func writeKinds(w weaver.Weaves, noun string, kinds []string) (err error) {
 	for _, k := range kinds {
-		if e := w.AddNounKind(noun, k); e != nil && !errors.Is(e, weaver.Duplicate) {
+		if e := w.AddNounKind(noun, k); e != nil && !errors.Is(e, weaver.ErrDuplicate) {
 			err = e
 			break
 		}

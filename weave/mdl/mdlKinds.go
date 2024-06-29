@@ -2,11 +2,13 @@ package mdl
 
 import (
 	"database/sql"
+	"errors"
 	"strconv"
 	"strings"
 
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
 )
 
 // fullpaths start and end with commas;
@@ -84,7 +86,7 @@ func (pen *Pen) findRequiredKind(kind string) (ret kindInfo, err error) {
 	if out, e := pen.findKind(kind); e != nil {
 		err = e
 	} else if out.id == 0 {
-		err = errutil.Fmt("%w kind %q in domain %q", Missing, kind, pen.domain)
+		err = fmt.Errorf("%w kind %q in domain %q", ErrMissing, kind, pen.domain)
 	} else {
 		ret = out
 	}
@@ -94,7 +96,7 @@ func (pen *Pen) findRequiredKind(kind string) (ret kindInfo, err error) {
 // if not specified errors, makes no assumptions about the results
 func (pen *Pen) findKind(kind string) (ret kindInfo, err error) {
 	if len(kind) == 0 {
-		err = errutil.New("empty name for kind")
+		err = errors.New("empty name for kind")
 	} else if singular, e := pen.singularize(kind); e != nil {
 		err = e
 	} else {
