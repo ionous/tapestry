@@ -14,6 +14,7 @@ import (
 	"syscall/js"
 
 	"encoding/gob"
+
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/parser"
@@ -74,7 +75,7 @@ func registerCallbacks() {
 				err = e
 			} else {
 				name := storyData.Scenes[len(storyData.Scenes)-1]
-				fmt.Println("loaded %s...", name)
+				fmt.Printf("loaded %s...\n", name)
 				tapestry.Set("story", name)
 				shuttle = PlayGame(storyData)
 			}
