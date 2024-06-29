@@ -30,7 +30,11 @@ func (op *NothingField) GetFieldInfo(run rt.Runtime) (_ mdl.FieldInfo) {
 }
 
 func (op *AspectField) GetFieldInfo(run rt.Runtime) (ret mdl.FieldInfo) {
-	return defineField(run, op.AspectName, op.AspectName, affine.Text, nil)
+	var init rt.Assignment
+	if i := op.Initially; i != nil {
+		init = &call.FromText{Value: i}
+	}
+	return defineField(run, op.AspectName, op.AspectName, affine.Text, init)
 }
 
 func (op *BoolField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {

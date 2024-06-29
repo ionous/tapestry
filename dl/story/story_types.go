@@ -1188,6 +1188,7 @@ func (op *NothingField_Slice) Repeats() bool {
 // Aspects are defined using the {"Define state:names:"} command.
 type AspectField struct {
 	AspectName rtti.TextEval
+	Initially  rtti.TextEval
 	Markup     map[string]any `json:",omitempty"`
 }
 
@@ -2314,7 +2315,15 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "aspect_name",
 			Markup: map[string]any{
-				"comment": []string{"Name for the aspect. Must be unique within the set of fields (eg. within the kind.)", "The field will have this same name."},
+				"comment": []string{"The name of here identifies both the previously defined set of states, ", "*and* the name of the field in the kind."},
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []string{"The initial state for objects of this kind.", "If not specified, the initial state will be the first state listed by the aspect."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -2643,6 +2652,7 @@ func Register(reg func(any)) {
 var z_signatures = map[uint64]typeinfo.Instance{
 	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
 	13010292396640781698: (*AspectField)(nil),           /* field_definition=Aspect: */
+	11237193098174075029: (*AspectField)(nil),           /* field_definition=Aspect:initially: */
 	12738236274201716794: (*BoolField)(nil),             /* field_definition=Bool: */
 	18077675806901364237: (*BoolField)(nil),             /* field_definition=Bool:initially: */
 	9796202271034753943:  (*DeclareStatement)(nil),      /* story_statement=Declare: */
