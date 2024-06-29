@@ -18,7 +18,7 @@
       <lv-status 
         :status="status"/>
       <lv-output 
-        class="lv-story" 
+        class="lv-story"
         :lines="narration" />
     </div>
     <div class="lv-input"> 
@@ -72,7 +72,7 @@ export default {
       statusBar: status.value, 
       narration: narration.value,
     }); 
-    q.restart("cloak"); // a promise
+    q.restart(tapestry.story); // a promise
 
     const onkey = (evt) => {
       // console.log("key", evt.key);

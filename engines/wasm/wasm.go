@@ -5,14 +5,10 @@
 // use `npm run dev` to serve
 //
 // https://go.dev/wiki/WebAssembly
-// https://codeberg.org/meta/gzipped
-// can strip symbols with -ldflags='-s -w'
-// can compress and .gz files will be served by http-server
 package main
 
 import (
 	"bytes"
-	_ "embed"
 	"fmt"
 	"strings"
 	"syscall/js"
@@ -27,12 +23,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/play"
 )
 
-//go:embed data/play.gob
-var playData []byte
-
 func main() {
 	fmt.Println("hello")
-	registerCallbacks(PlayGame())
+	tapestry.Register(gob.Register)
+	registerCallbacks()
 	// stop from exiting?
 	// might make more sense to go routine and wait on a process channel
 	c := make(chan struct{})
@@ -42,12 +36,16 @@ func main() {
 
 // register a js global object called "tapestry" containing everything needed.
 // https://tutorialedge.net/golang/go-webassembly-tutorial/#registering-functions
-func registerCallbacks(c *frame.Shuttle) {
+func registerCallbacks() {
+	var shuttle *frame.Shuttle
+	var tapestry js.Value
 	// expects a named endpoint, and data for that endpoint.
 	// data is a string containing serialized json; returns in the same format.
 	post := func(this js.Value, i []js.Value) (ret any, err error) {
-		if cnt := len(i); cnt != 2 {
-			err = fmt.Errorf("received %d args", cnt)
+		if shuttle == nil {
+			err = fmt.Errorf("game hasn't been loaded yet")
+		} else if cnt := len(i); cnt != 2 {
+			err = fmt.Errorf("post received %d args", cnt)
 		} else if endpoint, e := getString(i[0]); e != nil {
 			err = e
 		} else if msg, e := getString(i[1]); e != nil {
@@ -55,7 +53,7 @@ func registerCallbacks(c *frame.Shuttle) {
 		} else {
 			println("processing", endpoint, len(i))
 			var buf strings.Builder
-			if e := c.Post(&buf, endpoint, []byte(msg)); e != nil {
+			if e := shuttle.Post(&buf, endpoint, []byte(msg)); e != nil {
 				err = e
 			} else {
 				ret = buf.String()
@@ -63,10 +61,37 @@ func registerCallbacks(c *frame.Shuttle) {
 		}
 		return
 	}
+	// expects binary data
+	// data is a string containing serialized json; returns in the same format.
+	play := func(this js.Value, i []js.Value) (ret any, err error) {
+		if cnt := len(i); cnt != 1 {
+			err = fmt.Errorf("play received %d args", cnt)
+		} else {
+			v := i[0]
+			b := make([]byte, v.Length())
+			js.CopyBytesToGo(b, v)
+			if storyData, e := LoadStory(b); e != nil {
+				err = e
+			} else {
+				name := storyData.Scenes[len(storyData.Scenes)-1]
+				fmt.Println("loaded %s...", name)
+				tapestry.Set("story", name)
+				shuttle = PlayGame(storyData)
+			}
+		}
+		return
+	}
+
 	// register the tapestry object
-	js.Global().Set("tapestry", map[string]any{
+	tapestry = js.ValueOf(map[string]any{
 		"post": promisify(post),
+		"play": promisify(play),
+		// the story name is a little loopy
+		// its needed for some of the calls (ex. restart)
+		// but it comes from the gob
+		"story": nil,
 	})
+	js.Global().Set("tapestry", tapestry)
 }
 
 type jsErrFunc func(js.Value, []js.Value) (any, error)
@@ -97,26 +122,24 @@ func promisify(call jsErrFunc) js.Func {
 	})
 }
 
-func getString(data js.Value) (ret string, err error) {
-	if data.Type() != js.TypeString {
+func getString(v js.Value) (ret string, err error) {
+	if v.Type() != js.TypeString {
 		err = fmt.Errorf("not a string")
 	} else {
-		ret = data.String()
+		ret = v.String()
 	}
 	return
 }
 
-func PlayGame() *frame.Shuttle {
-	return PlayWithOptions(qna.NewOptions())
+func PlayGame(storyData raw.Data) *frame.Shuttle {
+	return PlayWithOptions(storyData, qna.NewOptions())
 }
 
 // aka. makeShuttle
-func PlayWithOptions(opts qna.Options) (ret *frame.Shuttle) {
-	data := LoadPlayData()
-	//
-	q := raw.MakeQuery(&data)
-	scan := make([]parser.Scanner, len(data.Grammar))
-	for i, d := range data.Grammar {
+func PlayWithOptions(storyData raw.Data, opts qna.Options) (ret *frame.Shuttle) {
+	q := raw.MakeQuery(&storyData)
+	scan := make([]parser.Scanner, len(q.Grammar))
+	for i, d := range q.Grammar {
 		scan[i] = d.MakeScanners()
 	}
 	//
@@ -128,12 +151,9 @@ func PlayWithOptions(opts qna.Options) (ret *frame.Shuttle) {
 	return frame.NewShuttle(pt, decoder)
 }
 
-// deserialize from the passed path
-func LoadPlayData() (ret raw.Data) {
-	tapestry.Register(gob.Register)
-	dec := gob.NewDecoder(bytes.NewReader(playData))
-	if e := dec.Decode(&ret); e != nil {
-		panic("error loading data")
-	}
+// read the binary data
+func LoadStory(b []byte) (ret raw.Data, err error) {
+	dec := gob.NewDecoder(bytes.NewReader(b))
+	err = dec.Decode(&ret)
 	return
 }
