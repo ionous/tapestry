@@ -18,7 +18,7 @@ Developers should be able to work on the logic of their games separate from the 
 
 ## Working Example
 
-This is a port of the "Cloak of Darkness" originally by written by [Robert Firth](https://www.ifwiki.org/Cloak_of_Darkness): 
+This is a port of the "Cloak of Darkness" originally by written by [Roger Firth](https://www.ifwiki.org/Cloak_of_Darkness): 
 
 {{< include file="/static/_includes/cloak.tell" language="yaml" options="linenos=false" >}}
 

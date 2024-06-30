@@ -34,3 +34,26 @@ div.active > h3::before {
   content: '> ';
   padding-right: 1rem;
 }
+
+.page-main {
+  pre.chroma {
+    overflow: scroll;
+    height: 30.5em;
+    counter-reset: line;
+  }
+  /* manually add line numbers to wrap the lines */
+  code {
+    line-height: 1.25em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  span.line:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding: 0 .5em;
+    margin-right: .5em;
+    color: #888
+  }
+}

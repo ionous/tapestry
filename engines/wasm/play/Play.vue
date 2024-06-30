@@ -18,29 +18,34 @@
       @click="onContainerClicked">
       <lv-status 
         :status="status"/>
-      <lv-output 
-        class="lv-output"
-        :lines="narration" />
+      <div class="lv-output">
+        <lv-output 
+          :lines="narration" />
+        <div v-if="!playing"> 
+          <a v-if="!showCredits" href="#" @click="showCredits= !showCredits">Show Credits</a>
+          <lv-credits v-else></lv-credits>
+        </div>
+      </div>
     </div>
     <div class="lv-input"> 
       <lv-prompt v-show="!showDebug && playing"
         @changed="onPrompt"
         ref="prompt" />
       <div v-show="showDebug" class="lv-stub"/>
-      <div class="lv-debug">
-        <button @click="showDebug = !showDebug">{{ showDebug? "game view": "debug view" }}</button>
-      </div>
+      <button @click="showDebug = !showDebug">{{ showDebug? "game view": "debug view" }}</button>
     </div>
-  </div>
-  <div class="lv-image">
+    <div class="lv-image">
       <mk-tree :item="currRoom">
       </mk-tree>
   </div>
+  </div>
+  
 </template>
 <script>
 import lvPrompt from "./Prompt.vue";
 import lvOutput from "./Output.vue";
 import lvStatus from "./Status.vue";
+import lvCredits from "./Credits.vue";
 import Status from "./status.js";
 
 import { ref, onMounted, onUnmounted, reactive } from "vue";
@@ -49,7 +54,7 @@ import mkTree from './Tree.vue'
 import Query from './query.js'
 
 export default {
-  components: { lvOutput, lvPrompt, lvStatus, mkTree },
+  components: { lvOutput, lvPrompt, lvStatus, lvCredits, mkTree },
   // props: {},
   setup(/*props*/) {
     const narration = ref([]); // see textWriter.js & textRender.js
@@ -60,6 +65,7 @@ export default {
     const allItems = ref({}); // id and states
     const currRoom = ref({}); // id and states
     const debugItem = ref(false); // id and states
+    const showCredits = ref(false);
     
     const q = new Query({
       shuttle: appcfg.shuttle, // gets sent to Io constructor
@@ -103,6 +109,7 @@ export default {
       currRoom,
       prompt, // template ref
       showDebug,
+      showCredits,
       debugItem, // selected item
       playing,
       onActivated(id) {
