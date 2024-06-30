@@ -9,13 +9,10 @@ export default class TextRender {
     this.line= 2; // vertical spacing ( ie. are we at the start of a new line )
                   // we start it at 2, to indicate we are at the top of a fresh section.
   }
-  finalize(newline) {
+  finalize() {
     this.flushString();
     while (this.stack.length) {
       this.rollup();
-    }
-    if (newline) {
-      this.render('p', {class:'n'});
     }
     const c= this.curr;
     this.curr= null;

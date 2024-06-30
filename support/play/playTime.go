@@ -33,11 +33,6 @@ type Result struct {
 	Nouns  []string
 }
 
-// for ending an error print
-// Println + a newline will generate linter warnings;
-// so Print with new two lines is needed.
-const commandBreak = "\n\n"
-
 // advance time
 func (pt *Playtime) Step(words string) (ret *Result, err error) {
 	w := pt.Writer()
@@ -47,7 +42,7 @@ func (pt *Playtime) Step(words string) (ret *Result, err error) {
 
 	//"couldnt determine object", a.Nouns)
 	case parser.AmbiguousObject:
-		fmt.Fprint(w, e, commandBreak)
+		fmt.Fprintln(w, e)
 	// move to the next state
 	// prompt the user, and add whatever the user says into the original input for reparsing
 	// insert resolution into input.
@@ -59,14 +54,14 @@ func (pt *Playtime) Step(words string) (ret *Result, err error) {
 
 	// "mismatched word %s != %s at %d", a.Have, a.Want, a.Depth)
 	case parser.MismatchedWord:
-		fmt.Fprint(w, "That's not anything i recognize.", commandBreak)
+		fmt.Fprintln(w, "That's not anything i recognize.")
 
 	case parser.MissingObject:
 		// in this case, inform guesses at the object to fill.
-		fmt.Fprint(w, e, commandBreak)
+		fmt.Fprintln(w, e)
 
 	case parser.NoSuchObjects, parser.Overflow, parser.Underflow, parser.UnknownObject:
-		fmt.Fprint(w, e, commandBreak)
+		fmt.Fprintln(w, e)
 
 	case nil:
 		switch res := res.(type) {

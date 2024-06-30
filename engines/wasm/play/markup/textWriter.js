@@ -54,8 +54,7 @@ export default function writeText(msg) {
     next = next(c, q); // advance states
   }
   c.rejectTag(); // if anything was pending
-  // mimic print.NewLineSentences()
-  return c.out.finalize( msg.match( /[\.!?]$/ ));
+  return c.out.finalize();
 }
 
 const tagFriendly= /[a-zA-Z]/;

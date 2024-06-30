@@ -12,6 +12,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/print"
 )
 
 func NewShuttle(run rt.Runtime, dec *query.QueryDecoder) *Shuttle {
@@ -26,7 +27,7 @@ func NewShuttle(run rt.Runtime, dec *query.QueryDecoder) *Shuttle {
 		ChangedRelative: c.out.onChangeRel,
 	}
 	run.SetNotifier(note)
-	run.SetWriter(&c.out.buf)
+	run.SetWriter(print.NewLineSentences(&c.out.buf))
 	return c
 }
 

@@ -1,5 +1,6 @@
 import { h } from 'vue'
 
+// given some output; what character should it become?
 const fs= {
   "hr":   {tag: "hr", void: true},
   "p":    {char: '\v'},
@@ -7,6 +8,7 @@ const fs= {
   "wbr":  {char: '\r'},
 };
 
+// allow these tags to pass through as-is.
 const permit= [
   "b", "i", "li", "ul", "ol", "u", "s"
 ];

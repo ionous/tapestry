@@ -109,8 +109,7 @@ func createSqlContext(mdlFile string) (ret context, err error) {
 func goPlay(ctx context, scene string, opts qna.Options, testString string) (err error) {
 	const prompt = "> "
 	run := qna.NewRuntimeOptions(ctx.q, opts)
-	w := print.NewLineSentences(markup.ToText(os.Stdout))
-	run.SetWriter(w)
+	run.SetWriter(print.NewLineSentences(markup.ToText(os.Stdout)))
 	if e := run.ActivateDomain(scene); e != nil {
 		err = e
 	} else {

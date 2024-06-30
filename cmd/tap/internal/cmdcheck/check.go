@@ -48,10 +48,8 @@ func checkAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 				log.Println("ignoring", check.Name)
 			} else {
 				log.Printf("-- Checking: %q\n", check.Name)
-				w := print.NewLineSentences(markup.ToText(os.Stdout))
 				run := qna.NewRuntimeOptions(q, options)
-
-				run.SetWriter(w)
+				run.SetWriter(print.NewLineSentences(markup.ToText(os.Stdout)))
 				survey := play.MakeDefaultSurveyor(run)
 				play := play.NewPlaytime(run, survey, grammar)
 				if e := checkOne(play, check, &ret); e != nil {

@@ -33,11 +33,9 @@ function addItem(allItems, src, parentId) {
 
 let gameOver = false;
 
-// each msg implements the Event slot:
-// as of 2023-10-18, the complete set is:
-// FrameOutput, PairChanged, SceneEnded, SceneStarted, StateChanged
+// each msg is a taoestry command from frame.idl
 function processEvent(msg, { allItems, playing }) {
-  let out = "";
+  let out = ""; // accumulate text over multiple events.
   const [ sig, args ] = parseCommand(msg);
   switch (sig) {
     // printed text; accumulates over multiple events
@@ -159,6 +157,12 @@ export default class Query {
         };
       }
       if (out.length) {
+        // game start ends with \n<p>
+        // other things end with just \n.
+        // \n generates br which only take up space if there's other elements.
+        if (!out.endsWith("<p>")) {
+          out+= '\n';
+        }
         narration.push(out);
       }
     });
