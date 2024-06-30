@@ -23,4 +23,3 @@ doc/themes
 www/dist
 *.zip
 .DS_Store
-/engines/wasm/game

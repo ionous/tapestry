@@ -1,24 +1,25 @@
 <template>
   <div class="lv-container">
     <div v-if="showDebug" 
-      class="lv-container__debug">
+      class="lv-debug">
         <h3>Object List</h3>
-      <mk-folder
-        :folder="objTree"
-        @fileSelected="onLeafObject"
-        @folderSelected="onEnclosingObject"
-      ></mk-folder>
-      <h3>Selected Object</h3>
-      <b class="lv-selected-item"> {{ currentItem.name }} ( {{ currentItem.kind }} )</b>:
-        <span v-for="(trait,index) in currentItem.traits">{{index?", ":""}}{{trait}}</span>
+        <mk-tree :item="currRoom" :list="true"
+          @activated="onActivated">
+        </mk-tree>
+        <div v-if="debugItem">
+          <b>{{ debugItem.name }}</b> <span>( {{ debugItem.kind }} ) </span>
+          <div class="lv-traits">
+            <span v-for="(trait,index) in debugItem.traits">{{index?", ":""}}{{trait}}</span>
+          </div>
+        </div>
     </div>
-    <div
+    <div class="lv-console"
       v-else-if="narration"
       @click="onContainerClicked">
       <lv-status 
         :status="status"/>
       <lv-output 
-        class="lv-story"
+        class="lv-output"
         :lines="narration" />
     </div>
     <div class="lv-input"> 
@@ -31,6 +32,10 @@
       </div>
     </div>
   </div>
+  <div class="lv-image">
+      <mk-tree :item="currRoom">
+      </mk-tree>
+  </div>
 </template>
 <script>
 import lvPrompt from "./Prompt.vue";
@@ -40,36 +45,28 @@ import Status from "./status.js";
 
 import { ref, onMounted, onUnmounted, reactive } from "vue";
 //
-import ObjectCatalog from './objectCatalog.js'
-import mkFolder from '/catalog/Folder.vue'
+import mkTree from './Tree.vue'
 import Query from './query.js'
 
-const objCatalog = new ObjectCatalog();
-
 export default {
-  components: { lvOutput, lvPrompt, lvStatus, mkFolder },
+  components: { lvOutput, lvPrompt, lvStatus, mkTree },
   // props: {},
   setup(/*props*/) {
-    const narration = ref([]); // ultimately processed through textWriter.js & textRender.js
+    const narration = ref([]); // see textWriter.js & textRender.js
     const status = ref(new Status());
     const playing = ref(true);
     const showDebug = ref(false);
     const prompt = ref(null); // template slot helper.
-    const currentItem = ref({});
-    // replace the obj catalog's root with a vue reactive proxy
-    // so vue can see those changes when moving between rooms
-    const reactiveRoot = reactive(objCatalog.root);
-    objCatalog.root = reactiveRoot;
-    // make the contents itself reactive ( recursively )
-    // so that new objects being added
-    // and modifications to those objects can be seen by vue
-    objCatalog.all = reactive(objCatalog.all);
-
+    const allItems = ref({}); // id and states
+    const currRoom = ref({}); // id and states
+    const debugItem = ref(false); // id and states
+    
     const q = new Query({
       shuttle: appcfg.shuttle, // gets sent to Io constructor
-      objCatalog,
-      statusBar: status.value, 
       narration: narration.value,
+      currRoom,
+      allItems: allItems.value,
+      statusBar: status.value, 
       playing,
     }); 
     q.restart(tapestry.story); // a promise
@@ -103,26 +100,15 @@ export default {
     return {
       narration, // story output
       status,
+      currRoom,
       prompt, // template ref
-      objTree: reactiveRoot,
-      currentItem,
       showDebug,
+      debugItem, // selected item
       playing,
-      onLeafObject(item) {
-        currentItem.value = item.data;
+      onActivated(id) {
+        console.log("activated", id);
+        debugItem.value = allItems.value[id];
       },
-      onEnclosingObject(item) {
-        // opening and closing the object "folder" causes problems with query event handling
-        // if (!item.contents) {
-        //   item.contents = item.backup;
-        //   item.backup = false;
-        // } else {
-        //   item.backup = item.contents;
-        //   item.contents = false;
-        // }
-        currentItem.value = item.data;
-      },
-      // clicking anywhere below the prompt should focus the prompt
       onContainerClicked() {
         const el = prompt.value;
         if (el && el !== document.activeElement) {

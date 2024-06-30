@@ -11,13 +11,32 @@ function parseCommand(op) {
   }
 }
 
+// add each item to items recursively
+function addItem(allItems, src, parentId) {
+  // create if necessary:
+  const { id } = src;
+  let my = allItems[id];
+  if (!my) { 
+    my = allItems[id] = src;
+  } else {
+    // refresh allItems traits
+    my.traits.splice(0, Infinity, ...src.traits);
+  }
+  // update the parent
+  my.parentId = parentId;
+  // update the children, mapping source data to real data
+  my.kids = src.kids.map(srcKid => {
+    return addItem(allItems, srcKid, id);    
+  });
+  return my;
+}
 
 let gameOver = false;
 
 // each msg implements the Event slot:
 // as of 2023-10-18, the complete set is:
 // FrameOutput, PairChanged, SceneEnded, SceneStarted, StateChanged
-function processEvent(msg, { objCatalog, playing }) {
+function processEvent(msg, { allItems, playing }) {
   let out = "";
   const [ sig, args ] = parseCommand(msg);
   switch (sig) {
@@ -48,16 +67,16 @@ function processEvent(msg, { objCatalog, playing }) {
     case "PairChanged a:b:rel:":
       const [a, b, rel] = args;
       if (rel === "whereabouts") {
-        const child = objCatalog.get(b);
+        const child = allItems[b];
         // remove from old parent
         const oldParentId = child.parentId;
         if (oldParentId) {
-          const oldParent = objCatalog.get(oldParentId);
+          const oldParent = allItems[oldParentId];
           child.parentId = false;
-          if (oldParent.contents) {
-            const wasAt = oldParent.contents.findIndex((el) => el.data.id === b);
+          if (oldParent.kids) {
+            const wasAt = oldParent.kids.findIndex((kid) => kid.id === b);
             if (wasAt >= 0) {
-              oldParent.contents.splice(wasAt, 1);
+              oldParent.kids.splice(wasAt, 1);
             }
           }
         }
@@ -65,12 +84,10 @@ function processEvent(msg, { objCatalog, playing }) {
         if (newParentId) {
           child.parentId = newParentId;
           // if this is a new parent object....
-          // we might not have heard about it before --
-          // we'll probably hear about it in rebuild
-          // alt: we could could create a temp folder item here.
-          const newParent = objCatalog.get(newParentId);
-          if (newParent && newParent.contents) {
-            newParent.contents.push(child);
+          // we might not have heard about it yet.
+          const newParent = allItems[newParentId];
+          if (newParent && newParent.kids) {
+            newParent.kids.push(child);
           }
         }
         break; // handled whereabouts
@@ -87,12 +104,14 @@ export default class Query {
   constructor({
     shuttle,   // url of api
     narration, // a watched array
+    currRoom,
+    allItems,
     statusBar, // a watched class Status
-    objCatalog, // class ObjectCatalog
     playing
   }) {
     this.statusBar= statusBar;
-    this.objCatalog= objCatalog;
+    this.allItems= allItems;
+    this.currRoom = currRoom;
     // fix: rename shuttle?
     this.io = createShuttle(shuttle, (msgs, calls) => {
       let out = "";
@@ -120,7 +139,7 @@ export default class Query {
             if (events) {
               for (const evt of events) {
                 out += processEvent(evt, {
-                  objCatalog,
+                  allItems,
                   playing,
                 });
               }
@@ -145,9 +164,7 @@ export default class Query {
     });
   }
   restart(scene) {
-    const io = this.io;
-    const objCatalog = this.objCatalog;
-    const statusBar = this.statusBar;
+    const { io, statusBar } = this;
     return io.post("restart", scene).then(() => {
       return io.query(
         cmds.storyTitle, (title) => {
@@ -164,7 +181,7 @@ export default class Query {
           statusBar.location = name;
         },
         cmds.currentObjects, (root) => {
-           objCatalog.rebuild(root);
+          this._updateObjects(root);
         }
       );
     });
@@ -175,10 +192,8 @@ export default class Query {
       return Promise.reject(new Error("game over"));
     }
     const player = "self"; // fix: kind of hacky that this is tied to self
-    const io = this.io;
-    const statusBar= this.statusBar;
-    const objCatalog = this.objCatalog;
-    const prevLoc = objCatalog.get(player).parentId;
+    const { io, statusBar, currRoom } = this;
+    const prevLoc = currRoom.id;
     return io.query(
       // send player input
       cmds.fabricate(text), null,
@@ -193,16 +208,21 @@ export default class Query {
       // if there is an event that changes the player's whereabouts
       // re-query location and objects
     ).then(()=> {
-      const newLoc = objCatalog.get(player).parentId;
+      const newLoc = this.allItems[player].parentId;
       return (prevLoc !== newLoc) &&
         io.query(
           cmds.locationName, (name) => {
             statusBar.location = name;
           },
-          cmds.currentObjects, (objs) => {
-            objCatalog.rebuild(objs);
+          cmds.currentObjects, (root) => {
+            this._updateObjects(root);
           });
     });
+  }
+
+  _updateObjects(srcData) {
+    const root = addItem(this.allItems, srcData, false);
+    this.currRoom.value = root;
   }
 }
 
