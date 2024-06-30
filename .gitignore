@@ -18,8 +18,8 @@ cmd/spec/spec
 cmd/stem/stem
 cmd/tap/tap
 cmd/tap/tap.db
-doc/.hugo_build.lock
-doc/themes
+docs/.hugo_build.lock
+docs/themes
 www/dist
 *.zip
 .DS_Store

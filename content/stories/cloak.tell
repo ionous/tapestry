@@ -1,4 +1,3 @@
----
 # The 'Cloak of Darkness' was originally written by Roger Firth.
 # It's a story which has been implemented in many IF systems over the years.
 # This one is ported from the Inform7 version.
@@ -26,8 +25,7 @@ East from the Foyer is the Cloakroom. The Cloakroom has the description "In the 
 
 In the Cloakroom is a scenery supporter called the small brass hook.
 
-# The description of the hook depends on the number of things hanging on it.
-# This uses a special template syntax to achieve that.
+# The description of the hook depends on the number of things hanging on it. This uses a special "template" syntax to achieve that.
 The hook has the description "A brass hook{if children_of: .hook} with {children_of: .hook | print_inline_objects!} hanging on it{else} screwed into the wall{end}."
 
 # Understandings change the game's input parser, and allow a player to refer to objects in new ways. Without these, a player could only have typed: > put cloak on hook.
