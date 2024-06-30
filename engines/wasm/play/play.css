@@ -1,9 +1,4 @@
 @import 'normalize.css';
-
-.lv-play {
-  
-}
-
 .lv-container {
   margin: 0.5em;
   max-width: 500px;
@@ -11,6 +6,7 @@
 }
 .lv-image {
  margin: 0.5em;
+ display:inline-block;
 }
 .lv-status {
   background-color: black;

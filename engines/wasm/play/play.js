@@ -1,12 +1,15 @@
 import { createApp } from 'vue'
 import Play from './Play.vue'         // contains the router-view
 
+import playGob from '/game/play.gob'
+import tapWasm from '/game/tap.wasm'
+
 const go = new Go();
-fetch("/game/play.gob")
+fetch(playGob)
   .then(res => res.arrayBuffer())
   .then(playGob => {
     let storyData = new Uint8Array(playGob); // treat buffer as a sequence of 32-bit integers
-    WebAssembly.instantiateStreaming(fetch("/game/tap.wasm"), go.importObject)
+    WebAssembly.instantiateStreaming(fetch(tapWasm), go.importObject)
       .then((result) => {
         // tbd: i think run() returns a promise that only resolves on main() exit
         go.run(result.instance);
