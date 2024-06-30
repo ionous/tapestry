@@ -23,9 +23,15 @@ module:
   mounts:
     - target: content
       source: content
-    - # `npm run doc-build-api` outputs to `bin/docextra`
+    - # `npm run doc-build-api` outputs to `bin/hd/codedocs`
       target: content
-      source: ../bin/docextra
+      source: ../bin/hd/codedocs
+    - target: static
+      source: static
+    - target: static
+      source: ../bin/hd/wasm
+    - target: static
+      source: ../bin/hd/schema
 
 markup:
   goldmark:

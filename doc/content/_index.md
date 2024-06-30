@@ -23,7 +23,7 @@ This is a port of the "Cloak of Darkness" originally by written by [Roger Firth]
 {{< include file="/static/_includes/cloak.tell" language="yaml" options="linenos=false" >}}
 
 Building this with Tapestry produces a playable story and a SQLite database containing the objects in the game and their interactions. You can play the story here: <br> 
-<span class="gdoc-button gdoc-button--regular"><a class="gdoc-button__link" target="_blank" href="/cloak-of-darkness.html">Play ↗</a></span>
+<span class="gdoc-button gdoc-button--regular"><a class="gdoc-button__link" target="_blank" href="/cloak-of-darkness">Play ↗</a></span>
 
 ## Relation to interactive fiction
 

@@ -4,8 +4,8 @@
     "url": "https://todo.sr.ht/~ionous/tapestry"
   },
   "dependencies": {
-    "exec-bin": "^1.0.0",
     "concurrently": "^8.2.2",
+    "exec-bin": "^1.0.0",
     "hugo-installer": "^4.0.1"
   },
   "description": "A story engine for games.",
@@ -19,8 +19,8 @@
   "scripts": {
     "doc": "concurrently -m 1 -k \"npm:doc-*\"",
     "doc-gen": "go run ./cmd/tap gen -in ./idl -out ./dl",
-    "doc-build-api": "go run ./cmd/tap doc -out ./bin/docextra/api",
-    "doc-schema": "go run ./cmd/tap gen -in idl -schema ./bin/static/schema/tap.schema.json",
+    "doc-build-api": "go run ./cmd/tap doc -out ./bin/hd/codedocs/api",
+    "doc-schema": "go run ./cmd/tap gen -in idl -schema ./bin/hd/static/schema/tap.schema.json",
     "doc-hugo": "exec-bin ./bin/hugo/hugo -s doc -d ../bin/doc",
     "doc-tar": "tar -C ./bin/doc -cvz . > ./bin/site.tar.gz",
     "publish": "hut pages publish -d tapestry.ionous.net ./bin/site.tar.gz",
