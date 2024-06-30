@@ -122,8 +122,7 @@ func goPlay(ctx context, scene string, opts qna.Options, testString string) (err
 			for _, cmd := range strings.Split(testString, ";") {
 				fmt.Println(prompt, cmd)
 				if step(play, scene, cmd) {
-
-					break
+					break // done
 				}
 			}
 		} else {

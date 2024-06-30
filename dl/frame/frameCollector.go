@@ -2,11 +2,13 @@ package frame
 
 import (
 	"strings"
+
+	"git.sr.ht/~ionous/tapestry/dl/game"
 )
 
-// maker interface implemented by every frame command
+// marker interface for frame commands.
+// ( assigned to those commands in the frame.idl )
 type Notification interface{}
-
 
 // Queues incoming events and collects text output between events.
 type Collector struct {
@@ -23,6 +25,10 @@ func (out *Collector) GetEvents() (ret []Notification) {
 	return
 }
 
+func (out *Collector) onGameEvent(sig game.Signal) {
+	out.flush()
+	out.addEvent(&GameSignal{Signal: sig.String()})
+}
 func (out *Collector) onStartScene(domains []string) {
 	out.flush()
 	out.addEvent(&SceneStarted{Domains: domains})

@@ -9,11 +9,10 @@ package main
 
 import (
 	"bytes"
+	"encoding/gob"
 	"fmt"
 	"strings"
 	"syscall/js"
-
-	"encoding/gob"
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
@@ -44,7 +43,7 @@ func registerCallbacks() {
 	// data is a string containing serialized json; returns in the same format.
 	post := func(this js.Value, i []js.Value) (ret any, err error) {
 		if shuttle == nil {
-			err = fmt.Errorf("game hasn't been loaded yet")
+			err = fmt.Errorf("game hasn't been loaded, or has finished.")
 		} else if cnt := len(i); cnt != 2 {
 			err = fmt.Errorf("post received %d args", cnt)
 		} else if endpoint, e := getString(i[0]); e != nil {
@@ -54,10 +53,11 @@ func registerCallbacks() {
 		} else {
 			println("processing", endpoint, len(i))
 			var buf strings.Builder
-			if e := shuttle.Post(&buf, endpoint, []byte(msg)); e != nil {
-				err = e
-			} else {
+			if e := shuttle.Post(&buf, endpoint, []byte(msg)); e == nil {
 				ret = buf.String()
+			} else {
+				err = e
+				// shuttle = nil?
 			}
 		}
 		return

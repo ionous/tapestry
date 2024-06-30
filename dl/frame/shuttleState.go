@@ -8,6 +8,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -70,27 +71,42 @@ func (c *Shuttle) Post(w io.Writer, endpoint string, msg json.RawMessage) (err e
 		var qs []json.RawMessage
 		if e := json.Unmarshal(msg, &qs); e != nil {
 			err = errors.New("invalid query")
+		} else if frames, e := c.readFrames(qs); e != nil {
+			err = e
 		} else {
-			// a series of commands:
-			var frames []Frame // output
-			for _, q := range qs {
-				var f Frame
-				if a, e := c.dec.DecodeAssignment(affine.None, q); e != nil {
-					f.Error = e.Error()
-				} else if v, e := a.GetAssignedValue(c.run); e != nil {
-					f.Error = e.Error()
-				} else if v != nil {
-					f.Result = debug.Stringify(v)
-				}
-				f.Events = c.out.GetEvents() // even on error
-				frames = append(frames, f)
-			}
-			//
 			err = writeFrames(w, frames)
 		}
 
 	default:
 		err = fmt.Errorf("unknown endpoint %s", endpoint)
+	}
+	return
+}
+
+func (c *Shuttle) readFrames(qs []json.RawMessage) (ret []Frame, err error) {
+	for _, q := range qs {
+		var f Frame // a frame contains many events.
+		if a, e := c.dec.DecodeAssignment(affine.None, q); e != nil {
+			err = e
+			break
+		} else if v, e := a.GetAssignedValue(c.run); e == nil && v != nil {
+			f.Result = debug.Stringify(v)
+			// success!
+		} else if e != nil {
+			//
+			var sig game.Signal
+			if errors.As(e, &sig) {
+				// fix? this is a little wonky
+				// signals should probably be a first class method in the runtime?
+				c.out.onGameEvent(sig)
+			} else {
+				f.Error = e.Error()
+				// return this error as part of the frame
+			}
+		}
+		//
+		f.Events = c.out.GetEvents()
+		ret = append(ret, f)
 	}
 	return
 }

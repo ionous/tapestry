@@ -1,6 +1,6 @@
 import http from '/lib/http.js'
 
-// fix? rename Shuttle? or ShuttleJs
+// fix? rename this file createShuttle() ?
 // fix: maybe could include different library packages or files?
 export default function(url, cb) {
    const io = url === "wasm" ? 
@@ -46,8 +46,6 @@ class Wasm {
     return this.tapestry.post(endpoint, send).then((res) => {
       const frames = JSON.parse(res);
       return this.msgcb(frames, calls || []);
-    }).catch((e)  => {
-      console.warn("io error", e);
     });
   }
 };

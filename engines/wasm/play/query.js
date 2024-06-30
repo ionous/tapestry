@@ -11,16 +11,28 @@ function parseCommand(op) {
   }
 }
 
+
+let gameOver = false;
+
 // each msg implements the Event slot:
 // as of 2023-10-18, the complete set is:
 // FrameOutput, PairChanged, SceneEnded, SceneStarted, StateChanged
-function processEvent(objCatalog, msg) {
+function processEvent(msg, { objCatalog, playing }) {
   let out = "";
   const [ sig, args ] = parseCommand(msg);
   switch (sig) {
     // printed text; accumulates over multiple events
     case "FrameOutput:":
       out += args;
+      break;
+
+    case "GameSignal:":
+      const signal = args;
+      console.warn("game signal", signal);
+      if (signal === "Quit") {
+        gameOver = true;
+        playing.value = false;
+      }
       break;
 
     // object state change
@@ -76,7 +88,8 @@ export default class Query {
     shuttle,   // url of api
     narration, // a watched array
     statusBar, // a watched class Status
-    objCatalog // class ObjectCatalog
+    objCatalog, // class ObjectCatalog
+    playing
   }) {
     this.statusBar= statusBar;
     this.objCatalog= objCatalog;
@@ -106,10 +119,15 @@ export default class Query {
             const [result, events] = body;
             if (events) {
               for (const evt of events) {
-                out += processEvent(objCatalog, evt);
+                out += processEvent(evt, {
+                  objCatalog,
+                  playing,
+                });
               }
             }
-            if (call) {
+            if (!call) {
+              out += result;
+            } else {
               // ick: we debug.Stringify the results to support "any value"
               // so we have to unpack that too.
               const res = result? JSON.parse(result): "";
@@ -153,6 +171,9 @@ export default class Query {
   }
 
   fabricate(text) {
+    if (gameOver) {
+      return Promise.reject(new Error("game over"));
+    }
     const player = "self"; // fix: kind of hacky that this is tied to self
     const io = this.io;
     const statusBar= this.statusBar;

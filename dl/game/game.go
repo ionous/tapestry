@@ -1,9 +1,10 @@
 package game
 
 import (
+	"io"
+
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
-	"io"
 )
 
 // error code for system commands

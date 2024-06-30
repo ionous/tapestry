@@ -22,6 +22,7 @@ Spec:requires:contains:
               - "error"
               - "text"
               - true
+
     - # Marker interface used by all frame events.
       Slot: "notification"
 
@@ -34,6 +35,17 @@ Spec:requires:contains:
               - "_"
               - "text"
 
+    - # System game event.
+       Flow:slots:terms:
+        - "game_signal"
+        - "notification"
+        - - # String version of the system event.
+            # ( see go package game type Signal. )
+            Term:name:type:
+              - "_"
+              - "signal"
+              - "text" 
+
     - # One or more scenes ( aka domain ) have started.
       Flow:slots:terms:
         - "scene_started"
@@ -44,6 +56,7 @@ Spec:requires:contains:
               - "domains"
               - "text"
               - true
+              
     - # One or more scenes ( aka domain ) have finished.
       Flow:slots:terms:
         - "scene_ended"

@@ -22,8 +22,7 @@
         :lines="narration" />
     </div>
     <div class="lv-input"> 
-      <lv-prompt v-show="!showDebug"
-        enabled="playing"
+      <lv-prompt v-show="!showDebug && playing"
         @changed="onPrompt"
         ref="prompt" />
       <div v-show="showDebug" class="lv-stub"/>
@@ -53,7 +52,7 @@ export default {
   setup(/*props*/) {
     const narration = ref([]); // ultimately processed through textWriter.js & textRender.js
     const status = ref(new Status());
-    const playing = ref(false);
+    const playing = ref(true);
     const showDebug = ref(false);
     const prompt = ref(null); // template slot helper.
     const currentItem = ref({});
@@ -71,6 +70,7 @@ export default {
       objCatalog,
       statusBar: status.value, 
       narration: narration.value,
+      playing,
     }); 
     q.restart(tapestry.story); // a promise
 
@@ -107,6 +107,7 @@ export default {
       objTree: reactiveRoot,
       currentItem,
       showDebug,
+      playing,
       onLeafObject(item) {
         currentItem.value = item.data;
       },
@@ -131,7 +132,10 @@ export default {
       onPrompt(text) {
         // console.log("onPrompt");
         narration.value.push("> " + text);
-        q.fabricate(text);
+        q.fabricate(text).catch(e => {
+          narration.value.push("! " + e.message );
+          console.error(e);
+        });
       },
     };
   },
