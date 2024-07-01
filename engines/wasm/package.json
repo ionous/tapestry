@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "predev": "npm run compile",
-    "prebuid": "npm run compile",
+    "prebuid": "npm run clean && npm run compile",
+    "clean": "rm -Rf dist",
     "dev": "vite",
     "build": "vite build --base=/cloak-of-darkness",
     "preview": "vite preview  --base=/cloak-of-darkness",

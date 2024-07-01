@@ -20,9 +20,10 @@
     "build-go": "go build ./...",
     "build-code": "go run ./cmd/tap code -in ./idl -out ./dl",
     "build-tap": "go build ./cmd/tap",
-    "build-codedocs": "./cmd/tap doc -out ./docs/bin/extra/codedocs/api",
-    "build-schema": "./cmd/tap code -in idl -schema ./docs/bin/extra/static/schema/tap.schema.json",
+    "build-code-docs": "./cmd/tap doc -out ./docs/bin/extra/codedocs/api",
+    "build-code-schema": "./cmd/tap code -in idl -schema ./docs/bin/extra/static/schema/tap.schema.json",
     "build-wasm": "npm run -w wasm build",
+    "build-wasm-docs": "cp -pfR ./engines/wasm/dist/ ./docs/bin/extra/wasm/cloak-of-darkness",
     "build-godot": "go build -C ./engines/godot/ext/src -o taplib.so -buildmode=c-shared taplib.go",
     "build-docs": "npm run -w docs build"
   },
