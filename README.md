@@ -6,7 +6,11 @@ You can find the full documentation at [tapestry.ionous.net](https://tapestry.io
 
 # Status
 
-Tapestry is a work in progress. You can [![Play](https://img.shields.io/badge/Play%20%E2%86%97-blue)](https://tapestry.ionous.net/cloak-of-darkness.html) a small sample story ( the "Cloak of Darkness", ported from [Robert Firth's original](https://www.ifwiki.org/Cloak_of_Darkness) ) — and checkout its [source code](https://git.sr.ht/~ionous/tapestry/tree/main/item/content/stories/cloak.tell).  I hope to continue expanding its capabilities as my time allows.
+Tapestry is a work in progress. 
+
+You can [![Play](https://img.shields.io/badge/Play%20%E2%86%97-blue)](https://tapestry.ionous.net/cloak-of-darkness.html) a small example in your browser ( the "Cloak of Darkness", ported from [Roger Firth's original](https://www.ifwiki.org/Cloak_of_Darkness) ), and there's some preliminary integration with the [Godot game engine.](https://godotengine.org)  
+
+I hope to continue expanding Tapestry's capabilities as my time allows.
 
 # License
 

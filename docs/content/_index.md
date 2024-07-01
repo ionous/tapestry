@@ -6,15 +6,13 @@ geekdocBreadcrumb: false
 params:
   pageclass: "page-main"
 ---
-A story engine for games.
+**Tapestry** is an experimental interactive fiction engine, with the goal of creating game stories for any game genre — independent of a game's graphics.
 
-# Premise
-
-Modern game engines -- while providing amazing support for graphics and game play -- don't have great tools for **building stories**. Game scripting is integrated deeply into the engine. Story development, while simple at the start, quickly becomes time consuming and error prone.
+**Why Tapestry?** Modern game engines -- while providing amazing support for graphics and gameplay -- don't have great tools for **building stories**. Game scripting is usually deeply integrated into the engine. And story development, while simple at the start, quickly becomes time consuming and error prone.
 
 Developers should be able to work on the logic of their games separate from the visual elements whenever possible. This enables quick iteration for commonplace tasks such as creating dialog, puzzles, and quests.
 
-**Tapestry** provides a way to build and test stories independent from the game engine; independent of graphics.
+Tapestry aims to do just that.
 
 ## Working Example
 
@@ -22,12 +20,12 @@ This is a port of the [Cloak of Darkness](https://www.ifwiki.org/Cloak_of_Darkne
 
 {{< include file="static/_includes/cloak.tell" language="yaml" options="linenos=false" >}}
 
-Building this with Tapestry produces a playable story and a SQLite database containing the objects in the game and their interactions. You can play the story here: <br> 
+Building this with Tapestry produces a playable story and a SQLite database containing all of the objects in the game and their interactions. You can play the story here: <br> 
 <span class="gdoc-button gdoc-button--regular"><a class="gdoc-button__link" target="_blank" href="/cloak-of-darkness">Play ↗</a></span>
 
 ## Relation to interactive fiction
 
-The ability to play a game without graphics is, to my mind, a lot like the original [text adventure](https://en.wikipedia.org/wiki/Colossal_Cave_Adventure) games. 
+The ability to develop a game without graphics is, to my mind, a lot like the original [text adventures](https://en.wikipedia.org/wiki/Colossal_Cave_Adventure). 
 
 Tapestry is therefore inspired by the world of interactive fiction and owes a lot in particular to [Inform 7](http://inform7.com/). For that reason, the default game world for Tapestry attempts to provide a similar set of game rules as Inform. And, Tapestry tries to provide a similar ( if less extensive ) way to model a game world using English-like sentences.
 

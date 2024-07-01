@@ -29,9 +29,9 @@ module:
     - target: static
       source: static
     - target: static
-      source: ./bin/extra/wasm
+      source: ./bin/extra/static
     - target: static
-      source: ./bin/extra/schema
+      source: ./bin/extra/wasm
 
 markup:
   goldmark:
