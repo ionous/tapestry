@@ -1,5 +1,5 @@
 //go:build dev
 
-package mosaic
+package main
 
 const BuildConfig = Dev

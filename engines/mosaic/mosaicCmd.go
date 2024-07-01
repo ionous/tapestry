@@ -1,74 +1,82 @@
 // Copyright (C) 2022 - Simon Travis. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-package cmdmosaic
+package main
 
 import (
-	"context"
+	"flag"
+	"fmt"
 	"go/build"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/mosaic"
 	"git.sr.ht/~ionous/tapestry/web"
 )
 
 // exported to package main in cmd/tap
-var CmdMosaic = &base.Command{
-	Run:       runMosaic,
-	Flag:      buildFlags(),
-	UsageLine: "tap edit [-in <directory>] [mosaic flags]",
-	Short:     "run the tapestry story editor",
-	Long: `Start the Tapestry story editor.
+// var CmdMosaic = &base.Command{
+// 	Run:       runMosaic,
+// 	Flag:      buildFlags(),
+// 	UsageLine: "tap edit [-in <directory>] [mosaic flags]",
+// 	Short:     "run the tapestry story editor",
+// 	Long: `Start the Tapestry story editor.
 
-The 'in' directory should contain two sub-directories:
-	1. "stories" - containing story files ( the target for save/load )
-	2. "shared"  - containing shared libraries ( defaults will be used if this folder is missing. )
+// The 'in' directory should contain two sub-directories:
+// 	1. "stories" - containing story files ( the target for save/load )
+// 	2. "shared"  - containing shared libraries ( defaults will be used if this folder is missing. )
 
-By default, attempts to use a directory called Tapestry in your Documents folder.
-`,
+// By default, attempts to use a directory called Tapestry in your Documents folder.
+// `,
+// }
+
+func main() {
+	if e := runMosaic(); e != nil {
+		fmt.Println("error", e)
+	}
 }
-
-func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if dir, e := mosaicFlags.folder.GetFolder(); e != nil {
+func runMosaic() (err error) {
+	cmdLine := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	if e := cmdLine.Parse(os.Args[1:]); e != nil {
+		err = e
+	} else if dir, e := mosaicFlags.folder.GetFolder(); e != nil {
 		err = e
 	} else {
-		var ws mosaic.Workspace
+		var ws Workspace
 		mux := http.NewServeMux()
 
 		// FIX: remove the "cmdDir"
 		// everything should be using tap internals at this point i think.
-		cfg := mosaic.Configure(build.Default.GOPATH, dir)
+		cfg := Configure(build.Default.GOPATH, dir)
 
 		// raw story files ( because why not )
-		mux.Handle("/stories/", web.HandleResource(mosaic.FilesApi(cfg)))
+		mux.Handle("/stories/", web.HandleResource(FilesApi(cfg)))
 
 		// blockly blocks ( from story files )
-		mux.Handle("/blocks/", web.HandleResource(mosaic.FilesApi(cfg)))
+		mux.Handle("/blocks/", web.HandleResource(FilesApi(cfg)))
 
 		// blockly shape files ( from spec files )
-		mux.Handle("/shapes/", http.StripPrefix("/shapes/", web.HandleResource(mosaic.ShapesApi(cfg))))
+		mux.Handle("/shapes/", http.StripPrefix("/shapes/", web.HandleResource(ShapesApi(cfg))))
 
 		// blockly toolbox files ( from spec files )
-		mux.Handle("/boxes/", http.StripPrefix("/boxes/", web.HandleResource(mosaic.BoxesApi(cfg))))
+		mux.Handle("/boxes/", http.StripPrefix("/boxes/", web.HandleResource(BoxesApi(cfg))))
 
 		// ui actions
-		mux.Handle("/actions/", http.StripPrefix("/actions/", web.HandleResource(mosaic.ActionsApi(cfg, &ws))))
+		mux.Handle("/actions/", http.StripPrefix("/actions/", web.HandleResource(ActionsApi(cfg, &ws))))
 
 		// fix: serve specs from package idl?
 		// below is the file endpoint
 
-		if mosaic.BuildConfig == mosaic.Prod {
+		if BuildConfig == Prod {
 			// prod redirects unknown url requests to our embedded assets
 			// note: package http will tack on index.html redirects for bare directories automatically.
 			// and, for good or ill, it will serve directories of files as actual directory listings
 			mux.Handle("/", web.MethodHandler{
-				http.MethodGet:  http.FileServer(http.FS(mosaic.Frontend)),
-				http.MethodPost: mosaic.HandleCommands(cfg),
+				http.MethodGet:  http.FileServer(http.FS(Frontend)),
+				http.MethodPost: HandleCommands(cfg),
 			})
 
 		} else {
@@ -91,16 +99,16 @@ func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error
 					log.Println(req.Method, req.RequestURI)
 					vite.ServeHTTP(w, req)
 				}),
-				http.MethodPost: mosaic.HandleCommands(cfg),
+				http.MethodPost: HandleCommands(cfg),
 			})
 
-			if mosaic.BuildConfig != mosaic.Prod {
+			if BuildConfig != Prod {
 				log.Println("don't forget to run the vite web server")
 				log.Println("in the directory tapestry/www type 'npm run dev'.")
 			}
 
 			// NOTE: web mode stops here
-			if mosaic.BuildConfig != mosaic.Dev {
+			if BuildConfig != Dev {
 				startBackend(listenTo, mux)
 				// doesn't return.
 			}

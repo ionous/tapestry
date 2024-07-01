@@ -1,5 +1,5 @@
 //go:build !production && !dev
 
-package mosaic
+package main
 
 const BuildConfig = Web

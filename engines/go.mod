@@ -1,2 +1,1 @@
-// an empty go.mod to exclude the engines directory from go build and test
-// https://github.com/golang/go/wiki/Modules#can-an-additional-gomod-exclude-unnecessary-content-do-modules-have-the-equivalent-of-a-gitignore-file
+// an empty go.mod to exclude "engines" from tapestry core

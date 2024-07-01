@@ -1,4 +1,4 @@
-package cmdmosaic
+package main
 
 import (
 	"io/fs"
@@ -6,13 +6,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/mosaic"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 )
 
 // wails application framing
-//
 type Host struct{}
 
 // startup is called when the app starts.
@@ -28,10 +26,10 @@ func startBackend(listenTo int, mux http.Handler) {
 }
 
 // not expected to return
-func runWails(ws *mosaic.Workspace, width, height int, mux http.Handler) {
+func runWails(ws *Workspace, width, height int, mux http.Handler) {
 	var wailsFakeout fs.FS
-	if mosaic.BuildConfig == mosaic.Prod {
-		wailsFakeout = mosaic.ErrFS{}
+	if BuildConfig == Prod {
+		wailsFakeout = ErrFS{}
 	}
 
 	var host Host

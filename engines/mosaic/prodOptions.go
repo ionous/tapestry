@@ -1,6 +1,6 @@
 //go:build production
 
-package mosaic
+package main
 
 import (
 	"io/fs"

@@ -1,4 +1,4 @@
-package mosaic
+package main
 
 import (
 	"git.sr.ht/~ionous/tapestry/web"
