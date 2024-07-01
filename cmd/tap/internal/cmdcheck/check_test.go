@@ -4,9 +4,11 @@ import (
 	"os"
 	"testing"
 
-	check "git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
@@ -15,7 +17,7 @@ import (
 )
 
 func TestCheck(t *testing.T) {
-	prog := &check.CheckOutput{
+	prog := query.CheckData{
 		Name:   t.Name(),
 		Expect: "hello",
 		Test: []rt.Execute{
@@ -35,10 +37,10 @@ func TestCheck(t *testing.T) {
 	}
 }
 
-func runTest(prog *check.CheckOutput) (err error) {
+func runTest(prog query.CheckData) (err error) {
 	var run checkTester
 	run.SetWriter(print.NewLineSentences(markup.ToText(os.Stdout)))
-	return prog.RunTest(&run)
+	return cmdcheck.RunTest(&run, prog)
 }
 
 type baseRuntime struct {

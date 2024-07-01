@@ -14,7 +14,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/support/play"
-	"git.sr.ht/~ionous/tapestry/support/player"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web/markup"
 	"github.com/ionous/errutil"
@@ -36,7 +35,7 @@ func checkAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 	d := query.NewDecoder(signatures)
 	if q, e := qdb.NewQueries(db, d); e != nil {
 		err = e
-	} else if grammar, e := player.MakeGrammar(db); e != nil {
+	} else if grammar, e := qdb.MakeGrammar(db); e != nil {
 		err = e
 	} else if checks, e := q.ReadChecks(actuallyJustThisOne); e != nil {
 		err = e

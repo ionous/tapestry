@@ -79,7 +79,7 @@ func getShuttle() (ret *frame.Shuttle, err error) {
 
 func makeShuttle(db *sql.DB, opts qna.Options) (ret *frame.Shuttle, err error) {
 	decoder := decode.NewDecoder(tapestry.AllSignatures)
-	if grammar, e := player.MakeGrammar(db); e != nil {
+	if grammar, e := qdb.MakeGrammar(db); e != nil {
 		err = e
 	} else if q, e := qdb.NewQueries(db); e != nil {
 		err = e

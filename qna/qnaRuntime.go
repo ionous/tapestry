@@ -40,6 +40,12 @@ type Runner struct {
 	currentPatterns             // stack of patterns currently in progress
 }
 
+// exposed for save-load
+// fix? look at moving this into the query layer
+func (run *Runner) DynamicData() *query.Cache {
+	return &run.dynamicVals
+}
+
 func (run *Runner) SetNotifier(n rt.Notifier) (prev rt.Notifier) {
 	prev = run.notify
 	run.notify = n

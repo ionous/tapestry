@@ -1,3 +1,4 @@
+// Package player provides a console like game.
 package player
 
 import (
@@ -92,7 +93,7 @@ func createSqlContext(mdlFile string) (ret context, err error) {
 	if db, e := tables.CreateRunTime(mdlFile); e != nil {
 		err = e
 	} else {
-		if grammar, e := ReadGrammar(db, dec); e != nil {
+		if grammar, e := qdb.ReadGrammar(db, dec); e != nil {
 			err = e
 		} else if q, e := qdb.NewQueries(db, dec); e != nil {
 			err = e
@@ -120,12 +121,13 @@ func goPlay(ctx context, scene string, opts qna.Options, testString string) (err
 		} else if len(testString) > 0 {
 			for _, cmd := range strings.Split(testString, ";") {
 				fmt.Println(prompt, cmd)
-				if step(play, scene, cmd) {
+				if step(play, nil, scene, cmd) {
 					break // done
 				}
 			}
 		} else {
 			reader := bufio.NewReader(os.Stdin)
+			persist := Persistence{run, ctx.q}
 		Out:
 			for {
 				if len(prompt) > 0 {
@@ -136,7 +138,7 @@ func goPlay(ctx context, scene string, opts qna.Options, testString string) (err
 				} else {
 					words := in[:len(in)-1]
 					for _, cmd := range strings.Split(words, ";") {
-						if step(play, scene, cmd) {
+						if step(play, &persist, scene, cmd) {
 							break Out
 						}
 					}
@@ -147,31 +149,26 @@ func goPlay(ctx context, scene string, opts qna.Options, testString string) (err
 	return
 }
 
-type SaveTime interface {
-	LoadGame(string) (string, error)
-	SaveGame(string) (string, error)
-}
-
-func step(p *play.Playtime, scene string, s string) (done bool) {
+func step(pt *play.Playtime, ps *Persistence, story string, s string) (done bool) {
 	var sig game.Signal
-	if res, e := p.Step(s); errors.As(e, &sig) {
+	if res, e := pt.Step(s); errors.As(e, &sig) {
 		switch sig {
 		case game.SignalLoad:
-			if saver, ok := p.Runtime.(SaveTime); !ok {
+			if ps == nil {
 				log.Println("this runtime doesn't support save/load")
-			} else if res, e := saver.LoadGame(scene); e != nil {
+			} else if res, e := ps.LoadGame(story); e != nil {
 				log.Printf("couldn't load game because %v\n", e)
 			} else {
-				log.Printf("loaded %s from %s\n", scene, res)
+				log.Printf("loaded %s from %s\n", story, res)
 			}
 
 		case game.SignalSave:
-			if saver, ok := p.Runtime.(SaveTime); !ok {
+			if ps == nil {
 				log.Print("this runtime doesn't support save/load")
-			} else if res, e := saver.SaveGame(scene); e != nil {
+			} else if res, e := ps.SaveGame(story); e != nil {
 				log.Printf("couldn't save game because %v\n", e)
 			} else {
-				log.Printf("saved %s to %s\n", scene, res)
+				log.Printf("saved %s to %s\n", story, res)
 			}
 		case game.SignalQuit:
 			done = true
