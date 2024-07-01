@@ -15,11 +15,13 @@ import (
 var _ query.Query = (*RawQuery)(nil)
 
 func MakeQuery(data *Data) RawQuery {
-	return RawQuery{data}
+	rand := query.RandomizedTime()
+	return RawQuery{data, &rand}
 }
 
 type RawQuery struct {
 	*Data
+	rand *query.Randomizer
 }
 
 func (q RawQuery) Close() {
@@ -230,8 +232,7 @@ func (q RawQuery) Relate(rel, noun, otherNoun string) (err error) {
 
 // Random implements Query.
 func (q RawQuery) Random(inclusiveMin int, exclusiveMax int) int {
-	// FIX!!!!
-	return inclusiveMin
+	return q.rand.Random(inclusiveMin, exclusiveMax)
 }
 
 // LoadGame implements Query.
