@@ -19,7 +19,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmddoc"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmddump"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdgenerate"
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdmosaic"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdnew"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdplay"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdserve"
@@ -196,7 +195,6 @@ func init() {
 		cmddoc.CmdDoc,
 		cmddump.CmdDump,
 		cmdgenerate.CmdGenerate,
-		cmdmosaic.CmdMosaic,
 		cmdnew.CmdNew,
 		cmdplay.CmdPlay,
 		cmdserve.CmdServe,
