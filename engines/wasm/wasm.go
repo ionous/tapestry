@@ -1,3 +1,5 @@
+//go:build js && wasm
+
 // Experimental wasm version
 // http://localhost:5173/
 //

@@ -12,7 +12,7 @@
     "preview": "vite preview  --base=/cloak-of-darkness",
     "compile": "concurrently -m 1 -k \"npm:compile-*\"",
     "compile-copy": "cp ~/Documents/Tapestry/build/play.gob ./game",
-    "compile-wasm": "GOOS=js GOARCH=wasm go build -o ./game/tap.wasm ./wasm.go"
+    "compile-wasm": "GOOS=js GOARCH=wasm go build -o ./game/tap.wasm"
   },
   "dependencies": {
     "normalize.css": "^8.0.1",

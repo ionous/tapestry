@@ -11,6 +11,8 @@ require (
 	github.com/kr/pretty v0.3.1
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/mitchellh/go-wordwrap v1.0.1
+	github.com/reiver/go-porterstemmer v1.0.1
+	golang.org/x/sys v0.21.0
 )
 
 require (

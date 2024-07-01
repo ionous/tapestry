@@ -1,8 +1,0 @@
-go 1.22
-
-use (
-	.
-	./cmd/tap
-)
-
-replace git.sr.ht/~ionous/tapestry@latest => ./
