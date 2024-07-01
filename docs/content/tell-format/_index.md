@@ -9,7 +9,7 @@ The **plain text sections** always consist of English-like statements such as `T
 
 > The Lobby is a room. You are in the Lobby.
 
-The **structured command sections**, on the other hand, contain a series of lines consisting of key-value pairs. Such a section might look something like this: 
+The **structured command sections** contain a series of lines consisting of key-value pairs. Such a section might look something like this: 
 ```yaml
 - Say: "Press 'Q' to quit."
 - Interpret:with:
@@ -22,12 +22,12 @@ The **structured command sections**, on the other hand, contain a series of line
 
 > `---`
 
-Finally, both sections can contain **comments**  ( ie. notes to yourself or other authors which don't affect the actual story. ) Comments start with hash and run until the end of the line. 
+Both the plain text and the command sections can contain **comments**  ( ie. notes to yourself or other authors which don't affect the actual story. ) Comments start with hash, followed by a space, and run until the end of the line. 
 
 > `# This is a comment.`
 
 {{< hint type=caution >}}
-Comments <em>must</em> can only outside of quoted text.
+Comments can only outside of quoted text.
 {{< /hint >}}
 
 ```yaml
@@ -35,11 +35,11 @@ Comments <em>must</em> can only outside of quoted text.
 - Say: "This does not # contain a comment."
 ```
 
-## What's the difference?
+## Plain text or commands?
 
-The two section types have different purposes. While anything that can be described in plain text can be described using commands ( although not the other way around... ) most often, the **plain text describes the world**, and the **commands control how play proceeds.**
+Generally speaking, **plain text describes the world**, and **commands control how play proceeds.** While anything that can be described in plain text can be described using commands, it's often much more work to use commands for world descriptions. At the same time, the commands are the only syntax available for implementing game rules. So commands can do more, even if they sometimes take longer to write.
 
-This example says the same thing using both methods; the plain text version is simpler and easier to understand. 
+This example says the same thing using both methods:
 
 ```
 The Lobby is a room. You are in the Lobby.

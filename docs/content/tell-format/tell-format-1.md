@@ -9,9 +9,9 @@ A structured section of a `.tell` file consists of commands specified as key-val
 
 ## Kinds of commands
 
-There are set of fixed commands provided by the Tapestry engine. Adding new commands requires building Tapestry from source. ( see: `tap gen` TODO: link )
+There are set of fixed commands provided by the Tapestry engine. Adding new commands requires building Tapestry from source. ( see: `tap code` TODO: link )
 
-Commands are divided into different categories based on the functionality they provide. For instance: commands describe the game world ( modeling ), those that alter the parser, those which listen to game events, those which take actions to change the world, and so on.
+Commands are divided into different categories based on the functionality they provide. For instance: commands describe the game world ( modeling ), those that alter the parser, those which listen to game events, those which take actions to change the world, and so on. The [API](/api) documentation will let you catch them all.
 
 Here is an example of doing some math:
 ```yaml 
@@ -46,7 +46,7 @@ Some commands have an **"anonymous"** first parameter. These lack a label, so th
 In general, the number of colons is the number of values needed.
 
 {{< hint title="Parameterless commands" >}}
-There are a few rare commands which don't require parameterization. However, due to the way yaml/tell works, these commands still require a trailing colon. You will often see them given a value of `true` even though that value is unused.  Breaking out of a loop is a common example:
+There are a few rare commands which don't require parameterization. However, due to the way yaml/tell works, these commands still require a trailing colon. You may see them with a value of `true` even though that value is unused.  Breaking out of a loop is a common example:
 ```
 - Break: true
 ```
@@ -56,7 +56,7 @@ There are a few rare commands which don't require parameterization. However, due
 
 Commands -- like functions a programming language -- need some sort of input, some sort of values, to operate on. Multiplication, for instance, requires two numbers.
 
-The values available in Tapestry include **quoted text**, **numbers**, **boolean** values ( that is the words `true` or `false` ),  or a **"arrays"** of one of those types. Values can also be supplied using the **results** of  another command.
+The values available in Tapestry include **quoted text**, **numbers**, **boolean** values ( that is the words `true` or `false` ),  or a **"arrays"** of one of those types. And, values can be supplied using the **results** of  another command.
 
 Tapestry uses **strict typing**. If a declaration command requires a number, then the value supplied must also be a number: It **will not** convert automatically from text to numbers, nor between any other types.
 
@@ -78,13 +78,13 @@ This is not good:
 
 ## Multiple values
 
-As you've already seen from the examples, values start after the colon of the last label, separated from it with either a space, or a newline. When there are multiple values needed, the values *must* appear on a new line. In that case, each value appears on its own line, starting with a dash, slightly indented from the signature on the line before.
+Values always appear after the colon of the last label, separated from it with either a space or a newline. When there are multiple values needed, the values *must* appear on a new line. In that case, each value appears on its own line, starting with a dash, slightly indented from the signature on the line before.
 
 Dashes indicate a list of values. This works just like a "sequence" in yaml.
 
 ## Commands as values
 
-Some commands return a value. Commands that do can be used as values for other commands. 
+Some commands return a value, and those commands can be used to generate values for other commands.
 
 For example, to add `1 + 4` we can use the `Add:value:` command, specifying the numbers directly.
 
@@ -94,7 +94,7 @@ For example, to add `1 + 4` we can use the `Add:value:` command, specifying the 
   - 4
 ```
 
-And, if we wanted to add three numbers to produce the same value, we could specify it like:
+Or, if we wanted to add three numbers for the sake of a quick example, we could use:
 
 ```yaml 
 - Add:value:
@@ -104,4 +104,4 @@ And, if we wanted to add three numbers to produce the same value, we could speci
     - 2
 ```
 
-The second `Add:value:` takes the same spot as the number `4` did. The list of its values are nested underneath its command.
+The second `Add:value:` takes the same spot as the number `4`, with its values indented underneath the command.

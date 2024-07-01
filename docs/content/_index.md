@@ -18,9 +18,9 @@ Developers should be able to work on the logic of their games separate from the 
 
 ## Working Example
 
-This is a port of the "Cloak of Darkness" originally by written by [Roger Firth](https://www.ifwiki.org/Cloak_of_Darkness): 
+This is a port of the [Cloak of Darkness](https://www.ifwiki.org/Cloak_of_Darkness). All Tapestry stories are a mixture of English descriptions, and [yaml](https://github.com/ionous/tell) style commands. The English sections describe the game world, and the commands describe the story's behavior.
 
-{{< include file="/static/_includes/cloak.tell" language="yaml" options="linenos=false" >}}
+{{< include file="static/_includes/cloak.tell" language="yaml" options="linenos=false" >}}
 
 Building this with Tapestry produces a playable story and a SQLite database containing the objects in the game and their interactions. You can play the story here: <br> 
 <span class="gdoc-button gdoc-button--regular"><a class="gdoc-button__link" target="_blank" href="/cloak-of-darkness">Play ↗</a></span>
@@ -31,4 +31,4 @@ The ability to play a game without graphics is, to my mind, a lot like the origi
 
 Tapestry is therefore inspired by the world of interactive fiction and owes a lot in particular to [Inform 7](http://inform7.com/). For that reason, the default game world for Tapestry attempts to provide a similar set of game rules as Inform. And, Tapestry tries to provide a similar ( if less extensive ) way to model a game world using English-like sentences.
 
-It is *not* a goal to match Inform's amazing natural language programming environment. ( Nor is it a goal to run on z-machines. )  It *is* however a goal to be able to play some "Inform-like" stories with similar results. Tapestry *extends* interactive fiction into any game genre.
+It is *not* a goal to match Inform's amazing natural language programming environment. ( Nor is it a goal to run on z-machines. )  It *is* however a goal to be able to play some "Inform-like" stories with similar results. The hope is to bring interactive fiction into any game genre.

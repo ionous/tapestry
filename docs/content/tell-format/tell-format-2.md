@@ -38,9 +38,9 @@ Or, you could specify a single entry without the list:
 
 ## Arrays
 
-Arrays show up only rarely. Like lists they are several values specified together, however they only support the so-called "primitive types": inline quoted text, numbers, and boolean values. They must appear all together on the same line, surrounded by square brackets.
+Arrays show up only rarely. Like lists they are several values specified together, however they only support the so-called "primitive types": quoted text, numbers, and boolean values. They must appear all together on the same line, surrounded by square brackets.
 
-For example, assume there's some command that takes a bunch of numbers. You could specify a <em>list</em>em> of those numbers like this:
+For example, assume there's some command that takes a bunch of numbers. You could specify a <em>list</em> of those numbers like this:
 
 ```yaml
 MarsNeedsNumbers: 
@@ -65,9 +65,9 @@ The specifics of the different string types can be found in the [tell documentat
  
 # Json
 
-There is a wholly different, alternative file format to `.tell` which uses the `.if` extension and contains [`json`](https://en.wikipedia.org/wiki/JSON) data.  This is the format that Tapestry uses to save commands to the story database.  It is more verbose than `tell`. For instance, all plain-text sections must be manually wrapped in `Declare:`and `Comment:` commands.
+There is a wholly different, alternative file format to `.tell` which uses the `.if` extension and contains [`json`](https://en.wikipedia.org/wiki/JSON) data.  This is the format that Tapestry uses to save commands to the story database.  
 
-It is unlikely anyone would want to author files using `.if`. But, it exists.
+It's more verbose than `tell`, and all of its plain-text sections must be manually wrapped in `Declare:`and `Comment:` commands... It is therefore unlikely anyone would want to author files using `.if`. But, it exists.
 
 ```json
 {
