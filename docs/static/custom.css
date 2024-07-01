@@ -52,8 +52,9 @@ div.active > h3::before {
     content: counter(line);
     display: inline-block;
     border-right: 1px solid #ddd;
-    padding: 0 .5em;
+    padding-right: 0.5rem;
     margin-right: .5em;
+    min-width: 1rem;
     color: #888
   }
 }

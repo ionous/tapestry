@@ -1,6 +1,5 @@
 <template>
 <component :is="list ? 'ul': 'div'"
-  :id="id"
   :class="traits"
   >
   <component :is="list ? 'li': 'div'">
@@ -29,21 +28,14 @@ export default {
     },
     item: {
       type: Object,
-      default: {
-        id: "",
-        traits: []
-      }
+      default: {}
     },
   },
   emits: ['activated'],
   computed: {
-    id() {
-      const { id = "_missing_" } = this.item;
-      return clean(id);
-    },
     traits() {
-      const { traits = [], kind = "" } = this.item;
-      return ["kind-"+clean(kind)].concat(traits.map(clean));
+      const { id = "", kind = "", traits = [] } = this.item;
+      return ["id-"+clean(id), "kind-"+clean(kind)].concat(traits.map(clean));
     },
   },
    methods: {

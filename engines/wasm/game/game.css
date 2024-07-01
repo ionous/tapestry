@@ -7,7 +7,7 @@
     width: 100%;
     height: 360px;
     background-color: whitesmoke;
-    display:inline-block; 
+    display: inline-block;
 
     background-position: center;
     background-repeat: no-repeat;
@@ -19,32 +19,32 @@
     filter: brightness(10%);
   }
 
-  #cloakroom {
+  .id-cloakroom {
     background-image: url("./512px-MFS_Lichtenberg_Garderobe.jpeg");
   }
 
-  #velvet_cloak {
+  .id-velvet_cloak {
     background-repeat: no-repeat;
     background-image: url("./cloak.png");
   }
 
-  #small_brass_hook #velvet_cloak {
+  .id-small_brass_hook .id-velvet_cloak {
     background-position-x: -80px;
     height: 350px;
   }
 
-  #cloakroom > div > #velvet_cloak {
+  .id-cloakroom > div > .id-velvet_cloak {
     background-position-x: 150px;
     background-position-y: 100px;
     transform: rotateX(0.2turn);
     height: 500px;
   }
 
-  #foyer_bar {
+  .id-foyer_bar {
     background-image: url("./Pub_interior_-_geograph.org.uk_-_555584.jpg");
   }
 
-  #foyer_of_the_opera_house {
+  .id-foyer_of_the_opera_house {
     background-image: url("./512px-2009_Emerson_Majestic_Theatre_Boston_3599607642.jpg");
   }
 }

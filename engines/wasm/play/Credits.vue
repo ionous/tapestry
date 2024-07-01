@@ -26,7 +26,7 @@
     </ul>
   </p>
   <p>
-    This game was built using the <a target="_blank" href="tapestry.ionous.net">Tapestry</a> story engine.
+    This game was built using the <a target="_blank" href="https://tapestry.ionous.net">Tapestry</a> story engine.
   </p>
   
   <div ref="scrollIntoView">Thanks for playing!</div>

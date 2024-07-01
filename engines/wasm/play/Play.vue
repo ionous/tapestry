@@ -16,7 +16,7 @@
     <div class="lv-console"
       v-else-if="narration"
       @click="onContainerClicked">
-      <lv-status 
+      <lv-status v-if="!showCredits"
         :status="status"/>
       <div class="lv-output">
         <lv-output 
