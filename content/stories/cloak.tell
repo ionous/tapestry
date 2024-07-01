@@ -2,6 +2,7 @@
 # The 'Cloak of Darkness' was originally written by Roger Firth.
 # Its been implemented in many IF systems over the years.
 # This one is ported from the Inform7 version.
+---
 Define scene:requires:
   - "cloak"
   - - "tapestry"  # a library of shared object types and behaviors.
