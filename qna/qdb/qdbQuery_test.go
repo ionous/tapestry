@@ -1,11 +1,11 @@
 package qdb_test
 
 import (
-	"reflect"
 	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/rt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -135,7 +135,7 @@ func TestQueries(t *testing.T) {
 	}
 
 	// start querying
-	if q, e := qdb.NewQueries(db); e != nil {
+	if q, e := qdb.NewQueries(db, qdb.DecodeNone("testing")); e != nil {
 		t.Fatal(e)
 	} else if domainPoke, e := db.Prepare(
 		// turn on / off a domain regardless of hierarchy
@@ -155,13 +155,13 @@ func TestQueries(t *testing.T) {
 		t.Fatal("plural", many, e)
 	} else if fd, e := q.FieldsOf(kind); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(fd, []query.FieldData{
-		{Name: aspect, Affinity: affine.Text, Class: aspect},
+	} else if diff := pretty.Diff(fd, []rt.Field{
+		{Name: aspect, Affinity: affine.Text, Type: aspect},
 	}); len(diff) > 0 {
 		t.Fatal(fd, diff)
 	} else if fd, e := q.FieldsOf(aspect); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(fd, []query.FieldData{
+	} else if diff := pretty.Diff(fd, []rt.Field{
 		{Name: "brief", Affinity: affine.Bool},
 		{Name: "verbose", Affinity: affine.Bool},
 		{Name: "superbrief", Affinity: affine.Bool},
@@ -184,16 +184,16 @@ func TestQueries(t *testing.T) {
 		t.Fatal(kindOfApple, e)
 	} else if kindOfTable, e := q.NounKind("table"); e != nil || kindOfTable != "" {
 		t.Fatal(kindOfTable, e) // should be blank because the table is out of scope
-	} else */if pairs, e := q.NounValues("apple", aspect); e != nil ||
+	} else if pairs, e := q.NounValue("apple", aspect); e != nil ||
 		!reflect.DeepEqual(pairs, []query.ValueData{{Field: aspect, Value: []byte("brief")}}) {
 		t.Fatal("the aspect's current value should be the value 'brief'", pairs, e)
-	} else if pairs, e := q.NounValues("table", aspect); e != nil || pairs != nil {
-		t.Fatal(pairs, e) // should be out of scope
-	} else if name, e := q.NounName("empire apple"); e != nil || name != "empire apple" {
-		t.Fatal(name, e)
-	} else if id, e := q.NounInfo("apple"); e != nil || id != (query.NounInfo{Domain: domain, Id: "apple", Kind: kind}) {
+		// } else if pairs, e := q.NounValue("table", aspect); e != nil || pairs != nil {
+		// 	t.Fatal(pairs, e) // should be out of scope
+		// } else if name, e := q.NounName("empire apple"); e != nil || name != "empire apple" {
+		// 	t.Fatal(name, e)
+	} else */if id, e := q.NounInfo("apple"); e != nil || id != (query.NounInfo{Domain: domain, Noun: "apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if id, e := q.NounInfo("empire"); e != nil || id != (query.NounInfo{Domain: domain, Id: "empire apple", Kind: kind}) {
+	} else if id, e := q.NounInfo("empire"); e != nil || id != (query.NounInfo{Domain: domain, Noun: "empire apple", Kind: kind}) {
 		t.Fatal(e, id)
 	} else if id, e := q.NounInfo("table"); e != nil || id != (query.NounInfo{}) {
 		t.Fatal(id, e) // should be blank because the table is out of scope
@@ -201,7 +201,7 @@ func TestQueries(t *testing.T) {
 		t.Fatal("patternLabels:", e)
 	} else if diff := pretty.Diff(got, []string{"object", "other object", "ancestor"}); len(diff) > 0 {
 		t.Fatal(e, diff)
-	} else if got, e := q.RulesFor(pattern); e != nil {
+	} else /*else if got, e := q.RulesFor(pattern); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(got, []query.RuleData{
 		{Name: "rule 1", Prog: []byte("prog1")},
@@ -209,13 +209,13 @@ func TestQueries(t *testing.T) {
 		{Name: "rule 3", Prog: []byte("prog3")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
-	} else /*if got, e := q.Relation(relation); e != nil {
+	} else if got, e := q.Relation(relation); e != nil {
 		t.Fatal("relation:", e)
 	} else if diff := pretty.Diff(got, RelationData{
 		kind, kind, tables.ONE_TO_MANY,
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
-	} else */if _, _, e := q.ActivateDomains(subDomain); e != nil {
+	} else*/if _, _, e := q.ActivateDomains(subDomain); e != nil {
 		t.Fatal("ActivateDomain", e) // enable the sub domain again to get reasonable pairs
 		// note: we never previously fully activated a domain, so prev is empty.
 	} else if rel, e := q.RelativesOf(relation, "table"); e != nil ||

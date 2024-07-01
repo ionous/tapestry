@@ -86,9 +86,7 @@ func _process(_delta):
 	# done with frame.
 	_set_turn_running(false)
 
-# each evt is a Tapestry Event
-# as of 2023-10-18, the complete set is:
-# FrameOutput, PairChanged, SceneEnded, SceneStarted, StateChanged
+# each event is a taoestry command from frame.idl
 func _handle_event(cmd: TapCommands.Cmd):
 	match cmd.sig:
 		# printed text; accumulates over multiple events

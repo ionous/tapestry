@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -13,15 +14,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type CheckOutput struct {
-	Name   string
-	Domain string
-	Expect string // all tests generate text right now; fix: need to handle comparison of literal values
-	Test   []rt.Execute
-}
-
 // takes a play time so that it can run parser commands when requeted
-func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
+func RunTest(run rt.Runtime, t query.CheckData) (err error) {
 	var buf strings.Builder
 	prevWriter := run.SetWriter(print.NewLineSentences(markup.ToText(&buf)))
 	//

@@ -52,7 +52,7 @@ type MockVerbs map[string]jess.VerbDesc
 
 func (vs MockVerbs) GetVerbValue(name, field string) (ret rt.Value, err error) {
 	if v, ok := vs[name]; !ok {
-		err = fmt.Errorf("%w %q %q", weaver.Missing, name, field)
+		err = fmt.Errorf("%w %q %q", weaver.ErrMissing, name, field)
 	} else {
 		switch field {
 		case jess.VerbSubject:
@@ -74,7 +74,7 @@ func (vs MockVerbs) GetVerbValue(name, field string) (ret rt.Value, err error) {
 			}
 			ret = rt.StringOf(str)
 		default:
-			err = fmt.Errorf("%w %q %q", weaver.Missing, name, field)
+			err = fmt.Errorf("%w %q %q", weaver.ErrMissing, name, field)
 		}
 	}
 	return

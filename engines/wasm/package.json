@@ -1,0 +1,26 @@
+{
+  "name": "wasm",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "predev": "npm run compile",
+    "prebuid": "npm run clean && npm run compile",
+    "clean": "rm -Rf dist",
+    "dev": "vite",
+    "build": "vite build --base=/cloak-of-darkness",
+    "preview": "vite preview  --base=/cloak-of-darkness",
+    "compile": "concurrently -m 1 -k \"npm:compile-*\"",
+    "compile-copy": "cp ~/Documents/Tapestry/build/play.gob ./game",
+    "compile-wasm": "GOOS=js GOARCH=wasm go build -o ./game/tap.wasm ./wasm.go"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1",
+    "vue": "^3.4.29"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "vite": "^5.3.2",
+    "concurrently": "^8.2.2"
+  }
+}

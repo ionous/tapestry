@@ -1,0 +1,54 @@
+# Hugo configuration for tapestry documentation
+# based on the hugo-geekdoc theme.
+# https://geekdocs.de/usage/configuration/
+#
+# For search Geekdoc uses:
+# https://github.com/nextapps-de/flexsearch
+#
+title: Tapestry
+baseURL: https://tapestry.ionous.net/
+languageCode: en-us
+# to install the install theme:
+# 1, mkdir -p themes/hugo-geekdoc/
+# 2. curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/download/v0.45.0/hugo-geekdoc.tar.gz | tar -xz -C themes/hugo-geekdoc/ --strip-components=1
+# TODO: use a hugo module for the theme?
+theme: hugo-geekdoc
+pluralizeListTitles: false
+pygmentsUseClasses: true
+pygmentsCodeFences: true
+disablePathToLower: true
+# Required if you want to render robots.txt template
+enableRobotsTXT: true
+module:
+  mounts:
+    - target: content
+      source: content
+    - # `npm run doc-build-api` outputs to `bin/extra/codedocs`
+      target: content
+      source: ./bin/extra/codedocs
+    - target: static
+      source: static
+    - target: static
+      source: ./bin/extra/wasm
+    - target: static
+      source: ./bin/extra/schema
+
+markup:
+  goldmark:
+    renderer:
+      # Needed for mermaid shortcode or when nesting shortcodes
+      #(e.g. img within columns or tabs)
+      unsafe: true
+  tableOfContents:
+    startLevel: 1
+    endLevel: 9
+
+taxonomies:
+  tag: tags
+
+params:
+  geekdocContentLicense:
+    name: Creative Commons 4.0 Attribution
+    link: https://creativecommons.org/licenses/by/4.0/
+
+

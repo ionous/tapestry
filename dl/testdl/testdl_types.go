@@ -38,7 +38,7 @@ func (op *TestSlot_Slots) Repeats() bool {
 
 type TestEmbed struct {
 	TestFlow TestFlow
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // test_embed, a type of flow.
@@ -79,7 +79,7 @@ type TestFlow struct {
 	Num    float64
 	Bool   TestBool
 	Slots  []TestSlot
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // test_flow, a type of flow.
@@ -282,6 +282,12 @@ var z_str_list = []*typeinfo.Str{
 // A list of all nums in this this package.
 var z_num_list = []*typeinfo.Num{
 	&Zt_TestNum,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*TestEmbed)(nil))
+	reg((*TestFlow)(nil))
 }
 
 // a list of all command signatures

@@ -42,7 +42,7 @@ func (op *Brancher_Slots) Repeats() bool {
 
 // This always returns true.
 type Always struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // always, a type of flow.
@@ -79,7 +79,7 @@ func (op *Always_Slice) Repeats() bool {
 
 // This always returns false.
 type Never struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // never, a type of flow.
@@ -124,7 +124,7 @@ func (op *Never_Slice) Repeats() bool {
 // ( only sub-records start uninitialized; record variables are always true. )
 type IsValue struct {
 	Value  rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // is_value, a type of flow.
@@ -164,7 +164,7 @@ func (op *IsValue_Slice) Repeats() bool {
 // An empty list returns false.
 type IsAll struct {
 	Test   []rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // is_all, a type of flow.
@@ -204,7 +204,7 @@ func (op *IsAll_Slice) Repeats() bool {
 // An empty list returns false.
 type IsAny struct {
 	Test   []rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // is_any, a type of flow.
@@ -242,7 +242,7 @@ func (op *IsAny_Slice) Repeats() bool {
 // Determine the opposite of a condition.
 type Not struct {
 	Test   rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // not, a type of flow.
@@ -281,7 +281,7 @@ func (op *Not_Slice) Repeats() bool {
 // This is the opposite of [TrueValue].
 type NotValue struct {
 	Value  rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // not_value, a type of flow.
@@ -321,7 +321,7 @@ func (op *NotValue_Slice) Repeats() bool {
 // An empty list returns false.
 type NotAll struct {
 	Test   []rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // not_all, a type of flow.
@@ -361,7 +361,7 @@ func (op *NotAll_Slice) Repeats() bool {
 // An empty list returns false.
 type NotAny struct {
 	Test   []rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // not_any, a type of flow.
@@ -402,7 +402,7 @@ type ChooseBranch struct {
 	Args      []call.Arg
 	Exe       []rtti.Execute
 	Else      Brancher
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // choose_branch, a type of flow.
@@ -441,7 +441,7 @@ func (op *ChooseBranch_Slice) Repeats() bool {
 // Run a set of statements after a condition has failed.
 type ChooseNothingElse struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // choose_nothing_else, a type of flow.
@@ -483,7 +483,7 @@ type ChooseNum struct {
 	Args   []call.Arg
 	True   rtti.NumEval
 	False  rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // choose_num, a type of flow.
@@ -525,7 +525,7 @@ type ChooseText struct {
 	Args   []call.Arg
 	True   rtti.TextEval
 	False  rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // choose_text, a type of flow.
@@ -563,7 +563,7 @@ func (op *ChooseText_Slice) Repeats() bool {
 // In a repeating loop, exit the loop;
 // or, in a rule, stop processing rules.
 type Break struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // break, a type of flow.
@@ -601,7 +601,7 @@ func (op *Break_Slice) Repeats() bool {
 // In a repeating loop, try the next iteration of the loop;
 // or, in a rule, continue to the next rule.
 type Continue struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // continue, a type of flow.
@@ -642,7 +642,7 @@ type Repeat struct {
 	Initial   []call.Arg
 	Args      []call.Arg
 	Exe       []rtti.Execute
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // repeat, a type of flow.
@@ -717,7 +717,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine the \"truthiness\" of a value.", "Bool values simply return their value.", "Num values: are true when not exactly zero.", "Text values: are true whenever they contain content.", "List values: are true whenever the list is non-empty.", "( note this is similar to python, and different than javascript. )", "Record values: are true whenever they have been initialized.", "( only sub-records start uninitialized; record variables are always true. )"},
+			"comment": []string{"Determine the \"truthiness\" of a value.", "Bool values simply return their value.", "Num values: are true when not exactly zero.", "Text values: are true whenever they contain content.", "List values: are true whenever the list is non-empty.", "( note this is similar to python, and different than javascript. )", "Record values: are true whenever they have been initialized.", "( only sub-records start uninitialized; record variables are always true. )"},
 		},
 	}
 	Zt_IsAll = typeinfo.Flow{
@@ -736,7 +736,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Check that every condition in a set of conditions returns true.", "Stops after finding a failed condition.", "An empty list returns false."},
+			"comment": []string{"Check that every condition in a set of conditions returns true.", "Stops after finding a failed condition.", "An empty list returns false."},
 		},
 	}
 	Zt_IsAny = typeinfo.Flow{
@@ -755,7 +755,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Check whether any condition in a set of conditions returns true.", "Stops after finding the first successful condition.", "An empty list returns false."},
+			"comment": []string{"Check whether any condition in a set of conditions returns true.", "Stops after finding the first successful condition.", "An empty list returns false."},
 		},
 	}
 	Zt_Not = typeinfo.Flow{
@@ -790,7 +790,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine the \"falsiness\" of a value.", "This is the opposite of [TrueValue]."},
+			"comment": []string{"Determine the \"falsiness\" of a value.", "This is the opposite of [TrueValue]."},
 		},
 	}
 	Zt_NotAll = typeinfo.Flow{
@@ -809,7 +809,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Check that every condition in a set of conditions returns false.", "Stops after finding any successful condition.", "An empty list returns false."},
+			"comment": []string{"Check that every condition in a set of conditions returns false.", "Stops after finding any successful condition.", "An empty list returns false."},
 		},
 	}
 	Zt_NotAny = typeinfo.Flow{
@@ -828,7 +828,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Check whether any condition in a set of conditions returns false.", "Stops after finding any failed condition.", "An empty list returns false."},
+			"comment": []string{"Check whether any condition in a set of conditions returns false.", "Stops after finding any failed condition.", "An empty list returns false."},
 		},
 	}
 	Zt_ChooseBranch = typeinfo.Flow{
@@ -916,7 +916,7 @@ func init() {
 			Name:  "true",
 			Label: "then",
 			Markup: map[string]any{
-				"comment": []interface{}{"The number to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
+				"comment": []string{"The number to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -924,7 +924,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The number to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
+				"comment": []string{"The number to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -932,7 +932,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
+			"comment": []string{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
 		},
 	}
 	Zt_ChooseText = typeinfo.Flow{
@@ -958,7 +958,7 @@ func init() {
 			Name:  "true",
 			Label: "then",
 			Markup: map[string]any{
-				"comment": []interface{}{"The text to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
+				"comment": []string{"The text to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -966,7 +966,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The text to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
+				"comment": []string{"The text to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -974,7 +974,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
+			"comment": []string{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
 		},
 	}
 	Zt_Break = typeinfo.Flow{
@@ -985,7 +985,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"In a repeating loop, exit the loop;", "or, in a rule, stop processing rules."},
+			"comment": []string{"In a repeating loop, exit the loop;", "or, in a rule, stop processing rules."},
 		},
 	}
 	Zt_Continue = typeinfo.Flow{
@@ -996,7 +996,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"In a repeating loop, try the next iteration of the loop;", "or, in a rule, continue to the next rule."},
+			"comment": []string{"In a repeating loop, try the next iteration of the loop;", "or, in a rule, continue to the next rule."},
 		},
 	}
 	Zt_Repeat = typeinfo.Flow{
@@ -1006,7 +1006,7 @@ func init() {
 			Name:  "condition",
 			Label: "if",
 			Markup: map[string]any{
-				"comment": []interface{}{"The condition to check before running the loop.", "If it succeeds, execute the loop;", "if it fails, stop executing the loop."},
+				"comment": []string{"The condition to check before running the loop.", "If it succeeds, execute the loop;", "if it fails, stop executing the loop."},
 			},
 			Type: &rtti.Zt_BoolEval,
 		}, {
@@ -1015,7 +1015,7 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": []interface{}{"A set of variables available to the loop;", "evaluated just once, before the loop's first run."},
+				"comment": []string{"A set of variables available to the loop;", "evaluated just once, before the loop's first run."},
 			},
 			Type: &call.Zt_Arg,
 		}, {
@@ -1024,7 +1024,7 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": []interface{}{"A set of variables available to the loop;", "evaluated before each iteration of the loop.", "( These take precedence over the initial variables.", "If the same names appear in both sets of variables, the ones here win. )"},
+				"comment": []string{"A set of variables available to the loop;", "evaluated before each iteration of the loop.", "( These take precedence over the initial variables.", "If the same names appear in both sets of variables, the ones here win. )"},
 			},
 			Type: &call.Zt_Arg,
 		}, {
@@ -1082,6 +1082,26 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Break,
 	&Zt_Continue,
 	&Zt_Repeat,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*Always)(nil))
+	reg((*Never)(nil))
+	reg((*IsValue)(nil))
+	reg((*IsAll)(nil))
+	reg((*IsAny)(nil))
+	reg((*Not)(nil))
+	reg((*NotValue)(nil))
+	reg((*NotAll)(nil))
+	reg((*NotAny)(nil))
+	reg((*ChooseBranch)(nil))
+	reg((*ChooseNothingElse)(nil))
+	reg((*ChooseNum)(nil))
+	reg((*ChooseText)(nil))
+	reg((*Break)(nil))
+	reg((*Continue)(nil))
+	reg((*Repeat)(nil))
 }
 
 // a list of all command signatures

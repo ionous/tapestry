@@ -601,12 +601,18 @@ Spec:requires:contains:
         - "aspect_field"
         - "field_definition"
         - "aspect"
-        - - # Name for the aspect. Must be unique within the set of fields (eg. within the kind.)
-            # The field will have this same name.
+        - - # The name of here identifies both the previously defined set of states, 
+            # *and* the name of the field in the kind.
             Term:name:type:
               - "_"
               - "aspect_name"
               - "text_eval"
+          - # The initial state for objects of this kind.
+            # If not specified, the initial state will be the first state listed by the aspect.
+            Term:type:optional:
+              - "initially"
+              - "text_eval"
+              - true
 
     - # A field containing a boolean ( true/false ) value.
       # As a special case, when used to define a boolean field in a kind,

@@ -2,8 +2,7 @@ package qdb
 
 import (
 	"database/sql"
-
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 type QueryTest struct {
@@ -12,7 +11,7 @@ type QueryTest struct {
 }
 
 func NewQueryTest(db *sql.DB) (ret *QueryTest, err error) {
-	if q, e := NewQueries(db); e != nil {
+	if q, e := NewQueries(db, DecodeNone("query test")); e != nil {
 		err = e
 	} else if scan, e := db.Prepare(
 		`select domain || ':' || active
@@ -31,7 +30,7 @@ func (q *QueryTest) InnerActivate(name string) (ret []string, err error) {
 	if _, _, e := q.ActivateDomains(name); e != nil {
 		err = e
 	} else if els, e := scanStrings(q.scan); e != nil {
-		err = errutil.New("couldnt scan", name, e)
+		err = fmt.Errorf("%w couldnt scan %q", e, name)
 	} else {
 		ret = els
 	}

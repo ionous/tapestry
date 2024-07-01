@@ -56,7 +56,7 @@ func (op *ShuffleText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if curr, e := updateCounter(run, op.Name, op.Parts, wrap); e != nil {
 		err = cmd.Error(op, e)
 	} else if curr, max := curr-1, len(op.Parts); curr < max {
-		onedex := op.Indices.shuffle(run, curr, max)
+		onedex := op.indices.shuffle(run, curr, max)
 		ret, err = getNextText(run, op.Parts, onedex)
 	}
 	return

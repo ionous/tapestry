@@ -16,7 +16,7 @@ import (
 type AddValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // add_value, a type of flow.
@@ -55,7 +55,7 @@ func (op *AddValue_Slice) Repeats() bool {
 type SubtractValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // subtract_value, a type of flow.
@@ -94,7 +94,7 @@ func (op *SubtractValue_Slice) Repeats() bool {
 type MultiplyValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // multiply_value, a type of flow.
@@ -133,7 +133,7 @@ func (op *MultiplyValue_Slice) Repeats() bool {
 type DivideValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // divide_value, a type of flow.
@@ -172,7 +172,7 @@ func (op *DivideValue_Slice) Repeats() bool {
 type ModValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // mod_value, a type of flow.
@@ -210,7 +210,7 @@ func (op *ModValue_Slice) Repeats() bool {
 // Remove the sign from a value and return its positive value.
 type AbsValue struct {
 	Value  rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // abs_value, a type of flow.
@@ -249,7 +249,7 @@ func (op *AbsValue_Slice) Repeats() bool {
 type Increment struct {
 	Target rtti.Address
 	Step   rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // increment, a type of flow.
@@ -289,7 +289,7 @@ func (op *Increment_Slice) Repeats() bool {
 type Decrement struct {
 	Target rtti.Address
 	Step   rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // decrement, a type of flow.
@@ -337,7 +337,7 @@ type CompareValue struct {
 	A       rtti.Assignment
 	Compare Comparison
 	B       rtti.Assignment
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // compare_value, a type of flow.
@@ -378,7 +378,7 @@ type CompareNum struct {
 	Compare   Comparison
 	B         rtti.NumEval
 	Tolerance float64
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // compare_num, a type of flow.
@@ -418,7 +418,7 @@ type CompareText struct {
 	A       rtti.TextEval
 	Compare Comparison
 	B       rtti.TextEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // compare_text, a type of flow.
@@ -645,7 +645,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Markup: map[string]any{
-				"comment": []interface{}{"A reference to the value to increase.", "This reads and writes to that value."},
+				"comment": []string{"A reference to the value to increase.", "This reads and writes to that value."},
 			},
 			Type: &rtti.Zt_Address,
 		}, {
@@ -671,7 +671,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Markup: map[string]any{
-				"comment": []interface{}{"A reference to the value to decrease.", "This reads and writes to that value."},
+				"comment": []string{"A reference to the value to decrease.", "This reads and writes to that value."},
 			},
 			Type: &rtti.Zt_Address,
 		}, {
@@ -697,7 +697,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": []interface{}{"The first value.", "If needed, the second value will coerced to match the type of the first."},
+				"comment": []string{"The first value.", "If needed, the second value will coerced to match the type of the first."},
 			},
 			Type: &rtti.Zt_Assignment,
 		}, {
@@ -711,7 +711,7 @@ func init() {
 			Name:  "b",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": []interface{}{"The first value.", "If needed, this value will coerced to match the type of the first value."},
+				"comment": []string{"The first value.", "If needed, this value will coerced to match the type of the first value."},
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -719,7 +719,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Compare two values.", "If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.", "", "Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.", "Otherwise, the types of the values must match exactly.", "", "Numbers are compared using an internally determined default tolerance.", "To control the tolerance between numbers, use [CompareNum]."},
+			"comment": []string{"Compare two values.", "If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.", "", "Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.", "Otherwise, the types of the values must match exactly.", "", "Numbers are compared using an internally determined default tolerance.", "To control the tolerance between numbers, use [CompareNum]."},
 		},
 	}
 	Zt_CompareNum = typeinfo.Flow{
@@ -825,6 +825,21 @@ var z_flow_list = []*typeinfo.Flow{
 // A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_Comparison,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*AddValue)(nil))
+	reg((*SubtractValue)(nil))
+	reg((*MultiplyValue)(nil))
+	reg((*DivideValue)(nil))
+	reg((*ModValue)(nil))
+	reg((*AbsValue)(nil))
+	reg((*Increment)(nil))
+	reg((*Decrement)(nil))
+	reg((*CompareValue)(nil))
+	reg((*CompareNum)(nil))
+	reg((*CompareText)(nil))
 }
 
 // a list of all command signatures

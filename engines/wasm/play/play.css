@@ -1,0 +1,111 @@
+@import 'normalize.css'; 
+
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+a, a:visited {
+  color: rgb(2, 66, 242);
+}
+body {
+  background-color: #31697b;
+}
+.lv-container {
+  max-width: 500px;
+  margin: 0.5rem auto;
+}
+.lv-image {
+  margin-top: 0.5em;
+}
+.lv-status {
+  background-color: black;
+  color: white;
+}
+.lv-status__title {
+  text-align: center;
+}
+.lv-status__room {
+  float:left;
+  margin-left: 5px;
+}
+.lv-status__score {
+  float:right;
+  margin-right: 5px;
+}
+.lv-output {
+  padding: 0.25em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  overflow-y: scroll;
+  height: 300px;
+}
+.lv-input {
+  display: flex;
+  border: solid;
+  border-top: none;
+  border-width: 1px;
+  border-color: black;
+  background-color: white;
+  padding:2px;
+/*  pad*/
+}
+.lv-stub {
+   flex-grow: 1;
+}
+.lv-console, .lv-debug {
+   background-color: white;
+}
+.lv-debug {
+  height: 350px;
+  border: solid;
+  border-top: none;
+  border-width: 1px;
+  border-color: black;
+  background-color: white;
+}
+.lv-prompt {
+  flex-grow: 1;
+  display: flex;
+  padding: 3px;
+}
+.lv-prompt input {
+  flex-grow: 1;
+  background-color: gainsboro;
+  margin: 0 3px;
+}
+.lv-no-outline {
+  border-style: none;
+}
+.lv-no-outline:focus {
+  outline: none; 
+}
+/* fake blinking cursor contains the same text as the prompt
+and this positions that text overlapping it. */
+.lv-prompt i {
+  position: absolute;
+  top:0;
+  left:2ch;
+  border-right: solid;
+  border-width: 1px;
+  border-color: black;
+  font-style: normal;
+  animation: blink 1s linear infinite;
+  user-select: none;
+}
+/* hide the text used to place the blinking cursor */
+.lv-hidden {
+  width:auto;
+  visibility: hidden;
+  overflow: auto;
+}
+/* hide the fake blinking cursor when the input has the focus */
+.lv-prompt input:focus + i {
+  display: none;
+}
+@keyframes blink {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

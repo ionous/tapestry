@@ -11,10 +11,10 @@ import (
 
 // returns the real ( generally plural ) name of the kind
 func (op *Kind) Validate(ks ...kindsOf.Kinds) (ret string, err error) {
-	if k := op.ActualKind.BaseKind; len(ks) > 0 && !slices.Contains(ks, k) {
+	if k := op.actualKind.BaseKind; len(ks) > 0 && !slices.Contains(ks, k) {
 		err = fmt.Errorf("matched an unexpected kind %q", k)
 	} else {
-		ret = op.ActualKind.Name
+		ret = op.actualKind.Name
 	}
 	return
 }
@@ -31,7 +31,7 @@ func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 	var k kindsOf.Kinds
 	if m, width := q.FindKind(input.Words(), &k); width > 0 && filterKind(q, k) {
-		op.ActualKind = ActualKind{m, k}
+		op.actualKind = ActualKind{m, k}
 		op.Matched = input.Cut(width)
 		*input, okay = input.Skip(width), true
 	}

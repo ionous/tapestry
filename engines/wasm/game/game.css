@@ -1,0 +1,50 @@
+/*
+  todo: investigate flex boxes for the container and room 
+  to handle scaling into the space better 
+*/
+.lv-image {
+  .kind-rooms {
+    width: 100%;
+    height: 360px;
+    background-color: whitesmoke;
+    display: inline-block;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: sepia(60%);
+  }
+
+  .kind-rooms.unlit {
+    filter: brightness(10%);
+  }
+
+  .id-cloakroom {
+    background-image: url("./512px-MFS_Lichtenberg_Garderobe.jpeg");
+  }
+
+  .id-velvet_cloak {
+    background-repeat: no-repeat;
+    background-image: url("./cloak.png");
+  }
+
+  .id-small_brass_hook .id-velvet_cloak {
+    background-position-x: -80px;
+    height: 350px;
+  }
+
+  .id-cloakroom > div > .id-velvet_cloak {
+    background-position-x: 150px;
+    background-position-y: 100px;
+    transform: rotateX(0.2turn);
+    height: 500px;
+  }
+
+  .id-foyer_bar {
+    background-image: url("./Pub_interior_-_geograph.org.uk_-_555584.jpg");
+  }
+
+  .id-foyer_of_the_opera_house {
+    background-image: url("./512px-2009_Emerson_Majestic_Theatre_Boston_3599607642.jpg");
+  }
+}

@@ -17,6 +17,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmddoc"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmddump"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdgenerate"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdmosaic"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdnew"
@@ -193,6 +194,7 @@ func init() {
 	base.Go.Commands = []*base.Command{
 		cmdcheck.CmdCheck,
 		cmddoc.CmdDoc,
+		cmddump.CmdDump,
 		cmdgenerate.CmdGenerate,
 		cmdmosaic.CmdMosaic,
 		cmdnew.CmdNew,

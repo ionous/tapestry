@@ -3,9 +3,9 @@ package mdl
 import (
 	"database/sql"
 
+	"fmt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
 // some ugly caching:
@@ -46,7 +46,7 @@ func queryPath(db *tables.Cache, kind kindsOf.Kinds) (ret string, err error) {
 		limit 1
 		`, kind.String()).Scan(&ret); e {
 	case sql.ErrNoRows:
-		err = errutil.New("couldn't determine", kind)
+		err = fmt.Errorf("couldn't determine kind %q", kind)
 	default:
 		err = e // nil or ortherwise
 	}

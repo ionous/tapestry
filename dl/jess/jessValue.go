@@ -23,9 +23,9 @@ func (op *SingleValue) Assignment() (ret rt.Assignment) {
 	} else if n := op.MatchingNum; n != nil {
 		ret = n.Assignment()
 	} else if n := op.Noun; n != nil {
-		ret = nounAsTextValue(n.ActualNoun)
+		ret = nounAsTextValue(n.actualNoun)
 	} else if k := op.Kind; k != nil {
-		ret = kindAsTextValue(k.ActualKind)
+		ret = kindAsTextValue(k.actualKind)
 	} else {
 		panic("unmatched assignment")
 	}

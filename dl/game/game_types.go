@@ -12,7 +12,7 @@ import (
 
 // Immediately end the current game.
 type QuitGame struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // quit_game, a type of flow.
@@ -49,7 +49,7 @@ func (op *QuitGame_Slice) Repeats() bool {
 
 // Save the game.
 type SaveGame struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // save_game, a type of flow.
@@ -86,7 +86,7 @@ func (op *SaveGame_Slice) Repeats() bool {
 
 // Load the most recent save.
 type LoadGame struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // load_game, a type of flow.
@@ -123,7 +123,7 @@ func (op *LoadGame_Slice) Repeats() bool {
 
 // Unimplemented: rewind the game to undo the player's most recent input.
 type UndoTurn struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // undo_turn, a type of flow.
@@ -160,7 +160,7 @@ func (op *UndoTurn_Slice) Repeats() bool {
 
 // Print the version of the tap executable.
 type PrintVersion struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_version, a type of flow.
@@ -274,6 +274,15 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_LoadGame,
 	&Zt_UndoTurn,
 	&Zt_PrintVersion,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*QuitGame)(nil))
+	reg((*SaveGame)(nil))
+	reg((*LoadGame)(nil))
+	reg((*UndoTurn)(nil))
+	reg((*PrintVersion)(nil))
 }
 
 // a list of all command signatures

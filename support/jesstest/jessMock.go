@@ -57,7 +57,7 @@ func (m *Mock) generate(str string, val rt.Assignment) (err error) {
 				// update callbacks for the current phase
 				// in story; these would be intermixed with other scheduled elements for the phase
 				cnt, e := m.UpdatePhase(z, m, &m.jessRt)
-				missing := errors.Is(e, weaver.Missing)
+				missing := errors.Is(e, weaver.ErrMissing)
 				if (e != nil && !missing) || (missing && cnt == 0) {
 					err = e
 					break
@@ -77,11 +77,11 @@ func (m *Mock) AddNounKind(noun, kind string) (err error) {
 		if prev, exists := m.nounPool["$"+noun]; !exists {
 			m.addNounKind(noun, kind)
 		} else if prev == kind {
-			err = fmt.Errorf("%w %s already declared as %s", weaver.Duplicate, noun, prev)
+			err = fmt.Errorf("%w %s already declared as %s", weaver.ErrDuplicate, noun, prev)
 		} else if prev == "things" && thingLike(kind) {
 			m.addNounKind(noun, kind)
 		} else if kind != "things" || !thingLike(prev) {
-			err = fmt.Errorf("%w %s already declared as %s", weaver.Conflict, noun, prev)
+			err = fmt.Errorf("%w %s already declared as %s", weaver.ErrConflict, noun, prev)
 		}
 	}
 	return

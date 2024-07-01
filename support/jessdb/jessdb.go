@@ -61,7 +61,7 @@ func (d dbWrapper) FindField(kind string, ws []match.TokenValue) (ret string, wi
 
 func (d dbWrapper) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width int) {
 	if m, e := d.findNoun(ws, pkind); e != nil {
-		if !errors.Is(e, mdl.Missing) {
+		if !errors.Is(e, mdl.ErrMissing) {
 			log.Println("FindNoun", e)
 		}
 	} else {

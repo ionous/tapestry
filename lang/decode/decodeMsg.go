@@ -53,7 +53,7 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 // same as decode; errors if the passed value is something other than a map of plain values.
 func ParseMessage(v any) (ret compact.Message, err error) {
 	if m, ok := v.(map[string]any); !ok {
-		err = fmt.Errorf("expected a json map but found a %T (%q)", v, v)
+		err = fmt.Errorf("expected json map but found %T(%v)", v, v)
 	} else {
 		ret, err = DecodeMessage(m)
 	}

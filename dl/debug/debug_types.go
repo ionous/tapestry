@@ -16,7 +16,7 @@ import (
 //
 //	or rules which aren't supposed to do anything. )
 type DoNothing struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // do_nothing, a type of flow.
@@ -54,7 +54,7 @@ func (op *DoNothing_Slice) Repeats() bool {
 // Evaluate a boolean command and ensure it returns true.
 type Expect struct {
 	Value  rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // expect, a type of flow.
@@ -92,7 +92,7 @@ func (op *Expect_Slice) Repeats() bool {
 // Examine the most recent game output, and generate an error unless it matches the specified text.
 type ExpectText struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // expect_text, a type of flow.
@@ -134,7 +134,7 @@ func (op *ExpectText_Slice) Repeats() bool {
 //	Fabricate input: "s; jump; look"
 type Fabricate struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // fabricate, a type of flow.
@@ -174,7 +174,7 @@ func (op *Fabricate_Slice) Repeats() bool {
 type LogValue struct {
 	LogLevel LoggingLevel
 	Value    rtti.Assignment
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // log_value, a type of flow.
@@ -214,7 +214,7 @@ func (op *LogValue_Slice) Repeats() bool {
 type Note struct {
 	Text     rtti.TextEval
 	LogLevel LoggingLevel
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // note, a type of flow.
@@ -301,7 +301,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A runtime command that does... nothing.", "( Can be used to fill in branches ( ex. of if statements )", " or rules which aren't supposed to do anything. )"},
+			"comment": []string{"A runtime command that does... nothing.", "( Can be used to fill in branches ( ex. of if statements )", " or rules which aren't supposed to do anything. )"},
 		},
 	}
 	Zt_Expect = typeinfo.Flow{
@@ -328,7 +328,7 @@ func init() {
 			Name:  "text",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": []interface{}{"The expected line or lines.", "If an expected line ends with ellipses \"...\"", "then only the first part of the line has to match.", "", "For example, if the expectation was \"Hello...\",", "then the output \"Hello World!\" would match."},
+				"comment": []string{"The expected line or lines.", "If an expected line ends with ellipses \"...\"", "then only the first part of the line has to match.", "", "For example, if the expectation was \"Hello...\",", "then the output \"Hello World!\" would match."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -354,7 +354,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Process fake input as if the player had typed it themselves.", "Fabricate only works while running tests, and does nothing during normal game play.", "Multiple actions can be specified by separating them with semi-colons. For example:", "  Fabricate input: \"s; jump; look\""},
+			"comment": []string{"Process fake input as if the player had typed it themselves.", "Fabricate only works while running tests, and does nothing during normal game play.", "Multiple actions can be specified by separating them with semi-colons. For example:", "  Fabricate input: \"s; jump; look\""},
 		},
 	}
 	Zt_LogValue = typeinfo.Flow{
@@ -378,7 +378,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Print a value that might be useful during development.", "It will be hidden from players in the final game."},
+			"comment": []string{"Print a value that might be useful during development.", "It will be hidden from players in the final game."},
 		},
 	}
 	Zt_Note = typeinfo.Flow{
@@ -400,7 +400,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Print a message that might be useful during development.", "It will be hidden from players in the final game."},
+			"comment": []string{"Print a message that might be useful during development.", "It will be hidden from players in the final game."},
 		},
 	}
 }
@@ -431,6 +431,16 @@ var z_flow_list = []*typeinfo.Flow{
 // A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_LoggingLevel,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*DoNothing)(nil))
+	reg((*Expect)(nil))
+	reg((*ExpectText)(nil))
+	reg((*Fabricate)(nil))
+	reg((*LogValue)(nil))
+	reg((*Note)(nil))
 }
 
 // a list of all command signatures

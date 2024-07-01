@@ -3,9 +3,13 @@
 {{- end }}
 type {{Pascal .Name}} struct {
 {{- range $i, $t := .Terms }}
-	{{Pascal $t.Name}} {{TermType $t}}
+	{{ if not $t.Private 
+	}}{{ Pascal $t.Name
+	}}{{ else 
+	}}{{ Camelize $t.Name
+	}}{{ end }} {{TermType $t}}
 {{- end }}
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // {{.Name}}, a type of flow.

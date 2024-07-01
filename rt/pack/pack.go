@@ -10,46 +10,43 @@ import (
 )
 
 // serialize the passed record in tapestry command format
-func PackValue(v rt.Value) (ret string, err error) {
+func PackValue(v rt.Value) string {
 	var out js.Builder
-	if e := packValue(&out, v); e != nil {
-		err = e
-	} else {
-		ret = out.String()
-	}
-	return
+	packValue(&out, v)
+	return out.String()
 }
 
 // serialize the passed record in tapestry command format
-func PackRecord(rec *rt.Record) (ret string, err error) {
+func PackRecord(rec *rt.Record) string {
 	var out js.Builder
-	if e := packRecord(&out, rec); e != nil {
-		err = e
-	} else {
-		ret = out.String()
-	}
-	return
+	packRecord(&out, rec)
+	return out.String()
 }
 
-func packRecord(out *js.Builder, rec *rt.Record) (err error) {
+func packRecord(out *js.Builder, rec *rt.Record) {
 	var b encode.SigBuilder
 	out.Brace(js.Obj, func(out *js.Builder) {
 		b.WriteLede(rec.Name())
 		for i, cnt := 0, rec.FieldCount(); i < cnt; i++ {
-			b.WriteLabel(rec.Field(i).Name)
+			if rec.HasValue(i) {
+				b.WriteLabel(rec.Field(i).Name)
+			}
 		}
 		out.Q(b.String()).R(js.Colon).Brace(js.Array, func(out *js.Builder) {
+			var comma bool
 			for i, cnt := 0, rec.FieldCount(); i < cnt; i++ {
-				if 1 > 0 {
-					out.R(js.Comma)
-				}
-				if v, e := rec.GetIndexedField(i); e == nil {
-					packValue(out, v)
-				} else if rt.IsNilRecord(e) {
-					out.Raw("null")
-				} else {
-					err = e // really shouldn't be possible.
-					break
+				if rec.HasValue(i) {
+					if comma {
+						out.R(js.Comma)
+					}
+					if v, e := rec.GetIndexedField(i); e != nil {
+						// should only return error for nil record;
+						// and that should have been !HasValue
+						panic(e)
+					} else {
+						packValue(out, v)
+						comma = true
+					}
 				}
 			}
 		})
@@ -57,7 +54,7 @@ func packRecord(out *js.Builder, rec *rt.Record) (err error) {
 	return
 }
 
-func packValue(out *js.Builder, v rt.Value) (err error) {
+func packValue(out *js.Builder, v rt.Value) {
 	switch a := v.Affinity(); a {
 	default:
 		log.Panicf("unexpected affinity %s", a)
@@ -71,7 +68,7 @@ func packValue(out *js.Builder, v rt.Value) (err error) {
 		el := v.String()
 		out.Q(el)
 	case affine.Record:
-		err = packRecord(out, v.Record())
+		packRecord(out, v.Record())
 	case affine.NumList:
 		els := v.Floats()
 		out.Brace(js.Array, func(_ *js.Builder) {
@@ -98,11 +95,7 @@ func packValue(out *js.Builder, v rt.Value) (err error) {
 				if i > 0 {
 					out.R(js.Comma)
 				}
-				el := v.Index(i)
-				if e := packRecord(out, el.Record()); e != nil {
-					err = e
-					break
-				}
+				packRecord(out, v.Index(i).Record())
 			}
 		})
 	}

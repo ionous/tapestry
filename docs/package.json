@@ -1,0 +1,24 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "Hugo site for tapestry documentation.",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "exec-bin": "^1.0.0",
+    "hugo-installer": "^4.0.1"
+  },
+  "scripts": {
+    "postinstall": "concurrently -m 1 -k \"npm:pi-*\"",
+    "pi-hugo": "hugo-installer --version 0.125.7",
+    "pi-theme-1": "mkdir -p ./themes/hugo-geekdoc/",
+    "pi-theme-2": "curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/download/v0.45.0/hugo-geekdoc.tar.gz | tar -xz -C ./themes/hugo-geekdoc/ --strip-components=1",
+    "predev": "npm run dupe",
+    "prebuild": "npm run dupe",
+    "dupe": "cp -pf ../content/stories/cloak.tell ./static/_includes",
+    "dev": "exec-bin ./bin/hugo/hugo server -d ./bin/site",
+    "build": "concurrently -m 1 -k \"npm:build-*\"",
+    "build-hugo": "exec-bin ./bin/hugo/hugo -d ./bin/site",
+    "build-tar": "tar -C ./bin/site -cvz . > ./bin/site.tar.gz",
+    "publish": "hut pages publish -d tapestry.ionous.net ./bin/site.tar.gz"
+  }
+}

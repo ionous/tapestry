@@ -1,0 +1,189 @@
+---
+# 'Cloak of Darkness', originally told by Roger Firth,
+# is a story which has been implemented in many if systems over the years.
+# It contains some essential features used by interactive fiction including: descriptions of rooms, their contents, and connections, darkness and the control of light, scoring, and more.
+Define scene:requires:
+  - "cloak"
+  - - "tapestry"
+    - "scoring"
+---
+The title of the story is "The Cloak of Darkness."
+The story has the headline "An example story."
+The story has the max score 2.
+
+# The Foyer:
+The Foyer of the Opera House is a room. You are in the foyer.
+The description of the Foyer is "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and east."
+
+The entrance is a scenery door in the foyer. North from the foyer is the entrance. Through the entrance is the Street. Instead of traveling through the entrance:
+  - Say: "You've only just arrived and besides the weather outside is terrible."
+
+# The Cloakroom:
+East from the Foyer is the Cloakroom. The Cloakroom has the description "In the Opera's better days the walls of this small room must have been lined with coat hooks. Now, only one remains. The exit is a door to the west."
+
+In the Cloakroom is a scenery supporter called the small brass hook.
+# The description of the hook depends on the number of things hanging on it.
+# This uses a special template syntax to achieve that.
+The hook has the description "A brass hook{if children_of: .hook} with {children_of: .hook | print_inline_objects!} hanging on it{else} screwed into the wall{end}."
+
+# Understandings change the game's input parser,
+# and allow a player to refer to objects in new ways.
+# For instance, these allow the player to type: > hang cloak on peg.
+# Without these, they could only use: > put cloak on hook.
+
+Understand "peg" as the hook.
+Understand "hang [objects] on/onto [objects]" as storing.
+
+# The Foyer Bar
+South from the Foyer is the Foyer Bar. The bar is unlit. The scrawled message is scenery in the bar.
+The description of the bar is "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor."
+
+Neatness is a kind of aspect. The neatnesses are neat, scuffed, and trampled.
+Messages are a kind of thing. Messages have a neatness. The scrawled message is a message.
+Understand "floor" or "sawdust" as the message.
+
+Instead of examining the message:
+  - Increase: "#story.score"
+  - Say: "The message, {if .message.neat}neatly {end}marked in the sawdust, reads..."
+  - EndGame finally:
+      FromBool: true
+
+# when multiple rules for the same action exist
+# the later rule is considered a refinement.
+# it "overrides" rules described earlier
+# a sort of, i may have said that before but actually...
+Instead of examining the message:
+  - If:do:
+    - "#message.trampled"
+    - - Say: "The message has been carelessly trampled, making it difficult to read. You can just distinguish the words..."
+      - EndGame saying:
+          FromText: "You have lost"
+
+Instead of going:
+  - If:do:
+    - Is all:
+      - Is:matching:text:
+        - "#story.location"
+        - "equal_to"
+        - "#bar"
+      - "#bar.unlit"
+      - # this is unsatisfying
+        # would love to say 'destination' other than 'foyer'
+        # but destination comes from door, and if there is no door there's no destination.
+        Is:matching:text:
+        - "@direction"
+        - "other_than"
+        - "#north"
+    - - Set:state:
+        - "#message"
+        - "trampled"
+      - Say: "Blundering around in the dark isn't a good idea!"
+
+# block actions other than "going" when in the darkened bar:
+Instead of running an action:
+  - If:do:
+    - Is all:
+      - Is:matching:text:
+          - "#story.location"
+          - "equal_to"
+          - "#bar"
+      - Is:matching:text:
+        - "@action"
+        - "other_than"
+        - "going"
+      - "#bar.unlit"
+    - - # increase neatness, clamp so that it doesn't go past 'trampled'
+        Increase:state:clamp:
+          - "#message"
+          - "neatness"
+          - true
+      - Say: "In the dark? You could easily disturb something."
+
+# --------------------------------------------------------------------------------
+# The cloak of darkness.
+# --------------------------------------------------------------------------------
+You are wearing a velvet cloak. The description of the cloak is "A handsome cloak made of velvet trimmed with satin. Its blackness is so deep that it seems to suck light from the room." Understand "dark", "black", or "satin" as the cloak.
+
+After taking the cloak:
+  - Set:state:
+    - "#bar"
+    - "unlit"
+
+# TODO: it'd be nice to have a generic way to capture is/not in possession.
+After dropping the cloak:
+  - Set:state:
+    - "#bar"
+    - "lit"
+
+# FIX: this allows a player to increase their score multiple times by repeatedly taking and dropping the cloak.
+After storing the cloak:
+  - Set:state:
+    - "#bar"
+    - "lit"
+  - Increase: "#story.score"
+
+Instead of dropping the cloak:
+  - If:do:
+    - Is:matching:text:
+      - "#story.location"
+      - "other_than"
+      - "#cloakroom"
+    - - Say: "This isn't the best place to leave such a nice piece of clothing."
+
+Instead of storing the cloak:
+  - If:do:
+    - Is:matching:text:
+      - "#story.location"
+      - "other_than"
+      - "#cloakroom"
+    - - Say: "This isn't the best place to leave such a nice piece of clothing."
+
+# --------------------------------------------------------------------------------
+# Testing!
+# --------------------------------------------------------------------------------
+---
+# dropping the cloak of darkness should give you some points
+# but shouldn't let you win the game.
+- Define test:do:
+  - "cloak of dropping"
+  - - StartGame actor:quietly:
+      - FromText: "#player.pawn"
+      - FromBool: true
+    - Fabricate input: "e; take off cloak; drop cloak; w; s; x message"
+    - Expect: "#story.completed"
+    - Expect:
+        Is:matching:num:
+        - "#story.score"
+        - "equal_to"
+        - 1
+
+# handing the cloak on the hook;
+# that's where it's at.
+- Define test:do:
+  - "cloak of perfection"
+  - - StartGame actor:quietly:
+      - FromText: "#player.pawn"
+      - FromBool: true
+    - Fabricate input: "e; take off cloak; put cloak on peg; w; s; x message"
+    - Expect: "#story.completed"
+    - Expect:
+        Is:matching:num:
+        - "#story.score"
+        - "equal_to"
+        - 2
+
+# disturbing the message should fail the game.
+- Define test:do:
+  - "cloak of failure"
+  - - StartGame actor:quietly:
+      - FromText: "#player.pawn"
+      - FromBool: true
+    - Fabricate input: "s; jump; jump; n; e; take off cloak; drop cloak; w; s; x message"
+    - # game should be finished, but not completed.
+      Expect: "#story.concluded"
+    - # dropping the cloak shouldn't have earned you any points.
+      Expect:
+        Is:matching:num:
+        - "#story.score"
+        - "equal_to"
+        - 0

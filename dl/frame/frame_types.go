@@ -45,7 +45,7 @@ type Frame struct {
 	Result string
 	Events []Notification
 	Error  string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // frame, a type of flow.
@@ -80,7 +80,7 @@ func (op *Frame_Slice) Repeats() bool {
 // Printed text that should be visible the player.
 type FrameOutput struct {
 	Text   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // frame_output, a type of flow.
@@ -115,10 +115,48 @@ func (op *FrameOutput_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// System game event.
+type GameSignal struct {
+	Signal string
+	Markup map[string]any `json:",omitempty"`
+}
+
+// game_signal, a type of flow.
+var Zt_GameSignal typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*GameSignal) TypeInfo() typeinfo.T {
+	return &Zt_GameSignal
+}
+
+// Implements [typeinfo.Markup]
+func (op *GameSignal) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ Notification = (*GameSignal)(nil)
+
+// Holds a slice of type GameSignal.
+type GameSignal_Slice []GameSignal
+
+// Implements [typeinfo.Instance] for a slice of GameSignal.
+func (*GameSignal_Slice) TypeInfo() typeinfo.T {
+	return &Zt_GameSignal
+}
+
+// Implements [typeinfo.Repeats] for a slice of GameSignal.
+func (op *GameSignal_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // One or more scenes ( aka domain ) have started.
 type SceneStarted struct {
 	Domains []string
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // scene_started, a type of flow.
@@ -156,7 +194,7 @@ func (op *SceneStarted_Slice) Repeats() bool {
 // One or more scenes ( aka domain ) have finished.
 type SceneEnded struct {
 	Domains []string
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // scene_ended, a type of flow.
@@ -197,7 +235,7 @@ type StateChanged struct {
 	Aspect string
 	Prev   string
 	Trait  string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // state_changed, a type of flow.
@@ -237,7 +275,7 @@ type PairChanged struct {
 	A      string
 	B      string
 	Rel    string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // pair_changed, a type of flow.
@@ -298,7 +336,7 @@ func init() {
 			Label:    "error",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Any critical server errors.", "Returned to the client as a string", "so that it can be displayed to the player."},
+				"comment": []string{"Any critical server errors.", "Returned to the client as a string", "so that it can be displayed to the player."},
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -321,6 +359,23 @@ func init() {
 		},
 		Markup: map[string]any{
 			"comment": "Printed text that should be visible the player.",
+		},
+	}
+	Zt_GameSignal = typeinfo.Flow{
+		Name: "game_signal",
+		Lede: "game_signal",
+		Terms: []typeinfo.Term{{
+			Name: "signal",
+			Markup: map[string]any{
+				"comment": []string{"String version of the system event.", "( see go package game type Signal. )"},
+			},
+			Type: &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Notification,
+		},
+		Markup: map[string]any{
+			"comment": "System game event.",
 		},
 	}
 	Zt_SceneStarted = typeinfo.Flow{
@@ -456,10 +511,22 @@ var z_slot_list = []*typeinfo.Slot{
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_Frame,
 	&Zt_FrameOutput,
+	&Zt_GameSignal,
 	&Zt_SceneStarted,
 	&Zt_SceneEnded,
 	&Zt_StateChanged,
 	&Zt_PairChanged,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*Frame)(nil))
+	reg((*FrameOutput)(nil))
+	reg((*GameSignal)(nil))
+	reg((*SceneStarted)(nil))
+	reg((*SceneEnded)(nil))
+	reg((*StateChanged)(nil))
+	reg((*PairChanged)(nil))
 }
 
 // a list of all command signatures
@@ -468,6 +535,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	14657663848717440116: (*Frame)(nil),        /* Frame result:events: */
 	2438049115146588168:  (*Frame)(nil),        /* Frame result:events:error: */
 	1471826827262877163:  (*FrameOutput)(nil),  /* notification=FrameOutput: */
+	12436577688224376915: (*GameSignal)(nil),   /* notification=GameSignal: */
 	7717838589161657001:  (*PairChanged)(nil),  /* notification=PairChanged a:b:rel: */
 	5707328743025875669:  (*SceneEnded)(nil),   /* notification=SceneEnded: */
 	6789405419350772834:  (*SceneStarted)(nil), /* notification=SceneStarted: */

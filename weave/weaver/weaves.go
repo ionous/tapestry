@@ -9,15 +9,15 @@ import (
 
 // when the definition would contradict existing information:
 // the returned error wraps this tag. errors.Is can be used to detect it.
-const Conflict = mdl.Conflict
+var ErrConflict = mdl.ErrConflict
 
 // when the definition would repeat existing information:
 // the returned error wraps this tag. errors.Is can be used to detect it.
-const Duplicate = mdl.Duplicate
+var ErrDuplicate = mdl.ErrDuplicate
 
 // when the definition can't find some required information:
 // the returned error wraps this tag. errors.Is can be used to detect it.
-const Missing = mdl.Missing
+var ErrMissing = mdl.ErrMissing
 
 type Weaves interface {
 	// set the possible traits of an aspect

@@ -72,7 +72,7 @@ Using '-test' can run the list of specified commands as if a player had typed th
 // filled with the user's choices as described by buildFlags()
 var cfg = struct {
 	inFile, saveDir, testString string
-	json, debugging, responses  bool
+	json, responses  bool
 	logLevel                    string
 }{}
 

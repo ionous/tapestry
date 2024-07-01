@@ -3,10 +3,8 @@
   "bugs": {
     "url": "https://todo.sr.ht/~ionous/tapestry"
   },
-  "dependencies": {
-    "exec-bin": "^1.0.0",
-    "concurrently": "^8.2.2",
-    "hugo-installer": "^4.0.1"
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   },
   "description": "A story engine for games.",
   "homepage": "https://git.sr.ht/~ionous/tapestry#readme",
@@ -17,23 +15,22 @@
     "url": "https://git.sr.ht/~ionous/tapestry.git"
   },
   "scripts": {
-    "doc": "concurrently -m 1 -k \"npm:doc-*\"",
-    "doc-gen": "go run ./cmd/tap gen -in ./idl -out ./dl",
-    "doc-build-api": "go run ./cmd/tap doc -out ./bin/docextra/api",
-    "doc-schema": "go run ./cmd/tap gen -in idl -schema ./bin/static/schema/tap.schema.json",
-    "doc-hugo": "exec-bin ./bin/hugo/hugo -s doc -d ../bin/doc",
-    "doc-tar": "tar -C ./bin/doc -cvz . > ./bin/site.tar.gz",
-    "publish": "hut pages publish -d tapestry.ionous.net ./bin/site.tar.gz",
     "mosaic": "npm run -w www dev",
-    "hugo": "exec-bin ./bin/hugo/hugo server -s ./doc -d ../bin/doc",
-    "postinstall": "concurrently -m 1 -k \"npm:post-*\"",
-    "post-hugo": "hugo-installer --version 0.125.7",
-    "post-theme-1": "mkdir -p ./doc/themes/hugo-geekdoc/",
-    "post-theme-2": "curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/download/v0.45.0/hugo-geekdoc.tar.gz | tar -xz -C ./doc/themes/hugo-geekdoc/ --strip-components=1"
-
+    "build": "concurrently -m 1 -k \"npm:build-*\"",
+    "build-go": "go build ./...",
+    "build-code": "go run ./cmd/tap code -in ./idl -out ./dl",
+    "build-tap": "go build ./cmd/tap",
+    "build-code-docs": "./cmd/tap doc -out ./docs/bin/extra/codedocs/api",
+    "build-code-schema": "./cmd/tap code -in idl -schema ./docs/bin/extra/static/schema/tap.schema.json",
+    "build-wasm": "npm run -w wasm build",
+    "build-wasm-docs": "cp -pfR ./engines/wasm/dist/ ./docs/bin/extra/wasm/cloak-of-darkness",
+    "build-godot": "go build -C ./engines/godot/ext/src -o taplib.so -buildmode=c-shared taplib.go",
+    "build-docs": "npm run -w docs build"
   },
   "version": "1.0.0",
   "workspaces": [
-    "www"
+    "www",
+    "engines/wasm",
+    "docs"
   ]
 }

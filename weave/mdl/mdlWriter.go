@@ -2,8 +2,11 @@ package mdl
 
 import (
 	"database/sql"
+	"errors"
 	"slices"
 	"strings"
+
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/call"
@@ -12,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
 // tbd: perhaps writing the aspect to its own table would be best
@@ -23,12 +25,12 @@ func (pen *Pen) AddAspectTraits(aspect string, traits []string) (err error) {
 	if kid, e := pen.findRequiredKind(aspect); e != nil {
 		err = e // ^ hrm.
 	} else if isAspect := strings.HasSuffix(kid.fullpath(), pen.getPath(kindsOf.Aspect)); !isAspect {
-		err = errutil.Fmt("kind %q in domain %q is not an aspect", aspect, pen.domain)
+		err = fmt.Errorf("kind %q in domain %q is not an aspect", aspect, pen.domain)
 	} else if strings.Count(kid.fullpath(), ",") != 3 {
 		// tbd: could loosen this; for now it simplifies writing the aspects;
 		// no need to check for conflicting fields if there's no derivation
 		// doesn't stop someone from adding derivation later though ...
-		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
+		err = fmt.Errorf("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
 	} else {
 		err = pen.addTraits(kid, traits)
 	}
@@ -53,20 +55,20 @@ func (pen *Pen) addTraits(kid kindInfo, traits []string) (err error) {
 			from mdl_field mf 
 			where mf.kind = ?1
 			order by mf.rowid`, kid.id); e != nil {
-		err = errutil.New("database error", e)
+		err = fmt.Errorf("database error: %s", e)
 	} else if len(existingTraits) > 0 {
 		// fix? doesn't stop someone from adding new traits later though....
 		// field builder could check that it only builds kindsOf.Kind
 		if slices.Compare(traits, existingTraits) != 0 {
-			err = errutil.Fmt("aspect %q from %q already has traits", kid.name, domain)
+			err = fmt.Errorf("aspect %q from %q already has traits", kid.name, domain)
 		}
 	} else if kid.domain != domain {
-		err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
+		err = fmt.Errorf("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
 			kid.name, kid.domain, domain)
 	} else {
 		for _, t := range traits {
 			if _, e := pen.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
-				err = errutil.New("database error", e)
+				err = fmt.Errorf("database error: %s", e)
 				break
 			}
 		}
@@ -98,19 +100,17 @@ func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Exec
 			where base = ?1
 			and name = ?2
 		`, domain, name).Scan(&prev.id, &prev.domain, &prev.prog, &prev.value); e != nil && e != sql.ErrNoRows {
-			err = errutil.New("database error", e)
+			err = fmt.Errorf("database error: %s", e)
 		} else {
 			// the user can write the check in parts if they so desire:
 			if prev.id != 0 {
 				if prog != nil && prev.prog {
-					e := errutil.Fmt("%w new program for check %q in %q already specified in %q",
-						Conflict, name, domain, prev.domain)
-					err = errutil.Append(err, e)
+					err = fmt.Errorf("%w new program for check %q in %q already specified in %q",
+						ErrConflict, name, domain, prev.domain)
 				}
 				if value != nil && prev.value {
-					e := errutil.Fmt("%w new expectation for check %q in %q already specified in %q",
-						Conflict, name, domain, prev.domain)
-					err = e
+					err = fmt.Errorf("%w new expectation for check %q in %q already specified in %q",
+						ErrConflict, name, domain, prev.domain)
 				}
 			}
 
@@ -136,7 +136,7 @@ func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Exec
 						} else if cnt, e := res.RowsAffected(); cnt != 1 {
 							err = e
 						} else {
-							err = errutil.Fmt("unexpected error updating check %q; %d rows affected.",
+							err = fmt.Errorf("unexpected error updating check %q; %d rows affected.",
 								name, cnt)
 						}
 					}
@@ -164,7 +164,7 @@ var mdl_fact = tables.Insert("mdl_fact", "domain", "fact", "value", "at")
 
 func makeKeyValue(key string, partsAndValue []string) (k, v string, err error) {
 	if end := len(partsAndValue) - 1; end < 0 {
-		err = errutil.New("invalid fact", key)
+		err = fmt.Errorf("invalid fact %s", key)
 	} else if end == 0 {
 		k, v = key, partsAndValue[0]
 	} else {
@@ -201,22 +201,22 @@ func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err err
 		switch e := q.Scan(&prev.domain, &prev.value); e {
 		case sql.ErrNoRows:
 			if _, e := pen.db.Exec(mdl_fact, domain, fact, value, pen.at); e != nil {
-				err = errutil.New("database error", e)
+				err = fmt.Errorf("database error: %s", e)
 			} else {
 				okay = true
 			}
 		case nil:
 			if prev.value != value {
-				err = errutil.Fmt("%w fact %q was %q in domain %q and now %q in domain %q",
-					Conflict, fact, prev.value, prev.domain, value, domain)
+				err = fmt.Errorf("%w fact %q was %q in domain %q and now %q in domain %q",
+					ErrConflict, fact, prev.value, prev.domain, value, domain)
 			} else {
 				// do we want to warn about duplicate facts? isnt that kind of the point of them?
 				// maybe eat at the weave level?
 				pen.warn("%w fact %q already declared in domain %q and now domain %q",
-					Duplicate, fact, prev.domain, domain)
+					ErrDuplicate, fact, prev.domain, domain)
 			}
 		default:
-			err = errutil.New("database error", e)
+			err = fmt.Errorf("database error: %s", e)
 		}
 	}
 	return
@@ -253,15 +253,15 @@ func (pen *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
 
 		case nil:
 			if prev.prog != prog {
-				err = errutil.Fmt("%w grammar %q was %q in domain %q and now %q in domain %q",
-					Conflict, name, prev.prog, prev.domain, prog, domain)
+				err = fmt.Errorf("%w grammar %q was %q in domain %q and now %q in domain %q",
+					ErrConflict, name, prev.prog, prev.domain, prog, domain)
 			} else {
 				pen.warn("%w grammar %q already declared in domain %q and now domain %q",
-					Duplicate, name, prev.domain, domain)
+					ErrDuplicate, name, prev.domain, domain)
 			}
 
 		default:
-			err = errutil.New("database error", e)
+			err = fmt.Errorf("database error: %s", e)
 		}
 	}
 	return
@@ -282,7 +282,7 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 		err = e
 	} else if len(parent.name) > 0 && parent.id == 0 {
 		// a specified ancestor doesn't exist.
-		err = errutil.Fmt("%w ancestor %q", Missing, parent.name)
+		err = fmt.Errorf("%w ancestor %q", ErrMissing, parent.name)
 	} else if kind, e := pen.findKind(name); e != nil {
 		err = e
 	} else if kind.id != 0 {
@@ -309,7 +309,7 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 			// we verified the other inputs already, so insert:
 			path := parent.fullpath()
 			if res, e := pen.db.Exec(mdl_kind, domain, name, optionalOne, trimPath(path), at); e != nil {
-				err = errutil.New("database error", e)
+				err = fmt.Errorf("database error: %s", e)
 			} else if newid, e := res.LastInsertId(); e != nil {
 				err = e
 			} else {
@@ -355,40 +355,40 @@ func (pen *Pen) addAncestor(kind, parent kindInfo) (err error) {
 	if !kind.exactName && parent.numAncestors() < 2 {
 		// we only allow plural named kinds for nouns ( kinds of kind )
 		// see notes in jessAspects.go
-		err = errutil.Fmt("%w plural singular conflict for %q (in %q)",
-			Conflict, name, domain)
+		err = fmt.Errorf("%w plural singular conflict for %q (in %q)",
+			ErrConflict, name, domain)
 	} else if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
-		err = errutil.Fmt("%w circular reference detected %q already declared as an ancestor of %q.",
-			Conflict, parent.name, name)
+		err = fmt.Errorf("%w circular reference detected %q already declared as an ancestor of %q.",
+			ErrConflict, parent.name, name)
 	} else if strings.HasSuffix(kind.path, parent.fullpath()) {
 		// did the existing path fully contain the new ancestor?
 		// then its a duplicate request (ex. `,c,b,a,` `,b,a,` )
 		pen.warn("%w %q already declared as an ancestor of %q.",
-			Duplicate, parent.name, name)
+			ErrDuplicate, parent.name, name)
 	} else if strings.HasSuffix(parent.fullpath(), kind.path) {
 		// is the newly specified ancestor more specific than the existing path?
 		// then we are ratcheting down. (ex. `,c,b,a,` `,b,a,` )
 		if kind.domain != domain {
 			// if it was declared in a different domain: we can't change it now.
-			err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
-				Conflict, name, parent.name, kind.domain, domain)
+			err = fmt.Errorf("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
+				ErrConflict, name, parent.name, kind.domain, domain)
 		} else if res, e := pen.db.Exec(`update mdl_kind set path = ?2 where rowid = ?1`,
 			kind.id, trimPath(parent.fullpath())); e != nil {
 			err = e
 		} else if cnt, e := res.RowsAffected(); cnt != 1 {
-			err = errutil.Fmt("unexpected error updating hierarchy of %q; %d rows affected.",
+			err = fmt.Errorf("unexpected error updating hierarchy of %q; %d rows affected.",
 				name, cnt)
 		} else if e != nil {
 			err = e
 		}
 	} else if kind.domain != domain {
 		// unrelated completely? then its an error
-		err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
-			Conflict, name, parent.name, kind.domain, domain)
+		err = fmt.Errorf("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
+			ErrConflict, name, parent.name, kind.domain, domain)
 	} else {
 		// its possible some future definition might allow this to happen.
-		err = errutil.Fmt("%w a definition in domain %q that would allow %q to have the ancestor %q; the hierarchies differ.",
-			Missing, domain, name, parent.name)
+		err = fmt.Errorf("%w a definition in domain %q that would allow %q to have the ancestor %q; the hierarchies differ.",
+			ErrMissing, domain, name, parent.name)
 	}
 	return
 }
@@ -420,7 +420,7 @@ func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 		// easiest is if the name has never been mentioned before;
 		// we verified the other inputs already, so just go ahead and insert:
 		if res, e := pen.db.Exec(mdl_noun, domain, name, parent.id, at); e != nil {
-			err = errutil.New("database error", e)
+			err = fmt.Errorf("database error: %s", e)
 		} else if newid, e := res.LastInsertId(); e != nil {
 			err = e
 		} else {
@@ -439,23 +439,23 @@ func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 		if strings.HasSuffix(prev.fullpath, parent.fullpath()) {
 			// does the existing kind fully contain the new kind?
 			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
-			err = errutil.Fmt("%w %q already declared as a kind of %q",
-				Duplicate, name, ancestor)
+			err = fmt.Errorf("%w %q already declared as a kind of %q",
+				ErrDuplicate, name, ancestor)
 
 		} else if !strings.HasSuffix(parent.fullpath(), prev.fullpath) {
 			// unrelated completely? then its an error
-			err = errutil.Fmt("%w can't redefine kind of %q as %q",
-				Conflict, name, ancestor)
+			err = fmt.Errorf("%w can't redefine kind of %q as %q",
+				ErrConflict, name, ancestor)
 		} else if prev.domain != domain {
 			// if it was declared in a different domain: we can't change it now.
-			err = errutil.Fmt("%w new ancestor %q of %q expected in the same domain as the original declaration; was %q now %q",
-				Conflict, ancestor, name, prev.domain, domain)
+			err = fmt.Errorf("%w new ancestor %q of %q expected in the same domain as the original declaration; was %q now %q",
+				ErrConflict, ancestor, name, prev.domain, domain)
 		} else {
 			if res, e := pen.db.Exec(`update mdl_noun set kind = ?2 where rowid = ?1`,
 				prev.id, parent.id); e != nil {
 				err = e
 			} else if cnt, e := res.RowsAffected(); cnt != 1 {
-				err = errutil.Fmt("unexpected error updating hierarchy of %q; %d rows affected",
+				err = fmt.Errorf("unexpected error updating hierarchy of %q; %d rows affected",
 					name, cnt)
 			} else if e != nil {
 				err = e
@@ -490,13 +490,13 @@ func (pen *Pen) addName(noun nounInfo, name string, rank int) (err error) {
 	where base = ?1
 	and noun = ?2
 	and name = ?3`, pen.domain, noun.id, name).Scan(&exists); e != nil && e != sql.ErrNoRows {
-		err = errutil.New("database error", e)
+		err = fmt.Errorf("database error: %s", e)
 	} else if exists {
 		// tbd: silence duplicates?
 		// since these are generated, there's probably very little the user could do about them.
-		pen.warn("%w %q already an alias of %q", Duplicate, name, noun.name)
+		pen.warn("%w %q already an alias of %q", ErrDuplicate, name, noun.name)
 	} else if _, e := pen.db.Exec(mdl_name, pen.domain, noun.id, name, rank, pen.at); e != nil {
-		err = errutil.New("database error", e)
+		err = fmt.Errorf("database error: %s", e)
 	}
 	return
 }
@@ -539,7 +539,7 @@ func (pen *Pen) AddNounPair(rel, oneNoun, otherNoun string) (err error) {
 
 		default:
 			// well, it should have been one of those.
-			err = errutil.Fmt("invalid cardinality %q for %q", card, rel.name)
+			err = fmt.Errorf("invalid cardinality %q for %q", card, rel.name)
 		}
 		if err == nil {
 			if e := pen.checkPair(rel, one, other, reverse, multi); e != nil {
@@ -559,7 +559,7 @@ func (pen *Pen) findCardinality(kind kindInfo) (ret string, err error) {
 	where relKind = ?1 
 	limit 1
 	`, kind.id).Scan(&ret); e == sql.ErrNoRows {
-		err = errutil.Fmt("unknown or invalid cardinality for %q in %q", kind.name, kind.domain)
+		err = fmt.Errorf("unknown or invalid cardinality for %q in %q", kind.name, kind.domain)
 	} else {
 		err = e
 	}
@@ -568,16 +568,16 @@ func (pen *Pen) findCardinality(kind kindInfo) (ret string, err error) {
 
 func (pen *Pen) AddPattern(pat Pattern) (err error) {
 	if e := pat.writePattern(pen, true); e != nil {
-		err = errutil.Fmt("%w adding pattern %q domain %q", e, pat.name, pen.domain)
+		err = fmt.Errorf("%w adding pattern %q domain %q", e, pat.name, pen.domain)
 	}
 	return
 }
 
 func (pen *Pen) ExtendPattern(pat Pattern) (err error) {
 	if pat.parent != kindsOf.Pattern.String() {
-		err = errutil.Fmt("extend pattern %q didn't expect a newly defined parent %q", pat.name, pat.parent)
+		err = fmt.Errorf("extend pattern %q didn't expect a newly defined parent %q", pat.name, pat.parent)
 	} else if e := pat.writePattern(pen, false); e != nil {
-		err = errutil.Fmt("%w extending pattern %q domain %q", e, pat.name, pen.domain)
+		err = fmt.Errorf("%w extending pattern %q domain %q", e, pat.name, pen.domain)
 	}
 	return
 }
@@ -586,8 +586,8 @@ func (pen *Pen) ExtendPattern(pat Pattern) (err error) {
 func (pen *Pen) addParameter(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
 	domain := pen.domain
 	if kid.domain != domain {
-		err = errutil.Fmt("%w new parameter %q of %q expected in the same domain as the original declaration; was %q now %q",
-			Conflict, field, kid.name, kid.domain, domain)
+		err = fmt.Errorf("%w new parameter %q of %q expected in the same domain as the original declaration; was %q now %q",
+			ErrConflict, field, kid.name, kid.domain, domain)
 	} else if e := pen.addField(kid, cls, field, aff); e != nil {
 		err = eatDuplicates(pen.warn, e)
 	} else if res, e := pen.db.Exec(`
@@ -600,7 +600,7 @@ func (pen *Pen) addParameter(kid, cls kindInfo, field string, aff affine.Affinit
 		err = e
 	} else if rows == 0 {
 		// can happen if the result was already written.
-		err = errutil.Fmt("pattern parameters should be written before results")
+		err = fmt.Errorf("pattern parameters should be written before results")
 	}
 	return
 }
@@ -623,16 +623,16 @@ func (pen *Pen) AddPlural(many, one string) (err error) {
 				on(uses=domain)
 			where base = ?1
 			and many = ?2`, domain, many); e != nil {
-		err = errutil.New("database error", e)
+		err = fmt.Errorf("database error: %s", e)
 	} else {
 		var prev, from string
 		if e := tables.ScanAll(rows, func() (err error) {
 			if prev == one {
-				err = errutil.Fmt("%w plural %q was %q in %q and %q",
-					Duplicate, many, one, from, domain)
+				err = fmt.Errorf("%w plural %q was %q in %q and %q",
+					ErrDuplicate, many, one, from, domain)
 			} else {
-				err = errutil.Fmt("%w plural %q had singular %q (in %q) wants %q (in %q)",
-					Conflict, many, prev, from, one, domain)
+				err = fmt.Errorf("%w plural %q had singular %q (in %q) wants %q (in %q)",
+					ErrConflict, many, prev, from, one, domain)
 			}
 			return
 		}, &prev, &from); e != nil {
@@ -676,14 +676,14 @@ func (pen *Pen) AddRelation(name, oneKind, otherKind string, amany bool, bmany b
 			where base = ?1
 			and rk.kind = ?2
 		`, pen.domain, name).Scan(&prev.id, &prev.domain, &prev.one, &prev.other, &prev.cardinality); e != nil && e != sql.ErrNoRows {
-			err = errutil.New("database error", e)
+			err = fmt.Errorf("database error: %s", e)
 		} else {
 			if prev.id != 0 {
 				if prev.relInfo != info {
-					err = errutil.Fmt("%w relation %q in %q defined as %s, now %s",
-						Conflict, name, prev.domain, prev.relInfo, info)
+					err = fmt.Errorf("%w relation %q in %q defined as %s, now %s",
+						ErrConflict, name, prev.domain, prev.relInfo, info)
 				} else {
-					pen.warn("%w relation %q in domain %q", Duplicate, name, pen.domain)
+					pen.warn("%w relation %q in domain %q", ErrDuplicate, name, pen.domain)
 				}
 			} else {
 				if rel, e := pen.addKind(name, kindsOf.Relation.String()); e != nil {
@@ -707,8 +707,8 @@ func (pen *Pen) AddRelation(name, oneKind, otherKind string, amany bool, bmany b
 // a field used for patterns as a returned value
 func (pen *Pen) addResult(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
 	if kid.domain != pen.domain {
-		err = errutil.Fmt("%w new result %q of %q expected in the same domain as the original declaration; was %q now %q",
-			Conflict, field, kid.name, kid.domain, pen.domain)
+		err = fmt.Errorf("%w new result %q of %q expected in the same domain as the original declaration; was %q now %q",
+			ErrConflict, field, kid.name, kid.domain, pen.domain)
 	} else {
 		// sneaky: if a result duplicates a parameter; we mark that parameter as the return.
 		e := pen.addField(kid, cls, field, aff)
@@ -725,7 +725,7 @@ func (pen *Pen) addResult(kid, cls kindInfo, field string, aff affine.Affinity) 
 		} else if rows == 0 {
 			// was there a previous result stored in the db?
 			// because of the pattern precache loop, the shouldnt be any duplicate results
-			err = errutil.Fmt("result already exists for kind %q in domain %q", kid.name, pen.domain)
+			err = fmt.Errorf("result already exists for kind %q in domain %q", kid.name, pen.domain)
 		}
 	}
 	return
@@ -774,7 +774,7 @@ func (pen *Pen) AddDefaultValue(kind, field string, value rt.Assignment) (err er
 // note: assumes noun is an exact name
 func (pen *Pen) AddNounValue(noun, field string, value rt.Assignment) (err error) {
 	if strings.ContainsRune(field, '.') {
-		err = errutil.Fmt("unexpected dot in assigned value for noun %q field %q", noun, field)
+		err = fmt.Errorf("unexpected dot in assigned value for noun %q field %q", noun, field)
 	} else {
 		err = pen.addFieldValue(noun, field, value)
 	}
@@ -787,7 +787,7 @@ func (pen *Pen) AddNounValue(noun, field string, value rt.Assignment) (err error
 // ... and strip assignment down to a literal value
 func (pen *Pen) AddNounPath(noun string, path []string, value literal.LiteralValue) (err error) {
 	if len(path) == 0 {
-		err = errutil.New("can't set an empty path")
+		err = errors.New("can't set an empty path")
 	} else if len(path) == 1 {
 		err = pen.addFieldValue(noun, path[0], call.Literal(value))
 	} else {

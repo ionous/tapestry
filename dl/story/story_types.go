@@ -79,7 +79,7 @@ func (op *FieldDefinition_Slots) Repeats() bool {
 // Used internally as the container for every .tell file.
 type StoryFile struct {
 	Statements []StoryStatement
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // story_file, a type of flow.
@@ -115,7 +115,7 @@ func (op *StoryFile_Slice) Repeats() bool {
 // are visible in the editor. Not needed when using .tell files.
 type StoryNote struct {
 	Text   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // story_note, a type of flow.
@@ -158,7 +158,7 @@ type DefineTest struct {
 	RequiredSceneNames rtti.TextListEval
 	Statements         []StoryStatement
 	Exe                []rtti.Execute
-	Markup             map[string]any
+	Markup             map[string]any `json:",omitempty"`
 }
 
 // define_test, a type of flow.
@@ -199,7 +199,7 @@ type DefineScene struct {
 	SceneName          rtti.TextEval
 	RequiredSceneNames rtti.TextListEval
 	Statements         []StoryStatement
-	Markup             map[string]any
+	Markup             map[string]any `json:",omitempty"`
 }
 
 // define_scene, a type of flow.
@@ -241,7 +241,7 @@ type DefineAction struct {
 	PatternName rtti.TextEval
 	Requires    []FieldDefinition
 	Provides    []FieldDefinition
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // define_action, a type of flow.
@@ -283,7 +283,7 @@ func (op *DefineAction_Slice) Repeats() bool {
 type DefineState struct {
 	AspectName rtti.TextEval
 	StateNames rtti.TextListEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_state, a type of flow.
@@ -324,7 +324,7 @@ func (op *DefineState_Slice) Repeats() bool {
 type DefineAlias struct {
 	Names    rtti.TextListEval
 	NounName rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // define_alias, a type of flow.
@@ -363,7 +363,7 @@ func (op *DefineAlias_Slice) Repeats() bool {
 type DefineLeadingGrammar struct {
 	Lede   []string
 	Scans  []grammar.ScannerMaker
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // define_leading_grammar, a type of flow.
@@ -403,7 +403,7 @@ func (op *DefineLeadingGrammar_Slice) Repeats() bool {
 type DefineNamedGrammar struct {
 	Name   string
 	Scans  []grammar.ScannerMaker
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // define_named_grammar, a type of flow.
@@ -443,8 +443,8 @@ func (op *DefineNamedGrammar_Slice) Repeats() bool {
 type DeclareStatement struct {
 	Text    rtti.TextEval
 	Assign  rtti.Assignment
-	Matches JessMatches
-	Markup  map[string]any
+	matches JessMatches
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // declare_statement, a type of flow.
@@ -487,7 +487,7 @@ type DefineRelation struct {
 	KindName      rtti.TextEval
 	OtherKindName rtti.TextEval
 	Cardinality   RelationCardinality
-	Markup        map[string]any
+	Markup        map[string]any `json:",omitempty"`
 }
 
 // define_relation, a type of flow.
@@ -528,7 +528,7 @@ func (op *DefineRelation_Slice) Repeats() bool {
 type DefineKind struct {
 	KindName         rtti.TextEval
 	AncestorKindName rtti.TextEval
-	Markup           map[string]any
+	Markup           map[string]any `json:",omitempty"`
 }
 
 // define_kind, a type of flow.
@@ -569,7 +569,7 @@ func (op *DefineKind_Slice) Repeats() bool {
 type DefineFields struct {
 	KindName   rtti.TextEval
 	FieldNames []FieldDefinition
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_fields, a type of flow.
@@ -615,7 +615,7 @@ func (op *DefineFields_Slice) Repeats() bool {
 type DefinePlural struct {
 	Singular rtti.TextEval
 	Plural   rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // define_plural, a type of flow.
@@ -654,7 +654,7 @@ func (op *DefinePlural_Slice) Repeats() bool {
 type DefineNounKind struct {
 	NounName rtti.TextEval
 	KindName rtti.TextEval
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // define_noun_kind, a type of flow.
@@ -694,7 +694,7 @@ type DefineNounValue struct {
 	NounName  rtti.TextEval
 	FieldName rtti.TextEval
 	Value     rtti.Assignment
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // define_noun_value, a type of flow.
@@ -733,7 +733,7 @@ func (op *DefineNounValue_Slice) Repeats() bool {
 type DefineNounStates struct {
 	NounName   rtti.TextEval
 	StateNames rtti.TextListEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_noun_states, a type of flow.
@@ -775,7 +775,7 @@ type DefinePattern struct {
 	Requires    []FieldDefinition
 	Provides    []FieldDefinition
 	Exe         []rtti.Execute
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // define_pattern, a type of flow.
@@ -814,7 +814,7 @@ func (op *DefinePattern_Slice) Repeats() bool {
 type DefinePatternProvides struct {
 	PatternName rtti.TextEval
 	Provides    []FieldDefinition
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // define_pattern_provides, a type of flow.
@@ -860,7 +860,7 @@ type DefineRule struct {
 	RuleTiming rtti.TextEval
 	RuleName   rtti.TextEval
 	Exe        []rtti.Execute
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_rule, a type of flow.
@@ -901,7 +901,7 @@ type DefineNounRule struct {
 	RuleTiming rtti.TextEval
 	RuleName   rtti.TextEval
 	Exe        []rtti.Execute
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_noun_rule, a type of flow.
@@ -942,7 +942,7 @@ type DefineKindRule struct {
 	RuleTiming rtti.TextEval
 	RuleName   rtti.TextEval
 	Exe        []rtti.Execute
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // define_kind_rule, a type of flow.
@@ -985,7 +985,7 @@ type DefineRelatives struct {
 	RelationName   rtti.TextEval
 	NounNames      rtti.TextListEval
 	OtherNounNames rtti.TextListEval
-	Markup         map[string]any
+	Markup         map[string]any `json:",omitempty"`
 }
 
 // define_relatives, a type of flow.
@@ -1024,7 +1024,7 @@ func (op *DefineRelatives_Slice) Repeats() bool {
 // See the Tapestry guide for more information.
 type SayTemplate struct {
 	Template string
-	Markup   map[string]any
+	Markup   map[string]any `json:",omitempty"`
 }
 
 // say_template, a type of flow.
@@ -1070,7 +1070,7 @@ func (op *SayTemplate_Slice) Repeats() bool {
 type SayResponse struct {
 	ResponseName string
 	Text         rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // say_response, a type of flow.
@@ -1111,7 +1111,7 @@ func (op *SayResponse_Slice) Repeats() bool {
 type CountOf struct {
 	Trigger call.Trigger
 	Num     rtti.NumEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // count_of, a type of flow.
@@ -1149,7 +1149,7 @@ func (op *CountOf_Slice) Repeats() bool {
 // A valueless field.
 // Intended mainly as a way for patterns which don't return a value.
 type NothingField struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // nothing_field, a type of flow.
@@ -1188,7 +1188,8 @@ func (op *NothingField_Slice) Repeats() bool {
 // Aspects are defined using the {"Define state:names:"} command.
 type AspectField struct {
 	AspectName rtti.TextEval
-	Markup     map[string]any
+	Initially  rtti.TextEval
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // aspect_field, a type of flow.
@@ -1230,7 +1231,7 @@ func (op *AspectField_Slice) Repeats() bool {
 type BoolField struct {
 	FieldName rtti.TextEval
 	Initially rtti.BoolEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // bool_field, a type of flow.
@@ -1269,7 +1270,7 @@ func (op *BoolField_Slice) Repeats() bool {
 type NumField struct {
 	FieldName rtti.TextEval
 	Initially rtti.NumEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // num_field, a type of flow.
@@ -1309,7 +1310,7 @@ type RecordField struct {
 	FieldName  rtti.TextEval
 	RecordName rtti.TextEval
 	Initially  rtti.RecordEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // record_field, a type of flow.
@@ -1350,7 +1351,7 @@ type TextField struct {
 	FieldName rtti.TextEval
 	KindName  rtti.TextEval
 	Initially rtti.TextEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // text_field, a type of flow.
@@ -1390,7 +1391,7 @@ type TextListField struct {
 	FieldName rtti.TextEval
 	KindName  rtti.TextEval
 	Initially rtti.TextListEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // text_list_field, a type of flow.
@@ -1429,7 +1430,7 @@ func (op *TextListField_Slice) Repeats() bool {
 type NumListField struct {
 	FieldName rtti.TextEval
 	Initially rtti.NumListEval
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // num_list_field, a type of flow.
@@ -1470,7 +1471,7 @@ type RecordListField struct {
 	FieldName  rtti.TextEval
 	RecordName rtti.TextEval
 	Initially  rtti.RecordListEval
-	Markup     map[string]any
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // record_list_field, a type of flow.
@@ -1575,7 +1576,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Used for the blockly editor so that hash-mark style comments", "are visible in the editor. Not needed when using .tell files."},
+			"comment": []string{"Used for the blockly editor so that hash-mark style comments", "are visible in the editor. Not needed when using .tell files."},
 		},
 	}
 	Zt_DefineTest = typeinfo.Flow{
@@ -1593,7 +1594,7 @@ func init() {
 			Label:    "requires",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"One or more scenes that this test depends on.", "Tests implicitly depend upon the scene within which they are defined.", "In order to reference the nouns, kinds, etc. of any other scenes in a test, that scene must be listed here."},
+				"comment": []string{"One or more scenes that this test depends on.", "Tests implicitly depend upon the scene within which they are defined.", "In order to reference the nouns, kinds, etc. of any other scenes in a test, that scene must be listed here."},
 			},
 			Type: &rtti.Zt_TextListEval,
 		}, {
@@ -1610,7 +1611,7 @@ func init() {
 			Label:   "do",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"One or more commands to run when checking the test.", "The {\"Expect:\"} command will trigger a test failure when an author specified condition is not met."},
+				"comment": []string{"One or more commands to run when checking the test.", "The {\"Expect:\"} command will trigger a test failure when an author specified condition is not met."},
 			},
 			Type: &rtti.Zt_Execute,
 		}},
@@ -1618,7 +1619,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines a scene used for testing a story.", "Tests can be executed using the `tap check` command.", "TODO: see https://todo.sr.ht/~ionous/tapestry/42"},
+			"comment": []string{"Defines a scene used for testing a story.", "Tests can be executed using the `tap check` command.", "TODO: see https://todo.sr.ht/~ionous/tapestry/42"},
 		},
 	}
 	Zt_DefineScene = typeinfo.Flow{
@@ -1636,7 +1637,7 @@ func init() {
 			Label:    "requires",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"One or more scenes that this scene depends on.", "This is a one-way dependency. This scene can reference anything defined within the required scenes; the required scenes cannot reference anything declared within this scene. Circular dependencies are prevented by weave."},
+				"comment": []string{"One or more scenes that this scene depends on.", "This is a one-way dependency. This scene can reference anything defined within the required scenes; the required scenes cannot reference anything declared within this scene. Circular dependencies are prevented by weave."},
 			},
 			Type: &rtti.Zt_TextListEval,
 		}, {
@@ -1653,7 +1654,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines a collection of nouns, kinds, game rules, etc. used the game.", "Every .tell story has its own unique scene."},
+			"comment": []string{"Defines a collection of nouns, kinds, game rules, etc. used the game.", "Every .tell story has its own unique scene."},
 		},
 	}
 	Zt_DefineAction = typeinfo.Flow{
@@ -1671,7 +1672,7 @@ func init() {
 			Label:   "requires",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Parameters to customize the behavior of an action.", "Most actions require an actor, and possibly one or two other objects.", "For instance: the standard \"storing\" action -- used for inserting something into a container -- requires an actor to perform the action, an object to store, and a container to receive that object."},
+				"comment": []string{"Parameters to customize the behavior of an action.", "Most actions require an actor, and possibly one or two other objects.", "For instance: the standard \"storing\" action -- used for inserting something into a container -- requires an actor to perform the action, an object to store, and a container to receive that object."},
 			},
 			Type: &Zt_FieldDefinition,
 		}, {
@@ -1688,7 +1689,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines an in-game behavior that can be triggered by an actor.", "Actions are a special kind of pattern, and like patterns use \"rules\" to define and customize their behavior. The shared library includes many common actions including things like moving from room to room, examining something, taking or dropping items, and so on.", "See the Tapestry guide for more information."},
+			"comment": []string{"Defines an in-game behavior that can be triggered by an actor.", "Actions are a special kind of pattern, and like patterns use \"rules\" to define and customize their behavior. The shared library includes many common actions including things like moving from room to room, examining something, taking or dropping items, and so on.", "See the Tapestry guide for more information."},
 		},
 	}
 	Zt_DefineState = typeinfo.Flow{
@@ -1705,7 +1706,7 @@ func init() {
 			Name:  "state_names",
 			Label: "names",
 			Markup: map[string]any{
-				"comment": []interface{}{"The names of the states in the set.", "TODO: a list of containing only one state should probably automatically generate its opposite the way that [BoolField] does."},
+				"comment": []string{"The names of the states in the set.", "TODO: a list of containing only one state should probably automatically generate its opposite the way that [BoolField] does."},
 			},
 			Type: &rtti.Zt_TextListEval,
 		}},
@@ -1713,7 +1714,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines a set of mutually exclusive states that can be assigned to any kind of noun. By default, every noun with this set of states starts the game with the first state listed by this command. At runtime, a script can change to other states, ask whether a noun is in a particular state, or ask for the name of the current state from the set.", "Internally, these are also known as \"aspects\" and \"traits.\"", "Many programming languages refer to these as \"enumerations.\"", "See also: {\"Set:state:\"} and {\"Object:field:\"}"},
+			"comment": []string{"Defines a set of mutually exclusive states that can be assigned to any kind of noun. By default, every noun with this set of states starts the game with the first state listed by this command. At runtime, a script can change to other states, ask whether a noun is in a particular state, or ask for the name of the current state from the set.", "Internally, these are also known as \"aspects\" and \"traits.\"", "Many programming languages refer to these as \"enumerations.\"", "See also: {\"Set:state:\"} and {\"Object:field:\"}"},
 		},
 	}
 	Zt_DefineAlias = typeinfo.Flow{
@@ -1738,7 +1739,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Interpret a name typed by the player as some existing noun.", "For example, if there is a noun called \"the book\", the story could define", "an alias so that \"tome\" also means the book."},
+			"comment": []string{"Interpret a name typed by the player as some existing noun.", "For example, if there is a noun called \"the book\", the story could define", "an alias so that \"tome\" also means the book."},
 		},
 	}
 	Zt_DefineLeadingGrammar = typeinfo.Flow{
@@ -1748,7 +1749,7 @@ func init() {
 			Name:    "lede",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"One or more words to match against the player's input.", "For example, the standard \"examine\" action lists the words:", "\"examine\", \"x\", and \"describe\" all of which the player can use", "to trigger inspect a particular object."},
+				"comment": []string{"One or more words to match against the player's input.", "For example, the standard \"examine\" action lists the words:", "\"examine\", \"x\", and \"describe\" all of which the player can use", "to trigger inspect a particular object."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -1790,7 +1791,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Creates a grammar to parse player input that can be referenced in other grammars.", "It can also be used for grammars that need more flexibility in matching the initial words of a sentence ( because {\"Interpret:with:\"} depends on a set of fixed words. )"},
+			"comment": []string{"Creates a grammar to parse player input that can be referenced in other grammars.", "It can also be used for grammars that need more flexibility in matching the initial words of a sentence ( because {\"Interpret:with:\"} depends on a set of fixed words. )"},
 		},
 	}
 	Zt_DeclareStatement = typeinfo.Flow{
@@ -1807,7 +1808,7 @@ func init() {
 			Label:    "assign",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"The last sentence of the specified text can sometimes ( depending on the sentence structure ) break out into runtime commands. Those sentences always end with a colon.", "Most often, these are rules. For instance: {\"Instead of jumping:\" .... do something.}"},
+				"comment": []string{"The last sentence of the specified text can sometimes ( depending on the sentence structure ) break out into runtime commands. Those sentences always end with a colon.", "Most often, these are rules. For instance: {\"Instead of jumping:\" .... do something.}"},
 			},
 			Type: &rtti.Zt_Assignment,
 		}, {
@@ -1819,7 +1820,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Used internally to contain the plain-text sections of .tell documents.", "Contains English-like definitions of nouns, kinds, and their relatives."},
+			"comment":  []string{"Used internally to contain the plain-text sections of .tell documents.", "Contains English-like definitions of nouns, kinds, and their relatives."},
 			"internal": true,
 		},
 	}
@@ -1851,7 +1852,7 @@ func init() {
 			Name:  "cardinality",
 			Label: "cardinality",
 			Markup: map[string]any{
-				"comment": []interface{}{"Determines the number of times a noun can appear on the left", "or the right side of a given relation."},
+				"comment": []string{"Determines the number of times a noun can appear on the left", "or the right side of a given relation."},
 			},
 			Type: &Zt_RelationCardinality,
 		}},
@@ -1859,7 +1860,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines a connection between different kinds of nouns.", "The shared library, for instance, defines a spatial relation between objects;", "allowing one object to be placed inside another."},
+			"comment": []string{"Defines a connection between different kinds of nouns.", "The shared library, for instance, defines a spatial relation between objects;", "allowing one object to be placed inside another."},
 		},
 	}
 	Zt_DefineKind = typeinfo.Flow{
@@ -1876,7 +1877,7 @@ func init() {
 			Name:  "ancestor_kind_name",
 			Label: "ancestor",
 			Markup: map[string]any{
-				"comment": []interface{}{"The parent of this kind.", "( In point of fact, this can be any ancestor of the kind", "so long as it doesn't conflict with other [DefineKind] statements. )"},
+				"comment": []string{"The parent of this kind.", "( In point of fact, this can be any ancestor of the kind", "so long as it doesn't conflict with other [DefineKind] statements. )"},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -1884,7 +1885,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines a new kind: a set of properties used by game objects.", "This command is similar to a sentence like:", "\"Doors are a kind of opener.\""},
+			"comment": []string{"Defines a new kind: a set of properties used by game objects.", "This command is similar to a sentence like:", "\"Doors are a kind of opener.\""},
 		},
 	}
 	Zt_DefineFields = typeinfo.Flow{
@@ -1910,7 +1911,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Adds properties to an existing kind.", "This command is similar to a sentence like:", "\"Things have some text called a description.\""},
+			"comment": []string{"Adds properties to an existing kind.", "This command is similar to a sentence like:", "\"Things have some text called a description.\""},
 		},
 	}
 	Zt_DefinePlural = typeinfo.Flow{
@@ -1929,7 +1930,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Controls how Tapestry pluralize words.", "Plurals are used both at runtime and during weave to", "guide the interpretation of nouns and kinds.", "A singular word can have multiple plurals;", "a plural word only has one singular form.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
+			"comment": []string{"Controls how Tapestry pluralize words.", "Plurals are used both at runtime and during weave to", "guide the interpretation of nouns and kinds.", "A singular word can have multiple plurals;", "a plural word only has one singular form.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
 		},
 	}
 	Zt_DefineNounKind = typeinfo.Flow{
@@ -1971,14 +1972,14 @@ func init() {
 			Name:  "field_name",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of the property to set.", "( The property must have been defined by the noun's kind or one of its ancestor kinds. )"},
+				"comment": []string{"The name of the property to set.", "( The property must have been defined by the noun's kind or one of its ancestor kinds. )"},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "value",
 			Label: "initially",
 			Markup: map[string]any{
-				"comment": []interface{}{"The value to assign the noun.", "The type of the value must match the type of the property.", "( ie. Text values can't be assigned to number properties, etc. )"},
+				"comment": []string{"The value to assign the noun.", "The type of the value must match the type of the property.", "( ie. Text values can't be assigned to number properties, etc. )"},
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -2003,7 +2004,7 @@ func init() {
 			Name:  "state_names",
 			Label: "states",
 			Markup: map[string]any{
-				"comment": []interface{}{"The state names to assign to the noun.", "The states must be part of a state set used by the noun's kind or one of its ancestor kinds."},
+				"comment": []string{"The state names to assign to the noun.", "The states must be part of a state set used by the noun's kind or one of its ancestor kinds."},
 			},
 			Type: &rtti.Zt_TextListEval,
 		}},
@@ -2029,7 +2030,7 @@ func init() {
 			Label:   "requires",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Parameters a caller can specify when triggering the pattern.", "Despite the name, whether the parameters are actually required depends on the pattern's specific implementation."},
+				"comment": []string{"Parameters a caller can specify when triggering the pattern.", "Despite the name, whether the parameters are actually required depends on the pattern's specific implementation."},
 			},
 			Type: &Zt_FieldDefinition,
 		}, {
@@ -2037,7 +2038,7 @@ func init() {
 			Label:   "provides",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Local variables used by the pattern to carry out its goals.", "As a special case, the first provided variable also acts as a return value for the pattern."},
+				"comment": []string{"Local variables used by the pattern to carry out its goals.", "As a special case, the first provided variable also acts as a return value for the pattern."},
 			},
 			Type: &Zt_FieldDefinition,
 		}, {
@@ -2054,7 +2055,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Declares a new pattern.", "A pattern is a set of author defined rules used at runtime to either change the game world, or to provide information about it. Patterns are the Tapestry equivalent of functions."},
+			"comment": []string{"Declares a new pattern.", "A pattern is a set of author defined rules used at runtime to either change the game world, or to provide information about it. Patterns are the Tapestry equivalent of functions."},
 		},
 	}
 	Zt_DefinePatternProvides = typeinfo.Flow{
@@ -2090,7 +2091,7 @@ func init() {
 			Name:  "rule_timing",
 			Label: "rule",
 			Markup: map[string]any{
-				"comment": []interface{}{"The pattern and phase to which this rule applies.", "For event listeners, the name can start with a modifier which changes the event phase in which the rule applies:", "\"before\", \"instead of\", \"when\", \"after\", and \"report\".", "The modifier can be followed by the word \"someone\" so that it applies to all actors and not just the player."},
+				"comment": []string{"The pattern and phase to which this rule applies.", "For event listeners, the name can start with a modifier which changes the event phase in which the rule applies:", "\"before\", \"instead of\", \"when\", \"after\", and \"report\".", "The modifier can be followed by the word \"someone\" so that it applies to all actors and not just the player."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -2098,7 +2099,7 @@ func init() {
 			Label:    "named",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Optionally, specify a unique name for the rule.", "Giving a rule a name allows it to be replaced by later rules."},
+				"comment": []string{"Optionally, specify a unique name for the rule.", "Giving a rule a name allows it to be replaced by later rules."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -2114,7 +2115,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change the behavior of an existing pattern.", "", "For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.", "", "For patterns defined using [DefineAction], rules behave as \"event listeners\". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.", "", "See the Tapestry guide for more in-depth information."},
+			"comment": []string{"Change the behavior of an existing pattern.", "", "For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.", "", "For patterns defined using [DefineAction], rules behave as \"event listeners\". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.", "", "See the Tapestry guide for more in-depth information."},
 		},
 	}
 	Zt_DefineNounRule = typeinfo.Flow{
@@ -2228,7 +2229,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Relate nouns to each other.", "Most users will probably prefer defining verbs and using jess to relate nouns.", "For instance: \"Carrying is a verb. The relation of carrying is whereabouts. Bob is carrying the pen.\"", "See the Tapestry guide for details."},
+			"comment": []string{"Relate nouns to each other.", "Most users will probably prefer defining verbs and using jess to relate nouns.", "For instance: \"Carrying is a verb. The relation of carrying is whereabouts. Bob is carrying the pen.\"", "See the Tapestry guide for details."},
 		},
 	}
 	Zt_SayTemplate = typeinfo.Flow{
@@ -2243,7 +2244,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Print templated text. Templates contain commands executed at runtime.", "See the Tapestry guide for more information."},
+			"comment": []string{"Print templated text. Templates contain commands executed at runtime.", "See the Tapestry guide for more information."},
 		},
 	}
 	Zt_SayResponse = typeinfo.Flow{
@@ -2269,7 +2270,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Print text in a replaceable manner.", "Each response has a unique name and a default bit of text it responds with.", "The response can be changed everywhere its used by replacing that text.", "( ex. by using {\"Define kind:fields\": \"response\", \"name of the response\"} )", "", "The shared library uses responses for much of what it prints to the player", "so that stories can change the stock phrases."},
+			"comment": []string{"Print text in a replaceable manner.", "Each response has a unique name and a default bit of text it responds with.", "The response can be changed everywhere its used by replacing that text.", "( ex. by using {\"Define kind:fields\": \"response\", \"name of the response\"} )", "", "The shared library uses responses for much of what it prints to the player", "so that stories can change the stock phrases."},
 		},
 	}
 	Zt_CountOf = typeinfo.Flow{
@@ -2294,7 +2295,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A guard which returns true based on a counter.", "Counters start at zero and are incremented every time the guard is checked."},
+			"comment": []string{"A guard which returns true based on a counter.", "Counters start at zero and are incremented every time the guard is checked."},
 		},
 	}
 	Zt_NothingField = typeinfo.Flow{
@@ -2305,7 +2306,7 @@ func init() {
 			&Zt_FieldDefinition,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A valueless field.", "Intended mainly as a way for patterns which don't return a value."},
+			"comment": []string{"A valueless field.", "Intended mainly as a way for patterns which don't return a value."},
 		},
 	}
 	Zt_AspectField = typeinfo.Flow{
@@ -2314,7 +2315,15 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "aspect_name",
 			Markup: map[string]any{
-				"comment": []interface{}{"Name for the aspect. Must be unique within the set of fields (eg. within the kind.)", "The field will have this same name."},
+				"comment": []string{"The name of here identifies both the previously defined set of states, ", "*and* the name of the field in the kind."},
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []string{"The initial state for objects of this kind.", "If not specified, the initial state will be the first state listed by the aspect."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -2322,7 +2331,7 @@ func init() {
 			&Zt_FieldDefinition,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A field containing a set of states.", "Aspects are defined using the {\"Define state:names:\"} command."},
+			"comment": []string{"A field containing a set of states.", "Aspects are defined using the {\"Define state:names:\"} command."},
 		},
 	}
 	Zt_BoolField = typeinfo.Flow{
@@ -2347,7 +2356,7 @@ func init() {
 			&Zt_FieldDefinition,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A field containing a boolean ( true/false ) value.", "As a special case, when used to define a boolean field in a kind,", "the boolean becomes a state set consisting of the state and its opposite.", "For instance, a boolean field called \"reasonable\" generates a set called \"reasonable status\" and the states \"reasonable\" and \"not reasonable.\""},
+			"comment": []string{"A field containing a boolean ( true/false ) value.", "As a special case, when used to define a boolean field in a kind,", "the boolean becomes a state set consisting of the state and its opposite.", "For instance, a boolean field called \"reasonable\" generates a set called \"reasonable status\" and the states \"reasonable\" and \"not reasonable.\""},
 		},
 	}
 	Zt_NumField = typeinfo.Flow{
@@ -2396,7 +2405,7 @@ func init() {
 			Label:    "initially",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Provides a default value.", "If not specified, accessing the field in go returns nil;", "accessing via script returns a blank record with zero value fields."},
+				"comment": []string{"Provides a default value.", "If not specified, accessing the field in go returns nil;", "accessing via script returns a blank record with zero value fields."},
 			},
 			Type: &rtti.Zt_RecordEval,
 		}},
@@ -2437,7 +2446,7 @@ func init() {
 			&Zt_FieldDefinition,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A field containing a single piece of text.", "Text fields can be used to store anything from the name of a noun, the name of a state or set of states, or something to display to the player."},
+			"comment": []string{"A field containing a single piece of text.", "Text fields can be used to store anything from the name of a noun, the name of a state or set of states, or something to display to the player."},
 		},
 	}
 	Zt_TextListField = typeinfo.Flow{
@@ -2511,7 +2520,7 @@ func init() {
 			Name:  "record_name",
 			Label: "kind",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of a valid record type.", "All records in the list must be of this type."},
+				"comment": []string{"The name of a valid record type.", "All records in the list must be of this type."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -2527,7 +2536,7 @@ func init() {
 			&Zt_FieldDefinition,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A field containing a list of records.", "All of the records in the list must be of the same type."},
+			"comment": []string{"A field containing a list of records.", "All of the records in the list must be of the same type."},
 		},
 	}
 }
@@ -2599,11 +2608,51 @@ var z_str_list = []*typeinfo.Str{
 	&Zt_RelationCardinality,
 }
 
+// gob like registration
+func Register(reg func(any)) {
+	reg((*StoryFile)(nil))
+	reg((*StoryNote)(nil))
+	reg((*DefineTest)(nil))
+	reg((*DefineScene)(nil))
+	reg((*DefineAction)(nil))
+	reg((*DefineState)(nil))
+	reg((*DefineAlias)(nil))
+	reg((*DefineLeadingGrammar)(nil))
+	reg((*DefineNamedGrammar)(nil))
+	reg((*DeclareStatement)(nil))
+	reg((*DefineRelation)(nil))
+	reg((*DefineKind)(nil))
+	reg((*DefineFields)(nil))
+	reg((*DefinePlural)(nil))
+	reg((*DefineNounKind)(nil))
+	reg((*DefineNounValue)(nil))
+	reg((*DefineNounStates)(nil))
+	reg((*DefinePattern)(nil))
+	reg((*DefinePatternProvides)(nil))
+	reg((*DefineRule)(nil))
+	reg((*DefineNounRule)(nil))
+	reg((*DefineKindRule)(nil))
+	reg((*DefineRelatives)(nil))
+	reg((*SayTemplate)(nil))
+	reg((*SayResponse)(nil))
+	reg((*CountOf)(nil))
+	reg((*NothingField)(nil))
+	reg((*AspectField)(nil))
+	reg((*BoolField)(nil))
+	reg((*NumField)(nil))
+	reg((*RecordField)(nil))
+	reg((*TextField)(nil))
+	reg((*TextListField)(nil))
+	reg((*NumListField)(nil))
+	reg((*RecordListField)(nil))
+}
+
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
 	13010292396640781698: (*AspectField)(nil),           /* field_definition=Aspect: */
+	11237193098174075029: (*AspectField)(nil),           /* field_definition=Aspect:initially: */
 	12738236274201716794: (*BoolField)(nil),             /* field_definition=Bool: */
 	18077675806901364237: (*BoolField)(nil),             /* field_definition=Bool:initially: */
 	9796202271034753943:  (*DeclareStatement)(nil),      /* story_statement=Declare: */

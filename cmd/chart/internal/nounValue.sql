@@ -1,13 +1,6 @@
 select mn.noun, mv.value
--- all of the requested domains 
-from mdl_domain pd
-join mdl_domain cd
--- is Y (the domain we want) within X (within some other domain)
-	on instr(',' ||cd.rowid || ',' || cd.path,
-		',' ||pd.rowid || ',' )
 -- all of the nouns for those domains 
-join mdl_noun mn
-	on (mn.domain = cd.rowid)
+from mdl_noun mn
 -- the hierarchy of kinds used by those nouns 	
 join mdl_kind mk 
 	on (mk.rowid = mn.kind)
@@ -21,9 +14,12 @@ join mdl_field mf
 -- all of the values for those fields used by that are used by our nouns. 
 join mdl_value mv 
 	on (mv.noun=mn.rowid) and (mv.field=mf.rowid)
+-- all of the domains in which that noun is active
+join mdl_domain md
+	on (mn.domain=md.domain)
 -- and get the rank 0 friendlier name
 -- ( ... printed name might even more friendly ... )
-where pd.domain like ?1
+where (md.domain=?1 or md.requires=?1)
 and ks.kind = ?2 
 and mf.field= ?3 
 and (not length(?4) or mn.noun=?4)

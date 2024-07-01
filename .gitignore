@@ -3,8 +3,6 @@ _
 .idea
 .godot
 .sconsign.dblite
-bin/*
-!bin/go.mod
 __debug_bin
 node_modules
 cmd/atlas/atlas
@@ -18,8 +16,8 @@ cmd/spec/spec
 cmd/stem/stem
 cmd/tap/tap
 cmd/tap/tap.db
-doc/.hugo_build.lock
-doc/themes
+docs/.hugo_build.lock
+docs/themes
+docs/bin
 www/dist
-*.zip
 .DS_Store

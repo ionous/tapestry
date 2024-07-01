@@ -52,7 +52,7 @@ func (op *RenderEval_Slots) Repeats() bool {
 // otherwise, its an error.
 type RenderName struct {
 	Name   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // render_name, a type of flow.
@@ -97,7 +97,7 @@ func (op *RenderName_Slice) Repeats() bool {
 type UnknownDot struct {
 	Name   rtti.TextEval
 	Dot    []object.Dot
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // unknown_dot, a type of flow.
@@ -142,7 +142,7 @@ func (op *UnknownDot_Slice) Repeats() bool {
 // Pull a value from an assignment of unknown affinity.
 type RenderValue struct {
 	Value  rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // render_value, a type of flow.
@@ -182,7 +182,7 @@ func (op *RenderValue_Slice) Repeats() bool {
 type RenderPattern struct {
 	PatternName string
 	Render      []RenderEval
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // render_pattern, a type of flow.
@@ -223,7 +223,7 @@ func (op *RenderPattern_Slice) Repeats() bool {
 type RenderResponse struct {
 	Name   string
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // render_response, a type of flow.
@@ -273,7 +273,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
+			"comment":  []string{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
 			"internal": true,
 		},
 	}
@@ -301,7 +301,7 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "This gets used by text templates when processing names.", "The templates don't attempt to determine which names are objects and which names are variables.", "For instance:", "  - Say: \"{.story.title} by {.story.author}\"", "uses UnknownDot for accessing \"story\"."},
+			"comment":  []string{"Pull a value from name that might refer either to a variable, or to an object.", "This gets used by text templates when processing names.", "The templates don't attempt to determine which names are objects and which names are variables.", "For instance:", "  - Say: \"{.story.title} by {.story.author}\"", "uses UnknownDot for accessing \"story\"."},
 			"internal": true,
 		},
 	}
@@ -338,7 +338,7 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
+			"comment":  []string{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
 			"internal": true,
 		},
 	}
@@ -393,6 +393,15 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RenderValue,
 	&Zt_RenderPattern,
 	&Zt_RenderResponse,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*RenderName)(nil))
+	reg((*UnknownDot)(nil))
+	reg((*RenderValue)(nil))
+	reg((*RenderPattern)(nil))
+	reg((*RenderResponse)(nil))
 }
 
 // a list of all command signatures

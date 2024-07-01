@@ -5,16 +5,21 @@ package qdb
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
+
+// /verify that query none implements every method
+var _ query.Query = (*Query)(nil)
 
 // Read various data from the play database.
 type Query struct {
-	db *sql.DB
+	db   *sql.DB
+	dec  CommandDecoder
+	rand query.Randomizer
 	activeDomains,
 	domainActivate,
 	domainChange,
@@ -25,6 +30,7 @@ type Query struct {
 	fieldsOf,
 	kindOfAncestors,
 	nounInfo,
+	nounKind,
 	nounName,
 	nounValues,
 	nounAliases,
@@ -40,7 +46,13 @@ type Query struct {
 	rulesFor *sql.Stmt
 	//
 	domain     string
-	activation int // number of domain activation requests ( to find new domains in run_domain )
+	activation int         // number of domain activation requests ( to find new domains in run_domain )
+	constVals  query.Cache // readonly info cached from the db
+}
+
+// implements closer
+func (q *Query) Close() {
+	q.db.Close()
 }
 
 func (q *Query) IsDomainActive(name string) (okay bool, err error) {
@@ -72,8 +84,9 @@ func (q *Query) ActivateDomains(name string) (retEnds, retBegins []string, err e
 		if err == nil {
 			err = tx.Commit()
 		} else if e := tx.Rollback(); e != nil {
-			err = errutil.Append(err, e)
+			err = fmt.Errorf("%w caused rollback which caused %w", err, e)
 		}
+		q.constVals.Reset() // fix? focus cache clear to just the domains that became inactive?
 	}
 	return
 }
@@ -142,43 +155,6 @@ func (q *activator) activate(act int, domains []string) (err error) {
 	return
 }
 
-// read all the matching tests from the db.
-func (q *Query) ReadChecks(actuallyJustThisOne string) (ret []query.CheckData, err error) {
-	if rows, e := q.checks.Query(actuallyJustThisOne); e != nil {
-		err = e
-	} else {
-		var check query.CheckData
-		err = tables.ScanAll(rows, func() (err error) {
-			ret = append(ret, check)
-			return
-		}, &check.Name, &check.Domain, &check.Value, &check.Aff, &check.Prog)
-	}
-	return
-}
-
-func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
-	// select  kind, field, value from (
-	// 	select *, max(final) over (PARTITION by kind,field) as best
-	// 	from mdl_value_kind
-	// ) where final = best
-	if rows, e := q.fieldsOf.Query(kind); e != nil {
-		err = e
-	} else {
-		var last string
-		var field query.FieldData
-		err = tables.ScanAll(rows, func() (err error) {
-			// the same field might be a final value ( listed first )
-			// and a non final value ( listed second )
-			if last != field.Name {
-				ret = append(ret, field)
-				last = field.Name
-			}
-			return
-		}, &field.Name, &field.Affinity, &field.Class, &field.Init)
-	}
-	return
-}
-
 // returns the ancestor hierarchy, starting with the kind itself.
 // empty if the kind doesnt exist, errors on a db error.
 // accepts both the plural and singular kind.
@@ -191,9 +167,9 @@ func (q *Query) KindOfAncestors(kind string) (ret []string, err error) {
 	return
 }
 
-// given a name, find a noun ( and some useful other context )
+// given a short name, find a noun ( and some useful other context )
 func (q *Query) NounInfo(name string) (ret query.NounInfo, err error) {
-	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Id, &ret.Kind); e != nil && e != sql.ErrNoRows {
+	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Noun, &ret.Kind); e != nil && e != sql.ErrNoRows {
 		err = e
 	}
 	return
@@ -206,22 +182,6 @@ func (q *Query) NounName(id string) (ret string, err error) {
 
 func (q *Query) NounNames(id string) (ret []string, err error) {
 	return scanStrings(q.nounAliases, id)
-}
-
-// interpreting the value is left to the caller ( re: field affinity )
-// returns pairs of path, (marshaled) value
-func (q *Query) NounValues(id, field string) (ret []query.ValueData, err error) {
-	if rows, e := q.nounValues.Query(id, field); e != nil {
-		err = e
-	} else {
-		var path sql.NullString
-		var value []byte
-		err = tables.ScanAll(rows, func() (_ error) {
-			ret = append(ret, query.ValueData{Field: field, Path: path.String, Value: value})
-			return
-		}, &path, &value)
-	}
-	return
 }
 
 func (q *Query) NounsByKind(kind string) ([]string, error) {
@@ -244,25 +204,25 @@ func (q *Query) PatternLabels(pat string) (ret []string, err error) {
 	case sql.ErrNoRows:
 		// returns blank with no error
 	case nil:
-		parts := strings.Split(labels.String, ",")
-		ret = append(parts, result.String)
+		if labels.Valid {
+			ret = strings.Split(labels.String, ",")
+		}
+		ret = append(ret, result.String)
 	default:
 		err = e
 	}
 	return
 }
 
-func (q *Query) RulesFor(pat string) (ret []query.RuleData, err error) {
-	if rows, e := q.rulesFor.Query(pat); e != nil {
+// get the rules from the cache, or build them and add them to the cache
+func (q *Query) RulesFor(pat string) (ret query.RuleSet, err error) {
+	key := query.MakeKey("rules", pat, "")
+	if c, e := q.constVals.Ensure(key, func() (any, error) {
+		return q.getRules(pat)
+	}); e != nil {
 		err = e
 	} else {
-		var rule query.RuleData
-		if e := tables.ScanAll(rows, func() (err error) {
-			ret = append(ret, rule)
-			return
-		}, &rule.Name, &rule.Stop, &rule.Jump, &rule.Updates, &rule.Prog); e != nil {
-			err = e // scan error...
-		}
+		ret = c.(query.RuleSet)
 	}
 	return
 }
@@ -281,15 +241,22 @@ func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
 	} else if rows, e := res.RowsAffected(); e != nil {
 		err = e
 	} else if rows == 0 {
-		err = errutil.New("nothing related for", q.domain, rel, noun, otherNoun)
+		err = fmt.Errorf("nothing related for %q %q %q %q", q.domain, rel, noun, otherNoun)
 	}
 	return
 }
 
-func NewQueries(db *sql.DB) (ret *Query, err error) {
+func NewQueries(db *sql.DB, dec CommandDecoder) (*Query, error) {
+	return NewQueryOptions(db, dec, query.RandomizedTime(), true)
+}
+
+func NewQueryOptions(db *sql.DB, dec CommandDecoder, rand query.Randomizer, cacheErrors bool) (ret *Query, err error) {
 	var ps tables.Prep
 	q := &Query{
-		db: db,
+		db:        db,
+		rand:      rand,
+		dec:       dec,
+		constVals: query.MakeCache(cacheErrors),
 		activeDomains: ps.Prep(db,
 			`select domain 
 			from active_domains
@@ -409,9 +376,17 @@ order by mf.rowid, mv.kind desc, mv.final desc`,
 			order by rank
 			limit 1`,
 		),
+		nounKind: ps.Prep(db,
+			`select mk.kind
+			from active_nouns ns
+			join mdl_kind mk
+				on (mk.rowid = ns.kind)
+			where ns.name = ?1
+			limit 1`,
+		),
 		// does a noun have some specific name?
 		nounAliases: ps.Prep(db,
-			`select my.name
+			`select distinct my.name
 			from mdl_name my
 			join active_nouns ns
 				using (noun)
@@ -439,14 +414,14 @@ order by mf.rowid, mv.kind desc, mv.final desc`,
 		// query the db for the value(s) of a given field for a given noun
 		// fix: future, we will want to save values to a "run_value" table and union those in here.
 		nounValues: ps.Prep(db,
-			`select mv.dot, mv.value
+			`select coalesce(mv.dot,'') as dot, mv.value
 			from mdl_value mv
 			join active_nouns ns
 				using (noun)
 			join mdl_field mf
 				on (mf.rowid = mv.field)
 			where (ns.name = ?1) and (mf.field = ?2) and (mv.noun = ns.noun)
-			order by length(mv.dot), mv.final desc`,
+			order by length(dot), mv.final desc`,
 		),
 		// find the names of a given pattern ( kind's ) args and results
 		patternOf: ps.Prep(db,

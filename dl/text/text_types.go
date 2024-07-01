@@ -14,7 +14,7 @@ import (
 // Count the number of characters in some text.
 type TextLen struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // text_len, a type of flow.
@@ -56,7 +56,7 @@ func (op *TextLen_Slice) Repeats() bool {
 type FindText struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // find_text, a type of flow.
@@ -96,7 +96,7 @@ func (op *FindText_Slice) Repeats() bool {
 type TextStartsWith struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // text_starts_with, a type of flow.
@@ -135,7 +135,7 @@ func (op *TextStartsWith_Slice) Repeats() bool {
 type TextEndsWith struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // text_ends_with, a type of flow.
@@ -176,7 +176,7 @@ func (op *TextEndsWith_Slice) Repeats() bool {
 // The text " " is considered something.
 type IsNothing struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // is_nothing, a type of flow.
@@ -218,8 +218,8 @@ func (op *IsNothing_Slice) Repeats() bool {
 type Matches struct {
 	Text   rtti.TextEval
 	Match  string
-	Cache  MatchCache
-	Markup map[string]any
+	cache  MatchCache
+	Markup map[string]any `json:",omitempty"`
 }
 
 // matches, a type of flow.
@@ -257,7 +257,7 @@ func (op *Matches_Slice) Repeats() bool {
 // Copy some text, changing its first letter to uppercase.
 type Capitalize struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // capitalize, a type of flow.
@@ -296,7 +296,7 @@ func (op *Capitalize_Slice) Repeats() bool {
 type Join struct {
 	Sep    rtti.TextEval
 	Parts  []rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // join, a type of flow.
@@ -335,7 +335,7 @@ func (op *Join_Slice) Repeats() bool {
 // For example, turns "QUIET" into "quiet.
 type MakeLowercase struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_lowercase, a type of flow.
@@ -374,7 +374,7 @@ func (op *MakeLowercase_Slice) Repeats() bool {
 // For example, turns "Tapestry" into 'yrtsepaT'.
 type MakeReversed struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_reversed, a type of flow.
@@ -413,7 +413,7 @@ func (op *MakeReversed_Slice) Repeats() bool {
 // For example, "see the doctor run. run doctor. run." into "See the doctor run. Run doctor. Run."
 type MakeSentenceCase struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_sentence_case, a type of flow.
@@ -452,7 +452,7 @@ func (op *MakeSentenceCase_Slice) Repeats() bool {
 // For example, turns "empire apple" into "Empire Apple".
 type MakeTitleCase struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_title_case, a type of flow.
@@ -491,7 +491,7 @@ func (op *MakeTitleCase_Slice) Repeats() bool {
 // For example, transforms "loud" into "LOUD".
 type MakeUppercase struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // make_uppercase, a type of flow.
@@ -535,7 +535,7 @@ func (op *MakeUppercase_Slice) Repeats() bool {
 // The story command [DefinePlural] can add new mappings.
 type Pluralize struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // pluralize, a type of flow.
@@ -576,7 +576,7 @@ func (op *Pluralize_Slice) Repeats() bool {
 // See [pluralize] for more information.
 type Singularize struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // singularize, a type of flow.
@@ -654,7 +654,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether one piece of text contains a second piece of text.", "", "The [rt.NumEval] version returns the first index at which the text appears,", "or zero if not found."},
+			"comment": []string{"Determine whether one piece of text contains a second piece of text.", "", "The [rt.NumEval] version returns the first index at which the text appears,", "or zero if not found."},
 		},
 	}
 	Zt_TextStartsWith = typeinfo.Flow{
@@ -722,7 +722,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether text is completely without content.", "Even spaces are considered content.", "The text \"\" is considered nothing,", "The text \" \" is considered something."},
+			"comment": []string{"Determine whether text is completely without content.", "Even spaces are considered content.", "The text \"\" is considered nothing,", "The text \" \" is considered something."},
 		},
 	}
 	Zt_Matches = typeinfo.Flow{
@@ -751,7 +751,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether text matches a regular expression.", "The expressions used are defined by go.", "https://pkg.go.dev/regexp/syntax", "https://github.com/google/re2/wiki/Syntax"},
+			"comment": []string{"Determine whether text matches a regular expression.", "The expressions used are defined by go.", "https://pkg.go.dev/regexp/syntax", "https://github.com/google/re2/wiki/Syntax"},
 		},
 	}
 	Zt_Capitalize = typeinfo.Flow{
@@ -811,7 +811,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Copy some text, changing every letter into lowercase.", "For example, turns \"QUIET\" into \"quiet."},
+			"comment": []string{"Copy some text, changing every letter into lowercase.", "For example, turns \"QUIET\" into \"quiet."},
 		},
 	}
 	Zt_MakeReversed = typeinfo.Flow{
@@ -829,7 +829,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Copy some text with its contents flipped back to front.", "For example, turns \"Tapestry\" into 'yrtsepaT'."},
+			"comment": []string{"Copy some text with its contents flipped back to front.", "For example, turns \"Tapestry\" into 'yrtsepaT'."},
 		},
 	}
 	Zt_MakeSentenceCase = typeinfo.Flow{
@@ -846,7 +846,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Copy text, changing the start of each sentence so that it starts with a capital letter. ( Currently, \"sentences\" are considered to be a series of characters ending with a full-stop followed by a space. )", "For example, \"see the doctor run. run doctor. run.\" into \"See the doctor run. Run doctor. Run.\""},
+			"comment": []string{"Copy text, changing the start of each sentence so that it starts with a capital letter. ( Currently, \"sentences\" are considered to be a series of characters ending with a full-stop followed by a space. )", "For example, \"see the doctor run. run doctor. run.\" into \"See the doctor run. Run doctor. Run.\""},
 		},
 	}
 	Zt_MakeTitleCase = typeinfo.Flow{
@@ -863,7 +863,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Copy some text, making every word start with a capital letter.", "For example, turns \"empire apple\" into \"Empire Apple\"."},
+			"comment": []string{"Copy some text, making every word start with a capital letter.", "For example, turns \"empire apple\" into \"Empire Apple\"."},
 		},
 	}
 	Zt_MakeUppercase = typeinfo.Flow{
@@ -880,7 +880,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Copy some text, changing every letter into uppercase.", "For example, transforms \"loud\" into \"LOUD\"."},
+			"comment": []string{"Copy some text, changing every letter into uppercase.", "For example, transforms \"loud\" into \"LOUD\"."},
 		},
 	}
 	Zt_Pluralize = typeinfo.Flow{
@@ -898,7 +898,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Pluralize a word.", "The singular form of a word can have more than one plural form.", "For example: \"person\" can be \"people\" or \"persons\".", "If more than one exists, this chooses arbitrarily.", "", "Note, The transformation uses predefined rules and some explicit mappings.", "The story command [DefinePlural] can add new mappings."},
+			"comment": []string{"Pluralize a word.", "The singular form of a word can have more than one plural form.", "For example: \"person\" can be \"people\" or \"persons\".", "If more than one exists, this chooses arbitrarily.", "", "Note, The transformation uses predefined rules and some explicit mappings.", "The story command [DefinePlural] can add new mappings."},
 		},
 	}
 	Zt_Singularize = typeinfo.Flow{
@@ -916,7 +916,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change a plural word into its singular form.", "A plural word only has one singular form.", "For example, given the word \"people\", return \"person\".", "See [pluralize] for more information."},
+			"comment": []string{"Change a plural word into its singular form.", "A plural word only has one singular form.", "For example, given the word \"people\", return \"person\".", "See [pluralize] for more information."},
 		},
 	}
 }
@@ -950,6 +950,25 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_MakeUppercase,
 	&Zt_Pluralize,
 	&Zt_Singularize,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*TextLen)(nil))
+	reg((*FindText)(nil))
+	reg((*TextStartsWith)(nil))
+	reg((*TextEndsWith)(nil))
+	reg((*IsNothing)(nil))
+	reg((*Matches)(nil))
+	reg((*Capitalize)(nil))
+	reg((*Join)(nil))
+	reg((*MakeLowercase)(nil))
+	reg((*MakeReversed)(nil))
+	reg((*MakeSentenceCase)(nil))
+	reg((*MakeTitleCase)(nil))
+	reg((*MakeUppercase)(nil))
+	reg((*Pluralize)(nil))
+	reg((*Singularize)(nil))
 }
 
 // a list of all command signatures

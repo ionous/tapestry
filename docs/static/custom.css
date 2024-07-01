@@ -1,0 +1,60 @@
+/* Global customization */
+/* https://geekdocs.de/features/theming/#color-scheme */
+
+/* Light mode theming */
+:root,
+:root[color-theme="light"] {
+  --accent-color-lite: inherit;
+  --link-color-visited:var(--link-color);
+}
+
+:root[color-theme="dark"] {
+ --accent-color-lite: inherit;
+ --link-color-visited: var(--link-color);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {   
+    --accent-color-lite: inherit;
+    --link-color-visited: var(--link-color);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {   
+    --accent-color-lite: inherit;
+    --link-color-visited: var(--link-color);
+  }
+}
+
+.gdoc-markdown table:not(.lntable):not(.highlight) tr { 
+  border-top: 1.5px solid var(--accent-color);
+}
+
+div.active > h3::before { 
+  content: '> ';
+  padding-right: 1rem;
+}
+
+.page-main {
+  pre.chroma {
+    overflow: scroll;
+    height: 30.5em;
+    counter-reset: line;
+  }
+  /* manually add line numbers to wrap the lines */
+  code {
+    line-height: 1.25em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  span.line:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    padding-right: 0.5rem;
+    margin-right: .5em;
+    min-width: 1rem;
+    color: #888
+  }
+}

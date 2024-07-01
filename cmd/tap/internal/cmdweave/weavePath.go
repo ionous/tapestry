@@ -11,7 +11,8 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/qna/decode"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/support/flex"
@@ -38,9 +39,10 @@ func WeavePaths(outFile string, stories ...fs.FS) (err error) {
 			err = fmt.Errorf("couldn't create output file %q because %s", outFile, e)
 		} else {
 			defer db.Close()
-			if run, e := qna.NewRuntime(db, decode.NewDecoder(story.AllSignatures)); e != nil {
+			if q, e := qdb.NewQueries(db, query.NewDecoder(story.AllSignatures)); e != nil {
 				err = e
 			} else {
+				run := qna.NewRuntime(q)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				if e := cat.DomainStart("tapestry", nil); e != nil {
 					err = e
@@ -71,11 +73,9 @@ func addDefaultKinds(pen *mdl.Pen) (err error) {
 
 func importAll(cat *weave.Catalog, all ...fs.FS) (err error) {
 	for _, fsys := range all {
-		if fsys != nil {
-			if e := importDir(cat, loggingFS{fsys}, []string{"."}); e != nil {
-				err = e
-				break
-			}
+		if e := importDir(cat, loggingFS{fsys}, []string{"."}); e != nil {
+			err = e
+			break
 		}
 	}
 	return

@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -38,10 +39,12 @@ func NewCatalog(db *sql.DB) *Catalog {
 
 func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
 	if run == nil {
-		if r, e := qna.NewRuntime(db, nil); e != nil {
+		// fix: this only happens for tests; unwind the calls so that's explicit
+		dec := qdb.DecodeNone("unsupported decoder")
+		if q, e := qdb.NewQueries(db, dec); e != nil {
 			panic(e)
 		} else {
-			run = r
+			run = qna.NewRuntime(q)
 		}
 	}
 	var logerr mdl.Log
@@ -271,7 +274,7 @@ func (cat *Catalog) findRivals() (err error) {
 	var rivals error
 	if e := findRivals(cat.db, func(group, domain, key, value, at string) (_ error) {
 		rivals = errutil.Append(rivals, errutil.Fmt("%w in domain %q at %q for %s %q",
-			mdl.Conflict, domain, at, group, value))
+			mdl.ErrConflict, domain, at, group, value))
 		return
 	}); e != nil {
 		err = e

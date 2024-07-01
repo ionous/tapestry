@@ -2,6 +2,8 @@ package mdl
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -13,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
 func MakePath(path ...string) string {
@@ -24,7 +25,7 @@ func (pen *Pen) addDefaultValue(kind kindInfo, name string, value rt.Assignment)
 	if field, e := pen.findField(kind.class(), name); e != nil {
 		err = e
 	} else if value, e := field.rewriteTrait(name, value); e != nil {
-		err = errutil.Fmt("can't assign trait %q to kind %q", name, kind.name)
+		err = fmt.Errorf("can't assign trait %q to kind %q", name, kind.name)
 	} else if out, provisional, e := marshalAssignment(value, field.aff); e != nil {
 		err = e
 	} else {
@@ -39,7 +40,7 @@ func (pen *Pen) addFieldValue(noun, name string, value rt.Assignment) (err error
 	} else if field, e := pen.findField(noun.class(), name); e != nil {
 		err = e
 	} else if value, e := field.rewriteTrait(name, value); e != nil {
-		err = errutil.New("can't assign trait to noun")
+		err = errors.New("can't assign trait to noun")
 	} else if out, provisional, e := marshalAssignment(value, field.aff); e != nil {
 		err = e
 	} else if noun.domain != pen.domain {
@@ -56,7 +57,7 @@ type DomainValueError struct {
 }
 
 func (e DomainValueError) Error() string {
-	return errutil.Sprint("initial values for noun %q (%q) must be in the same domain as its declaration.",
+	return fmt.Sprintf("initial values for noun %q (%q) must be in the same domain as its declaration.",
 		e.Noun, e.Field)
 }
 
@@ -67,7 +68,7 @@ func (pen *Pen) addPathValue(noun string, parts []string, value literal.LiteralV
 	} else if outer, inner, e := pen.digField(noun, parts); e != nil {
 		err = e
 	} else if end := len(parts) - 1; parts[end] != inner.name {
-		err = errutil.New("can't add traits to records of nouns")
+		err = errors.New("can't add traits to records of nouns")
 	} else if out, provisional, e := marshalProvisional(value, inner.aff); e != nil {
 		err = e
 	} else {
@@ -108,17 +109,17 @@ func (pen *Pen) addNounValue(noun nounInfo, final bool, outer fieldInfo, field, 
 		)`,
 		noun.id, outer.id, opt,
 	); e != nil {
-		err = errutil.New("database error", e)
+		err = fmt.Errorf("database error: %s", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
 		if prev.dot.String != dot {
-			err = errutil.Fmt(`%w writing noun value for %s, had value for %s.`,
-				Conflict, debugJoin(noun.name, field, dot), debugJoin(noun.name, field, prev.dot.String))
+			err = fmt.Errorf(`%w writing noun value for %s, had value for %s.`,
+				ErrConflict, debugJoin(noun.name, field, dot), debugJoin(noun.name, field, prev.dot.String))
 		} else if prev.value != value {
-			err = errutil.Fmt(`%w mismatched noun value for %s.`,
-				Conflict, debugJoin(noun.name, field, dot))
+			err = fmt.Errorf(`%w mismatched noun value for %s.`,
+				ErrConflict, debugJoin(noun.name, field, dot))
 		} else {
-			err = errutil.Fmt(`%w noun value for %s.`,
-				Duplicate, debugJoin(noun.name, field, dot))
+			err = fmt.Errorf(`%w noun value for %s.`,
+				ErrDuplicate, debugJoin(noun.name, field, dot))
 		}
 		return
 	}, &prev.dot, &prev.value); e != nil {
@@ -128,7 +129,7 @@ func (pen *Pen) addNounValue(noun nounInfo, final bool, outer fieldInfo, field, 
 		// and avoids questions about what happens to values at the *end* of domain
 		// (ex. do the values revert back to their previous dynamic value?
 		//  or, are they forced to the values at the start of the parent scene, etc. )
-		err = errutil.Fmt("assignments to noun %q (at %q) must be in the domain %q, was %q",
+		err = fmt.Errorf("assignments to noun %q (at %q) must be in the domain %q, was %q",
 			noun.name, field, noun.domain, pen.domain)
 	} else {
 		if _, e := pen.db.Exec(mdl_value, noun.id, outer.id, opt, value, final, pen.at); e != nil {
@@ -163,15 +164,15 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 		and mv.field = @2`,
 		kind.id, field.id,
 	); e != nil {
-		err = errutil.New("database error", e)
+		err = fmt.Errorf("database error: %s", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
 		if prev.final {
 			if prev.value != value {
-				err = errutil.Fmt(`%w mismatched kind value for %s.`,
-					Conflict, debugJoin(kind.name, field.name, ""))
+				err = fmt.Errorf(`%w mismatched kind value for %s.`,
+					ErrConflict, debugJoin(kind.name, field.name, ""))
 			} else {
-				err = errutil.Fmt(`%w kind value for %s.`,
-					Duplicate, debugJoin(kind.name, field.name, ""))
+				err = fmt.Errorf(`%w kind value for %s.`,
+					ErrDuplicate, debugJoin(kind.name, field.name, ""))
 			}
 		}
 		return
@@ -179,7 +180,7 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 		err = eatDuplicates(pen.warn, e)
 	} else if field.domain != pen.domain {
 		// this to simplify domain management (ex. would have to check rival values)
-		err = errutil.Fmt("the domain of the assignment (%s) must match the field %q domain (%s)",
+		err = fmt.Errorf("the domain of the assignment (%s) must match the field %q domain (%s)",
 			pen.domain, field.name, field.domain)
 	} else if _, e := pen.db.Exec(mdl_value_kind, kind.id, field.id, value, final, pen.at); e != nil {
 		err = e
@@ -212,7 +213,7 @@ func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, 
 		val = a.Assignment
 	}
 	if aff := call.GetAffinity(val); aff != wantAff {
-		err = errutil.Fmt("%w assignment wanted %s not %s", Conflict, aff, wantAff)
+		err = fmt.Errorf("%w assignment wanted %s not %s", ErrConflict, aff, wantAff)
 	} else {
 		// strip off the From section to avoid serializing redundant info
 		switch v := val.(type) {
@@ -238,7 +239,7 @@ func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, 
 			slot := rtti.RecordListEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
 		default:
-			err = errutil.New("unknown type")
+			err = errors.New("unknown type")
 		}
 	}
 	return
@@ -252,7 +253,7 @@ func marshalProvisional(val literal.LiteralValue, wantAff affine.Affinity) (ret 
 		val = a.LiteralValue
 	}
 	if aff := literal.GetAffinity(val); aff != wantAff {
-		err = errutil.Fmt("%w literal wanted %s not %s", Conflict, aff, wantAff)
+		err = fmt.Errorf("%w literal wanted %s not %s", ErrConflict, aff, wantAff)
 	} else {
 		slot := literal.LiteralValue_Slot{Value: val}
 		ret, err = marshal(&slot)

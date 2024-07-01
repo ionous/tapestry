@@ -3,7 +3,7 @@ package mdl
 import (
 	"database/sql"
 
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 // findDomain validates that the named domain exists
@@ -14,7 +14,7 @@ func (pen *Pen) findDomain() (ret string, err error) {
 	select domain 
 	from mdl_domain 
 	where domain = ?1`, domain).Scan(&ret); e == sql.ErrNoRows {
-		err = errutil.Fmt("domain not found %q", domain)
+		err = fmt.Errorf("domain not found %q", domain)
 	} else {
 		err = e
 	}

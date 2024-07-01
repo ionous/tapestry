@@ -26,7 +26,7 @@ func (ja localWeaver) AddFact(key string, parts ...string) (err error) {
 	if ok, e := ja.Pen.AddFact(key, parts...); e != nil {
 		err = e
 	} else if !ok {
-		err = mdl.Duplicate
+		err = mdl.ErrDuplicate
 	}
 	return
 }

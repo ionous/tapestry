@@ -1,5 +1,5 @@
 ---
-- Declare: "Settings are kinds of kinds. Settings are usually brief."
+- Declare: "Settings are kinds of kinds. Settings are usually verbose."
 - # Settings is a global singleton for controlling various gameplay options.
   Define noun:kind:
     - "settings"

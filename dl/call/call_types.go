@@ -44,7 +44,7 @@ func (op *Trigger_Slots) Repeats() bool {
 // Determine whether a scene (aka domain) is active.
 type ActiveScene struct {
 	Name   string
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // active_scene, a type of flow.
@@ -84,7 +84,7 @@ func (op *ActiveScene_Slice) Repeats() bool {
 // The [rtti.num_eval] version returns the distance to the pattern.
 type ActivePattern struct {
 	PatternName string
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // active_pattern, a type of flow.
@@ -124,7 +124,7 @@ func (op *ActivePattern_Slice) Repeats() bool {
 type Arg struct {
 	Name   string
 	Value  rtti.Assignment
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // arg, a type of flow.
@@ -160,7 +160,7 @@ func (op *Arg_Slice) Repeats() bool {
 // Used internally for jess rules.
 type FromExe struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_exe, a type of flow.
@@ -198,7 +198,7 @@ func (op *FromExe_Slice) Repeats() bool {
 // Provide a stored value for an assignment.
 type FromAddress struct {
 	Value  rtti.Address
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_address, a type of flow.
@@ -236,7 +236,7 @@ func (op *FromAddress_Slice) Repeats() bool {
 // Provide a boolean value for an assignment.
 type FromBool struct {
 	Value  rtti.BoolEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_bool, a type of flow.
@@ -274,7 +274,7 @@ func (op *FromBool_Slice) Repeats() bool {
 // Provide a number for an assignment.
 type FromNum struct {
 	Value  rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_num, a type of flow.
@@ -312,7 +312,7 @@ func (op *FromNum_Slice) Repeats() bool {
 // Provide some text for an assignment.
 type FromText struct {
 	Value  rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_text, a type of flow.
@@ -350,7 +350,7 @@ func (op *FromText_Slice) Repeats() bool {
 // Provide a record for an assignment.
 type FromRecord struct {
 	Value  rtti.RecordEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_record, a type of flow.
@@ -388,7 +388,7 @@ func (op *FromRecord_Slice) Repeats() bool {
 // Provide a list of numbers for an assignment.
 type FromNumList struct {
 	Value  rtti.NumListEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_num_list, a type of flow.
@@ -426,7 +426,7 @@ func (op *FromNumList_Slice) Repeats() bool {
 // Provide a list of text values for an assignment.
 type FromTextList struct {
 	Value  rtti.TextListEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_text_list, a type of flow.
@@ -464,7 +464,7 @@ func (op *FromTextList_Slice) Repeats() bool {
 // Provide a list of records for an assignment.
 type FromRecordList struct {
 	Value  rtti.RecordListEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // from_record_list, a type of flow.
@@ -504,7 +504,7 @@ func (op *FromRecordList_Slice) Repeats() bool {
 type CallPattern struct {
 	PatternName string
 	Arguments   []Arg
-	Markup      map[string]any
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // call_pattern, a type of flow.
@@ -552,7 +552,7 @@ type CallTrigger struct {
 	Name    string
 	Trigger Trigger
 	Num     rtti.NumEval
-	Markup  map[string]any
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // call_trigger, a type of flow.
@@ -589,7 +589,7 @@ func (op *CallTrigger_Slice) Repeats() bool {
 
 // call_trigger
 type TriggerCycle struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // trigger_cycle, a type of flow.
@@ -626,7 +626,7 @@ func (op *TriggerCycle_Slice) Repeats() bool {
 
 // call_trigger
 type TriggerOnce struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // trigger_once, a type of flow.
@@ -663,7 +663,7 @@ func (op *TriggerOnce_Slice) Repeats() bool {
 
 // call_trigger
 type TriggerSwitch struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // trigger_switch, a type of flow.
@@ -735,7 +735,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether a pattern is running.", "", "The [rtti.num_eval] version returns the distance to the pattern."},
+			"comment": []string{"Determine whether a pattern is running.", "", "The [rtti.num_eval] version returns the distance to the pattern."},
 		},
 	}
 	Zt_Arg = typeinfo.Flow{
@@ -771,7 +771,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Provide one or more execute commands for an assignment.", "Used internally for jess rules."},
+			"comment":  []string{"Provide one or more execute commands for an assignment.", "Used internally for jess rules."},
 			"internal": true,
 		},
 	}
@@ -925,7 +925,7 @@ func init() {
 			Label:   "args",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
+				"comment": []string{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
 			},
 			Type: &Zt_Arg,
 		}},
@@ -940,7 +940,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed when using the blockly editor."},
+			"comment": []string{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed when using the blockly editor."},
 		},
 	}
 	Zt_CallTrigger = typeinfo.Flow{
@@ -962,7 +962,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Runtime version of count_of.", "A guard which returns true based on a counter."},
+			"comment":  []string{"Runtime version of count_of.", "A guard which returns true based on a counter."},
 			"internal": true,
 		},
 	}
@@ -1042,6 +1042,27 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_TriggerCycle,
 	&Zt_TriggerOnce,
 	&Zt_TriggerSwitch,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*ActiveScene)(nil))
+	reg((*ActivePattern)(nil))
+	reg((*Arg)(nil))
+	reg((*FromExe)(nil))
+	reg((*FromAddress)(nil))
+	reg((*FromBool)(nil))
+	reg((*FromNum)(nil))
+	reg((*FromText)(nil))
+	reg((*FromRecord)(nil))
+	reg((*FromNumList)(nil))
+	reg((*FromTextList)(nil))
+	reg((*FromRecordList)(nil))
+	reg((*CallPattern)(nil))
+	reg((*CallTrigger)(nil))
+	reg((*TriggerCycle)(nil))
+	reg((*TriggerOnce)(nil))
+	reg((*TriggerSwitch)(nil))
 }
 
 // a list of all command signatures

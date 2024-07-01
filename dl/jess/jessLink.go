@@ -93,16 +93,16 @@ func (door jessLink) readParent(run rt.Runtime) (ret string, err error) {
 func (p *jessLink) writeLinkType(w weaver.Weaves) (err error) {
 	noun := p.Noun
 	// both newly stamping the noun as room, or re-stamping it as such is okay.
-	if e := w.AddNounKind(noun, Rooms); e == nil || errors.Is(e, weaver.Duplicate) {
+	if e := w.AddNounKind(noun, Rooms); e == nil || errors.Is(e, weaver.ErrDuplicate) {
 		p.roomLike = true
 	} else {
 		// some unknown error is room problem:
-		if !errors.Is(e, weaver.Conflict) {
+		if !errors.Is(e, weaver.ErrConflict) {
 			err = e
 		} else {
 			// oto, if it was conflicted, maybe it was actually room door;
 			// attempt to figure that out by saying it *is* a door.
-			if e := w.AddNounKind(noun, Doors); e != nil && !errors.Is(e, weaver.Duplicate) {
+			if e := w.AddNounKind(noun, Doors); e != nil && !errors.Is(e, weaver.ErrDuplicate) {
 				err = e
 			}
 		}

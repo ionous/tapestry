@@ -44,7 +44,7 @@ func (op *Counter_Slots) Repeats() bool {
 // Add a single blank line ( unless a blank line was just written ).
 // See also the <p> markup.
 type ParagraphBreak struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // paragraph_break, a type of flow.
@@ -82,7 +82,7 @@ func (op *ParagraphBreak_Slice) Repeats() bool {
 // Start a new line ( if not already at a new line ).
 // See also the <wbr> markup.
 type SoftBreak struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // soft_break, a type of flow.
@@ -120,7 +120,7 @@ func (op *SoftBreak_Slice) Repeats() bool {
 // Start a new line.
 // See also the <br> markup.
 type LineBreak struct {
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // line_break, a type of flow.
@@ -159,7 +159,7 @@ func (op *LineBreak_Slice) Repeats() bool {
 type CycleText struct {
 	Name   string
 	Parts  []rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // cycle_text, a type of flow.
@@ -199,8 +199,8 @@ func (op *CycleText_Slice) Repeats() bool {
 type ShuffleText struct {
 	Name    string
 	Parts   []rtti.TextEval
-	Indices Shuffler
-	Markup  map[string]any
+	indices Shuffler
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // shuffle_text, a type of flow.
@@ -242,7 +242,7 @@ func (op *ShuffleText_Slice) Repeats() bool {
 type StoppingText struct {
 	Name   string
 	Parts  []rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // stopping_text, a type of flow.
@@ -281,7 +281,7 @@ func (op *StoppingText_Slice) Repeats() bool {
 // Capture any and all text printed by the game, and return it as a single string of continuous text. New lines are stored as line feeds ('\n').
 type BufferText struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // buffer_text, a type of flow.
@@ -321,7 +321,7 @@ func (op *BufferText_Slice) Repeats() bool {
 // https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup
 type PrintText struct {
 	Text   rtti.TextEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_text, a type of flow.
@@ -360,7 +360,7 @@ func (op *PrintText_Slice) Repeats() bool {
 type PrintWords struct {
 	Separator rtti.TextEval
 	Exe       []rtti.Execute
-	Markup    map[string]any
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // print_words, a type of flow.
@@ -400,7 +400,7 @@ func (op *PrintWords_Slice) Repeats() bool {
 // If no text is printed, no parentheses are printed.
 type PrintBrackets struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_brackets, a type of flow.
@@ -439,7 +439,7 @@ func (op *PrintBrackets_Slice) Repeats() bool {
 // Separates words with commas, and 'and'.
 type PrintCommas struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_commas, a type of flow.
@@ -478,7 +478,7 @@ func (op *PrintCommas_Slice) Repeats() bool {
 // Group text into an unordered list <ul>.
 type PrintRows struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_rows, a type of flow.
@@ -518,7 +518,7 @@ func (op *PrintRows_Slice) Repeats() bool {
 // See also: 'rows'.
 type PrintRow struct {
 	Exe    []rtti.Execute
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_row, a type of flow.
@@ -560,7 +560,7 @@ func (op *PrintRow_Slice) Repeats() bool {
 // The [story.Execute] version prints the text for the player.
 type PrintNum struct {
 	Num    rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_num, a type of flow.
@@ -604,7 +604,7 @@ func (op *PrintNum_Slice) Repeats() bool {
 // The [story.Execute] version prints the text for the player.
 type PrintCount struct {
 	Num    rtti.NumEval
-	Markup map[string]any
+	Markup map[string]any `json:",omitempty"`
 }
 
 // print_count, a type of flow.
@@ -651,7 +651,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Add a single blank line ( unless a blank line was just written ).", "See also the <p> markup."},
+			"comment": []string{"Add a single blank line ( unless a blank line was just written ).", "See also the <p> markup."},
 		},
 	}
 	Zt_SoftBreak = typeinfo.Flow{
@@ -662,7 +662,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Start a new line ( if not already at a new line ).", "See also the <wbr> markup."},
+			"comment": []string{"Start a new line ( if not already at a new line ).", "See also the <wbr> markup."},
 		},
 	}
 	Zt_LineBreak = typeinfo.Flow{
@@ -673,7 +673,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Start a new line.", "See also the <br> markup."},
+			"comment": []string{"Start a new line.", "See also the <br> markup."},
 		},
 	}
 	Zt_CycleText = typeinfo.Flow{
@@ -761,7 +761,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.", "", "As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after."},
+			"comment": []string{"Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.", "", "As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after."},
 		},
 	}
 	Zt_BufferText = typeinfo.Flow{
@@ -769,7 +769,6 @@ func init() {
 		Lede: "buffer",
 		Terms: []typeinfo.Term{{
 			Name:    "exe",
-			Label:   "do",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "The statements to capture text output from.",
@@ -797,7 +796,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Display some text to the player.", "The default runtime will format the text according to the rules specified by the Tapestry markup package:", "https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup"},
+			"comment": []string{"Display some text to the player.", "The default runtime will format the text according to the rules specified by the Tapestry markup package:", "https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup"},
 		},
 	}
 	Zt_PrintWords = typeinfo.Flow{
@@ -844,7 +843,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Collect printed text and surround the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
+			"comment": []string{"Collect printed text and surround the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
 		},
 	}
 	Zt_PrintCommas = typeinfo.Flow{
@@ -901,7 +900,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
+			"comment": []string{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
 		},
 	}
 	Zt_PrintNum = typeinfo.Flow{
@@ -920,7 +919,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Express a number using digits.", "For example, given the number `12` return the text \"12\".", "", "The [story.Execute] version prints the text for the player."},
+			"comment": []string{"Express a number using digits.", "For example, given the number `12` return the text \"12\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 	Zt_PrintCount = typeinfo.Flow{
@@ -939,7 +938,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Express an integer in plain english ( aka a cardinal number ).", "For example, given the number `12` return the text \"tweleve\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
+			"comment": []string{"Express an integer in plain english ( aka a cardinal number ).", "For example, given the number `12` return the text \"tweleve\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 }
@@ -983,12 +982,31 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_PrintCount,
 }
 
+// gob like registration
+func Register(reg func(any)) {
+	reg((*ParagraphBreak)(nil))
+	reg((*SoftBreak)(nil))
+	reg((*LineBreak)(nil))
+	reg((*CycleText)(nil))
+	reg((*ShuffleText)(nil))
+	reg((*StoppingText)(nil))
+	reg((*BufferText)(nil))
+	reg((*PrintText)(nil))
+	reg((*PrintWords)(nil))
+	reg((*PrintBrackets)(nil))
+	reg((*PrintCommas)(nil))
+	reg((*PrintRows)(nil))
+	reg((*PrintRow)(nil))
+	reg((*PrintNum)(nil))
+	reg((*PrintCount)(nil))
+}
+
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	6760736350978281265:  (*PrintBrackets)(nil),  /* execute=Bracket: */
 	7683154690772057430:  (*PrintBrackets)(nil),  /* text_eval=Bracket: */
-	9767668117811810575:  (*BufferText)(nil),     /* text_eval=Buffer do: */
+	14977888493551680556: (*BufferText)(nil),     /* text_eval=Buffer: */
 	16098131496381194958: (*CycleText)(nil),      /* counter=Cycle name:text: */
 	5355971188045229340:  (*CycleText)(nil),      /* text_eval=Cycle name:text: */
 	17596073119249480739: (*CycleText)(nil),      /* counter=Cycle text: */

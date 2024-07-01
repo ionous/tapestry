@@ -112,7 +112,7 @@ func (d *Domain) schedule(at string, when weaver.Phase, what ScheduledCallback) 
 			// if its the same phase, try to run immediately;
 			// this is important for jess which matches and then immediately schedules:
 			// that way one sentence can match dependent on the results of the previous sentence.
-			if e := d.runOne(m); e != nil && !errors.Is(e, mdl.Missing) {
+			if e := d.runOne(m); e != nil && !errors.Is(e, mdl.ErrMissing) {
 				err = e
 			} else if e != nil {
 				d.scheduling[z] = append(d.scheduling[z], m)
@@ -156,7 +156,7 @@ func (d *Domain) runPhase(z weaver.Phase) (err error) {
 func (d *Domain) runSchedule(phase []memento, lastMissing *error) (ret int, err error) {
 	var keep int
 	for _, next := range phase {
-		if e := d.runOne(next); e != nil && !errors.Is(e, mdl.Missing) {
+		if e := d.runOne(next); e != nil && !errors.Is(e, mdl.ErrMissing) {
 			err = e
 			break
 		} else if e != nil {

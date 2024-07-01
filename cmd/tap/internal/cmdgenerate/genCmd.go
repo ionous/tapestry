@@ -83,7 +83,7 @@ func writeTables(g generate.Generator, db generate.DB) (err error) {
 var CmdGenerate = &base.Command{
 	Run:       runGenerate,
 	Flag:      buildFlags(),
-	UsageLine: "tap gen [-in ../../idl] [-out ../../dl] [-db -dbFile]",
+	UsageLine: "tap code [-in ../../idl] [-out ../../dl] [-db -dbFile]",
 	Short:     "extend tapestry with new golang code",
 	Long: `
 Generates .go source code for reading and writing story files from .idl files.`,

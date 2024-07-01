@@ -62,7 +62,7 @@ func (op *TimedRule) Generate(ctx Context) (err error) {
 		err = e
 	} else if pat, e := op.Pattern.Validate(kindsOf.Pattern, kindsOf.Action); e != nil {
 		err = e
-	} else if op.Someone && op.Pattern.ActualKind.BaseKind != kindsOf.Action {
+	} else if op.Someone && op.Pattern.actualKind.BaseKind != kindsOf.Action {
 		// fix: story had an additional test CanFilterActor. hrm.
 		err = errors.New("can only filter actor actions")
 	} else if exe, ok := op.SubAssignment.GetExe(); !ok {
@@ -83,16 +83,16 @@ func (op *TimedRule) Generate(ctx Context) (err error) {
 				// add custom filters ( if any )
 				if tgt := op.RuleTarget; tgt != nil {
 					if n := tgt.Noun; n != nil {
-						filters = rules.AddNounFilter(n.ActualNoun.Name, filters)
+						filters = rules.AddNounFilter(n.actualNoun.Name, filters)
 					} else if k := tgt.Kind; k != nil {
-						filters = rules.AddKindFilter(k.ActualKind.Name, filters)
+						filters = rules.AddKindFilter(k.actualKind.Name, filters)
 					} else {
 						panic("unhandled target match")
 					}
 				}
 
 				// add other action filters
-				if op.Pattern.ActualKind.BaseKind == kindsOf.Action {
+				if op.Pattern.actualKind.BaseKind == kindsOf.Action {
 					if !op.Someone {
 						// all actions are triggered by actors;
 						// then we automatically filter for the player
@@ -147,12 +147,12 @@ func (op *RuleTarget) Match(q Query, input *InputState) (okay bool) {
 // ----
 
 func GetRulePrefix(op RulePrefix) rules.Prefix {
-	return rules.Prefix(op.PrefixValue)
+	return rules.Prefix(op.prefixValue)
 }
 
 func (op *RulePrefix) Match(q Query, input *InputState) (okay bool) {
 	if idx, width := prefixes.FindPrefixIndex(input.Words()); width > 0 {
-		op.PrefixValue = PrefixValue(idx)
+		op.prefixValue = PrefixValue(idx)
 		*input, okay = input.Skip(width), true
 	}
 	return
@@ -162,14 +162,14 @@ func (op *RulePrefix) Match(q Query, input *InputState) (okay bool) {
 
 func GetRuleSuffix(op *RuleSuffix) (ret rules.Suffix) {
 	if op != nil {
-		ret = rules.Suffix(op.SuffixValue)
+		ret = rules.Suffix(op.suffixValue)
 	}
 	return
 }
 
 func (op *RuleSuffix) Match(q Query, input *InputState) (okay bool) {
 	if idx, width := suffixes.FindPrefixIndex(input.Words()); width > 0 {
-		op.SuffixValue = SuffixValue(idx)
+		op.suffixValue = SuffixValue(idx)
 		*input, okay = input.Skip(width), true
 	}
 	return

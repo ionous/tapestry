@@ -1,9 +1,10 @@
 package mdl
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"github.com/ionous/errutil"
 )
 
 type FieldInfo struct {
@@ -33,9 +34,9 @@ func (f *FieldInfo) validate() (err error) {
 	if f.Error != nil {
 		err = f.Error
 	} else if len(f.Name) == 0 {
-		err = errutil.New("missing name")
+		err = errors.New("missing name")
 	} else if len(f.Affinity) == 0 {
-		err = errutil.New("missing affinity")
+		err = errors.New("missing affinity")
 	}
 	return
 }

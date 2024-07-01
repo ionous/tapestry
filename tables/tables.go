@@ -52,3 +52,7 @@ func CreateRunTime(mdlFile string) (ret *sql.DB, err error) {
 	}
 	return
 }
+
+func OpenModel(mdlFile string) (ret *sql.DB, err error) {
+	return open(tapestryDriver, mdlFile+"?mode=ro")
+}

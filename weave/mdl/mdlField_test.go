@@ -2,11 +2,11 @@ package mdl
 
 import (
 	"database/sql"
+	"fmt"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
 // todo: test that traits write to their aspect's field
@@ -63,8 +63,8 @@ func TestValueWriting(t *testing.T) {
 	nouns.b = mdl_noun.insert(db, nounB, kind.id)
 
 	//
-	if m, e := NewModelerWithWarnings(db, func(fmt string, parts ...any) {
-		LogWarning(errutil.Fmt(fmt, parts...))
+	if m, e := NewModelerWithWarnings(db, func(str string, parts ...any) {
+		LogWarning(fmt.Errorf(str, parts...))
 	}); e != nil {
 		t.Fatal(e)
 	} else {

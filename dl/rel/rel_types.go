@@ -15,7 +15,7 @@ import (
 type RelativeOf struct {
 	RelationName rtti.TextEval
 	NounName     rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // relative_of, a type of flow.
@@ -55,7 +55,7 @@ func (op *RelativeOf_Slice) Repeats() bool {
 type RelativesOf struct {
 	RelationName rtti.TextEval
 	NounName     rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // relatives_of, a type of flow.
@@ -95,7 +95,7 @@ func (op *RelativesOf_Slice) Repeats() bool {
 type ReciprocalOf struct {
 	RelationName rtti.TextEval
 	NounName     rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // reciprocal_of, a type of flow.
@@ -135,7 +135,7 @@ func (op *ReciprocalOf_Slice) Repeats() bool {
 type ReciprocalsOf struct {
 	RelationName rtti.TextEval
 	NounName     rtti.TextEval
-	Markup       map[string]any
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // reciprocals_of, a type of flow.
@@ -176,7 +176,7 @@ type Relate struct {
 	NounName      rtti.TextEval
 	OtherNounName rtti.TextEval
 	RelationName  rtti.TextEval
-	Markup        map[string]any
+	Markup        map[string]any `json:",omitempty"`
 }
 
 // relate, a type of flow.
@@ -235,7 +235,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the relative of a noun.", "For example: the right-hand noun in a one-to-one pairing."},
+			"comment": []string{"Return the relative of a noun.", "For example: the right-hand noun in a one-to-one pairing."},
 		},
 	}
 	Zt_RelativesOf = typeinfo.Flow{
@@ -259,7 +259,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the relatives of a noun as a list of names.", "For example: the right-hand nouns in a set of one-to-many pairing."},
+			"comment": []string{"Return the relatives of a noun as a list of names.", "For example: the right-hand nouns in a set of one-to-many pairing."},
 		},
 	}
 	Zt_ReciprocalOf = typeinfo.Flow{
@@ -283,7 +283,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the implied relative of a noun.", "For example: the left-hand noun in a one-to-many relation."},
+			"comment": []string{"Return the implied relative of a noun.", "For example: the left-hand noun in a one-to-many relation."},
 		},
 	}
 	Zt_ReciprocalsOf = typeinfo.Flow{
@@ -307,7 +307,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the implied relatives of a noun.", "For example: the left-hand nouns in a set of one-to-many pairing."},
+			"comment": []string{"Return the implied relatives of a noun.", "For example: the left-hand nouns in a set of one-to-many pairing."},
 		},
 	}
 	Zt_Relate = typeinfo.Flow{
@@ -338,7 +338,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Relate two nouns.", "Removes any previous pairings that might conflict with this one."},
+			"comment": []string{"Relate two nouns.", "Removes any previous pairings that might conflict with this one."},
 		},
 	}
 }
@@ -362,6 +362,15 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_ReciprocalOf,
 	&Zt_ReciprocalsOf,
 	&Zt_Relate,
+}
+
+// gob like registration
+func Register(reg func(any)) {
+	reg((*RelativeOf)(nil))
+	reg((*RelativesOf)(nil))
+	reg((*ReciprocalOf)(nil))
+	reg((*ReciprocalsOf)(nil))
+	reg((*Relate)(nil))
 }
 
 // a list of all command signatures
