@@ -1,6 +1,6 @@
 <template>
 <div class="lv-credits">
-  <h1>Credits</h1>
+  <h3>Credits</h3>
   <p>
     The original "Cloak of Darkness" is a story by <a target="_blank" href="https://www.ifwiki.org/Cloak_of_Darkness">Roger Firth</a>. This version was ported from <a target="_blank" href="https://inform7.com">Inform 7.</a>
   </p>

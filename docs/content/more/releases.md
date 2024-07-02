@@ -17,10 +17,13 @@
 # git checkout release
 # git merge main
 # git push --follow-tags
+# verify: 
 #
 # for documentation:
 # npm run build  ( or just the above )
-# npm run publish 
+# npm run -w docs publish 
+# verify: https://tapestry.ionous.net/
+#
 --- 
 
 To install Tapestry, please see the [Getting Started](/getting-started/#installing-tapestry) page.
