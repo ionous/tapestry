@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "reach test"
+- Define scene:requires:stage:do:
+    - "Test reaching"
     - "Kitchenette"
     - - Declare: "An other worldly cloak is a thing."
       - Note: "it is nowhere."

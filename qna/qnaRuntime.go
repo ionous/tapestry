@@ -56,14 +56,9 @@ func (run *Runner) Random(inclusiveMin, exclusiveMax int) int {
 	return run.query.Random(inclusiveMin, exclusiveMax)
 }
 
-func (run *Runner) reportError(e error) error {
-	log.Println(e) // fix? now what?
-	return e
-}
-
 func (run *Runner) ActivateDomain(domain string) (err error) {
 	if ends, begins, e := run.query.ActivateDomains(domain); e != nil {
-		err = run.reportError(e)
+		err = e
 	} else {
 		if len(ends) > 0 {
 			// fix? the domain is already out of scope
@@ -95,7 +90,7 @@ func (run *Runner) domainChanged(ds []string, evt string) (err error) {
 		name := d + " " + evt
 		if pat, e := run.getKind(name); e == nil {
 			if _, e := run.call(pat, rt.NewRecord(pat), affine.None); e != nil {
-				err = errutil.Append(err, run.reportError(e))
+				err = e
 				break
 			}
 		}
@@ -108,7 +103,7 @@ func (run *Runner) SingularOf(plural string) (ret string) {
 	if len(plural) < 2 {
 		ret = plural
 	} else if n, e := run.query.PluralToSingular(plural); e != nil {
-		run.reportError(e)
+		log.Println(e) // not critical enough to care about?
 	} else if len(n) > 0 {
 		ret = n
 	} else {
@@ -123,7 +118,7 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 	if len(singular) < 2 {
 		ret = singular
 	} else if n, e := run.query.PluralFromSingular(singular); e != nil {
-		run.reportError(e)
+		log.Println(e) // not critical enough to care about?
 	} else if len(n) > 0 {
 		ret = n
 	} else {
@@ -224,7 +219,7 @@ func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 	if field := inflect.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("GetField given an empty field for target %q", target)
-	} else if target[0] != meta.Prefix {
+	} else if len(target) > 0 && target[0] != meta.Prefix {
 		// an object from the author's story
 		if obj, e := run.getObjectInfo(target); e != nil {
 			err = e
@@ -244,14 +239,14 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 
 		case meta.Domain:
 			if b, e := run.query.IsDomainActive(field); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				ret = rt.BoolOf(b)
 			}
 
 		case meta.FieldsOfKind:
 			if k, e := run.getKind(field); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				var fs []string
 				for i, cnt := 0, k.FieldCount(); i < cnt; i++ {
@@ -263,14 +258,14 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 
 		case meta.KindAncestry:
 			if ks, e := run.getAncestry(field); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				ret = rt.StringsOf(ks)
 			}
 
 		case meta.ObjectAliases:
 			if ns, e := run.getObjectNames(field); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				ret = rt.StringsOf(ns)
 			}
@@ -294,7 +289,7 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else if ks, e := run.getAncestry(ok.Kind); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				ret = rt.StringsOf(ks)
 			}
@@ -302,7 +297,7 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 		// given a noun, return the name declared by the author
 		case meta.ObjectName:
 			if n, e := run.getObjectName(field); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				ret = rt.StringOf(n) // tbd: should these have a type?
 			}
@@ -310,9 +305,9 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 		// all objects of the named kind
 		case meta.ObjectsOfKind:
 			if k, e := run.getKind(field); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else if ns, e := run.query.NounsByKind(k.Name()); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				ret = rt.StringsOf(ns)
 			}
@@ -322,14 +317,14 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 			// note: uses raw field so that it matches the meta.Options go generated stringer strings.
 			// fix? specify those strings as their inflect.Normalized versions using -linecomment?
 			if t, e := run.options.OptionByName(rawField); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				ret = t
 			}
 
 		case meta.PatternLabels:
 			if vs, e := run.query.PatternLabels(field); e != nil {
-				err = run.reportError(e)
+				err = e
 			} else {
 				ret = rt.StringsOf(vs)
 			}

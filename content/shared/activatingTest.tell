@@ -1,7 +1,7 @@
 ---
 - # Ensures the standard library has properly described activation and deactivation states. The state changing algorithm used by all states happens at the engine level and gets tested there.
-  Define test:requires:scene:do:
-    - "activating test"
+  Define scene:requires:stage:do:
+    - "Test activating"
     - "Kitchenette"
     - - Declare: "You are carrying the knife."
       - Declare: "The espresso controls are a device in the kitchen."

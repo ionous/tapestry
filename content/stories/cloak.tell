@@ -142,8 +142,8 @@ Instead of storing the cloak:
 # -----------------------------------
 ---
 - # Dropping the cloak should give you points, but shouldn't let you win the game.
-  Define test:do:
-  - "cloak of dropping"
+  Define scene:do:
+  - "Test cloak of dropping"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
       - FromBool: true
@@ -156,8 +156,8 @@ Instead of storing the cloak:
         - 1
 
 - # Hanging the cloak on the hook. That's where it's at.
-  Define test:do:
-  - "cloak of perfection"
+  Define scene:do:
+  - "Test cloak of perfection"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
       - FromBool: true
@@ -170,8 +170,8 @@ Instead of storing the cloak:
         - 2
 
 - # Disturbing the message should fail the game.
-  Define test:do:
-  - "cloak of failure"
+  Define scene:do:
+  - "Test cloak of failure"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
       - FromBool: true

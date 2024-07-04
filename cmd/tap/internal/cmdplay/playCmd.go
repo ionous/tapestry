@@ -15,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/player"
-	"github.com/ionous/errutil"
 )
 
 // called by tap.go
@@ -35,13 +34,7 @@ func playCmd(ctx context.Context, _ *base.Command, args []string) (err error) {
 		opts := qna.NewOptions()
 		opts.SetOption(meta.PrintResponseNames, rt.BoolOf(cfg.responses))
 		opts.SetOption(meta.SaveDir, rt.StringOf(saveDir))
-		if e := player.PlayWithOptions(cfg.inFile, cfg.testString, scene, opts); e != nil {
-			// prints a stack of errors one by one.
-			errutil.PrintErrors(e, func(s string) { log.Println(s) })
-			if errutil.Panic {
-				log.Panic("mismatched")
-			}
-		}
+		err = player.PlayWithOptions(cfg.inFile, cfg.testString, scene, opts)
 	}
 	return
 }

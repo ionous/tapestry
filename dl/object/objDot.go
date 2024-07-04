@@ -2,6 +2,7 @@ package object
 
 import (
 	"errors"
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
@@ -15,8 +16,10 @@ func (op *ObjectDot) GetReference(run rt.Runtime) (ret rt.Reference, err error) 
 		err = e
 	} else if path, e := resolveDots(run, op.Dot); e != nil {
 		err = e
+	} else if str := name.String(); len(str) == 0 {
+		err = fmt.Errorf("object is nothing")
 	} else {
-		pos := dot.MakeReference(run, name.String())
+		pos := dot.MakeReference(run, str)
 		ret, err = dot.Path(pos, path)
 	}
 	return

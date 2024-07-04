@@ -21,8 +21,8 @@
           - Finally do:
               - Say: "{print_name:.obj|pluralize!}"
 - #
-  Define test:scene:do:
-    - "plural name printing"
+  Define scene:stage:do:
+    - "Test plural name printing"
     - - Declare: "The flowerpot, the dishes, and the spoon are things."
       - Define noun:value:initially:
         - "flowerpot"

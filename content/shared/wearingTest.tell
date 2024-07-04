@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "wearing test"
+- Define scene:requires:stage:do:
+    - "Test wearing"
     - "Kitchenette"
     - - Declare: "You are wearing the flower. You are carrying the knife."
       - Declare: "The purse is in the kitchen."

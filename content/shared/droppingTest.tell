@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "dropping test"
+- Define scene:requires:stage:do:
+    - "Test Dropping"
     - "Kitchenette"
     - - Declare: "You are carrying the knife."
     - - Say: "The knife's parent: {the: {parent_of: .knife}}."

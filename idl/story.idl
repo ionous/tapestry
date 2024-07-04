@@ -36,43 +36,7 @@ Spec:requires:contains:
               - "text"
               - "lines"
 
-    - # Defines a scene used for testing a story.
-      # Tests can be executed using the `tap check` command.
-      # TODO: see https://todo.sr.ht/~ionous/tapestry/42
-      Flow:slots:lede:terms:
-        - "define_test"
-        - "story_statement"
-        - "define"
-        - - # A unique name for the test.
-            Term:name:type:
-              - "test"
-              - "test_name"
-              - "text_eval"
-          - # One or more scenes that this test depends on.
-            # Tests implicitly depend upon the scene within which they are defined.
-            # In order to reference the nouns, kinds, etc. of any other scenes in a test, that scene must be listed here.
-            Term:name:type:optional:
-              - "requires"
-              - "required_scene_names"
-              - "text_list_eval"
-              - true
-          - # Modeling commands for defining nouns, kinds, game rules, etc. used by this test. Those definitions will not be visible outside of the test ( unless this test is "required" by another. )
-            Term:name:type:optional:repeats:
-              - "scene"
-              - "statements"
-              - "story_statement"
-              - true
-              - true
-          - # One or more commands to run when checking the test.
-            # The {"Expect:"} command will trigger a test failure when an author specified condition is not met.
-            Term:name:type:repeats:
-              - "do"
-              - "exe"
-              - "execute"
-              - true
-
-    - # Defines a collection of nouns, kinds, game rules, etc. used the game.
-      # Every .tell story has its own unique scene.
+    - # Defines a collection of nouns, kinds, game rules, etc. used in the game.
       Flow:slots:lede:terms:
         - "define_scene"
         - "story_statement"
@@ -91,9 +55,17 @@ Spec:requires:contains:
               - true
           - # Modeling commands for the defining nouns, kinds, game rules, etc. used by this scene.
             Term:name:type:optional:repeats:
-              - "with"
+              - "stage"
               - "statements"
               - "story_statement"
+              - true
+              - true
+          - # Commands to run when beginning the scene.
+            # For scenes that represent tests, {"Expect:"} can be used to trigger a failure when some condition has failed.
+            Term:name:type:optional:repeats:
+              - "do"
+              - "exe"
+              - "execute"
               - true
               - true
 

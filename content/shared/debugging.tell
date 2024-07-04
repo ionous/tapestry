@@ -9,7 +9,7 @@
                 - Action: "request debug details"
           - Action: "request debug location"
 - # Test scene comment...
-  Define scene:requires:with:
+  Define scene:requires:stage:
     - "debugging"
     - "tapestry"
     - - Define pattern:requires:provides:do:

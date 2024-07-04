@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "storing test"
+- Define scene:requires:stage:do:
+    - "Test storing"
     - "Kitchenette"
     - - Declare: "Mildred is in the kitchen.
           You are carrying the coffee, the coin, the clutch, and the knife.

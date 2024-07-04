@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "vision testing"
+- Define scene:requires:stage:do:
+    - "Test vision"
     - "Kitchenette"
     - - # fix: i think the news doesnt need a full pattern. but we need to be able to replace responses.
         Define rule:do:

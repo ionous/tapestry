@@ -3,7 +3,7 @@ package frame
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/game"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // marker interface for frame commands.
@@ -25,7 +25,7 @@ func (out *Collector) GetEvents() (ret []Notification) {
 	return
 }
 
-func (out *Collector) onGameEvent(sig game.Signal) {
+func (out *Collector) onGameEvent(sig rt.Signal) {
 	out.flush()
 	out.addEvent(&GameSignal{Signal: sig.String()})
 }

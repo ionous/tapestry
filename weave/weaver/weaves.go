@@ -22,7 +22,6 @@ var ErrMissing = mdl.ErrMissing
 type Weaves interface {
 	// set the possible traits of an aspect
 	AddAspectTraits(aspect string, traits []string) error
-	AddCheck(name string, value literal.LiteralValue, prog []rt.Execute) error
 	AddFact(key string, partsAndValue ...string) error
 	AddGrammar(name string, prog *grammar.Directive) error
 	AddKind(kind, ancestor string) error

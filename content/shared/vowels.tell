@@ -26,33 +26,23 @@
                   - - Set:value:
                         - "@matching"
                         - FromBool: true
-- Define test:do:
-    - "vowel tests"
-    - - Print:
-          Text if:then:else:
-            - StartsWithVowel text:
-                FromText: "house"
-            - "error: house doesn't start with a vowel."
-            - "ok."
-      - Expect text: "ok."
-      - Print:
-          Text if:then:else:
-            - StartsWithVowel text:
-                FromText: "hour"
-            - "ok."
-            - "error: hour starts with a vowel sound."
-      - Expect text: "ok."
-      - Print:
-          Text if:then:else:
-            - StartsWithVowel text:
-                FromText: "beta"
-            - "error: beta doesn't start with a vowel."
-            - "ok."
-      - Expect text: "ok."
-      - Print:
-          Text if:then:else:
-            - StartsWithVowel text:
-                FromText: "alpha"
-            - "ok."
-            - "alpha starts with a vowel."
-      - Expect text: "ok."
+- Define scene:do:
+  - "Test vowels"
+  - - # "House" starts with a consonant.
+      Expect:  
+        Not:
+          StartsWithVowel text: 
+            FromText: "house"
+    - # "Hour" starts with a vowel sound.
+      Expect:
+        StartsWithVowel text:
+         FromText: "hour"
+    - # "Beta" starts with a consonant.
+      Expect:
+        Not:
+          StartsWithVowel text:
+            FromText: "beta"
+    - # "Alpha" starts with a vowel sound.
+      Expect:
+        StartsWithVowel text:
+          FromText: "alpha"

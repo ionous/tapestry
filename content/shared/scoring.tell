@@ -1,5 +1,5 @@
 ---
-- Define scene:requires:with:
+- Define scene:requires:stage:
     - "scoring"
     - "tapestry"
     - - Define kind:fields:
@@ -88,8 +88,8 @@
                     - - Arg:from:
                           - "notify"
                           - FromBool: true
-- Define test:requires:do:
-    - "no score"
+- Define scene:requires:do:
+    - "Test scoring a game without scoring"
     - "tapestry"
     - - StartGame actor:quietly:
           - FromText:
@@ -99,8 +99,8 @@
           - FromBool: true
       - Fabricate input: "score"
       - Expect text: "This isn't a competition."
-- Define test:requires:do:
-    - "mid game score"
+- Define scene:requires:do:
+    - "Test mid game score"
     - "scoring"
     - - StartGame actor:quietly:
           - FromText:
@@ -120,8 +120,8 @@
           - FromNum: 23
       - Fabricate input: "score"
       - Expect text: "So far, in 1 turn, you have scored 23 out of a possible 50 points."
-- Define test:requires:do:
-    - "post game score"
+- Define scene:requires:do:
+    - "Test post game score"
     - "scoring"
     - - # simulate the end of game state.
         Set:state:
@@ -144,8 +144,8 @@
           - FromNum: 7
       - Fabricate input: "score"
       - Expect text: "In 7 turns, you scored 100 out of a possible 100 points."
-- Define test:requires:scene:do:
-    - "score notification"
+- Define scene:requires:stage:do:
+    - "Test score notification"
     - - "scoring"
       - "kitchenette"
     - - Declare: "You are carrying the flashlight. The flashlight is unlit."

@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "whereabouts"
+- Define scene:requires:stage:do:
+    - "Test whereabouts"
     - "thingaverse"
     - - Declare: "Mildred is an actor.
           The table is a supporter.

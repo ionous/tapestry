@@ -4,6 +4,7 @@ package cmdcheck
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -14,26 +15,21 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
 )
 
 func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	checkOne := strings.Join(args, " ")
 	log.Println("Checking", cfg.srcPath, checkOne)
 	if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
-		err = errutil.New("Unknown log level", cfg.logLevel)
+		err = fmt.Errorf("Unknown log level %s", cfg.logLevel)
 	} else if srcPath, e := filepath.Abs(cfg.srcPath); e != nil {
 		err = e
 	} else {
 		debug.LogLevel = lvl
 		opt := qna.NewOptions()
 		opt.SetOption(meta.PrintResponseNames, rt.BoolOf(cfg.responses))
-		if cnt, e := CheckFile(srcPath, inflect.Normalize(checkOne), opt); e != nil {
-			errutil.PrintErrors(e, func(s string) { log.Println(s) })
-			if errutil.Panic {
-				log.Panic("mismatched")
-			}
+		if cnt, e := CheckFile(srcPath, checkOne, opt); e != nil {
+			err = e
 		} else {
 			log.Println("Checked", cnt, cfg.srcPath)
 		}

@@ -26,7 +26,7 @@ type Query struct {
 	domainDeactivate,
 	domainDelete,
 	domainScope,
-	checks,
+	sceneGlob,
 	fieldsOf,
 	kindOfAncestors,
 	nounInfo,
@@ -261,12 +261,6 @@ func NewQueryOptions(db *sql.DB, dec CommandDecoder, rand query.Randomizer, cach
 			`select domain 
 			from active_domains
 			order by domain`,
-		),
-		checks: ps.Prep(db,
-			`select mc.name, mc.domain, mc.value, mc.affinity, mc.prog
-			from mdl_check mc
-			where mc.name = ?1 or length(?1) == 0
-			order by mc.domain, mc.name`,
 		),
 		// return domains which should be active and are not
 		// ( in order of increasing depth. )

@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "taking test"
+- Define scene:requires:stage:do:
+    - "Test taking"
     - "Kitchenette"
     - - Declare: "You are carrying the coin.
           Mildred is carrying the empire apple.

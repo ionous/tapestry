@@ -1,7 +1,7 @@
 # First Plain Text:
 ---
 # First Structured:
-Define scene:requires:with:
+Define scene:requires:stage:
 - "cloak"
 - "tapestry"
 - Declare: ""

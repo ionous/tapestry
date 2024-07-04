@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
-	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -40,8 +39,8 @@ func (op *Fabricate) fabricate(run rt.Runtime) (err error) {
 				var cmd string
 				cmd, split = split[0], split[1:]
 				if e := Stepper(cmd); e != nil {
-					var sig game.Signal // if the game was quit, override the error if output remains
-					if len(split) > 0 && errors.As(e, &sig) && sig == game.SignalQuit {
+					var sig rt.Signal // if the game was quit, override the error if output remains
+					if len(split) > 0 && errors.As(e, &sig) && sig == rt.SignalQuit {
 						e = errutil.New("game was quit, but input remains", strings.Join(split, ";"))
 					}
 					err = e

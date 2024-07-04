@@ -13,8 +13,8 @@ The table is in the lobby.
 # Story Tests:
 # --------------------------------------------------------------------------------
 ---
-- Define test:do:
-  - "coins test"
+- Define scene:do:
+  - "Test taking coins"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
       - FromBool: true

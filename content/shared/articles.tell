@@ -6,8 +6,8 @@
         Text: "indefinite article"
       - Aspect: "pluralization"
 - #
-  Define test:scene:do:
-    - "articles"
+  Define scene:stage:do:
+    - "Test articles"
     - - Declare: "The lamp-post, some soldiers, and Trevor are things."
     - - Say:
           - "You can only just make out {a: .lamp-post}."

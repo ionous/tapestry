@@ -6,14 +6,19 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
-	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-func (op *DefineScene) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if domain, reqs, e := op.GetSceneReqs(run); e != nil {
-			err = e
-		} else if pen, e := cat.PushScene(cat.EnsureScene(domain), mdl.MakeSource(op)); e != nil {
+func (op *DefineScene) Weave(cat *weave.Catalog) (err error) {
+	// some of the tests ( ex. TestImportSequence ) dont establish a top level scene
+	// so they cant schedule, and have to use the annoying cat.GetRuntime()
+	// maybe there could be a "current schedule" list
+	// and push stacks that ( rather than push creating the first schedule )
+	// return cat.Schedule(weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	if domain, reqs, e := op.GetSceneReqs(cat.GetRuntime()); e != nil {
+		err = e
+	} else {
+		domain := cat.EnsureScene(domain)
+		if pen, e := cat.PushScene(domain, mdl.MakeSource(op)); e != nil {
 			err = e
 		} else {
 			defer cat.PopScene()
@@ -21,10 +26,12 @@ func (op *DefineScene) Weave(cat *weave.Catalog) error {
 				err = e
 			} else if e := Weave(cat, op.Statements); e != nil {
 				err = e // add all the statements that are a part of this domain.
+			} else {
+				domain.AddStartup(op.Exe)
 			}
 		}
-		return
-	})
+	}
+	return
 }
 
 func (op *DefineScene) GetSceneReqs(run rt.Runtime) (string, []string, error) {

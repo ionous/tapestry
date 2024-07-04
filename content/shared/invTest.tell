@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "status printing test"
+- Define scene:requires:stage:do:
+    - "Test status printing"
     - "thingaverse"
     - - Declare: "The flashlight is lit."
     - - Say: "{the: .flower}: {print_status:.flower}."
@@ -20,8 +20,8 @@
       - Say: "{the: .coin}: {print_status:.coin}."
       - Expect text: "the coin: ."
 - #
-  Define test:requires:do:
-    - "default inventory"
+  Define scene:requires:do:
+    - "Test default inventory"
     - "Kitchenette"
     - - PrintInventory actor:
           FromText: "#Mildred"

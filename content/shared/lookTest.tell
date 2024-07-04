@@ -1,6 +1,6 @@
 ---
-- Define test:requires:do:
-    - "base vis"
+- Define scene:requires:do:
+    - "Test basic visibility"
     - "Kitchenette"
     - # Say the list of visible objects from one of several vantage points.
       - Repeat across:as:do:
@@ -58,8 +58,8 @@
             - "greater_than"
             - 1
 - #
-  Define test:requires:do:
-    - "look object description"
+  Define scene:requires:do:
+    - "Test look object description"
     - "kitchenette"
     - - PrintObjectDescription obj:locale:
           - FromText: "shelf"
@@ -74,8 +74,8 @@
           - FromText: "kitchen"
       - Expect text: "Steam leaks from the top of a recently used espresso machine."
 - #
-  Define test:requires:do:
-    - "printing vantages"
+  Define scene:requires:do:
+    - "Test printing vantages"
     - "Kitchenette"
     - - PrintVantage location:illuminated:verbosity:
           - FromText: "cabinet"
@@ -122,8 +122,8 @@
           - "**The cabinet**"
           - "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife."
 - #
-  Define test:requires:do:
-    - "printing inline objects"
+  Define scene:requires:do:
+    - "Test printing inline objects"
     - "Kitchenette"
     - - PrintInlineObjects objs:
           FromTextList:

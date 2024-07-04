@@ -56,8 +56,8 @@
                       - "equal_to"
                       - "#player.pawn"
 - #
-  Define test:do:
-    - "player tests"
+  Define scene:do:
+    - "Test that the player exists"
     - - Expect:
           IsPlayer obj:
             FromText: "self"

@@ -3,6 +3,7 @@ package cmdserve
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -13,7 +14,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/web"
-	"github.com/ionous/errutil"
 )
 
 // exported to package main in cmd/tap
@@ -27,7 +27,7 @@ var CmdServe = &base.Command{
 
 func goServe(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
-		err = errutil.New("Unknown log level", cfg.logLevel)
+		err = fmt.Errorf("Unknown log level %s", cfg.logLevel)
 	} else {
 		listenTo, _ := cfg.listen.GetPort(8080)
 		requestFrom, useBrowser := cfg.request.GetPort(3000)
@@ -42,14 +42,7 @@ func goServe(ctx context.Context, cmd *base.Command, args []string) (err error) 
 		}
 		debug.LogLevel = lvl
 		opts := qna.NewOptions()
-		if cnt, e := serveWithOptions(cfg.inFile, opts, listenTo, requestFrom); e != nil {
-			errutil.PrintErrors(e, func(s string) { log.Println(s) })
-			if errutil.Panic {
-				log.Panic("mismatched")
-			}
-		} else {
-			log.Println("done", cnt, cfg.inFile)
-		}
+		err = serveWithOptions(cfg.inFile, opts, listenTo, requestFrom)
 	}
 	return
 }

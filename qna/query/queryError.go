@@ -34,10 +34,6 @@ func (q QueryNone) ActivateDomains(name string) (_, _ []string, err error) {
 	return
 }
 
-func (q QueryNone) ReadChecks(actuallyJustThisOne string) (_ []CheckData, _ error) {
-	return
-}
-
 func (q QueryNone) KindOfAncestors(kind string) (_ []string, _ error) {
 	return
 }

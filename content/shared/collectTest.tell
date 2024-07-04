@@ -1,8 +1,8 @@
 ---
 - # this test is probably too sensitive to last for long.
   # maybe helpful for now at least
-  Define test:requires:do:
-    - "collect test"
+  Define scene:requires:do:
+    - "Test collection"
     - "Kitchenette"
     - - Log:value:
           - "debug"

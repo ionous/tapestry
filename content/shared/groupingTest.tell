@@ -6,8 +6,8 @@
 # Or, maybe we could store the (various) articles used when defining the noun, sort through them, and pick the most reasonable one -- always storing that regardless.
 # saying only ever "the X" , for example, would be remembered, but wouldn't alter the set of indefinite articles.
 ---
-- Define test:scene:do:
-    - "grouping tests"
+- Define scene:stage:
+    - "Grouping tests"
     - - Declare: "The lab is a room.
           Clarence is an actor.
           Cats are kinds of animals.
@@ -24,8 +24,8 @@
           - "f"
           - "indefinite article"
           - FromText: "an"
-      - Define test:scene:do:
-          - "no grouping"
+      - Define scene:stage:do:
+          - "Test no grouping"
           - - Define rule:do:
                 - "assign grouping"
                 - - # For patterns which return a value, assigning a return value ends the pattern matching.
@@ -44,8 +44,8 @@
                   - "cat-2"
             - Expect text: "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
       - #
-        Define test:do:
-          - "default grouping"
+        Define scene:do:
+          - "Test default grouping"
           - - PrintInlineObjects objs:
                 FromTextList:
                   - "Clarence"
@@ -57,8 +57,8 @@
                   - "cat-2"
             - Expect text: "Clarence, an empire apple, a pen, two triangles, and two cats"
       - #
-        Define test:scene:do:
-          - "custom few"
+        Define scene:stage:do:
+          - "Test custom grouping"
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
@@ -110,8 +110,8 @@
                       - "triangle-1"
             - Expect text: "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
       - #
-        Define test:scene:do:
-          - "x custom replacement"
+        Define scene:stage:do:
+          - "x Test custom replacement"
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
@@ -148,8 +148,8 @@
                       - "apple"
             - Expect text: "Clarence and some things; Clarence and an empire apple"
       - #
-        Define test:scene:do:
-          - "custom fancy phrase"
+        Define scene:stage:do:
+          - "x Test custom fancy phrases"
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
@@ -205,8 +205,8 @@
                       - "z"
             - Expect text: "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
       - #
-        Define test:scene:do:
-          - "custom parenthetical"
+        Define scene:stage:do:
+          - "Test custom parentheticals"
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
@@ -236,8 +236,8 @@
                   - "z"
             - Expect text: "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
       - #
-        Define test:scene:do:
-          - "custom parenthetical articles"
+        Define scene:stage:do:
+          - "Test custom parenthetical articles"
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
@@ -262,8 +262,8 @@
         # even though the triangles are counted nouns
         # for some reason they get pulled into the 'things' group
         # and print ex. 'a triangle' instead of 'one triangle'.
-        Define test:scene:do:
-          - "x custom unnamed parenthetical"
+        Define scene:stage:do:
+          - "x Test custom unnamed parenthetical"
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
@@ -291,5 +291,4 @@
                       - "triangle-1"
                       - "triangle-2"
             - Expect text: "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
-    - - # do nothing
-        Continue:
+    

@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -14,19 +15,21 @@ import (
 )
 
 type Domain struct {
-	name          string
-	cat           *Catalog
-	currPhase     weaver.Phase // updated during weave, ends at NumPhases
-	steps         []StepFunction
-	scheduling    [weaver.NumPhases][]memento // separates commands into phases
-	initialValues initialValues               // all of type object.SetValue
-	requires      []string
+	name       string
+	cat        *Catalog
+	currPhase  weaver.Phase // updated during weave, ends at NumPhases
+	steps      []StepFunction
+	scheduling [weaver.NumPhases][]memento // separates commands into phases
+	exe        []rt.Execute                // all of type object.SetValue
+	requires   []string
 }
 
-type initialValues []rt.Execute
+func (d *Domain) AddStartup(exe []rt.Execute) {
+	d.exe = append(d.exe, exe...)
+}
 
-func (in initialValues) add(noun, field string, val rt.Assignment) initialValues {
-	return append(in, &object.SetValue{
+func (d *Domain) AddInitialValue(noun, field string, val rt.Assignment) {
+	d.exe = append(d.exe, &object.SetValue{
 		Target: &object.ObjectDot{
 			NounName: literal.T(noun),
 			Dot:      object.MakeDot(field),
@@ -42,19 +45,19 @@ type memento struct {
 
 // write initial values....
 func (d *Domain) finalizeDomain() (err error) {
-	if len(d.initialValues) > 0 {
+	if len(d.exe) > 0 {
 		domainName := d.name
-		eventName := domainName + " " + "begins"
+		eventName := inflect.Normalize(domainName + " begins")
 		pin := d.cat.Modeler.Pin(domainName)
 		pb := mdl.NewPatternBuilder(eventName)
 		pb.AppendRule(0, rt.Rule{
-			Name: "initial value rule",
-			Exe:  d.initialValues,
+			Name: eventName, //
+			Exe:  d.exe,
 		})
 		if e := pin.AddPattern(pb.Pattern); e != nil {
 			err = e
 		} else {
-			d.initialValues = nil
+			d.exe = nil
 		}
 	}
 	return

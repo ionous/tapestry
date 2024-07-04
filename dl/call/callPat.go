@@ -41,7 +41,7 @@ func (op *CallPattern) GetRecordList(run rt.Runtime) (rt.Value, error) {
 }
 
 // note: at one point this would unwrap errors so that callers couldn't see them
-// i no longer am sure why. doing stops game.Signals(s) ( ex SignalQuit ) from reaching the parser.
+// i no longer am sure why. doing stops rt.Signals(s) ( ex SignalQuit ) from reaching the parser.
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
 	name := inflect.Normalize(op.PatternName)
 	if k, v, e := ExpandArgs(run, op.Arguments); e != nil {

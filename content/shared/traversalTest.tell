@@ -1,6 +1,6 @@
 ---
-- Define test:scene:do:
-    - "traversal"
+- Define scene:stage:do:
+    - "Test room traversal"
     - - Declare: "
           The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Street are rooms.
           You are in the Lobby.

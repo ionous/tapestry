@@ -1,6 +1,6 @@
 ---
-- Define test:requires:do:
-    - "vision test"
+- Define scene:requires:do:
+    - "Test lit looking"
     - "Kitchenette"
     - - Set:state:
           - "#kitchen"
@@ -22,8 +22,8 @@
           - "lit"
       - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
       - Expect text: "ok: The cabinet has light."
-- Define test:requires:scene:do:
-    - "the gloom"
+- Define scene:requires:stage:do:
+    - "Test unlit looking"
     - "kitchenette"
     - - Declare: "The kitchen is unlit. You are carrying the flashlight. The flashlight is unlit."
       - Define noun:rule:do:

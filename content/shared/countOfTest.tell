@@ -1,6 +1,6 @@
 ---
-- Define test:scene:do:
-    - "x countOf"
+- Define scene:stage:do:
+    - "x test counting"
     - - Define pattern:requires:provides:do:
           - "magic symbols"
           - - Nothing:

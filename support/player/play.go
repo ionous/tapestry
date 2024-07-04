@@ -13,7 +13,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -150,10 +149,10 @@ func goPlay(ctx context, scene string, opts qna.Options, testString string) (err
 }
 
 func step(pt *play.Playtime, ps *Persistence, story string, s string) (done bool) {
-	var sig game.Signal
+	var sig rt.Signal
 	if res, e := pt.Step(s); errors.As(e, &sig) {
 		switch sig {
-		case game.SignalLoad:
+		case rt.SignalLoad:
 			if ps == nil {
 				log.Println("this runtime doesn't support save/load")
 			} else if res, e := ps.LoadGame(story); e != nil {
@@ -162,7 +161,7 @@ func step(pt *play.Playtime, ps *Persistence, story string, s string) (done bool
 				log.Printf("loaded %s from %s\n", story, res)
 			}
 
-		case game.SignalSave:
+		case rt.SignalSave:
 			if ps == nil {
 				log.Print("this runtime doesn't support save/load")
 			} else if res, e := ps.SaveGame(story); e != nil {
@@ -170,7 +169,7 @@ func step(pt *play.Playtime, ps *Persistence, story string, s string) (done bool
 			} else {
 				log.Printf("saved %s to %s\n", story, res)
 			}
-		case game.SignalQuit:
+		case rt.SignalQuit:
 			done = true
 		default:
 			log.Println("unhandled signal:", e)

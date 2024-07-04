@@ -6,13 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-type CheckData struct {
-	Name   string
-	Domain string
-	Expect string // all tests generate text right now; fix: need to handle comparison of literal values
-	Test   []rt.Execute
-}
-
 type NounInfo struct {
 	Domain, Noun, Kind string // noun is unique identifier within the domain.
 }
@@ -25,7 +18,6 @@ type RuleSet struct {
 type Query interface {
 	IsDomainActive(name string) (bool, error)
 	ActivateDomains(name string) (prev, next []string, err error)
-	ReadChecks(actuallyJustThisOne string) ([]CheckData, error)
 	//
 	GetKindByName(rawName string) (*rt.Kind, error)
 	// given a plural or singular kind

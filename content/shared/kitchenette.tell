@@ -1,5 +1,5 @@
 ---
-- Define test:requires:scene:do:
+- Define scene:requires:stage:
     - "Kitchenette"
     - "Thingaverse"
     - - Declare: "The kitchen is a room. You are in the kitchen."
@@ -48,5 +48,4 @@
           - "espresso machine"
           - "initial appearance"
           - FromText: "Steam leaks from the top of a recently used espresso machine."
-    - - # do nothing
-        Continue:
+    

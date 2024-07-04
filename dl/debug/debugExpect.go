@@ -34,14 +34,19 @@ func (op *ExpectText) Execute(run rt.Runtime) (err error) {
 func (op *Expect) Execute(run rt.Runtime) (err error) {
 	if condition, e := safe.GetBool(run, op.Value); e != nil {
 		err = e
-	} else if !condition.Bool() {
+	} else {
 		// print the comment at the point of expectation;
 		// or the value if that fails.
 		str, ok := op.Markup[compact.Comment]
 		if !ok {
 			str = fmt.Sprintf("%v", op.Value)
 		}
-		err = errutil.New("expectation failed", str)
+		if !condition.Bool() {
+			err = errutil.New("expectation failed", str)
+			log.Println("ng:", str)
+		} else {
+			log.Println("ok:", str)
+		}
 	}
 	return
 }

@@ -19,7 +19,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/generate"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
 func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err error) {
@@ -184,7 +183,7 @@ func readGroups(path string) (groups []generate.Group, err error) {
 				}
 			}
 			if err != nil {
-				err = errutil.New(err, "in", path)
+				err = fmt.Errorf("%w in %s", err, path)
 			}
 		}
 		return
@@ -197,7 +196,7 @@ func createDB(create bool, outFile string) (ret modelWriter, err error) {
 		if outFile, e := filepath.Abs(outFile); e != nil {
 			err = e
 		} else if e := os.Remove(outFile); e != nil && !os.IsNotExist(e) {
-			err = errutil.New("couldn't clean output file", outFile, e)
+			err = fmt.Errorf("couldn't clean output file %s because %w", outFile, e)
 		} else {
 			log.Println("generating", outFile)
 			os.MkdirAll(path.Dir(outFile), os.ModePerm) // 0777 -> ModePerm ... read/writable by all
@@ -206,7 +205,7 @@ func createDB(create bool, outFile string) (ret modelWriter, err error) {
 				err = e
 			} else {
 				if tx, e := db.Begin(); e != nil {
-					err = errutil.New("couldnt create transaction", e)
+					err = fmt.Errorf("couldnt create transaction because %w", e)
 				} else {
 					ret = modelWriter{db, tx}
 				}

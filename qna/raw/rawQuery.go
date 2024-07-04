@@ -47,10 +47,6 @@ func (q RawQuery) ActivateDomains(name string) (prev, next []string, err error) 
 	return
 }
 
-func (q RawQuery) ReadChecks(actuallyJustThisOne string) (_ []query.CheckData, _ error) {
-	return // none
-}
-
 func (q RawQuery) KindOfAncestors(singleOrPlural string) (ret []string, err error) {
 	if exactKind, e := q.getPluralKind(singleOrPlural); e != nil {
 		err = e

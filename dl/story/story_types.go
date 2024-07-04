@@ -150,55 +150,12 @@ func (op *StoryNote_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Defines a scene used for testing a story.
-// Tests can be executed using the `tap check` command.
-// TODO: see https://todo.sr.ht/~ionous/tapestry/42
-type DefineTest struct {
-	TestName           rtti.TextEval
-	RequiredSceneNames rtti.TextListEval
-	Statements         []StoryStatement
-	Exe                []rtti.Execute
-	Markup             map[string]any `json:",omitempty"`
-}
-
-// define_test, a type of flow.
-var Zt_DefineTest typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*DefineTest) TypeInfo() typeinfo.T {
-	return &Zt_DefineTest
-}
-
-// Implements [typeinfo.Markup]
-func (op *DefineTest) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ StoryStatement = (*DefineTest)(nil)
-
-// Holds a slice of type DefineTest.
-type DefineTest_Slice []DefineTest
-
-// Implements [typeinfo.Instance] for a slice of DefineTest.
-func (*DefineTest_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineTest
-}
-
-// Implements [typeinfo.Repeats] for a slice of DefineTest.
-func (op *DefineTest_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Defines a collection of nouns, kinds, game rules, etc. used the game.
-// Every .tell story has its own unique scene.
+// Defines a collection of nouns, kinds, game rules, etc. used in the game.
 type DefineScene struct {
 	SceneName          rtti.TextEval
 	RequiredSceneNames rtti.TextListEval
 	Statements         []StoryStatement
+	Exe                []rtti.Execute
 	Markup             map[string]any `json:",omitempty"`
 }
 
@@ -1579,49 +1536,6 @@ func init() {
 			"--": []string{"Used for the blockly editor so that hash-mark style comments", "are visible in the editor. Not needed when using .tell files."},
 		},
 	}
-	Zt_DefineTest = typeinfo.Flow{
-		Name: "define_test",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "test_name",
-			Label: "test",
-			Markup: map[string]any{
-				"--": "A unique name for the test.",
-			},
-			Type: &rtti.Zt_TextEval,
-		}, {
-			Name:     "required_scene_names",
-			Label:    "requires",
-			Optional: true,
-			Markup: map[string]any{
-				"--": []string{"One or more scenes that this test depends on.", "Tests implicitly depend upon the scene within which they are defined.", "In order to reference the nouns, kinds, etc. of any other scenes in a test, that scene must be listed here."},
-			},
-			Type: &rtti.Zt_TextListEval,
-		}, {
-			Name:     "statements",
-			Label:    "scene",
-			Optional: true,
-			Repeats:  true,
-			Markup: map[string]any{
-				"--": "Modeling commands for defining nouns, kinds, game rules, etc. used by this test. Those definitions will not be visible outside of the test ( unless this test is \"required\" by another. )",
-			},
-			Type: &Zt_StoryStatement,
-		}, {
-			Name:    "exe",
-			Label:   "do",
-			Repeats: true,
-			Markup: map[string]any{
-				"--": []string{"One or more commands to run when checking the test.", "The {\"Expect:\"} command will trigger a test failure when an author specified condition is not met."},
-			},
-			Type: &rtti.Zt_Execute,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-		},
-		Markup: map[string]any{
-			"--": []string{"Defines a scene used for testing a story.", "Tests can be executed using the `tap check` command.", "TODO: see https://todo.sr.ht/~ionous/tapestry/42"},
-		},
-	}
 	Zt_DefineScene = typeinfo.Flow{
 		Name: "define_scene",
 		Lede: "define",
@@ -1642,19 +1556,28 @@ func init() {
 			Type: &rtti.Zt_TextListEval,
 		}, {
 			Name:     "statements",
-			Label:    "with",
+			Label:    "stage",
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
 				"--": "Modeling commands for the defining nouns, kinds, game rules, etc. used by this scene.",
 			},
 			Type: &Zt_StoryStatement,
+		}, {
+			Name:     "exe",
+			Label:    "do",
+			Optional: true,
+			Repeats:  true,
+			Markup: map[string]any{
+				"--": []string{"Commands to run when beginning the scene.", "For scenes that represent tests, {\"Expect:\"} can be used to trigger a failure when some condition has failed."},
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"--": []string{"Defines a collection of nouns, kinds, game rules, etc. used the game.", "Every .tell story has its own unique scene."},
+			"--": "Defines a collection of nouns, kinds, game rules, etc. used in the game.",
 		},
 	}
 	Zt_DefineAction = typeinfo.Flow{
@@ -2568,7 +2491,6 @@ var z_slot_list = []*typeinfo.Slot{
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_StoryFile,
 	&Zt_StoryNote,
-	&Zt_DefineTest,
 	&Zt_DefineScene,
 	&Zt_DefineAction,
 	&Zt_DefineState,
@@ -2612,7 +2534,6 @@ var z_str_list = []*typeinfo.Str{
 func Register(reg func(any)) {
 	reg((*StoryFile)(nil))
 	reg((*StoryNote)(nil))
-	reg((*DefineTest)(nil))
 	reg((*DefineScene)(nil))
 	reg((*DefineAction)(nil))
 	reg((*DefineState)(nil))
@@ -2676,15 +2597,15 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	18093984368234904277: (*DefineRule)(nil),            /* story_statement=Define rule:do: */
 	2007307886252117326:  (*DefineRule)(nil),            /* story_statement=Define rule:named:do: */
 	16728157364207612750: (*DefineScene)(nil),           /* story_statement=Define scene: */
+	7659505060041819803:  (*DefineScene)(nil),           /* story_statement=Define scene:do: */
 	10681959011863226668: (*DefineScene)(nil),           /* story_statement=Define scene:requires: */
-	10209709135447127962: (*DefineScene)(nil),           /* story_statement=Define scene:requires:with: */
-	13479298094295759568: (*DefineScene)(nil),           /* story_statement=Define scene:with: */
+	15040578301020781117: (*DefineScene)(nil),           /* story_statement=Define scene:requires:do: */
+	1949644758395100528:  (*DefineScene)(nil),           /* story_statement=Define scene:requires:stage: */
+	10161587202350178281: (*DefineScene)(nil),           /* story_statement=Define scene:requires:stage:do: */
+	14110620902636181318: (*DefineScene)(nil),           /* story_statement=Define scene:stage: */
+	6424789938653988835:  (*DefineScene)(nil),           /* story_statement=Define scene:stage:do: */
 	1798652288281835623:  (*DefinePlural)(nil),          /* story_statement=Define singular:plural: */
 	17999974279653753583: (*DefineState)(nil),           /* story_statement=Define state:names: */
-	12489141410311466071: (*DefineTest)(nil),            /* story_statement=Define test:do: */
-	3712030102885900665:  (*DefineTest)(nil),            /* story_statement=Define test:requires:do: */
-	16978239348269462739: (*DefineTest)(nil),            /* story_statement=Define test:requires:scene:do: */
-	13333326165932249009: (*DefineTest)(nil),            /* story_statement=Define test:scene:do: */
 	12975771225654832812: (*DefineAlias)(nil),           /* story_statement=Interpret alias:as: */
 	8001652437005351387:  (*DefineNamedGrammar)(nil),    /* story_statement=Interpret name:with: */
 	6001249499689096432:  (*DefineLeadingGrammar)(nil),  /* story_statement=Interpret:with: */

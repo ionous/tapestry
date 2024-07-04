@@ -3,15 +3,17 @@
  */
 
 /* 
- * stored tests, which run a program to verify it produces the expected value. 
- * fix: shouldnt we also be writing class of the value ? 
- */ 
-create table mdl_check( domain text not null, name text, value blob, affinity text, prog blob, at text, primary key( domain, name ));
+ * scenes are collections of objects and types; each object (or type) lives in exactly one scene.
+ * name: dash-normalized and required to be globally unique.
+ * start: the source location where the scene was defined; unlike most other types, 
+ *        scenes can only be defined at a single location, and can't be modified after creation.
+ * comment: author description of the scene.
+ */
+create table mdl_scene( name text not null, start text, comment text, primary key( name ) );
 /* 
- * pairs of domain name and (domain) dependencies. 
- * domain names are considered globally unique.
- * a domain can have multiple direct parents; 
+ * scenes to scene dependencies.
  * the application is responsible for ensuring no cyclic dependencies.
+ * the scene must exist in the mdl_scene table.
  */
 create table mdl_domain( domain text not null, requires text, at text, primary key( domain, requires ));
 /* 

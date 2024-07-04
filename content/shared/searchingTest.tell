@@ -1,6 +1,6 @@
 ---
-- Define test:requires:scene:do:
-    - "searching test"
+- Define scene:requires:stage:do:
+    - "Test searching"
     - "Kitchenette"
     - - Declare: "You are carrying the flower and the knife."
       - Declare: "The purse is in the kitchen."

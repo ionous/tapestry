@@ -8,7 +8,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
-	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -95,7 +94,7 @@ func (c *Shuttle) readFrames(qs []json.RawMessage) (ret []Frame, err error) {
 			// success!
 		} else if e != nil {
 			//
-			var sig game.Signal
+			var sig rt.Signal
 			if errors.As(e, &sig) {
 				// fix? this is a little wonky
 				// signals should probably be a first class method in the runtime?

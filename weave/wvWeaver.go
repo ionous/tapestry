@@ -40,7 +40,7 @@ func (ja localWeaver) AddNounValue(noun, field string, value rt.Assignment) (err
 	if e := ja.Pen.AddNounValue(noun, field, value); !errors.As(e, &u) {
 		err = e // nil or unexpected error.
 	} else {
-		ja.d.initialValues = ja.d.initialValues.add(u.Noun, u.Field, u.Value)
+		ja.d.AddInitialValue(u.Noun, u.Field, u.Value)
 	}
 	return
 }

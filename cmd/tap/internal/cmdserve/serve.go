@@ -20,7 +20,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web"
 )
 
-func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int) (ret int, err error) {
+func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int) (err error) {
 	if db, e := tables.CreateRunTime(inFile); e != nil {
 		err = e
 	} else if ctx, e := makeShuttle(db, opts); e != nil {

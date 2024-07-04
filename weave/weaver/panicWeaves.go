@@ -16,11 +16,6 @@ func (p *PanicWeaves) AddAspectTraits(aspect string, traits []string) error {
 	panic("unimplemented")
 }
 
-// AddCheck implements Weaves.
-func (p *PanicWeaves) AddCheck(name string, value literal.LiteralValue, prog []rt.Execute) error {
-	panic("unimplemented")
-}
-
 // AddFact implements Weaves.
 func (p *PanicWeaves) AddFact(key string, partsAndValue ...string) error {
 	panic("unimplemented")

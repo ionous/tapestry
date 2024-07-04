@@ -23,9 +23,9 @@ var FactorialJs string
 // a program that can check factorials
 var FactorialStory = story.StoryFile{
 	Statements: []story.StoryStatement{
-		&story.DefineTest{
-			TestName: T("factorial"),
-			Exe:      FactorialCheck,
+		&story.DefineScene{
+			SceneName: T("factorial"),
+			Exe:       FactorialCheck,
 		},
 		&story.DefinePattern{
 			PatternName: T("factorial"),
