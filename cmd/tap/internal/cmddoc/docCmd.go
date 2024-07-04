@@ -31,7 +31,7 @@ import (
 )
 
 func runDoc(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if outPath, e := filepath.Abs(genFlags.out); e != nil {
+	if outPath, e := filepath.Abs(cfg.out); e != nil {
 		flag.Usage()
 		log.Fatal(e)
 	} else {
@@ -73,16 +73,16 @@ var CmdDoc = &base.Command{
 Transforms generated idl files into api documentation.`,
 }
 
-// collection of local flags
-var genFlags = struct {
+// filled with the user's choices as described by buildFlags()
+var cfg = struct {
 	out string // output directory
 }{}
 
-func buildFlags() (fs flag.FlagSet) {
+func buildFlags() (ret flag.FlagSet) {
 	var outPath string
 	if home, e := os.UserHomeDir(); e == nil {
 		outPath = filepath.Join(home, "Documents", "Tapestry", "doc")
 	}
-	fs.StringVar(&genFlags.out, "out", outPath, "output directory")
+	ret.StringVar(&cfg.out, "out", outPath, "output directory")
 	return
 }

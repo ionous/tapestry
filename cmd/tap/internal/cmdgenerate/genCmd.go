@@ -23,10 +23,10 @@ import (
 )
 
 func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if inPath, e := filepath.Abs(genFlags.in); e != nil {
+	if inPath, e := filepath.Abs(cfg.in); e != nil {
 		flag.Usage()
 		log.Fatal(e)
-	} else if outPath, e := filepath.Abs(genFlags.out); e != nil {
+	} else if outPath, e := filepath.Abs(cfg.out); e != nil {
 		flag.Usage()
 		log.Fatal(e)
 	} else if groups, e := readGroups(inPath); e != nil {
@@ -35,7 +35,7 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 		err = fmt.Errorf("%w trying to generate groups", e)
 	} else {
 		// probably shouldnt be exclusive....
-		if schema := genFlags.schemaPath; len(schema) > 0 {
+		if schema := cfg.schemaPath; len(schema) > 0 {
 			log.Println("writing", schema)
 			var b, out bytes.Buffer
 			if e := g.WriteSchema(&b); e != nil {
@@ -53,14 +53,14 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 				}
 			}
 		} else {
-			if db, e := createDB(genFlags.useDB, genFlags.dbPath); e != nil {
+			if db, e := createDB(cfg.useDB, cfg.dbPath); e != nil {
 				err = e
 			} else {
 				defer db.Close()
 				if e := writeGroups(g, db, outPath); e != nil {
 					err = e
 				} else {
-					if genFlags.useDB {
+					if cfg.useDB {
 						err = writeTables(g, db)
 					}
 				}
@@ -89,8 +89,8 @@ var CmdGenerate = &base.Command{
 Generates .go source code for reading and writing story files from .idl files.`,
 }
 
-// collection of local flags
-var genFlags = struct {
+// filled with the user's choices as described by buildFlags()
+var cfg = struct {
 	dl         string // filter by group
 	in         string // input path
 	out        string // output directory
@@ -106,25 +106,25 @@ var genFlags = struct {
 // out would default to the same directory as in
 // ( either see if that directory code is portable
 // | or handle the more frequent patterns: ".", "...", and a directory )
-func buildFlags() (fs flag.FlagSet) {
+func buildFlags() (ret flag.FlagSet) {
 	var outBase string
 	if home, e := os.UserHomeDir(); e == nil {
 		outBase = filepath.Join(home, "Documents", "Tapestry", "build")
 	}
-	fs.StringVar(&genFlags.dl, "dl", "", "limit to which groups")
-	fs.StringVar(&genFlags.in, "in", "../../idl", "input directory containing one or more spec files")
-	fs.StringVar(&genFlags.out, "out", "../../dl", "output directory")
-	fs.BoolVar(&genFlags.useDB, "db", false, "generate a sqlite representation")
-	fs.StringVar(&genFlags.schemaPath, "schema", "", "generate a json schema")
-	fs.StringVar(&genFlags.dbPath, "dbFile", filepath.Join(outBase, "idl.db"), "sqlite output file")
+	ret.StringVar(&cfg.dl, "dl", "", "limit to which groups")
+	ret.StringVar(&cfg.in, "in", "../../idl", "input directory containing one or more spec files")
+	ret.StringVar(&cfg.out, "out", "../../dl", "output directory")
+	ret.BoolVar(&cfg.useDB, "db", false, "generate a sqlite representation")
+	ret.StringVar(&cfg.schemaPath, "schema", "", "generate a json schema")
+	ret.StringVar(&cfg.dbPath, "dbFile", filepath.Join(outBase, "idl.db"), "sqlite output file")
 	return
 }
 
 func writeGroups(g generate.Generator, db modelWriter, outPath string) (err error) {
 	for g.Next() {
 		group := g.Name()
-		if len(genFlags.dl) == 0 || (genFlags.dl == group) {
-			if genFlags.useDB {
+		if len(cfg.dl) == 0 || (cfg.dl == group) {
+			if cfg.useDB {
 				if e := g.WriteTable(db); e != nil {
 					err = e
 					break

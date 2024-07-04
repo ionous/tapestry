@@ -18,7 +18,7 @@ import (
 var queries embed.FS
 
 func DumpAll(db *sql.DB, dec qdb.CommandDecoder, scene string) (ret raw.Data, err error) {
-	if scenes, e := QueryScenes(db, scene); e != nil {
+	if scenes, e := QueryRequiredScenes(db, scene); e != nil {
 		err = fmt.Errorf("%w for scenes", e)
 	} else if plurals, e := QueryPlurals(db, scene); e != nil {
 		err = fmt.Errorf("%w for plurals", e)
@@ -63,7 +63,7 @@ func (q kindDecoder) GetKindByName(exactKind string) (ret *rt.Kind, err error) {
 	return
 }
 
-func QueryScenes(db *sql.DB, scene string) (ret []string, err error) {
+func QueryRequiredScenes(db *sql.DB, scene string) (ret []string, err error) {
 	if scenes, e := tables.QueryStrings(db, must("scenes"), scene); e != nil {
 		err = e
 	} else if len(scenes) == 0 {

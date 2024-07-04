@@ -24,8 +24,8 @@ var CmdVersion = &base.Command{
 }
 
 // returns b command line parsing object
-func buildFlags() (fs flag.FlagSet) {
-	fs.BoolVar(&cfg.all, "all", false, "print detailed information about the binary")
+func buildFlags() (ret flag.FlagSet) {
+	ret.BoolVar(&cfg.all, "all", false, "print detailed information about the binary")
 	return
 }
 

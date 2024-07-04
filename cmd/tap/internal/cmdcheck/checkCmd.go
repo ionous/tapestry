@@ -20,22 +20,22 @@ import (
 
 func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	checkOne := strings.Join(args, " ")
-	log.Println("Checking", checkFlags.srcPath, checkOne)
-	if lvl, ok := debug.MakeLoggingLevel(checkFlags.logLevel); !ok {
-		err = errutil.New("Unknown log level", checkFlags.logLevel)
-	} else if srcPath, e := filepath.Abs(checkFlags.srcPath); e != nil {
+	log.Println("Checking", cfg.srcPath, checkOne)
+	if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
+		err = errutil.New("Unknown log level", cfg.logLevel)
+	} else if srcPath, e := filepath.Abs(cfg.srcPath); e != nil {
 		err = e
 	} else {
 		debug.LogLevel = lvl
 		opt := qna.NewOptions()
-		opt.SetOption(meta.PrintResponseNames, rt.BoolOf(checkFlags.responses))
+		opt.SetOption(meta.PrintResponseNames, rt.BoolOf(cfg.responses))
 		if cnt, e := CheckFile(srcPath, inflect.Normalize(checkOne), opt); e != nil {
 			errutil.PrintErrors(e, func(s string) { log.Println(s) })
 			if errutil.Panic {
 				log.Panic("mismatched")
 			}
 		} else {
-			log.Println("Checked", cnt, checkFlags.srcPath)
+			log.Println("Checked", cnt, cfg.srcPath)
 		}
 	}
 	return
@@ -52,21 +52,21 @@ Runs all unit tests by default, can specify a name to run a specific one.
 `,
 }
 
-// collection of local flags
-var checkFlags = struct {
+// filled with the user's choices as described by buildFlags()
+var cfg = struct {
 	srcPath   string
 	responses bool
 	logLevel  string
 }{}
 
-func buildFlags() (flags flag.FlagSet) {
+func buildFlags() (ret flag.FlagSet) {
 	var inPath string
 	if home, e := os.UserHomeDir(); e == nil {
 		inPath = filepath.Join(home, "Documents", "Tapestry", "build", "play.db")
 	}
 	levels := strings.Join(debug.Zt_LoggingLevel.Options, ", ")
-	flags.StringVar(&checkFlags.srcPath, "in", inPath, `input file or directory name.`)
-	flags.BoolVar(&checkFlags.responses, "responses", false, "print response names instead of values")
-	flags.StringVar(&checkFlags.logLevel, "log", debug.C_LoggingLevel_Debug.String(), levels)
+	ret.StringVar(&cfg.srcPath, "in", inPath, `input file or directory name.`)
+	ret.BoolVar(&cfg.responses, "responses", false, "print response names instead of values")
+	ret.StringVar(&cfg.logLevel, "log", debug.C_LoggingLevel_Debug.String(), levels)
 	return
 }

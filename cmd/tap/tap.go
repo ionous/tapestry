@@ -15,6 +15,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdatlas"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmddoc"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmddump"
@@ -191,6 +192,7 @@ const UnknownCommand errutil.Error = "unknown command"
 func init() {
 	// rewrites the main tap command to simplify exitBadUsage
 	base.Go.Commands = []*base.Command{
+		cmdatlas.CmdAtlas,
 		cmdcheck.CmdCheck,
 		cmddoc.CmdDoc,
 		cmddump.CmdDump,

@@ -18,10 +18,10 @@ import (
 )
 
 func runDump(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if inFile, e := filepath.Abs(dumpFlags.inFile); e != nil {
+	if inFile, e := filepath.Abs(cfg.inFile); e != nil {
 		flag.Usage()
 		log.Fatal(e)
-	} else if outFile, e := filepath.Abs(dumpFlags.outFile); e != nil {
+	} else if outFile, e := filepath.Abs(cfg.outFile); e != nil {
 		flag.Usage()
 		log.Fatal(e)
 	} else if db, e := tables.OpenModel(inFile); e != nil {
@@ -61,11 +61,11 @@ var CmdDump = &base.Command{
 }
 
 // collection of local flags
-var dumpFlags = struct {
+var cfg = struct {
 	inFile, outFile string
 }{}
 
-func buildFlags() (fs flag.FlagSet) {
+func buildFlags() (ret flag.FlagSet) {
 	var inFile string
 	var outFile string
 	if home, e := os.UserHomeDir(); e == nil {
@@ -73,12 +73,11 @@ func buildFlags() (fs flag.FlagSet) {
 		outFile = filepath.Join(home, "Documents", "Tapestry", "build", "play.gob")
 	}
 
-	fs.StringVar(&dumpFlags.inFile, "in", inFile, "input file name (sqlite3)")
-	fs.StringVar(&dumpFlags.outFile, "out", outFile, "output file name (gob)")
+	ret.StringVar(&cfg.inFile, "in", inFile, "input file name (sqlite3)")
+	ret.StringVar(&cfg.outFile, "out", outFile, "output file name (gob)")
 	// fs.StringVar(&cfg.testString, "test", "", "optional list of commands to run (non-interactive)")
 	// fs.BoolVar(&cfg.json, "json", false, "expect input/output in json (default is plain text)")
 	// fs.BoolVar(&cfg.responses, "responses", false, "print response names instead of values")
 	// fs.StringVar(&cfg.logLevel, "log", debug.C_LoggingLevel_Info.String(), levels)
-
 	return
 }

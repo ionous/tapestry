@@ -76,10 +76,10 @@ func buildUsage() (ret string) {
 	return str.String()
 }
 
-func buildFlags() (fs flag.FlagSet) {
+func buildFlags() (ret flag.FlagSet) {
 	for i := 0; i < numOptions; i++ {
 		opt := options(i).String()
-		fs.BoolVar(&optionFlags[i], opt, false, fmt.Sprintf("Print %s of a word", opt))
+		ret.BoolVar(&optionFlags[i], opt, false, fmt.Sprintf("Print %s of a word", opt))
 	}
 	return
 }

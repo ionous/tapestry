@@ -72,12 +72,12 @@ Using '-test' can run the list of specified commands as if a player had typed th
 // filled with the user's choices as described by buildFlags()
 var cfg = struct {
 	inFile, saveDir, testString string
-	json, responses  bool
+	json, responses             bool
 	logLevel                    string
 }{}
 
 // returns a command line parsing object
-func buildFlags() (fs flag.FlagSet) {
+func buildFlags() (ret flag.FlagSet) {
 	var inFile string
 	var saveDir string
 	if home, e := os.UserHomeDir(); e == nil {
@@ -86,11 +86,11 @@ func buildFlags() (fs flag.FlagSet) {
 	}
 
 	levels := strings.Join(debug.Zt_LoggingLevel.Options, ", ")
-	fs.StringVar(&cfg.inFile, "in", inFile, "input file name (sqlite3)")
-	fs.StringVar(&cfg.saveDir, "out", saveDir, " directory for save files")
-	fs.StringVar(&cfg.testString, "test", "", "optional list of commands to run (non-interactive)")
-	fs.BoolVar(&cfg.json, "json", false, "expect input/output in json (default is plain text)")
-	fs.BoolVar(&cfg.responses, "responses", false, "print response names instead of values")
-	fs.StringVar(&cfg.logLevel, "log", debug.C_LoggingLevel_Info.String(), levels)
+	ret.StringVar(&cfg.inFile, "in", inFile, "input file name (sqlite3)")
+	ret.StringVar(&cfg.saveDir, "out", saveDir, " directory for save files")
+	ret.StringVar(&cfg.testString, "test", "", "optional list of commands to run (non-interactive)")
+	ret.BoolVar(&cfg.json, "json", false, "expect input/output in json (default is plain text)")
+	ret.BoolVar(&cfg.responses, "responses", false, "print response names instead of values")
+	ret.StringVar(&cfg.logLevel, "log", debug.C_LoggingLevel_Info.String(), levels)
 	return
 }

@@ -142,8 +142,8 @@ var cfg = struct {
 }{}
 
 // returns a command line parsing object
-func buildFlags() (fs flag.FlagSet) {
-	fs.BoolVar(&cfg.forceOverwrite, "force", false, "overwrite existing files if needed")
+func buildFlags() (ret flag.FlagSet) {
+	ret.BoolVar(&cfg.forceOverwrite, "force", false, "overwrite existing files if needed")
 	return
 }
 

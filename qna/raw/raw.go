@@ -25,6 +25,11 @@ type Data struct {
 	Grammar   []grammar.Directive // sorted by .Name
 }
 
+type SceneData struct {
+	Scene    string
+	Requires []string `json:",omitempty"`
+}
+
 type NounName struct {
 	Name, Noun string // shortname, fullname
 }
