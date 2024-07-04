@@ -59,7 +59,13 @@ type BeginDomain struct {
 }
 
 func (op *BeginDomain) Assert(cat *weave.Catalog) (err error) {
-	return cat.DomainStart(op.Name, op.Requires)
+	d := cat.EnsureScene(op.Name)
+	if pen, e := cat.PushScene(d, mdl.Source{}); e != nil {
+		err = e
+	} else if len(op.Requires) > 0 {
+		err = pen.AddDependency(op.Requires...)
+	}
+	return
 }
 
 // Directives
@@ -78,8 +84,9 @@ type EndDomain struct {
 	Name string
 }
 
-func (op *EndDomain) Assert(cat *weave.Catalog) (err error) {
-	return cat.DomainEnd()
+func (op *EndDomain) Assert(cat *weave.Catalog) (_ error) {
+	cat.PopScene()
+	return
 }
 
 // Kinds A new type deriving from another existing type.

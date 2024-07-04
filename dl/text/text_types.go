@@ -621,7 +621,7 @@ func init() {
 			Name:  "text",
 			Label: "length",
 			Markup: map[string]any{
-				"comment": "The text to measure.",
+				"--": "The text to measure.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -629,7 +629,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Count the number of characters in some text.",
+			"--": "Count the number of characters in some text.",
 		},
 	}
 	Zt_FindText = typeinfo.Flow{
@@ -638,14 +638,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to search within.",
+				"--": "The text to search within.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "subtext",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": "The text to find.",
+				"--": "The text to find.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -654,7 +654,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Determine whether one piece of text contains a second piece of text.", "", "The [rt.NumEval] version returns the first index at which the text appears,", "or zero if not found."},
+			"--": []string{"Determine whether one piece of text contains a second piece of text.", "", "The [rt.NumEval] version returns the first index at which the text appears,", "or zero if not found."},
 		},
 	}
 	Zt_TextStartsWith = typeinfo.Flow{
@@ -664,14 +664,14 @@ func init() {
 			Name:  "text",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": "The text to search within.",
+				"--": "The text to search within.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "subtext",
 			Label: "prefix",
 			Markup: map[string]any{
-				"comment": "The text to find.",
+				"--": "The text to find.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -679,7 +679,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether text starts in a particular way.",
+			"--": "Determine whether text starts in a particular way.",
 		},
 	}
 	Zt_TextEndsWith = typeinfo.Flow{
@@ -689,14 +689,14 @@ func init() {
 			Name:  "text",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": "The text to search within.",
+				"--": "The text to search within.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "subtext",
 			Label: "suffix",
 			Markup: map[string]any{
-				"comment": "The text to find.",
+				"--": "The text to find.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -704,7 +704,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether text ends in a particular way.",
+			"--": "Determine whether text ends in a particular way.",
 		},
 	}
 	Zt_IsNothing = typeinfo.Flow{
@@ -714,7 +714,7 @@ func init() {
 			Name:  "text",
 			Label: "nothing",
 			Markup: map[string]any{
-				"comment": "The text to check for content.",
+				"--": "The text to check for content.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -722,7 +722,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Determine whether text is completely without content.", "Even spaces are considered content.", "The text \"\" is considered nothing,", "The text \" \" is considered something."},
+			"--": []string{"Determine whether text is completely without content.", "Even spaces are considered content.", "The text \"\" is considered nothing,", "The text \" \" is considered something."},
 		},
 	}
 	Zt_Matches = typeinfo.Flow{
@@ -732,14 +732,14 @@ func init() {
 			Name:  "text",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": "The text to match the expression against.",
+				"--": "The text to match the expression against.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "match",
 			Label: "expression",
 			Markup: map[string]any{
-				"comment": "The expression to match against the text.",
+				"--": "The expression to match against the text.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -751,7 +751,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Determine whether text matches a regular expression.", "The expressions used are defined by go.", "https://pkg.go.dev/regexp/syntax", "https://github.com/google/re2/wiki/Syntax"},
+			"--": []string{"Determine whether text matches a regular expression.", "The expressions used are defined by go.", "https://pkg.go.dev/regexp/syntax", "https://github.com/google/re2/wiki/Syntax"},
 		},
 	}
 	Zt_Capitalize = typeinfo.Flow{
@@ -760,7 +760,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to copy, then capitalize.",
+				"--": "The text to copy, then capitalize.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -768,7 +768,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Copy some text, changing its first letter to uppercase.",
+			"--": "Copy some text, changing its first letter to uppercase.",
 		},
 	}
 	Zt_Join = typeinfo.Flow{
@@ -778,7 +778,7 @@ func init() {
 			Name:     "sep",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "Optionally, a separator to put between each piece of text.",
+				"--": "Optionally, a separator to put between each piece of text.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -786,7 +786,7 @@ func init() {
 			Label:   "parts",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "The pieces of text to combine.",
+				"--": "The pieces of text to combine.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -794,7 +794,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Combine text to produce new text.",
+			"--": "Combine text to produce new text.",
 		},
 	}
 	Zt_MakeLowercase = typeinfo.Flow{
@@ -803,7 +803,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to copy, then lowercase.",
+				"--": "The text to copy, then lowercase.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -811,7 +811,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Copy some text, changing every letter into lowercase.", "For example, turns \"QUIET\" into \"quiet."},
+			"--": []string{"Copy some text, changing every letter into lowercase.", "For example, turns \"QUIET\" into \"quiet."},
 		},
 	}
 	Zt_MakeReversed = typeinfo.Flow{
@@ -821,7 +821,7 @@ func init() {
 			Name:  "text",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": "The text to copy and then reverse.",
+				"--": "The text to copy and then reverse.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -829,7 +829,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Copy some text with its contents flipped back to front.", "For example, turns \"Tapestry\" into 'yrtsepaT'."},
+			"--": []string{"Copy some text with its contents flipped back to front.", "For example, turns \"Tapestry\" into 'yrtsepaT'."},
 		},
 	}
 	Zt_MakeSentenceCase = typeinfo.Flow{
@@ -838,7 +838,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to copy and then transform.",
+				"--": "The text to copy and then transform.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -846,7 +846,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Copy text, changing the start of each sentence so that it starts with a capital letter. ( Currently, \"sentences\" are considered to be a series of characters ending with a full-stop followed by a space. )", "For example, \"see the doctor run. run doctor. run.\" into \"See the doctor run. Run doctor. Run.\""},
+			"--": []string{"Copy text, changing the start of each sentence so that it starts with a capital letter. ( Currently, \"sentences\" are considered to be a series of characters ending with a full-stop followed by a space. )", "For example, \"see the doctor run. run doctor. run.\" into \"See the doctor run. Run doctor. Run.\""},
 		},
 	}
 	Zt_MakeTitleCase = typeinfo.Flow{
@@ -855,7 +855,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to copy and then transform.",
+				"--": "The text to copy and then transform.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -863,7 +863,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Copy some text, making every word start with a capital letter.", "For example, turns \"empire apple\" into \"Empire Apple\"."},
+			"--": []string{"Copy some text, making every word start with a capital letter.", "For example, turns \"empire apple\" into \"Empire Apple\"."},
 		},
 	}
 	Zt_MakeUppercase = typeinfo.Flow{
@@ -872,7 +872,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to copy and then transform into uppercase.",
+				"--": "The text to copy and then transform into uppercase.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -880,7 +880,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Copy some text, changing every letter into uppercase.", "For example, transforms \"loud\" into \"LOUD\"."},
+			"--": []string{"Copy some text, changing every letter into uppercase.", "For example, transforms \"loud\" into \"LOUD\"."},
 		},
 	}
 	Zt_Pluralize = typeinfo.Flow{
@@ -890,7 +890,7 @@ func init() {
 			Name:  "text",
 			Label: "of",
 			Markup: map[string]any{
-				"comment": "The text to pluralize.",
+				"--": "The text to pluralize.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -898,7 +898,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Pluralize a word.", "The singular form of a word can have more than one plural form.", "For example: \"person\" can be \"people\" or \"persons\".", "If more than one exists, this chooses arbitrarily.", "", "Note, The transformation uses predefined rules and some explicit mappings.", "The story command [DefinePlural] can add new mappings."},
+			"--": []string{"Pluralize a word.", "The singular form of a word can have more than one plural form.", "For example: \"person\" can be \"people\" or \"persons\".", "If more than one exists, this chooses arbitrarily.", "", "Note, The transformation uses predefined rules and some explicit mappings.", "The story command [DefinePlural] can add new mappings."},
 		},
 	}
 	Zt_Singularize = typeinfo.Flow{
@@ -908,7 +908,7 @@ func init() {
 			Name:  "text",
 			Label: "of",
 			Markup: map[string]any{
-				"comment": "The text to turn into its singular form.",
+				"--": "The text to turn into its singular form.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -916,7 +916,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Change a plural word into its singular form.", "A plural word only has one singular form.", "For example, given the word \"people\", return \"person\".", "See [pluralize] for more information."},
+			"--": []string{"Change a plural word into its singular form.", "A plural word only has one singular form.", "For example, given the word \"people\", return \"person\".", "See [pluralize] for more information."},
 		},
 	}
 }

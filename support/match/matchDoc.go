@@ -106,7 +106,7 @@ type tellDoc any
 func newAsyncDoc(out chan<- tellDoc, includeComments bool) chan<- rune {
 	in := make(channelReader)
 	go func() {
-		if content, e := files.ReadTellRunes(in, includeComments); e != nil {
+		if content, e := files.ReadTellRunes(in, files.Ofs{}, includeComments); e != nil {
 			out <- e
 		} else {
 			out <- content

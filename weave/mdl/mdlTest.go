@@ -4,8 +4,9 @@ import (
 	"log"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
 	"fmt"
+
+	"git.sr.ht/~ionous/tapestry/affine"
 )
 
 var LogWarning = func(e error) {
@@ -92,7 +93,7 @@ func (pen *Pen) AddTestResult(kind, field string, aff affine.Affinity, cls strin
 
 // public for tests:
 func (pen *Pen) AddTestRule(pattern string, rank int, prog string) (err error) {
-	domain, at := pen.domain, pen.at
+	domain, at := pen.domain, pen.pos.String()
 	if kid, e := pen.findRequiredKind(pattern); e != nil {
 		err = e
 	} else {

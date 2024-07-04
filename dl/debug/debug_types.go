@@ -249,7 +249,7 @@ func (op *Note_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Used with [DebugLog].
+// LoggingLevel, a type of str enum.
 type LoggingLevel int
 
 // The enumerated values of LoggingLevel.
@@ -286,7 +286,7 @@ var Zt_LoggingLevel = typeinfo.Str{
 		"error",
 	},
 	Markup: map[string]any{
-		"comment": "Used with [DebugLog].",
+		"--": "Used with [DebugLog].",
 	},
 }
 
@@ -301,7 +301,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"A runtime command that does... nothing.", "( Can be used to fill in branches ( ex. of if statements )", " or rules which aren't supposed to do anything. )"},
+			"--": []string{"A runtime command that does... nothing.", "( Can be used to fill in branches ( ex. of if statements )", " or rules which aren't supposed to do anything. )"},
 		},
 	}
 	Zt_Expect = typeinfo.Flow{
@@ -310,7 +310,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "The boolean command. If the command returns false, the expectation will fail and the game will generate an error.",
+				"--": "The boolean command. If the command returns false, the expectation will fail and the game will generate an error.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -318,7 +318,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Evaluate a boolean command and ensure it returns true.",
+			"--": "Evaluate a boolean command and ensure it returns true.",
 		},
 	}
 	Zt_ExpectText = typeinfo.Flow{
@@ -328,7 +328,7 @@ func init() {
 			Name:  "text",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": []string{"The expected line or lines.", "If an expected line ends with ellipses \"...\"", "then only the first part of the line has to match.", "", "For example, if the expectation was \"Hello...\",", "then the output \"Hello World!\" would match."},
+				"--": []string{"The expected line or lines.", "If an expected line ends with ellipses \"...\"", "then only the first part of the line has to match.", "", "For example, if the expectation was \"Hello...\",", "then the output \"Hello World!\" would match."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -336,7 +336,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Examine the most recent game output, and generate an error unless it matches the specified text.",
+			"--": "Examine the most recent game output, and generate an error unless it matches the specified text.",
 		},
 	}
 	Zt_Fabricate = typeinfo.Flow{
@@ -346,7 +346,7 @@ func init() {
 			Name:  "text",
 			Label: "input",
 			Markup: map[string]any{
-				"comment": "One or more actions to handle as if typed by the player.",
+				"--": "One or more actions to handle as if typed by the player.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -354,7 +354,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Process fake input as if the player had typed it themselves.", "Fabricate only works while running tests, and does nothing during normal game play.", "Multiple actions can be specified by separating them with semi-colons. For example:", "  Fabricate input: \"s; jump; look\""},
+			"--": []string{"Process fake input as if the player had typed it themselves.", "Fabricate only works while running tests, and does nothing during normal game play.", "Multiple actions can be specified by separating them with semi-colons. For example:", "  Fabricate input: \"s; jump; look\""},
 		},
 	}
 	Zt_LogValue = typeinfo.Flow{
@@ -363,14 +363,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "log_level",
 			Markup: map[string]any{
-				"comment": "Importance of the message.",
+				"--": "Importance of the message.",
 			},
 			Type: &Zt_LoggingLevel,
 		}, {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "Some text, or any other value, to display.",
+				"--": "Some text, or any other value, to display.",
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -378,7 +378,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Print a value that might be useful during development.", "It will be hidden from players in the final game."},
+			"--": []string{"Print a value that might be useful during development.", "It will be hidden from players in the final game."},
 		},
 	}
 	Zt_Note = typeinfo.Flow{
@@ -387,7 +387,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "One or more lines of text documentation.",
+				"--": "One or more lines of text documentation.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -400,7 +400,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Print a message that might be useful during development.", "It will be hidden from players in the final game."},
+			"--": []string{"Print a message that might be useful during development.", "It will be hidden from players in the final game."},
 		},
 	}
 }

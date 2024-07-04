@@ -14,17 +14,16 @@ import (
 func TestActivate(t *testing.T) {
 	db := tables.CreateTest(t.Name(), true)
 	defer db.Close()
-	const at = ""
 
 	if m, e := mdl.NewModeler(db); e != nil {
 		t.Fatal(e)
 	} else if e := mdlDomain(m,
-		// name, dependency, at
+		// name, dependency
 		// -------------------------
-		"main", "", at,
-		"sub", "main", at,
-		"beep", "", at,
-		"boop", "sub", at,
+		"main", "",
+		"sub", "main",
+		"beep", "",
+		"boop", "sub",
 	); e != nil {
 		t.Fatal("failed to create table", e)
 	} else if q, e := qdb.NewQueryTest(db); e != nil {

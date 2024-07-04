@@ -2,12 +2,11 @@
 package files
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/ionous/errutil"
 )
 
 // read a comma-separated list of files and directories
@@ -18,12 +17,16 @@ func ReadPaths(filePaths string, recusive bool, exts []string, onFile func(strin
 	for _, filePath := range split {
 		if srcPath, e := filepath.Abs(filePath); e != nil {
 			err = e
+			break
 		} else if info, e := os.Stat(srcPath); e != nil {
-			err = errutil.Append(err, e)
+			err = e
+			break
 		} else if !info.IsDir() {
-			err = errutil.Append(err, readOne(srcPath, onFile))
+			err = readOne(srcPath, onFile)
+			break
 		} else {
-			err = errutil.Append(err, readMany(srcPath, recusive, exts, onFile))
+			err = readMany(srcPath, recusive, exts, onFile)
+			break
 		}
 	}
 	return
@@ -56,7 +59,7 @@ func readMany(root string, recusive bool, exts []string, onFile func(string) err
 
 func readOne(path string, onFile func(string) error) (err error) {
 	if e := onFile(path); e != nil {
-		err = errutil.New("error reading", path, e)
+		err = fmt.Errorf("%w reading", e)
 	}
 	return
 }

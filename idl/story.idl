@@ -47,7 +47,7 @@ Spec:requires:contains:
             Term:name:type:
               - "test"
               - "test_name"
-              - "text"
+              - "text_eval"
           - # One or more scenes that this test depends on.
             # Tests implicitly depend upon the scene within which they are defined.
             # In order to reference the nouns, kinds, etc. of any other scenes in a test, that scene must be listed here.

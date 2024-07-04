@@ -10,10 +10,7 @@ import (
 	"strconv"
 )
 
-// A true or false value.
-// Even though the definition here uses a string,
-// the tell loading code ( and the go generated code )
-// have shortcuts which understand how to handle unquoted ( literal ) values.
+// Bool, a type of str enum.
 type Bool int
 
 // The enumerated values of Bool.
@@ -46,31 +43,31 @@ var Zt_Bool = typeinfo.Str{
 		"true",
 	},
 	Markup: map[string]any{
-		"comment": []string{"A true or false value.", "Even though the definition here uses a string,", "the tell loading code ( and the go generated code )", "have shortcuts which understand how to handle unquoted ( literal ) values."},
+		"--": []string{"A true or false value.", "Even though the definition here uses a string,", "the tell loading code ( and the go generated code )", "have shortcuts which understand how to handle unquoted ( literal ) values."},
 	},
 }
 
-// A sequence of characters of any length spanning multiple lines. See also: text.
+// Lines, a type of str.
 var Zt_Lines = typeinfo.Str{
 	Name: "lines",
 	Markup: map[string]any{
-		"comment": "A sequence of characters of any length spanning multiple lines. See also: text.",
+		"--": "A sequence of characters of any length spanning multiple lines. See also: text.",
 	},
 }
 
-// A sequence of characters of any length, all on one line. See also: lines.
+// Text, a type of str.
 var Zt_Text = typeinfo.Str{
 	Name: "text",
 	Markup: map[string]any{
-		"comment": "A sequence of characters of any length, all on one line. See also: lines.",
+		"--": "A sequence of characters of any length, all on one line. See also: lines.",
 	},
 }
 
-// An integer or floating point value.
+// Num, a type of num.
 var Zt_Num = typeinfo.Num{
 	Name: "num",
 	Markup: map[string]any{
-		"comment": "An integer or floating point value.",
+		"--": "An integer or floating point value.",
 	},
 }
 

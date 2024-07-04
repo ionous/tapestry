@@ -15,7 +15,7 @@ import (
 var Zt_Notification = typeinfo.Slot{
 	Name: "notification",
 	Markup: map[string]any{
-		"comment": "Marker interface used by all frame events.",
+		"--": "Marker interface used by all frame events.",
 	},
 }
 
@@ -320,7 +320,7 @@ func init() {
 			Name:  "result",
 			Label: "result",
 			Markup: map[string]any{
-				"comment": "The result of a query assignment sent to the server.",
+				"--": "The result of a query assignment sent to the server.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -328,7 +328,7 @@ func init() {
 			Label:   "events",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Changes as a result of a player's turn or a client query.",
+				"--": "Changes as a result of a player's turn or a client query.",
 			},
 			Type: &Zt_Notification,
 		}, {
@@ -336,12 +336,12 @@ func init() {
 			Label:    "error",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []string{"Any critical server errors.", "Returned to the client as a string", "so that it can be displayed to the player."},
+				"--": []string{"Any critical server errors.", "Returned to the client as a string", "so that it can be displayed to the player."},
 			},
 			Type: &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
-			"comment": "The results of a a player initiated turn, or other client to server query.",
+			"--": "The results of a a player initiated turn, or other client to server query.",
 		},
 	}
 	Zt_FrameOutput = typeinfo.Flow{
@@ -350,7 +350,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to show to the player.",
+				"--": "The text to show to the player.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -358,7 +358,7 @@ func init() {
 			&Zt_Notification,
 		},
 		Markup: map[string]any{
-			"comment": "Printed text that should be visible the player.",
+			"--": "Printed text that should be visible the player.",
 		},
 	}
 	Zt_GameSignal = typeinfo.Flow{
@@ -367,7 +367,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "signal",
 			Markup: map[string]any{
-				"comment": []string{"String version of the system event.", "( see go package game type Signal. )"},
+				"--": []string{"String version of the system event.", "( see go package game type Signal. )"},
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -375,7 +375,7 @@ func init() {
 			&Zt_Notification,
 		},
 		Markup: map[string]any{
-			"comment": "System game event.",
+			"--": "System game event.",
 		},
 	}
 	Zt_SceneStarted = typeinfo.Flow{
@@ -385,7 +385,7 @@ func init() {
 			Name:    "domains",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "The names of the scenes.",
+				"--": "The names of the scenes.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -393,7 +393,7 @@ func init() {
 			&Zt_Notification,
 		},
 		Markup: map[string]any{
-			"comment": "One or more scenes ( aka domain ) have started.",
+			"--": "One or more scenes ( aka domain ) have started.",
 		},
 	}
 	Zt_SceneEnded = typeinfo.Flow{
@@ -403,7 +403,7 @@ func init() {
 			Name:    "domains",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "The names of the scenes.",
+				"--": "The names of the scenes.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -411,7 +411,7 @@ func init() {
 			&Zt_Notification,
 		},
 		Markup: map[string]any{
-			"comment": "One or more scenes ( aka domain ) have finished.",
+			"--": "One or more scenes ( aka domain ) have finished.",
 		},
 	}
 	Zt_StateChanged = typeinfo.Flow{
@@ -421,28 +421,28 @@ func init() {
 			Name:  "noun",
 			Label: "noun",
 			Markup: map[string]any{
-				"comment": "The object who's state has changed.",
+				"--": "The object who's state has changed.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "aspect",
 			Label: "aspect",
 			Markup: map[string]any{
-				"comment": "The name of the set of states involved.",
+				"--": "The name of the set of states involved.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "prev",
 			Label: "prev",
 			Markup: map[string]any{
-				"comment": "The name of the old state.",
+				"--": "The name of the old state.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "trait",
 			Label: "trait",
 			Markup: map[string]any{
-				"comment": "The name of the new state.",
+				"--": "The name of the new state.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -450,7 +450,7 @@ func init() {
 			&Zt_Notification,
 		},
 		Markup: map[string]any{
-			"comment": "Some object in the game has changed from one state to another.",
+			"--": "Some object in the game has changed from one state to another.",
 		},
 	}
 	Zt_PairChanged = typeinfo.Flow{
@@ -460,21 +460,21 @@ func init() {
 			Name:  "a",
 			Label: "a",
 			Markup: map[string]any{
-				"comment": "The id of the primary object.",
+				"--": "The id of the primary object.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "b",
 			Label: "b",
 			Markup: map[string]any{
-				"comment": "The id of the secondary object.",
+				"--": "The id of the secondary object.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "rel",
 			Label: "rel",
 			Markup: map[string]any{
-				"comment": "The name of the relation in question.",
+				"--": "The name of the relation in question.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -482,7 +482,7 @@ func init() {
 			&Zt_Notification,
 		},
 		Markup: map[string]any{
-			"comment": "The relationship between two objects has changed. For instance, an object's whereabouts as indicated by a parent-child type relation.",
+			"--": "The relationship between two objects has changed. For instance, an object's whereabouts as indicated by a parent-child type relation.",
 		},
 	}
 }

@@ -17,6 +17,7 @@ func TestNounFormation(t *testing.T) {
 
 	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
+
 	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Nouns{Noun: "apple", Kind: "k"},
@@ -197,7 +198,7 @@ func TestNounDistance(t *testing.T) {
 	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
-		pen := cat.Pin("a", "x")
+		pen := cat.Pin("a")
 		tests := []string{
 			// word(s), noun(s)
 			"toy", "toy boat",

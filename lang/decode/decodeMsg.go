@@ -2,7 +2,6 @@ package decode
 
 import (
 	"fmt"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
@@ -17,12 +16,8 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 	}()
 	var out compact.Message
 	for k, v := range msg {
-		if strings.HasPrefix(k, compact.Markup) {
-			if key := k[len(compact.Markup):]; len(key) == 0 {
-				out.AddMarkup(compact.Comment, v)
-			} else {
-				out.AddMarkup(key, v)
-			}
+		if compact.IsMarkup(k) {
+			out.AddMarkup(k, v)
 		} else if len(out.Lede) > 0 {
 			err = fmt.Errorf("expected a single key, have %q and %q", out.Lede, k)
 			break
@@ -39,11 +34,10 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 		}
 	}
 	if err == nil {
-		// hrm: when there's only a comment { "--": "..." }
+		// hrm: when there's only a comment { "comment": "..." }
 		// report the key as having been the comment marker
-		// alt: give Comment a blank key? "" instead of "--"
-		if len(out.Key) == 0 && len(compact.Markup) > 0 {
-			out.Key = compact.Markup
+		if len(out.Key) == 0 && len(out.Markup) > 0 {
+			out.Key = compact.Comment
 		}
 		ret = out
 	}

@@ -22,7 +22,6 @@ func TestQueries(t *testing.T) {
 	db := tables.CreateTest(t.Name(), true)
 	defer db.Close()
 
-	const at = ""
 	const domain = "main"
 	const subDomain = "sub"
 	const pattern = "common ancestor"
@@ -36,99 +35,99 @@ func TestQueries(t *testing.T) {
 	if m, e := mdl.NewModeler(db); e != nil {
 		t.Fatal(e)
 	} else if e := mdlDomain(m,
-		// name, path, at
+		// name, path
 		// -------------------------
-		domain, "", at,
-		subDomain, domain, at); e != nil {
+		domain, "",
+		subDomain, domain); e != nil {
 		t.Fatal(e)
 	} else if e := mdlPlural(m,
-		// name, path, at
+		// name, path
 		// -------------------------
-		domain, plural, singular, at); e != nil {
+		domain, plural, singular); e != nil {
 		t.Fatal(e)
 	} else if e := mdlKind(m,
-		append(defaultKinds(domain, at),
-			// "domain", "kind", "path", "at"
+		append(defaultKinds(domain),
+			// "domain", "kind", "path"
 			// ---------------------------
-			domain, kind, kindsOf.Kind.String(), at,
-			domain, aspect, kindsOf.Aspect.String(), at,
+			domain, kind, kindsOf.Kind.String(),
+			domain, aspect, kindsOf.Aspect.String(),
 			// super confusing, in the db: root is towards end of the path; the row id is at the start.
 			// when read: root is hit first ( its in earlier *rows* ) so it becomes first.
-			subDomain, subKind, kind, at,
+			subDomain, subKind, kind,
 			// patterns:
-			domain, pattern, kindsOf.Pattern.String(), at,
+			domain, pattern, kindsOf.Pattern.String(),
 			// relations:
-			domain, relation, kindsOf.Relation.String(), at,
-			subDomain, otherRelation, kindsOf.Relation.String(), at,
+			domain, relation, kindsOf.Relation.String(),
+			subDomain, otherRelation, kindsOf.Relation.String(),
 		)...,
 	); e != nil {
 		t.Fatal(e)
 	} else if e := mdlField(m,
-		// domain, kind, field, affinity, type, at
+		// domain, kind, field, affinity, type
 		// ---------------------------------------
 		// traits of an aspect
-		addMember, domain, aspect, "brief", affine.Bool, "", at,
-		addMember, domain, aspect, "verbose", affine.Bool, "", at,
-		addMember, domain, aspect, "superbrief", affine.Bool, "", at,
+		addMember, domain, aspect, "brief", affine.Bool, "",
+		addMember, domain, aspect, "verbose", affine.Bool, "",
+		addMember, domain, aspect, "superbrief", affine.Bool, "",
 		// kind that uses that aspect
-		addMember, domain, kind, aspect, affine.Text, aspect, at,
+		addMember, domain, kind, aspect, affine.Text, aspect,
 		// patterns
-		addParameter, domain, pattern, "object", affine.Text, kind, at,
-		addParameter, domain, pattern, "other object", affine.Text, kind, at,
-		addResult, domain, pattern, "ancestor", affine.Text, kind, at,
+		addParameter, domain, pattern, "object", affine.Text, kind,
+		addParameter, domain, pattern, "other object", affine.Text, kind,
+		addResult, domain, pattern, "ancestor", affine.Text, kind,
 	); e != nil {
 		t.Fatal(e)
 	} else if e := mdlNoun(m,
-		// domain, noun, kind, at
+		// domain, noun, kind
 		// ---------------------------------------
-		domain, "apple", kind, at,
-		domain, "empire apple", kind, at,
-		subDomain, "table", subKind, at,
+		domain, "apple", kind,
+		domain, "empire apple", kind,
+		subDomain, "table", subKind,
 	); e != nil {
 		t.Fatal(e)
 		t.Fatal(e)
 	} else if e := mdlValue(m,
 		// "domain", "noun", "field", "value", "at"
 		// ---------------------------------------
-		domain, "apple", aspect, "brief", at,
-		domain, "empire apple", aspect, "verbose", at,
-		subDomain, "table", aspect, "superbrief", at,
+		domain, "apple", aspect, "brief",
+		domain, "empire apple", aspect, "verbose",
+		subDomain, "table", aspect, "superbrief",
 	); e != nil {
 		t.Fatal(e)
 		t.Fatal(e)
 	} else if e := mdlName(m,
-		// domain, noun, name, rank, at
+		// domain, noun, name, rank
 		// ---------------------------------------
-		domain, "empire apple", "empire apple", 0, at,
-		domain, "empire apple", "apple", 1, at,
-		domain, "empire apple", "empire", 2, at,
-		domain, "apple", "apple", 0, at, // a different noun with a similar name
+		domain, "empire apple", "empire apple", 0,
+		domain, "empire apple", "apple", 1,
+		domain, "empire apple", "empire", 2,
+		domain, "apple", "apple", 0, // a different noun with a similar name
 	); e != nil {
 		t.Fatal(e)
 		t.Fatal(e)
 	} else if e := mdlRule(m,
 		// "domain", "kind", "target", "rank", "prog", "at"
 		// ---------------------------------------
-		domain, pattern, 1, "prog1", at,
-		domain, pattern, 2, "prog2", at,
-		domain, pattern, 3, "prog3", at,
+		domain, pattern, 1, "prog1",
+		domain, pattern, 2, "prog2",
+		domain, pattern, 3, "prog3",
 	); e != nil {
 		t.Fatal(e)
 		t.Fatal(e)
 	} else if e := mdlRel(m,
-		// domain, rel, kind, otherKind, cardinality, at
+		// domain, rel, kind, otherKind, cardinality
 		// ---------------------------------------------
-		domain, relation, kind, kind, false, true, at,
+		domain, relation, kind, kind, false, true,
 		// ( something random )
-		subDomain, otherRelation, kind, aspect, false, false, at,
+		subDomain, otherRelation, kind, aspect, false, false,
 	); e != nil {
 		t.Fatal(e)
 		t.Fatal(e)
 	} else if e := mdlPair(m,
 		// "domain", "relKind", "oneNoun", "otherNoun", "at"
 		// ---------------------------------------------
-		subDomain, relation, "table", "empire apple", at,
-		subDomain, relation, "table", "apple", at,
+		subDomain, relation, "table", "empire apple",
+		subDomain, relation, "table", "apple",
 	); e != nil {
 		t.Fatal(e)
 		t.Fatal(e)
@@ -235,23 +234,22 @@ func TestQueries(t *testing.T) {
 	}
 }
 
-func defaultKinds(domain, at string) (out []any) {
+func defaultKinds(domain string) (out []any) {
 	for _, k := range kindsOf.DefaultKinds {
 		pk := k.Parent()
-		out = append(out, domain, k.String(), pk.String(), at)
+		out = append(out, domain, k.String(), pk.String())
 	}
 	return
 }
 
 // adapt old style tests to new interface
 func mdlDomain(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 3 {
+	for i, cnt := 0, len(els); i < cnt; i += 2 {
 		row := els[i:]
-		domain, requires, at :=
+		domain, requires :=
 			row[0].(string),
-			row[1].(string),
-			row[2].(string)
-		if e := m.Pin(domain, at).AddDependency(requires); e != nil {
+			row[1].(string)
+		if e := m.Pin(domain).AddDependency(requires); e != nil {
 			err = e
 			break
 		}
@@ -259,17 +257,16 @@ func mdlDomain(m *mdl.Modeler, els ...any) (err error) {
 	return
 }
 func mdlField(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 7 {
+	for i, cnt := 0, len(els); i < cnt; i += 6 {
 		row := els[i:]
-		fn, domain, kind, field, affinity, typeName, at :=
+		fn, domain, kind, field, affinity, typeName :=
 			row[0].(func(pen *mdl.Pen, kind, field string, affinity affine.Affinity, typeName string) error),
 			row[1].(string),
 			row[2].(string),
 			row[3].(string),
 			row[4].(affine.Affinity),
-			row[5].(string),
-			row[6].(string)
-		pen := m.Pin(domain, at)
+			row[5].(string)
+		pen := m.Pin(domain)
 		if e := fn(pen, kind, field, affinity, typeName); e != nil {
 			err = e
 			break
@@ -287,14 +284,13 @@ func addResult(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string
 	return pen.AddTestResult(kind, field, aff, cls)
 }
 func mdlKind(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 4 {
+	for i, cnt := 0, len(els); i < cnt; i += 3 {
 		row := els[i:]
-		domain, kind, path, at :=
+		domain, kind, path :=
 			row[0].(string),
 			row[1].(string),
-			row[2].(string),
-			row[3].(string)
-		if e := m.Pin(domain, at).AddKind(kind, path); e != nil {
+			row[2].(string)
+		if e := m.Pin(domain).AddKind(kind, path); e != nil {
 			err = e
 			break
 		}
@@ -303,15 +299,14 @@ func mdlKind(m *mdl.Modeler, els ...any) (err error) {
 }
 
 func mdlName(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 5 {
+	for i, cnt := 0, len(els); i < cnt; i += 4 {
 		row := els[i:]
-		domain, noun, name, rank, at :=
+		domain, noun, name, rank :=
 			row[0].(string),
 			row[1].(string),
 			row[2].(string),
-			row[3].(int),
-			row[4].(string)
-		if e := m.Pin(domain, at).AddNounName(noun, name, rank); e != nil {
+			row[3].(int)
+		if e := m.Pin(domain).AddNounName(noun, name, rank); e != nil {
 			err = e
 			break
 		}
@@ -320,14 +315,13 @@ func mdlName(m *mdl.Modeler, els ...any) (err error) {
 }
 
 func mdlNoun(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 4 {
+	for i, cnt := 0, len(els); i < cnt; i += 3 {
 		row := els[i:]
-		domain, noun, kind, at :=
+		domain, noun, kind :=
 			row[0].(string),
 			row[1].(string),
-			row[2].(string),
-			row[3].(string)
-		if e := m.Pin(domain, at).AddNounKind(noun, kind); e != nil {
+			row[2].(string)
+		if e := m.Pin(domain).AddNounKind(noun, kind); e != nil {
 			err = e
 			break
 		}
@@ -336,47 +330,28 @@ func mdlNoun(m *mdl.Modeler, els ...any) (err error) {
 }
 
 func mdlPair(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 5 {
+	for i, cnt := 0, len(els); i < cnt; i += 4 {
 		row := els[i:]
-		domain, relKind, oneNoun, otherNoun, at :=
+		domain, relKind, oneNoun, otherNoun :=
 			row[0].(string),
 			row[1].(string),
 			row[2].(string),
-			row[3].(string),
-			row[4].(string)
-		if e := m.Pin(domain, at).AddNounPair(relKind, oneNoun, otherNoun); e != nil {
+			row[3].(string)
+		if e := m.Pin(domain).AddNounPair(relKind, oneNoun, otherNoun); e != nil {
 			err = e
 			break
 		}
 	}
 	return
 }
-
-// func mdlPat(m *mdl.Modeler, els ...any) (err error) {
-// 	for i, cnt := 0, len(els); i < cnt; i += 4 {
-// 		row := els[i:]
-// 		domain, kind, labels, result :=
-// 			row[0].(string),
-// 			row[1].(string),
-// 			row[2].(string),
-// 			row[3].(string)
-// 		if e := m.Pin(domain,at).Pat(kind, labels, result); e != nil {
-// 			err =e
-// 			break
-// 		}
-// 	}
-// 	return
-// }
-
 func mdlPlural(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 4 {
+	for i, cnt := 0, len(els); i < cnt; i += 3 {
 		row := els[i:]
-		domain, many, one, at :=
+		domain, many, one :=
 			row[0].(string),
 			row[1].(string),
-			row[2].(string),
-			row[3].(string)
-		if e := m.Pin(domain, at).AddPlural(many, one); e != nil {
+			row[2].(string)
+		if e := m.Pin(domain).AddPlural(many, one); e != nil {
 			err = e
 			break
 		}
@@ -385,17 +360,16 @@ func mdlPlural(m *mdl.Modeler, els ...any) (err error) {
 }
 
 func mdlRel(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 7 {
+	for i, cnt := 0, len(els); i < cnt; i += 6 {
 		row := els[i:]
-		domain, relKind, oneKind, otherKind, oneMany, otherMany, at :=
+		domain, relKind, oneKind, otherKind, oneMany, otherMany :=
 			row[0].(string),
 			row[1].(string),
 			row[2].(string),
 			row[3].(string),
 			row[4].(bool),
-			row[5].(bool),
-			row[6].(string)
-		if e := m.Pin(domain, at).AddRelation(relKind, oneKind, otherKind, oneMany, otherMany); e != nil {
+			row[5].(bool)
+		if e := m.Pin(domain).AddRelation(relKind, oneKind, otherKind, oneMany, otherMany); e != nil {
 			err = e
 			break
 		}
@@ -403,14 +377,13 @@ func mdlRel(m *mdl.Modeler, els ...any) (err error) {
 	return
 }
 func mdlRule(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 5 {
+	for i, cnt := 0, len(els); i < cnt; i += 4 {
 		row := els[i:]
 		domain := row[0].(string)
 		pattern := row[1].(string)
 		rank := row[2].(int)
 		prog := row[3].(string)
-		at := row[4].(string)
-		if e := m.Pin(domain, at).AddTestRule(pattern, rank, prog); e != nil {
+		if e := m.Pin(domain).AddTestRule(pattern, rank, prog); e != nil {
 			err = e
 			break
 		}
@@ -418,15 +391,14 @@ func mdlRule(m *mdl.Modeler, els ...any) (err error) {
 	return
 }
 func mdlValue(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 5 {
+	for i, cnt := 0, len(els); i < cnt; i += 4 {
 		row := els[i:]
-		domain, noun, field, value, at :=
+		domain, noun, field, value :=
 			row[0].(string),
 			row[1].(string),
 			row[2].(string),
-			row[3].(string),
-			row[4].(string)
-		if e := m.Pin(domain, at).AddTestValue(noun, false, field, value); e != nil {
+			row[3].(string)
+		if e := m.Pin(domain).AddTestValue(noun, false, field, value); e != nil {
 			err = e
 			break
 		}

@@ -13,9 +13,10 @@ type Message struct {
 	Lede   string         // the leading part of the signature in lowercase
 	Labels []string       // parameter names sans colons; the first can be blank ( anonymous )
 	Args   []any          // the same length as labels
-	Markup map[string]any // from map keys starting with "--"; stored stripped of the dashes.
+	Markup map[string]any // from lowercase keys and comments
 }
 
+// panics if the value is a type gob encoding cant handle
 func (op *Message) AddMarkup(k string, v any) {
 	if op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -34,8 +35,8 @@ func (op *Message) AddMarkup(k string, v any) {
 		} else {
 			op.Markup[k] = str
 		}
+
 	default:
-		log.Printf("unhandled markup %s: %T %v", k, v, v)
-		panic("unhandled markup")
+		log.Panicf("unhandled markup %s: %T %v", k, v, v)
 	}
 }

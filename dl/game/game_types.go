@@ -206,7 +206,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Immediately end the current game.",
+			"--": "Immediately end the current game.",
 		},
 	}
 	Zt_SaveGame = typeinfo.Flow{
@@ -217,7 +217,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Save the game.",
+			"--": "Save the game.",
 		},
 	}
 	Zt_LoadGame = typeinfo.Flow{
@@ -228,7 +228,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Load the most recent save.",
+			"--": "Load the most recent save.",
 		},
 	}
 	Zt_UndoTurn = typeinfo.Flow{
@@ -239,7 +239,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Unimplemented: rewind the game to undo the player's most recent input.",
+			"--": "Unimplemented: rewind the game to undo the player's most recent input.",
 		},
 	}
 	Zt_PrintVersion = typeinfo.Flow{
@@ -250,7 +250,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Print the version of the tap executable.",
+			"--": "Print the version of the tap executable.",
 		},
 	}
 }

@@ -11,7 +11,7 @@ import (
 )
 
 func MakeQuery(m *mdl.Modeler, domain string) jess.Query {
-	return dbWrapper{m.Pin(domain, "jess")}
+	return dbWrapper{m.Pin(domain)}
 }
 
 // implements jess.Query; returned by dbWrapper.

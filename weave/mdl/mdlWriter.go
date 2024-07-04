@@ -49,7 +49,7 @@ func (pen *Pen) addAspect(aspect string, traits []string) (ret kindInfo, err err
 }
 
 func (pen *Pen) addTraits(kid kindInfo, traits []string) (err error) {
-	domain, at := pen.domain, pen.at
+	domain, at := pen.domain, pen.pos.String()
 	if existingTraits, e := tables.QueryStrings(pen.db, `
 			select mf.field	
 			from mdl_field mf 
@@ -80,8 +80,8 @@ var mdl_check = tables.Insert("mdl_check", "domain", "name", "value", "affinity"
 
 // author tests of stories
 func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Execute) (err error) {
-	domain, at := pen.domain, pen.at
-	if d, e := pen.findDomain(); e != nil {
+	domain, at := pen.domain, pen.pos.String()
+	if d, e := pen.findScene(); e != nil {
 		err = e
 	} else {
 		var prev struct {
@@ -152,11 +152,36 @@ func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Exec
 var mdl_domain = tables.InsertWith("mdl_domain", "on conflict do nothing", "domain", "requires", "at")
 
 // pairs of domain name and (domain) dependencies
-// fix: are we forcing/checking parent domains to exist before writing?
-// that might be cool .... but maybe this is the wrong level?
-func (pen *Pen) AddDependency(requires string) (err error) {
-	domain, at := pen.domain, pen.at
-	_, err = pen.db.Exec(mdl_domain, domain, requires, at)
+func (pen *Pen) AddDependency(reqs ...string) (err error) {
+	domain, at := pen.domain, pen.pos.String()
+	for _, req := range reqs {
+		// check for circular references:
+		if domain == req {
+			err = fmt.Errorf("circular reference: %q can't depend on itself", domain)
+		} else {
+			var exists bool
+			if e := pen.db.QueryRow(
+				`select 1 
+						from domain_tree 
+						where base = ?1
+						and uses = ?2
+						and base != uses`, req, domain).Scan(&exists); e != nil && e != sql.ErrNoRows {
+				err = e
+				break
+			} else if exists {
+				err = fmt.Errorf("circular reference: %q requires %q", req, domain)
+				break
+			} else if e := addDependency(pen.db, domain, req, at); e != nil {
+				err = e
+				break
+			}
+		}
+	}
+	return
+}
+
+func addDependency(db *tables.Cache, domain, req, at string) (err error) {
+	_, err = db.Exec(mdl_domain, domain, req, at)
 	return
 }
 
@@ -185,7 +210,7 @@ func makeKeyValue(key string, partsAndValue []string) (k, v string, err error) {
 func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err error) {
 	if fact, value, e := makeKeyValue(key, partsAndValue); e != nil {
 		err = e
-	} else if domain, e := pen.findDomain(); e != nil {
+	} else if domain, e := pen.findScene(); e != nil {
 		err = e
 	} else {
 		var prev struct {
@@ -200,7 +225,7 @@ func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err err
 		and fact = ?2`, domain, fact)
 		switch e := q.Scan(&prev.domain, &prev.value); e {
 		case sql.ErrNoRows:
-			if _, e := pen.db.Exec(mdl_fact, domain, fact, value, pen.at); e != nil {
+			if _, e := pen.db.Exec(mdl_fact, domain, fact, value, pen.pos.String()); e != nil {
 				err = fmt.Errorf("database error: %s", e)
 			} else {
 				okay = true
@@ -230,10 +255,10 @@ var mdl_grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 
 // player input parsing
 func (pen *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
-	domain, at := pen.domain, pen.at
+	domain, at := pen.domain, pen.pos.String()
 	if prog, e := marshal(prog); e != nil {
 		err = e
-	} else if d, e := pen.findDomain(); e != nil {
+	} else if d, e := pen.findScene(); e != nil {
 		err = e
 	} else {
 		var prev struct {
@@ -277,7 +302,7 @@ func (pen *Pen) AddKind(name, parent string) (err error) {
 }
 
 func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
-	domain, at := pen.domain, pen.at
+	domain, at := pen.domain, pen.pos.String()
 	if parent, e := pen.findOptionalKind(parent); e != nil {
 		err = e
 	} else if len(parent.name) > 0 && parent.id == 0 {
@@ -411,7 +436,7 @@ func (pen *Pen) AddNounKind(noun, kind string) (err error) {
 // ( the same as - or a child of - the domain of the kind ) error
 // this duplicates the algorithm used by Kind()
 func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
-	domain, at := pen.domain, pen.at
+	domain, at := pen.domain, pen.pos.String()
 	if parent, e := pen.findRequiredKind(ancestor); e != nil {
 		err = e
 	} else if prev, e := pen.findNoun(name, nounWithKind); e != nil {
@@ -495,7 +520,7 @@ func (pen *Pen) addName(noun nounInfo, name string, rank int) (err error) {
 		// tbd: silence duplicates?
 		// since these are generated, there's probably very little the user could do about them.
 		pen.warn("%w %q already an alias of %q", ErrDuplicate, name, noun.name)
-	} else if _, e := pen.db.Exec(mdl_name, pen.domain, noun.id, name, rank, pen.at); e != nil {
+	} else if _, e := pen.db.Exec(mdl_name, pen.domain, noun.id, name, rank, pen.pos.String()); e != nil {
 		err = fmt.Errorf("database error: %s", e)
 	}
 	return
@@ -545,7 +570,7 @@ func (pen *Pen) AddNounPair(rel, oneNoun, otherNoun string) (err error) {
 			if e := pen.checkPair(rel, one, other, reverse, multi); e != nil {
 				err = eatDuplicates(pen.warn, e)
 			} else {
-				_, err = pen.db.Exec(mdl_pair, pen.domain, rel.id, one.id, other.id, pen.at)
+				_, err = pen.db.Exec(mdl_pair, pen.domain, rel.id, one.id, other.id, pen.pos.String())
 			}
 		}
 	}
@@ -614,7 +639,7 @@ var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one", "at")
 // ie. people and persons are valid plurals of person,
 // but people as a singular can only be defined as person ( not also human ) error
 func (pen *Pen) AddPlural(many, one string) (err error) {
-	if domain, e := pen.findDomain(); e != nil {
+	if domain, e := pen.findScene(); e != nil {
 		err = e
 	} else if rows, e := pen.db.Query(
 		`select one, domain 
@@ -638,7 +663,7 @@ func (pen *Pen) AddPlural(many, one string) (err error) {
 		}, &prev, &from); e != nil {
 			err = eatDuplicates(pen.warn, e)
 		} else {
-			_, err = pen.db.Exec(mdl_plural, domain, many, one, pen.at)
+			_, err = pen.db.Exec(mdl_plural, domain, many, one, pen.pos.String())
 		}
 	}
 	return
@@ -694,7 +719,7 @@ func (pen *Pen) AddRelation(name, oneKind, otherKind string, amany bool, bmany b
 						err = e
 					} else if e := pen.addField(rel, other, b.rhs(), b.affinity()); e != nil {
 						err = e
-					} else if _, e := pen.db.Exec(mdl_rel, rel.id, one.id, other.id, info.cardinality, pen.at); e != nil {
+					} else if _, e := pen.db.Exec(mdl_rel, rel.id, one.id, other.id, info.cardinality, pen.pos.String()); e != nil {
 						err = e // improve the error result if the relation existed vefore?
 					}
 				}
@@ -748,7 +773,7 @@ func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump
 		jump,
 		updates,
 		prog,
-		pen.at)
+		pen.pos.String())
 	return
 }
 

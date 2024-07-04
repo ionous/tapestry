@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -24,8 +25,7 @@ type Catalog struct {
 	domains        map[string]*Domain
 	pendingDomains []*Domain
 
-	cursor     string // current file
-	processing DomainStack
+	processing SceneStack
 
 	run rt.Runtime    // custom runtime for running macros
 	db  *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
@@ -66,10 +66,6 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 	}
 }
 
-// func (cat *Catalog) SetSource(x string) {
-// 	cat.cursor = x
-// }
-
 func (cat *Catalog) GetRuntime() rt.Runtime {
 	return cat.run
 }
@@ -81,7 +77,7 @@ func (cat *Catalog) GetDomain(n string) (*Domain, bool) {
 }
 
 // return the uniformly named domain ( if it exists )
-func (cat *Catalog) CurrentDomain() (ret string) {
+func (cat *Catalog) CurrentScene() (ret string) {
 	if d, ok := cat.processing.Top(); ok {
 		ret = d.Name()
 	}
@@ -92,7 +88,7 @@ func (cat *Catalog) CurrentDomain() (ret string) {
 func (cat *Catalog) AssembleCatalog() (err error) {
 	for {
 		if len(cat.processing) > 0 {
-			err = errutil.New("mismatched begin/end domain")
+			err = errutil.New("mismatched begin/end scene")
 			break
 		} else if len(cat.pendingDomains) == 0 {
 			break
@@ -157,117 +153,79 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	return
 }
 
-func (cat *Catalog) BeginFile(name string) (err error) {
-	if cur := cat.cursor; len(cur) > 0 {
-		err = errutil.New("file already in progress", cur)
-	} else {
-		cat.cursor = name
-	}
-	return
-}
-
-func (cat *Catalog) EndFile() {
-	if len(cat.cursor) == 0 {
-		panic("EndFile called but no BeginFile")
-	}
-	cat.cursor = ""
-}
-
-// calls to schedule() between begin/end domain write to this newly declared domain.
-// names dont have to be normalized.
-func (cat *Catalog) DomainStart(name string, requires []string) (err error) {
-	if d, e := cat.addDomain(name, cat.cursor, requires...); e != nil {
-		err = e
-	} else {
-		cat.processing.Push(d)
-	}
-	return
-}
-
-func (cat *Catalog) DomainEnd() (err error) {
-	if _, ok := cat.processing.Top(); !ok {
-		err = errutil.New("unexpected domain ending when there's no domain")
-	} else {
-		cat.processing.Pop()
-	}
-	return
-}
-
-// run passed function until it returns true or errors
+// used for jess:
+// runs the passed function until it returns true or errors
 // if currently processing, the first step will execute next phase.
 func (cat *Catalog) Step(cb StepFunction) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
-		err = errutil.New("unknown top level domain")
+		err = errutil.New("step has no scene")
+	} else if z := d.currPhase; z < 0 {
+		err = errutil.Fmt("step scene %q already woven", d.name)
 	} else {
-		err = d.step(cat.cursor, cb)
+		d.steps = append(d.steps, cb)
 	}
 	return
 }
 
 // run the passed function now or in the future.
 func (cat *Catalog) Schedule(when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
+	return cat.SchedulePos(nil, when, cb)
+}
+
+// run the passed function now or in the future.
+// pass the line number of the operation.
+// tbd: maybe it would be better if the ops carried their full source pos
+// currently they just have line number.
+func (cat *Catalog) SchedulePos(t typeinfo.Markup, when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
-		err = errutil.New("unknown top level domain")
+		err = errutil.New("schedule has no active scene")
 	} else {
-		err = d.schedule(cat.cursor, when, cb)
+		pos := mdl.MakeSource(t)
+		err = d.schedule(pos, when, cb)
 	}
 	return
 }
 
-// return the uniformly named domain ( creating it if necessary )
-func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err error) {
+func (cat *Catalog) EnsureScene(name string) (ret *Domain) {
 	// find or create the domain
 	n := inflect.Normalize(name)
-	d, ok := cat.domains[n]
-	if !ok {
+	if d, ok := cat.domains[n]; ok {
+		ret = d
+	} else {
 		d = &Domain{name: n, cat: cat}
 		cat.pendingDomains = append(cat.pendingDomains, d)
 		cat.domains[n] = d
-	}
-	if d.currPhase < 0 || d.currPhase > 0 {
-		err = errutil.New("can't add new dependencies to parent domains", d.name)
-	} else {
-		// domains are implicitly dependent on their parent domain
-		if p, ok := cat.processing.Top(); ok {
-			reqs = append(reqs, p.name)
-		}
-		// probably asking for trouble:
-		// the tests have no top level domain (tapestry) the way weave does
-		// we still need them to wind up in the table eventually...
-		if len(reqs) == 0 {
-			err = cat.Modeler.Pin(d.name, at).AddDependency("")
-		} else {
-			for _, req := range reqs {
-				// check for circular references:
-				if req := inflect.Normalize(req); n == req {
-					err = errutil.Fmt("circular reference: %q can't depend on itself", n)
-				} else {
-					var exists bool
-					if e := cat.db.QueryRow(
-						`select 1 
-						from domain_tree 
-						where base = ?1
-						and uses = ?2
-						and base != uses`, req, n).Scan(&exists); e != nil && e != sql.ErrNoRows {
-						err = e
-						break
-					} else if exists {
-						err = errutil.Fmt("circular reference: %q requires %q", req, n)
-						break
-					} else {
-						if e := cat.Modeler.Pin(n, at).AddDependency(req); e != nil {
-							err = e
-							break
-						}
-					}
-				}
-			}
-		}
-	}
-	if err == nil {
 		ret = d
 	}
 	return
+}
+
+func (cat *Catalog) PushScene(d *Domain, at mdl.Source) (ret *mdl.Pen, err error) {
+	if d.currPhase != 0 {
+		err = errutil.New("trying to start an in-progress scene", d.name)
+	} else {
+		pen := cat.PinPos(d.name, at)
+		cd := cat.CurrentScene()
+		if len(cd) > 0 {
+			// we're implicitly dependent on the currently running domain
+			// noting that tests dont always have a current domain
+			// but really it shouldn't be a requirement anyway.
+			err = pen.AddDependency(cd)
+		}
+		if err == nil {
+			cat.processing.Push(d)
+			ret = pen
+		}
+	}
+	return
+}
+
+func (cat *Catalog) PopScene() {
+	if _, ok := cat.processing.Top(); !ok {
+		panic("mismatched PopScene")
+	} else {
+		cat.processing.Pop()
+	}
 }
 
 func (cat *Catalog) findRivals() (err error) {

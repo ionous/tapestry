@@ -20,6 +20,7 @@ type Domain struct {
 	steps         []StepFunction
 	scheduling    [weaver.NumPhases][]memento // separates commands into phases
 	initialValues initialValues               // all of type object.SetValue
+	requires      []string
 }
 
 type initialValues []rt.Execute
@@ -35,8 +36,8 @@ func (in initialValues) add(noun, field string, val rt.Assignment) initialValues
 }
 
 type memento struct {
-	cb ScheduledCallback
-	at string
+	cb  ScheduledCallback
+	pos mdl.Source
 }
 
 // write initial values....
@@ -44,7 +45,7 @@ func (d *Domain) finalizeDomain() (err error) {
 	if len(d.initialValues) > 0 {
 		domainName := d.name
 		eventName := domainName + " " + "begins"
-		pin := d.cat.Modeler.Pin(domainName, "")
+		pin := d.cat.Modeler.Pin(domainName)
 		pb := mdl.NewPatternBuilder(eventName)
 		pb.AppendRule(0, rt.Rule{
 			Name: "initial value rule",
@@ -88,16 +89,7 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 	return
 }
 
-func (d *Domain) step(_ string, cb StepFunction) (err error) {
-	if z := d.currPhase; z < 0 {
-		err = errutil.Fmt("domain %q already finished", d.name)
-	} else {
-		d.steps = append(d.steps, cb)
-	}
-	return
-}
-
-func (d *Domain) schedule(at string, when weaver.Phase, what ScheduledCallback) (err error) {
+func (d *Domain) schedule(at mdl.Source, when weaver.Phase, what ScheduledCallback) (err error) {
 	// when we are not running we are in phase zero; the first active phase is index 1
 	if z := d.currPhase; z < 0 {
 		err = errutil.Fmt("domain %q already finished", d.name)
@@ -172,7 +164,7 @@ func (d *Domain) runSchedule(phase []memento, lastMissing *error) (ret int, err 
 }
 
 func (d *Domain) runOne(m memento) error {
-	pen := d.cat.Modeler.Pin(d.name, m.at)
+	pen := d.cat.Modeler.PinPos(d.name, m.pos)
 	w := localWeaver{d, pen}
 	run := d.cat.GetRuntime()
 	return m.cb(w, run)

@@ -69,6 +69,11 @@ func (dt *TestWeave) MakeDomain(names []string, add ...eph.Ephemera) {
 		// shuffle the order of domain dependencies
 		rand.Shuffle(len(req), func(i, j int) { req[i], req[j] = req[j], req[i] })
 	}
+	if len(req) == 0 {
+		// this is a "root" domain;
+		// and similar to "tapestry" needs a blank dependency to get into the db
+		req = append(req, "")
+	}
 	dt.queue = append(dt.queue, &eph.BeginDomain{
 		Name:     n,
 		Requires: req,

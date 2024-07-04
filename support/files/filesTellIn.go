@@ -5,14 +5,19 @@ import (
 	"io"
 	"os"
 	"strings"
-	"unicode"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"github.com/ionous/tell/collect"
 	"github.com/ionous/tell/collect/stdmap"
 	"github.com/ionous/tell/collect/stdseq"
 	"github.com/ionous/tell/decode"
 	"github.com/ionous/tell/note"
 )
+
+type Ofs struct {
+	File string
+	Line int
+}
 
 // deserialize from the passed path
 func LoadTell(inPath string) (ret any, err error) {
@@ -26,13 +31,13 @@ func LoadTell(inPath string) (ret any, err error) {
 }
 
 func ReadTell(in io.Reader) (any, error) {
-	return ReadTellRunes(bufio.NewReader(in), true)
+	return ReadTellRunes(bufio.NewReader(in), Ofs{}, true)
 }
 
 // reads until the passed reader is exhausted ( hits eof )
 // returns nil error when finished.
 // includeComments helps with testing
-func ReadTellRunes(in io.RuneReader, includeComments bool) (ret any, err error) {
+func ReadTellRunes(in io.RuneReader, ofs Ofs, includeComments bool) (ret any, err error) {
 	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
 	if !includeComments {
 		dec.SetMapper(stdmap.Make)
@@ -42,7 +47,10 @@ func ReadTellRunes(in io.RuneReader, includeComments bool) (ret any, err error) 
 		dec.SetMapper(func(reserve bool) collect.MapWriter {
 			m := make(tapMap)
 			x, y := dec.Position()
-			m["--pos"] = []int{x, y}
+			m[compact.Position] = []int{x, y + ofs.Line}
+			if len(ofs.File) > 0 {
+				m[compact.Source] = ofs.File
+			}
 			return m
 		})
 		dec.SetSequencer(func(reserve bool) collect.SequenceWriter {
@@ -79,14 +87,13 @@ func (m tapMap) GetMap() any {
 func (m tapMap) MapValue(key string, val any) collect.MapWriter {
 	if len(key) != 0 {
 		// lowercase keys are tapestry metadata
-		if !unicode.IsLower(rune(key[0])) {
+		if !compact.IsMarkup(key) {
 			if val == nil {
 				// replace unary values
 				key = key[:len(key)-1]
 				val = true
 			}
 		} else {
-			key = "--" + key
 			if end := len(key) - 1; key[end] == ':' {
 				key = key[:end]
 			}
@@ -95,7 +102,7 @@ func (m tapMap) MapValue(key string, val any) collect.MapWriter {
 	} else {
 		// tbd: would it make more sense to send around "Comment" structs?
 		if str := val.(string); len(str) > 0 {
-			m["--"] = readComment(str)
+			m[compact.Comment] = readComment(str)
 		}
 	}
 	return m

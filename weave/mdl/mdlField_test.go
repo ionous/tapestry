@@ -68,7 +68,7 @@ func TestValueWriting(t *testing.T) {
 	}); e != nil {
 		t.Fatal(e)
 	} else {
-		pen := m.Pin("domain", "at")
+		pen := m.Pin("domain")
 		// some independent fields:
 		if e := pen.AddTestValue(nounA, false, oneField, oneValue); e != nil {
 			t.Fatal(e)

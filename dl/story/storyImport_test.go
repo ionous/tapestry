@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 // decode and import a story;
@@ -22,15 +23,18 @@ func TestImportStory(t *testing.T) {
 	} else {
 		db := tables.CreateTest(t.Name(), true)
 		defer db.Close()
-		k := weave.NewCatalog(db)
-		if e := k.DomainStart("tapestry", nil); e != nil {
-			t.Fatal("failed domain start", e)
-		} else if e := curr.Weave(k); e != nil {
-			t.Fatal("failed story import", e)
-		} else if e := k.DomainEnd(); e != nil {
-			t.Fatal("failed domain end", e)
+		cat := weave.NewCatalog(db)
+		//
+		d := cat.EnsureScene("tapestry")
+		if _, e := cat.PushScene(d, mdl.Source{}); e != nil {
+			t.Fatal(e)
 		} else {
-			t.Log("ok")
+			defer cat.PopScene()
+			if e := curr.Weave(cat); e != nil {
+				t.Fatal("failed story import", e)
+			} else {
+				t.Log("ok")
+			}
 		}
 	}
 }

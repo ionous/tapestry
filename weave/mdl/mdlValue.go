@@ -132,7 +132,7 @@ func (pen *Pen) addNounValue(noun nounInfo, final bool, outer fieldInfo, field, 
 		err = fmt.Errorf("assignments to noun %q (at %q) must be in the domain %q, was %q",
 			noun.name, field, noun.domain, pen.domain)
 	} else {
-		if _, e := pen.db.Exec(mdl_value, noun.id, outer.id, opt, value, final, pen.at); e != nil {
+		if _, e := pen.db.Exec(mdl_value, noun.id, outer.id, opt, value, final, pen.pos.String()); e != nil {
 			err = e
 		}
 	}
@@ -182,7 +182,7 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 		// this to simplify domain management (ex. would have to check rival values)
 		err = fmt.Errorf("the domain of the assignment (%s) must match the field %q domain (%s)",
 			pen.domain, field.name, field.domain)
-	} else if _, e := pen.db.Exec(mdl_value_kind, kind.id, field.id, value, final, pen.at); e != nil {
+	} else if _, e := pen.db.Exec(mdl_value_kind, kind.id, field.id, value, final, pen.pos.String()); e != nil {
 		err = e
 	}
 	return

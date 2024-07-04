@@ -28,7 +28,8 @@ func TestImportSequence(t *testing.T) {
 	// import that statement
 	if e := story.Weave(cat, []story.StoryStatement{
 		&story.DefineTest{
-			TestName: t.Name(),
+			TestName:           literal.T("test"),
+			RequiredSceneNames: literal.Ts(""), // mark it as a root scene
 			Exe: []rt.Execute{
 				printText,
 			},

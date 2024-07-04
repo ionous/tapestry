@@ -53,7 +53,11 @@ func WeavePaths(outFile string, stories ...NamedFS) (err error) {
 				if pen, e := cat.PushScene(d, pos); e != nil {
 					err = e
 				} else {
-					if e := addDefaultKinds(pen); e != nil {
+					// mark it as a root scene:
+					// fix? https://todo.sr.ht/~ionous/tapestry/60
+					if e := pen.AddDependency(""); e != nil {
+						err = e
+					} else if e := addDefaultKinds(pen); e != nil {
 						err = e
 					} else if e := importAll(cat, stories...); e != nil {
 						err = e
@@ -130,7 +134,7 @@ func importDir(cat *weave.Catalog, fsys NamedFS, dirs []string) (err error) {
 						err = e
 					} else {
 						namedPath := path.Join(fsys.Name, fullpath)
-						if els, e := flex.ReadStory(namedPath, bufio.NewReader(fp)); e != nil {
+						if els, e := flex.ReadStorySource(namedPath, bufio.NewReader(fp)); e != nil {
 							err = fmt.Errorf("couldn't read %q because %s", namedPath, e)
 						} else {
 							// without a scene index we need to have one for the file itself.

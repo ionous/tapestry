@@ -13,7 +13,7 @@ import (
 var Zt_Address = typeinfo.Slot{
 	Name: "address",
 	Markup: map[string]any{
-		"comment": "Identifies an object field, local variable, or pattern parameter. Addresses can be read from or written to.",
+		"--": "Identifies an object field, local variable, or pattern parameter. Addresses can be read from or written to.",
 	},
 }
 
@@ -42,7 +42,7 @@ func (op *Address_Slots) Repeats() bool {
 var Zt_Assignment = typeinfo.Slot{
 	Name: "assignment",
 	Markup: map[string]any{
-		"comment": []string{"Provides access to values in a generic way", "when the type of a value isn't known in advance.", "See also package assign. ( ex. [assign.FromBool] )"},
+		"--": []string{"Provides access to values in a generic way", "when the type of a value isn't known in advance.", "See also package assign. ( ex. [assign.FromBool] )"},
 	},
 }
 
@@ -71,8 +71,8 @@ func (op *Assignment_Slots) Repeats() bool {
 var Zt_BoolEval = typeinfo.Slot{
 	Name: "bool_eval",
 	Markup: map[string]any{
+		"--":            "Commands which return true/false values.",
 		"blockly-color": "LOGIC_HUE",
-		"comment":       "Commands which return true/false values.",
 	},
 }
 
@@ -101,9 +101,9 @@ func (op *BoolEval_Slots) Repeats() bool {
 var Zt_Execute = typeinfo.Slot{
 	Name: "execute",
 	Markup: map[string]any{
+		"--":            "Commands which don't return a value.",
 		"blockly-color": "PROCEDURES_HUE",
 		"blockly-stack": true,
-		"comment":       "Commands which don't return a value.",
 	},
 }
 
@@ -132,8 +132,8 @@ func (op *Execute_Slots) Repeats() bool {
 var Zt_NumListEval = typeinfo.Slot{
 	Name: "num_list_eval",
 	Markup: map[string]any{
+		"--":            "Commands which return a list of numbers.",
 		"blockly-color": "MATH_HUE",
-		"comment":       "Commands which return a list of numbers.",
 	},
 }
 
@@ -162,8 +162,8 @@ func (op *NumListEval_Slots) Repeats() bool {
 var Zt_NumEval = typeinfo.Slot{
 	Name: "num_eval",
 	Markup: map[string]any{
+		"--":            "Commands which return a number.",
 		"blockly-color": "MATH_HUE",
-		"comment":       "Commands which return a number.",
 	},
 }
 
@@ -192,8 +192,8 @@ func (op *NumEval_Slots) Repeats() bool {
 var Zt_TextEval = typeinfo.Slot{
 	Name: "text_eval",
 	Markup: map[string]any{
+		"--":            "Commands which return text.",
 		"blockly-color": "TEXTS_HUE",
-		"comment":       "Commands which return text.",
 	},
 }
 
@@ -222,8 +222,8 @@ func (op *TextEval_Slots) Repeats() bool {
 var Zt_TextListEval = typeinfo.Slot{
 	Name: "text_list_eval",
 	Markup: map[string]any{
+		"--":            "Commands which return a list of text.",
 		"blockly-color": "TEXTS_HUE",
-		"comment":       "Commands which return a list of text.",
 	},
 }
 
@@ -252,8 +252,8 @@ func (op *TextListEval_Slots) Repeats() bool {
 var Zt_RecordEval = typeinfo.Slot{
 	Name: "record_eval",
 	Markup: map[string]any{
+		"--":            "Commands which return a record.",
 		"blockly-color": "LISTS_HUE",
-		"comment":       "Commands which return a record.",
 	},
 }
 
@@ -282,8 +282,8 @@ func (op *RecordEval_Slots) Repeats() bool {
 var Zt_RecordListEval = typeinfo.Slot{
 	Name: "record_list_eval",
 	Markup: map[string]any{
+		"--":            "Commands which return a list of records.",
 		"blockly-color": "LISTS_HUE",
-		"comment":       "Commands which return a list of records.",
 	},
 }
 

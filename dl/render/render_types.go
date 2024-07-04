@@ -19,7 +19,7 @@ import (
 var Zt_RenderEval = typeinfo.Slot{
 	Name: "render_eval",
 	Markup: map[string]any{
-		"comment":  "Used with render pattern for arguments of unknown type.",
+		"--":       "Used with render pattern for arguments of unknown type.",
 		"internal": true,
 	},
 }
@@ -273,7 +273,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment":  []string{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
+			"--":       []string{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
 			"internal": true,
 		},
 	}
@@ -301,7 +301,7 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment":  []string{"Pull a value from name that might refer either to a variable, or to an object.", "This gets used by text templates when processing names.", "The templates don't attempt to determine which names are objects and which names are variables.", "For instance:", "  - Say: \"{.story.title} by {.story.author}\"", "uses UnknownDot for accessing \"story\"."},
+			"--":       []string{"Pull a value from name that might refer either to a variable, or to an object.", "This gets used by text templates when processing names.", "The templates don't attempt to determine which names are objects and which names are variables.", "For instance:", "  - Say: \"{.story.title} by {.story.author}\"", "uses UnknownDot for accessing \"story\"."},
 			"internal": true,
 		},
 	}
@@ -316,7 +316,7 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment":  "Pull a value from an assignment of unknown affinity.",
+			"--":       "Pull a value from an assignment of unknown affinity.",
 			"internal": true,
 		},
 	}
@@ -338,7 +338,7 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment":  []string{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
+			"--":       []string{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
 			"internal": true,
 		},
 	}
@@ -359,7 +359,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment":  "Generate text in a replaceable manner.",
+			"--":       "Generate text in a replaceable manner.",
 			"internal": true,
 		},
 	}

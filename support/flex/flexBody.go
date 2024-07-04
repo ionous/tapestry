@@ -1,8 +1,8 @@
 package flex
 
 import (
-	"errors"
 	"io"
+	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -13,10 +13,11 @@ import (
 type accum []story.StoryStatement
 
 // the body alternates between plain text and structured story ops
-func (a *accum) readBody(k *Section) (err error) {
+func (a *accum) readBody(source string, k *Section) (err error) {
 	for story := false; err == nil && k.NextSection(); story = !story {
 		if story {
-			err = a.readStory(k)
+			// note: line 0 is the first line.
+			err = a.readStory(k, files.Ofs{File: source, Line: k.line})
 		} else {
 			err = a.readText(k)
 		}
@@ -25,8 +26,8 @@ func (a *accum) readBody(k *Section) (err error) {
 }
 
 // read and record a story section
-func (a *accum) readStory(in io.RuneReader) (err error) {
-	if slots, e := decodeStorySection(in); e != nil {
+func (a *accum) readStory(in io.RuneReader, ofs files.Ofs) (err error) {
+	if slots, e := decodeStorySection(in, ofs); e != nil {
 		err = e
 	} else {
 		(*a) = append((*a), slots...)
@@ -48,8 +49,8 @@ func (a *accum) readText(in io.RuneReader) (err error) {
 // fix: maybe it'd be nice if the structured sections
 // could be of any uniform type ( same with plain text )
 // some sort of callback collector instead of specifically story/jess.
-func decodeStorySection(in io.RuneReader) (ret []story.StoryStatement, err error) {
-	if msg, e := readTellSection(in); e != nil {
+func decodeStorySection(in io.RuneReader, ofs files.Ofs) (ret []story.StoryStatement, err error) {
+	if msg, e := readTellSection(in, ofs); e != nil {
 		err = e
 	} else {
 		var slots story.StoryStatement_Slots
@@ -64,8 +65,8 @@ func decodeStorySection(in io.RuneReader) (ret []story.StoryStatement, err error
 }
 
 // read one or more values; presumably mappings.
-func readTellSection(in io.RuneReader) (ret []any, err error) {
-	if d, e := files.ReadTellRunes(in, true); e != nil {
+func readTellSection(in io.RuneReader, ofs files.Ofs) (ret []any, err error) {
+	if d, e := files.ReadTellRunes(in, ofs, true); e != nil {
 		err = e
 	} else {
 		switch content := d.(type) {
@@ -75,8 +76,11 @@ func readTellSection(in io.RuneReader) (ret []any, err error) {
 		case []any:
 			// a series of tell values
 			ret = content
+		case nil:
+			// content less
 		default:
-			err = errors.New("expected one or more tell statements")
+			// this shouldn't be able to happen.
+			log.Panicf("expected one or more tell statements, received %T", d)
 		}
 	}
 	return

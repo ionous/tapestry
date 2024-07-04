@@ -1,10 +1,27 @@
 package compact
 
-// constants for the markup maps in the dl.
-const (
-	Comment = "comment"
-	Markup  = "--"
+import (
+	"unicode"
+	"unicode/utf8"
 )
+
+// Common markup keys in tapestry compact (if) files.
+// the comment marker was chosen to be distinctive and to sort in front of all other keys
+// (ie. when using go's json encoder. )
+const (
+	Comment  = "--"
+	Position = "pos"
+	Source   = "src"
+)
+
+func IsMarkup(s string) (okay bool) {
+	if ch, n := utf8.DecodeRuneInString(s); n > 0 {
+		// testing "!IsUpper()" instead of "IsLower()" allows symbols for metadata.
+		normal := n < unicode.MaxASCII && unicode.IsUpper(ch)
+		okay = !normal
+	}
+	return
+}
 
 // read a user comment from markup, normalizing it as an array of strings
 func UserComment(markup map[string]any) (ret []string) {

@@ -453,7 +453,7 @@ func (op *CompareText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Used when comparing values.
+// Comparison, a type of str enum.
 type Comparison int
 
 // The enumerated values of Comparison.
@@ -494,7 +494,7 @@ var Zt_Comparison = typeinfo.Str{
 		"at_most",
 	},
 	Markup: map[string]any{
-		"comment": "Used when comparing values.",
+		"--": "Used when comparing values.",
 	},
 }
 
@@ -507,14 +507,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": "The augend.",
+				"--": "The augend.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The addend.",
+				"--": "The addend.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -522,7 +522,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Add two numbers and return the result.",
+			"--": "Add two numbers and return the result.",
 		},
 	}
 	Zt_SubtractValue = typeinfo.Flow{
@@ -531,14 +531,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": "The minuend.",
+				"--": "The minuend.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The subtrahend.",
+				"--": "The subtrahend.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -546,7 +546,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Subtract two numbers and return the result.",
+			"--": "Subtract two numbers and return the result.",
 		},
 	}
 	Zt_MultiplyValue = typeinfo.Flow{
@@ -555,14 +555,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": "The multiplier.",
+				"--": "The multiplier.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The multiplicand.",
+				"--": "The multiplicand.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -570,7 +570,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Multiply two numbers and return the result.",
+			"--": "Multiply two numbers and return the result.",
 		},
 	}
 	Zt_DivideValue = typeinfo.Flow{
@@ -579,14 +579,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": "The numerator.",
+				"--": "The numerator.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The divisor.",
+				"--": "The divisor.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -594,7 +594,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Divide one number by another and return the result.",
+			"--": "Divide one number by another and return the result.",
 		},
 	}
 	Zt_ModValue = typeinfo.Flow{
@@ -603,14 +603,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": "The dividend.",
+				"--": "The dividend.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The divisor.",
+				"--": "The divisor.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -618,7 +618,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Divide one number by another and return the remainder.",
+			"--": "Divide one number by another and return the remainder.",
 		},
 	}
 	Zt_AbsValue = typeinfo.Flow{
@@ -628,7 +628,7 @@ func init() {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The value to normalize.",
+				"--": "The value to normalize.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -636,7 +636,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Remove the sign from a value and return its positive value.",
+			"--": "Remove the sign from a value and return its positive value.",
 		},
 	}
 	Zt_Increment = typeinfo.Flow{
@@ -645,7 +645,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Markup: map[string]any{
-				"comment": []string{"A reference to the value to increase.", "This reads and writes to that value."},
+				"--": []string{"A reference to the value to increase.", "This reads and writes to that value."},
 			},
 			Type: &rtti.Zt_Address,
 		}, {
@@ -653,7 +653,7 @@ func init() {
 			Label:    "by",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "If not specified, increments by 1.",
+				"--": "If not specified, increments by 1.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -662,7 +662,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Increase a stored value and, optionally, return the new value.",
+			"--": "Increase a stored value and, optionally, return the new value.",
 		},
 	}
 	Zt_Decrement = typeinfo.Flow{
@@ -671,7 +671,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Markup: map[string]any{
-				"comment": []string{"A reference to the value to decrease.", "This reads and writes to that value."},
+				"--": []string{"A reference to the value to decrease.", "This reads and writes to that value."},
 			},
 			Type: &rtti.Zt_Address,
 		}, {
@@ -679,7 +679,7 @@ func init() {
 			Label:    "by",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "if not specified, decrements by 1.",
+				"--": "if not specified, decrements by 1.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -688,7 +688,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Decrease a stored value and, optionally, return the new value.",
+			"--": "Decrease a stored value and, optionally, return the new value.",
 		},
 	}
 	Zt_CompareValue = typeinfo.Flow{
@@ -697,21 +697,21 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": []string{"The first value.", "If needed, the second value will coerced to match the type of the first."},
+				"--": []string{"The first value.", "If needed, the second value will coerced to match the type of the first."},
 			},
 			Type: &rtti.Zt_Assignment,
 		}, {
 			Name:  "compare",
 			Label: "matching",
 			Markup: map[string]any{
-				"comment": "The specific way to compare the two values.",
+				"--": "The specific way to compare the two values.",
 			},
 			Type: &Zt_Comparison,
 		}, {
 			Name:  "b",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": []string{"The first value.", "If needed, this value will coerced to match the type of the first value."},
+				"--": []string{"The first value.", "If needed, this value will coerced to match the type of the first value."},
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -719,7 +719,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Compare two values.", "If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.", "", "Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.", "Otherwise, the types of the values must match exactly.", "", "Numbers are compared using an internally determined default tolerance.", "To control the tolerance between numbers, use [CompareNum]."},
+			"--": []string{"Compare two values.", "If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.", "", "Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.", "Otherwise, the types of the values must match exactly.", "", "Numbers are compared using an internally determined default tolerance.", "To control the tolerance between numbers, use [CompareNum]."},
 		},
 	}
 	Zt_CompareNum = typeinfo.Flow{
@@ -728,21 +728,21 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": "The first number.",
+				"--": "The first number.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "compare",
 			Label: "matching",
 			Markup: map[string]any{
-				"comment": "The specific way to compare the two numbers.",
+				"--": "The specific way to compare the two numbers.",
 			},
 			Type: &Zt_Comparison,
 		}, {
 			Name:  "b",
 			Label: "num",
 			Markup: map[string]any{
-				"comment": "The second number.",
+				"--": "The second number.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -750,7 +750,7 @@ func init() {
 			Label:    "within",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "A positive value to indicate how close the two numbers can be.",
+				"--": "A positive value to indicate how close the two numbers can be.",
 			},
 			Type: &prim.Zt_Num,
 		}},
@@ -758,7 +758,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Compare two numbers.",
+			"--": "Compare two numbers.",
 		},
 	}
 	Zt_CompareText = typeinfo.Flow{
@@ -767,21 +767,21 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "a",
 			Markup: map[string]any{
-				"comment": "The first text value.",
+				"--": "The first text value.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "compare",
 			Label: "matching",
 			Markup: map[string]any{
-				"comment": "The specific way to compare the two text values.",
+				"--": "The specific way to compare the two text values.",
 			},
 			Type: &Zt_Comparison,
 		}, {
 			Name:  "b",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": "The second text value.",
+				"--": "The second text value.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -789,7 +789,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Compare two text values in \"lexical\" ( alphabetical ) order.",
+			"--": "Compare two text values in \"lexical\" ( alphabetical ) order.",
 		},
 	}
 }

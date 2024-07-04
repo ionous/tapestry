@@ -11,9 +11,13 @@ import (
 )
 
 func ReadStory(in Unreader) (ret []story.StoryStatement, err error) {
+	return ReadStorySource("", in)
+}
+
+func ReadStorySource(source string, in Unreader) (ret []story.StoryStatement, err error) {
 	var els accum
 	k := MakeSection(in)
-	if e := els.readBody(&k); e != nil {
+	if e := els.readBody(source, &k); e != nil {
 		err = e
 	} else {
 		ret = els

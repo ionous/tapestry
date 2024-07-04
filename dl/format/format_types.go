@@ -16,7 +16,7 @@ import (
 var Zt_Counter = typeinfo.Slot{
 	Name: "counter",
 	Markup: map[string]any{
-		"comment": "A slot used internally for generating unique names during weave.",
+		"--": "A slot used internally for generating unique names during weave.",
 	},
 }
 
@@ -651,7 +651,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Add a single blank line ( unless a blank line was just written ).", "See also the <p> markup."},
+			"--": []string{"Add a single blank line ( unless a blank line was just written ).", "See also the <p> markup."},
 		},
 	}
 	Zt_SoftBreak = typeinfo.Flow{
@@ -662,7 +662,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Start a new line ( if not already at a new line ).", "See also the <wbr> markup."},
+			"--": []string{"Start a new line ( if not already at a new line ).", "See also the <wbr> markup."},
 		},
 	}
 	Zt_LineBreak = typeinfo.Flow{
@@ -673,7 +673,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Start a new line.", "See also the <br> markup."},
+			"--": []string{"Start a new line.", "See also the <br> markup."},
 		},
 	}
 	Zt_CycleText = typeinfo.Flow{
@@ -684,7 +684,7 @@ func init() {
 			Label:    "name",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "An optional name used for controlling internal state.  When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
+				"--": "An optional name used for controlling internal state.  When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -692,7 +692,7 @@ func init() {
 			Label:   "text",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more pieces of text to cycle through.",
+				"--": "One or more pieces of text to cycle through.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -701,7 +701,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in their specified order, then it loops back to the first value again.",
+			"--": "Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in their specified order, then it loops back to the first value again.",
 		},
 	}
 	Zt_ShuffleText = typeinfo.Flow{
@@ -712,7 +712,7 @@ func init() {
 			Label:    "name",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "An optional name used for controlling internal state.  When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
+				"--": "An optional name used for controlling internal state.  When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -720,7 +720,7 @@ func init() {
 			Label:   "text",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more pieces of text to shuffle through.",
+				"--": "One or more pieces of text to shuffle through.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -733,7 +733,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in a randomized order. After returning all of the available options, it begins again with a new ordering.",
+			"--": "Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in a randomized order. After returning all of the available options, it begins again with a new ordering.",
 		},
 	}
 	Zt_StoppingText = typeinfo.Flow{
@@ -744,7 +744,7 @@ func init() {
 			Label:    "name",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "An optional name used for controlling internal state. When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
+				"--": "An optional name used for controlling internal state. When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -752,7 +752,7 @@ func init() {
 			Label:   "text",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more pieces of text to shift through.",
+				"--": "One or more pieces of text to shift through.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -761,7 +761,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.", "", "As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after."},
+			"--": []string{"Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.", "", "As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after."},
 		},
 	}
 	Zt_BufferText = typeinfo.Flow{
@@ -771,7 +771,7 @@ func init() {
 			Name:    "exe",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "The statements to capture text output from.",
+				"--": "The statements to capture text output from.",
 			},
 			Type: &rtti.Zt_Execute,
 		}},
@@ -779,7 +779,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Capture any and all text printed by the game, and return it as a single string of continuous text. New lines are stored as line feeds ('\\n').",
+			"--": "Capture any and all text printed by the game, and return it as a single string of continuous text. New lines are stored as line feeds ('\\n').",
 		},
 	}
 	Zt_PrintText = typeinfo.Flow{
@@ -788,7 +788,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to print.",
+				"--": "The text to print.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -796,7 +796,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Display some text to the player.", "The default runtime will format the text according to the rules specified by the Tapestry markup package:", "https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup"},
+			"--": []string{"Display some text to the player.", "The default runtime will format the text according to the rules specified by the Tapestry markup package:", "https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup"},
 		},
 	}
 	Zt_PrintWords = typeinfo.Flow{
@@ -807,7 +807,7 @@ func init() {
 			Label:    "separator",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "Optional text to place between adjoining words.",
+				"--": "Optional text to place between adjoining words.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -815,7 +815,7 @@ func init() {
 			Label:   "words",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Runs one or more statements, and collects any text printed by them.",
+				"--": "Runs one or more statements, and collects any text printed by them.",
 			},
 			Type: &rtti.Zt_Execute,
 		}},
@@ -824,7 +824,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Collect printed text and separate that text by single spaces.",
+			"--": "Collect printed text and separate that text by single spaces.",
 		},
 	}
 	Zt_PrintBrackets = typeinfo.Flow{
@@ -834,7 +834,7 @@ func init() {
 			Name:    "exe",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Runs one or more statements, and collects any text printed by them.",
+				"--": "Runs one or more statements, and collects any text printed by them.",
 			},
 			Type: &rtti.Zt_Execute,
 		}},
@@ -843,7 +843,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Collect printed text and surround the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
+			"--": []string{"Collect printed text and surround the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
 		},
 	}
 	Zt_PrintCommas = typeinfo.Flow{
@@ -860,7 +860,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Separates words with commas, and 'and'.",
+			"--": "Separates words with commas, and 'and'.",
 		},
 	}
 	Zt_PrintRows = typeinfo.Flow{
@@ -871,7 +871,7 @@ func init() {
 			Label:   "rows",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Runs one or more statements, and collects any text printed by them.",
+				"--": "Runs one or more statements, and collects any text printed by them.",
 			},
 			Type: &rtti.Zt_Execute,
 		}},
@@ -880,7 +880,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Group text into an unordered list <ul>.",
+			"--": "Group text into an unordered list <ul>.",
 		},
 	}
 	Zt_PrintRow = typeinfo.Flow{
@@ -891,7 +891,7 @@ func init() {
 			Label:   "row",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Runs one or more statements, and collects any text printed by them.",
+				"--": "Runs one or more statements, and collects any text printed by them.",
 			},
 			Type: &rtti.Zt_Execute,
 		}},
@@ -900,7 +900,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
+			"--": []string{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
 		},
 	}
 	Zt_PrintNum = typeinfo.Flow{
@@ -910,7 +910,7 @@ func init() {
 			Name:  "num",
 			Label: "num",
 			Markup: map[string]any{
-				"comment": "The number to change into text, or to print.",
+				"--": "The number to change into text, or to print.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -919,7 +919,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Express a number using digits.", "For example, given the number `12` return the text \"12\".", "", "The [story.Execute] version prints the text for the player."},
+			"--": []string{"Express a number using digits.", "For example, given the number `12` return the text \"12\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 	Zt_PrintCount = typeinfo.Flow{
@@ -929,7 +929,7 @@ func init() {
 			Name:  "num",
 			Label: "count",
 			Markup: map[string]any{
-				"comment": "The number to change into words, or to print.",
+				"--": "The number to change into words, or to print.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -938,7 +938,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Express an integer in plain english ( aka a cardinal number ).", "For example, given the number `12` return the text \"tweleve\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
+			"--": []string{"Express an integer in plain english ( aka a cardinal number ).", "For example, given the number `12` return the text \"tweleve\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 }

@@ -2,8 +2,10 @@ package mdl
 
 import (
 	"database/sql"
+	"fmt"
 
 	"errors"
+
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -47,8 +49,25 @@ type Modeler struct {
 	warn  Log
 }
 
-func (m *Modeler) Pin(domain, at string) *Pen {
-	return &Pen{db: m.db, paths: m.paths, domain: domain, at: at, warn: m.warn}
+type Source struct {
+	File string // with extension
+	Path string // enough to locate the file
+	Line int    // a zero-offset printed as one-offset.
+}
+
+func (p Source) String() (ret string) {
+	if len(p.File) > 0 {
+		ret = fmt.Sprintf("%d:%s(%s)", p.Line+1, p.File, p.Path)
+	}
+	return
+}
+
+func (m *Modeler) PinPos(domain string, pos Source) *Pen {
+	return &Pen{db: m.db, pos: pos, paths: m.paths, domain: domain, warn: m.warn}
+}
+
+func (m *Modeler) Pin(domain string) *Pen {
+	return m.PinPos(domain, Source{})
 }
 
 // meant for tests which inject their own data outside of weave

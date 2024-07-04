@@ -28,7 +28,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 			if p, e := op.newParagraph(run); e != nil {
 				err = e
 			} else {
-				q := jessdb.MakeQuery(cat.Modeler, cat.CurrentDomain())
+				q := jessdb.MakeQuery(cat.Modeler, cat.CurrentScene())
 				// a little gross: run a step manually in the language phase
 				if ok, e := p.Generate(weaver.LanguagePhase, q, cat); e != nil {
 					err = e

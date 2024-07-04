@@ -24,7 +24,7 @@ var FactorialJs string
 var FactorialStory = story.StoryFile{
 	Statements: []story.StoryStatement{
 		&story.DefineTest{
-			TestName: "factorial",
+			TestName: T("factorial"),
 			Exe:      FactorialCheck,
 		},
 		&story.DefinePattern{

@@ -47,7 +47,7 @@ func readIndexFile(fsys fs.FS, dir, name string) (ret *story.DefineScene, err er
 	fullpath := path.Join(dir, name)
 	if fp, e := fsys.Open(fullpath); e != nil {
 		err = e
-	} else if els, e := flex.ReadStory(fullpath, bufio.NewReader(fp)); e != nil {
+	} else if els, e := flex.ReadStorySource(fullpath, bufio.NewReader(fp)); e != nil {
 		err = fmt.Errorf("couldn't read scene index %q because %s", fullpath, e)
 	} else {
 	Loop:

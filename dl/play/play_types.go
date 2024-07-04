@@ -16,7 +16,7 @@ import (
 var Zt_PlayMessage = typeinfo.Slot{
 	Name: "play_message",
 	Markup: map[string]any{
-		"comment": "A client-server message for the play app.",
+		"--": "A client-server message for the play app.",
 	},
 }
 
@@ -155,7 +155,7 @@ func (op *PlayOut_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// One of the app level states communicated by [PlayMode].
+// PlayModes, a type of str enum.
 type PlayModes int
 
 // The enumerated values of PlayModes.
@@ -192,7 +192,7 @@ var Zt_PlayModes = typeinfo.Str{
 		"error",
 	},
 	Markup: map[string]any{
-		"comment": "One of the app level states communicated by [PlayMode].",
+		"--": "One of the app level states communicated by [PlayMode].",
 	},
 }
 
@@ -211,7 +211,7 @@ func init() {
 			&Zt_PlayMessage,
 		},
 		Markup: map[string]any{
-			"comment": "A log message that might be displayed to the client for debugging.",
+			"--": "A log message that might be displayed to the client for debugging.",
 		},
 	}
 	Zt_PlayMode = typeinfo.Flow{
@@ -226,7 +226,7 @@ func init() {
 			&Zt_PlayMessage,
 		},
 		Markup: map[string]any{
-			"comment": "An app level change in state.",
+			"--": "An app level change in state.",
 		},
 	}
 	Zt_PlayOut = typeinfo.Flow{
@@ -241,7 +241,7 @@ func init() {
 			&Zt_PlayMessage,
 		},
 		Markup: map[string]any{
-			"comment": "Text that should be displayed to the player.",
+			"--": "Text that should be displayed to the player.",
 		},
 	}
 }

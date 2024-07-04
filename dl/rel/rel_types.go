@@ -220,14 +220,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "relation_name",
 			Markup: map[string]any{
-				"comment": "Name of the relation in question.",
+				"--": "Name of the relation in question.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "noun_name",
 			Label: "object",
 			Markup: map[string]any{
-				"comment": "Name of the left-side noun.",
+				"--": "Name of the left-side noun.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -235,7 +235,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Return the relative of a noun.", "For example: the right-hand noun in a one-to-one pairing."},
+			"--": []string{"Return the relative of a noun.", "For example: the right-hand noun in a one-to-one pairing."},
 		},
 	}
 	Zt_RelativesOf = typeinfo.Flow{
@@ -244,14 +244,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "relation_name",
 			Markup: map[string]any{
-				"comment": "Name of the relation in question.",
+				"--": "Name of the relation in question.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "noun_name",
 			Label: "object",
 			Markup: map[string]any{
-				"comment": "Name of the left-side noun.",
+				"--": "Name of the left-side noun.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -259,7 +259,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Return the relatives of a noun as a list of names.", "For example: the right-hand nouns in a set of one-to-many pairing."},
+			"--": []string{"Return the relatives of a noun as a list of names.", "For example: the right-hand nouns in a set of one-to-many pairing."},
 		},
 	}
 	Zt_ReciprocalOf = typeinfo.Flow{
@@ -268,14 +268,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "relation_name",
 			Markup: map[string]any{
-				"comment": "Name of the relation in question.",
+				"--": "Name of the relation in question.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "noun_name",
 			Label: "object",
 			Markup: map[string]any{
-				"comment": "Name of the right-side noun.",
+				"--": "Name of the right-side noun.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -283,7 +283,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Return the implied relative of a noun.", "For example: the left-hand noun in a one-to-many relation."},
+			"--": []string{"Return the implied relative of a noun.", "For example: the left-hand noun in a one-to-many relation."},
 		},
 	}
 	Zt_ReciprocalsOf = typeinfo.Flow{
@@ -292,14 +292,14 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "relation_name",
 			Markup: map[string]any{
-				"comment": "Name of the relation in question.",
+				"--": "Name of the relation in question.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "noun_name",
 			Label: "object",
 			Markup: map[string]any{
-				"comment": "Name of the right-side noun.",
+				"--": "Name of the right-side noun.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -307,7 +307,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Return the implied relatives of a noun.", "For example: the left-hand nouns in a set of one-to-many pairing."},
+			"--": []string{"Return the implied relatives of a noun.", "For example: the left-hand nouns in a set of one-to-many pairing."},
 		},
 	}
 	Zt_Relate = typeinfo.Flow{
@@ -316,21 +316,21 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "noun_name",
 			Markup: map[string]any{
-				"comment": "Name of the left-hand noun in the new pairing.",
+				"--": "Name of the left-hand noun in the new pairing.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "other_noun_name",
 			Label: "to",
 			Markup: map[string]any{
-				"comment": "Name of the right-hand noun in the new pairing.",
+				"--": "Name of the right-hand noun in the new pairing.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "relation_name",
 			Label: "via",
 			Markup: map[string]any{
-				"comment": "Name of the relation in question.",
+				"--": "Name of the relation in question.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -338,7 +338,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Relate two nouns.", "Removes any previous pairings that might conflict with this one."},
+			"--": []string{"Relate two nouns.", "Removes any previous pairings that might conflict with this one."},
 		},
 	}
 }

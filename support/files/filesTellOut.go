@@ -1,13 +1,13 @@
 package files
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	r "reflect"
-	"strings"
 
-	"github.com/ionous/errutil"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"github.com/ionous/tell/encode"
 )
 
@@ -30,12 +30,12 @@ func WriteTell(w io.Writer, data any) (err error) {
 
 func makeMapping(src r.Value) (ret encode.Iterator, err error) {
 	if src.Len() == 0 {
-		err = errutil.New("can't encode empty command")
+		err = errors.New("can't encode empty command")
 	} else {
 		var pairs []pair
 		for it := src.MapRange(); it.Next(); {
 			k, v := it.Key().String(), it.Value()
-			if !strings.HasPrefix(k, "--") {
+			if !compact.IsMarkup(k) {
 				// if there's a key that doesnt end with a add colon:
 				// add one. these are unary commands.
 				if cnt := len(k); cnt > 0 && k[cnt-1] != ':' {
@@ -43,18 +43,12 @@ func makeMapping(src r.Value) (ret encode.Iterator, err error) {
 				}
 				pairs = append(pairs, pair{k, v})
 			} else {
-				var markup string
-				if len(k) > 2 { // "--beep" -> "beep"
-					markup = k[2:] + ":"
-				}
 				// prepend metadata.
-				p := pair{key: markup, val: v}
+				p := pair{key: k, val: v}
 				pairs = append([]pair{p}, pairs...)
 			}
 		}
-		if err == nil {
-			ret = &mapIter{pairs: pairs}
-		}
+		ret = &mapIter{pairs: pairs}
 	}
 	return
 }
@@ -120,10 +114,10 @@ func encodeComments(v r.Value) (ret []string, err error) {
 				for i := 0; i < cnt; i++ {
 					at := val.Index(i)
 					if k := at.Kind(); k != r.Interface {
-						err = errutil.Fmt("comment slice contains %s not interface", k)
+						err = fmt.Errorf("comment slice contains %s not interface", k)
 						break
 					} else if at := at.Elem(); at.Kind() != r.String {
-						err = errutil.New("comment slice contains an underlying %s", at.Kind())
+						err = fmt.Errorf("comment slice contains an underlying %s", at.Kind())
 						break
 					} else { // fix: maybe it'd make more sense for tell to do this?
 						header[i] = "# " + at.String()
@@ -134,7 +128,7 @@ func encodeComments(v r.Value) (ret []string, err error) {
 				}
 			}
 		default:
-			err = errutil.Fmt("unexpected kind (%s) of comment", val.Kind())
+			err = fmt.Errorf("unexpected kind %q of comment", val.Kind())
 		}
 	}
 	return

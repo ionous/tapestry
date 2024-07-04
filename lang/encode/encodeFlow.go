@@ -23,12 +23,10 @@ func (out *FlowBuilder) SetMarkup(markup map[string]any) {
 func (out *FlowBuilder) FinalizeMap() (ret map[string]any) {
 	if sig := out.String(); len(sig) > 0 {
 		m := make(map[string]any)
-		if sig == compact.Markup {
+		// is the signature only markup?
+		isMarkup := compact.IsMarkup(sig)
+		if !isMarkup {
 			// this will most likely get overwritten by the markup loop
-			// however we want to avoid generating an empty {}
-			// and i just think it looks better as { "--": "" } than { "--": true }
-			m[compact.Markup] = ""
-		} else {
 			switch vals := out.params; len(vals) {
 			// zero parameters { "sig": true }
 			case 0:
@@ -44,14 +42,13 @@ func (out *FlowBuilder) FinalizeMap() (ret map[string]any) {
 				m[sig] = vals
 			}
 		}
+		// { "color": 5 }
 		for k, v := range out.markup {
-			if k == compact.Comment {
-				// { "--": "here's a story of a lovely comment, which was writing up some very lovely words." }
-				m[compact.Markup] = v
-			} else {
-				// { "--color": 5 }
-				m[compact.Markup+k] = v
-			}
+			m[k] = v
+		}
+		// avoid writing nothing
+		if len(m) == 0 && isMarkup {
+			m[compact.Comment] = ""
 		}
 		ret = m
 	}

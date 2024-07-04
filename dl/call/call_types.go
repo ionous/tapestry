@@ -15,7 +15,7 @@ import (
 var Zt_Trigger = typeinfo.Slot{
 	Name: "trigger",
 	Markup: map[string]any{
-		"comment":  "Helper for counting values.",
+		"--":       "Helper for counting values.",
 		"internal": true,
 	},
 }
@@ -708,7 +708,7 @@ func init() {
 			Name:  "name",
 			Label: "scene",
 			Markup: map[string]any{
-				"comment": "The name of the scene to check.",
+				"--": "The name of the scene to check.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -716,7 +716,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether a scene (aka domain) is active.",
+			"--": "Determine whether a scene (aka domain) is active.",
 		},
 	}
 	Zt_ActivePattern = typeinfo.Flow{
@@ -726,7 +726,7 @@ func init() {
 			Name:  "pattern_name",
 			Label: "pattern",
 			Markup: map[string]any{
-				"comment": "The name of the pattern to check.",
+				"--": "The name of the pattern to check.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -735,7 +735,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Determine whether a pattern is running.", "", "The [rtti.num_eval] version returns the distance to the pattern."},
+			"--": []string{"Determine whether a pattern is running.", "", "The [rtti.num_eval] version returns the distance to the pattern."},
 		},
 	}
 	Zt_Arg = typeinfo.Flow{
@@ -744,19 +744,19 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "name",
 			Markup: map[string]any{
-				"comment": "Name of the parameter. An empty string is treated as an unnamed parameter.",
+				"--": "Name of the parameter. An empty string is treated as an unnamed parameter.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "value",
 			Label: "from",
 			Markup: map[string]any{
-				"comment": "Value to assign to the parameter.",
+				"--": "Value to assign to the parameter.",
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
 		Markup: map[string]any{
-			"comment": "Pass a named value to a parameterized call.",
+			"--": "Pass a named value to a parameterized call.",
 		},
 	}
 	Zt_FromExe = typeinfo.Flow{
@@ -771,7 +771,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment":  []string{"Provide one or more execute commands for an assignment.", "Used internally for jess rules."},
+			"--":       []string{"Provide one or more execute commands for an assignment.", "Used internally for jess rules."},
 			"internal": true,
 		},
 	}
@@ -781,7 +781,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Address to read from.",
+				"--": "Address to read from.",
 			},
 			Type: &rtti.Zt_Address,
 		}},
@@ -789,7 +789,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide a stored value for an assignment.",
+			"--": "Provide a stored value for an assignment.",
 		},
 	}
 	Zt_FromBool = typeinfo.Flow{
@@ -798,7 +798,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Boolean value for the assignment.",
+				"--": "Boolean value for the assignment.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -806,7 +806,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide a boolean value for an assignment.",
+			"--": "Provide a boolean value for an assignment.",
 		},
 	}
 	Zt_FromNum = typeinfo.Flow{
@@ -815,7 +815,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Number for the assignment.",
+				"--": "Number for the assignment.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -823,7 +823,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide a number for an assignment.",
+			"--": "Provide a number for an assignment.",
 		},
 	}
 	Zt_FromText = typeinfo.Flow{
@@ -832,7 +832,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Text for the assignment.",
+				"--": "Text for the assignment.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -840,7 +840,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide some text for an assignment.",
+			"--": "Provide some text for an assignment.",
 		},
 	}
 	Zt_FromRecord = typeinfo.Flow{
@@ -849,7 +849,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Record for the assignment.",
+				"--": "Record for the assignment.",
 			},
 			Type: &rtti.Zt_RecordEval,
 		}},
@@ -857,7 +857,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide a record for an assignment.",
+			"--": "Provide a record for an assignment.",
 		},
 	}
 	Zt_FromNumList = typeinfo.Flow{
@@ -866,7 +866,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Numbers for the assignment.",
+				"--": "Numbers for the assignment.",
 			},
 			Type: &rtti.Zt_NumListEval,
 		}},
@@ -874,7 +874,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide a list of numbers for an assignment.",
+			"--": "Provide a list of numbers for an assignment.",
 		},
 	}
 	Zt_FromTextList = typeinfo.Flow{
@@ -883,7 +883,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Text values for the assignment.",
+				"--": "Text values for the assignment.",
 			},
 			Type: &rtti.Zt_TextListEval,
 		}},
@@ -891,7 +891,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide a list of text values for an assignment.",
+			"--": "Provide a list of text values for an assignment.",
 		},
 	}
 	Zt_FromRecordList = typeinfo.Flow{
@@ -900,7 +900,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Record values for the assignment.",
+				"--": "Record values for the assignment.",
 			},
 			Type: &rtti.Zt_RecordListEval,
 		}},
@@ -908,7 +908,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide a list of records for an assignment.",
+			"--": "Provide a list of records for an assignment.",
 		},
 	}
 	Zt_CallPattern = typeinfo.Flow{
@@ -917,7 +917,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "pattern_name",
 			Markup: map[string]any{
-				"comment": "The name of the pattern to run.",
+				"--": "The name of the pattern to run.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -925,7 +925,7 @@ func init() {
 			Label:   "args",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []string{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
+				"--": []string{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
 			},
 			Type: &Zt_Arg,
 		}},
@@ -940,7 +940,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed when using the blockly editor."},
+			"--": []string{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed when using the blockly editor."},
 		},
 	}
 	Zt_CallTrigger = typeinfo.Flow{
@@ -962,7 +962,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment":  []string{"Runtime version of count_of.", "A guard which returns true based on a counter."},
+			"--":       []string{"Runtime version of count_of.", "A guard which returns true based on a counter."},
 			"internal": true,
 		},
 	}
@@ -974,7 +974,7 @@ func init() {
 			&Zt_Trigger,
 		},
 		Markup: map[string]any{
-			"comment":  "call_trigger",
+			"--":       "call_trigger",
 			"internal": true,
 		},
 	}
@@ -986,7 +986,7 @@ func init() {
 			&Zt_Trigger,
 		},
 		Markup: map[string]any{
-			"comment":  "call_trigger",
+			"--":       "call_trigger",
 			"internal": true,
 		},
 	}
@@ -998,7 +998,7 @@ func init() {
 			&Zt_Trigger,
 		},
 		Markup: map[string]any{
-			"comment":  "call_trigger",
+			"--":       "call_trigger",
 			"internal": true,
 		},
 	}

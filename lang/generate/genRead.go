@@ -17,7 +17,7 @@ func readSpec(group string, mm MessageMap) (ret groupContent, err error) {
 		ret.Requires = req
 		for _, msg := range contents {
 			if e := readEntry(group, &ret, msg); e != nil {
-				if pos, ok := msg.Markup["pos"].([]int); ok {
+				if pos, ok := msg.Markup[compact.Position].([]int); ok {
 					err = fmt.Errorf("%w at line %d col %d", e, pos[1], pos[0])
 					break
 				}

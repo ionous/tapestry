@@ -1,5 +1,5 @@
 /**
- * generate pairs of domains and all of their requirements.
+ * generate triplets of domains and all of their requirements.
  * the smaller dist(ances) are closer to the named base domain; 
  * larger distances are most root-like.
  */

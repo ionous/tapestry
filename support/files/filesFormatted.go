@@ -1,10 +1,9 @@
 package files
 
 import (
+	"fmt"
 	"io"
 	"os"
-
-	"github.com/ionous/errutil"
 )
 
 // write a .if or .tell tapestry file
@@ -28,7 +27,7 @@ func FormattedSave(outPath string, data any, pretty bool) (err error) {
 	case ext.Tell():
 		err = SaveTell(outPath, data)
 	default:
-		err = errutil.New("unknown supported format", ext)
+		err = fmt.Errorf("unknown format %q", ext)
 	}
 	return
 }
@@ -42,12 +41,12 @@ func FormattedRead(in io.Reader, ext Extension, pv *map[string]any) (err error) 
 		if d, e := ReadTell(in); e != nil {
 			err = e
 		} else if m, ok := d.(map[string]any); !ok {
-			err = errutil.New("expected a tell mapping")
+			err = fmt.Errorf("expected a tell mapping")
 		} else {
 			*pv = m
 		}
 	default:
-		err = errutil.New("unknown supported format", ext)
+		err = fmt.Errorf("unknown format %q", ext)
 	}
 	return
 }
@@ -60,7 +59,7 @@ func FormattedWrite(w io.Writer, data any, ext Extension, pretty bool) (err erro
 	case ext.Tell():
 		err = WriteTell(w, data)
 	default:
-		err = errutil.New("unknown supported format", ext)
+		err = fmt.Errorf("unknown format %q", ext)
 	}
 	return
 }

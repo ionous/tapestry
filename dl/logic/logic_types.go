@@ -15,7 +15,7 @@ import (
 var Zt_Brancher = typeinfo.Slot{
 	Name: "brancher",
 	Markup: map[string]any{
-		"comment": "Helper for the else statements of [ChooseBranch].",
+		"--": "Helper for the else statements of [ChooseBranch].",
 	},
 }
 
@@ -688,7 +688,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "This always returns true.",
+			"--": "This always returns true.",
 		},
 	}
 	Zt_Never = typeinfo.Flow{
@@ -699,7 +699,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "This always returns false.",
+			"--": "This always returns false.",
 		},
 	}
 	Zt_IsValue = typeinfo.Flow{
@@ -709,7 +709,7 @@ func init() {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The value to test.",
+				"--": "The value to test.",
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -717,7 +717,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Determine the \"truthiness\" of a value.", "Bool values simply return their value.", "Num values: are true when not exactly zero.", "Text values: are true whenever they contain content.", "List values: are true whenever the list is non-empty.", "( note this is similar to python, and different than javascript. )", "Record values: are true whenever they have been initialized.", "( only sub-records start uninitialized; record variables are always true. )"},
+			"--": []string{"Determine the \"truthiness\" of a value.", "Bool values simply return their value.", "Num values: are true when not exactly zero.", "Text values: are true whenever they contain content.", "List values: are true whenever the list is non-empty.", "( note this is similar to python, and different than javascript. )", "Record values: are true whenever they have been initialized.", "( only sub-records start uninitialized; record variables are always true. )"},
 		},
 	}
 	Zt_IsAll = typeinfo.Flow{
@@ -728,7 +728,7 @@ func init() {
 			Label:   "all",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more conditions to check for success.",
+				"--": "One or more conditions to check for success.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -736,7 +736,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Check that every condition in a set of conditions returns true.", "Stops after finding a failed condition.", "An empty list returns false."},
+			"--": []string{"Check that every condition in a set of conditions returns true.", "Stops after finding a failed condition.", "An empty list returns false."},
 		},
 	}
 	Zt_IsAny = typeinfo.Flow{
@@ -747,7 +747,7 @@ func init() {
 			Label:   "any",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more conditions to check for success.",
+				"--": "One or more conditions to check for success.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -755,7 +755,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Check whether any condition in a set of conditions returns true.", "Stops after finding the first successful condition.", "An empty list returns false."},
+			"--": []string{"Check whether any condition in a set of conditions returns true.", "Stops after finding the first successful condition.", "An empty list returns false."},
 		},
 	}
 	Zt_Not = typeinfo.Flow{
@@ -764,7 +764,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "test",
 			Markup: map[string]any{
-				"comment": "The condition to check.",
+				"--": "The condition to check.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -772,7 +772,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine the opposite of a condition.",
+			"--": "Determine the opposite of a condition.",
 		},
 	}
 	Zt_NotValue = typeinfo.Flow{
@@ -782,7 +782,7 @@ func init() {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The value to test.",
+				"--": "The value to test.",
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -790,7 +790,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Determine the \"falsiness\" of a value.", "This is the opposite of [TrueValue]."},
+			"--": []string{"Determine the \"falsiness\" of a value.", "This is the opposite of [TrueValue]."},
 		},
 	}
 	Zt_NotAll = typeinfo.Flow{
@@ -801,7 +801,7 @@ func init() {
 			Label:   "all",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more conditions to check for failure.",
+				"--": "One or more conditions to check for failure.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -809,7 +809,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Check that every condition in a set of conditions returns false.", "Stops after finding any successful condition.", "An empty list returns false."},
+			"--": []string{"Check that every condition in a set of conditions returns false.", "Stops after finding any successful condition.", "An empty list returns false."},
 		},
 	}
 	Zt_NotAny = typeinfo.Flow{
@@ -820,7 +820,7 @@ func init() {
 			Label:   "any",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more conditions to check for failure.",
+				"--": "One or more conditions to check for failure.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -828,7 +828,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Check whether any condition in a set of conditions returns false.", "Stops after finding any failed condition.", "An empty list returns false."},
+			"--": []string{"Check whether any condition in a set of conditions returns false.", "Stops after finding any failed condition.", "An empty list returns false."},
 		},
 	}
 	Zt_ChooseBranch = typeinfo.Flow{
@@ -837,7 +837,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "condition",
 			Markup: map[string]any{
-				"comment": "The condition to test.",
+				"--": "The condition to test.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}, {
@@ -846,7 +846,7 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
+				"--": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
 			},
 			Type: &call.Zt_Arg,
 		}, {
@@ -854,7 +854,7 @@ func init() {
 			Label:   "do",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Statements which run when the condition succeeded.",
+				"--": "Statements which run when the condition succeeded.",
 			},
 			Type: &rtti.Zt_Execute,
 		}, {
@@ -862,7 +862,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "An optional set of statements to evaluate when the condition failed.",
+				"--": "An optional set of statements to evaluate when the condition failed.",
 			},
 			Type: &Zt_Brancher,
 		}},
@@ -871,7 +871,7 @@ func init() {
 			&Zt_Brancher,
 		},
 		Markup: map[string]any{
-			"comment": "Select a block of statements to run based on a true/false check.",
+			"--": "Select a block of statements to run based on a true/false check.",
 		},
 	}
 	Zt_ChooseNothingElse = typeinfo.Flow{
@@ -882,7 +882,7 @@ func init() {
 			Label:   "do",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more statements to run.",
+				"--": "One or more statements to run.",
 			},
 			Type: &rtti.Zt_Execute,
 		}},
@@ -890,7 +890,7 @@ func init() {
 			&Zt_Brancher,
 		},
 		Markup: map[string]any{
-			"comment": "Run a set of statements after a condition has failed.",
+			"--": "Run a set of statements after a condition has failed.",
 		},
 	}
 	Zt_ChooseNum = typeinfo.Flow{
@@ -900,7 +900,7 @@ func init() {
 			Name:  "if",
 			Label: "if",
 			Markup: map[string]any{
-				"comment": "The condition to test.",
+				"--": "The condition to test.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}, {
@@ -909,14 +909,14 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
+				"--": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
 			},
 			Type: &call.Zt_Arg,
 		}, {
 			Name:  "true",
 			Label: "then",
 			Markup: map[string]any{
-				"comment": []string{"The number to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
+				"--": []string{"The number to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -924,7 +924,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []string{"The number to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
+				"--": []string{"The number to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -932,7 +932,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
+			"--": []string{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
 		},
 	}
 	Zt_ChooseText = typeinfo.Flow{
@@ -942,7 +942,7 @@ func init() {
 			Name:  "if",
 			Label: "if",
 			Markup: map[string]any{
-				"comment": "The condition to test.",
+				"--": "The condition to test.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}, {
@@ -951,14 +951,14 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
+				"--": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
 			},
 			Type: &call.Zt_Arg,
 		}, {
 			Name:  "true",
 			Label: "then",
 			Markup: map[string]any{
-				"comment": []string{"The text to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
+				"--": []string{"The text to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -966,7 +966,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []string{"The text to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
+				"--": []string{"The text to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -974,7 +974,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []string{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
+			"--": []string{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
 		},
 	}
 	Zt_Break = typeinfo.Flow{
@@ -985,7 +985,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"In a repeating loop, exit the loop;", "or, in a rule, stop processing rules."},
+			"--": []string{"In a repeating loop, exit the loop;", "or, in a rule, stop processing rules."},
 		},
 	}
 	Zt_Continue = typeinfo.Flow{
@@ -996,7 +996,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []string{"In a repeating loop, try the next iteration of the loop;", "or, in a rule, continue to the next rule."},
+			"--": []string{"In a repeating loop, try the next iteration of the loop;", "or, in a rule, continue to the next rule."},
 		},
 	}
 	Zt_Repeat = typeinfo.Flow{
@@ -1006,7 +1006,7 @@ func init() {
 			Name:  "condition",
 			Label: "if",
 			Markup: map[string]any{
-				"comment": []string{"The condition to check before running the loop.", "If it succeeds, execute the loop;", "if it fails, stop executing the loop."},
+				"--": []string{"The condition to check before running the loop.", "If it succeeds, execute the loop;", "if it fails, stop executing the loop."},
 			},
 			Type: &rtti.Zt_BoolEval,
 		}, {
@@ -1015,7 +1015,7 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": []string{"A set of variables available to the loop;", "evaluated just once, before the loop's first run."},
+				"--": []string{"A set of variables available to the loop;", "evaluated just once, before the loop's first run."},
 			},
 			Type: &call.Zt_Arg,
 		}, {
@@ -1024,7 +1024,7 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": []string{"A set of variables available to the loop;", "evaluated before each iteration of the loop.", "( These take precedence over the initial variables.", "If the same names appear in both sets of variables, the ones here win. )"},
+				"--": []string{"A set of variables available to the loop;", "evaluated before each iteration of the loop.", "( These take precedence over the initial variables.", "If the same names appear in both sets of variables, the ones here win. )"},
 			},
 			Type: &call.Zt_Arg,
 		}, {
@@ -1032,7 +1032,7 @@ func init() {
 			Label:   "do",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "The statements to execute every loop.",
+				"--": "The statements to execute every loop.",
 			},
 			Type: &rtti.Zt_Execute,
 		}},
@@ -1040,7 +1040,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Keep running a series of actions while a condition succeeds.",
+			"--": "Keep running a series of actions while a condition succeeds.",
 		},
 	}
 }

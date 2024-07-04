@@ -18,8 +18,8 @@ import (
 var Zt_LiteralValue = typeinfo.Slot{
 	Name: "literal_value",
 	Markup: map[string]any{
+		"--":            "A slot to identify constant values.",
 		"blockly-color": "MATH_HUE",
-		"comment":       "A slot to identify constant values.",
 	},
 }
 
@@ -407,7 +407,7 @@ func init() {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "The true or false value.",
+				"--": "The true or false value.",
 			},
 			Type: &prim.Zt_Bool,
 		}},
@@ -416,7 +416,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify an explicit true or false.",
+			"--": "Specify an explicit true or false.",
 		},
 	}
 	Zt_NumValue = typeinfo.Flow{
@@ -426,7 +426,7 @@ func init() {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "A literal number.",
+				"--": "A literal number.",
 			},
 			Type: &prim.Zt_Num,
 		}},
@@ -435,7 +435,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify a particular number.",
+			"--": "Specify a particular number.",
 		},
 	}
 	Zt_NumList = typeinfo.Flow{
@@ -446,7 +446,7 @@ func init() {
 			Label:   "values",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Zero or more literal numbers.",
+				"--": "Zero or more literal numbers.",
 			},
 			Type: &prim.Zt_Num,
 		}},
@@ -455,7 +455,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify a list of literal numbers.",
+			"--": "Specify a list of literal numbers.",
 		},
 	}
 	Zt_TextValue = typeinfo.Flow{
@@ -466,14 +466,14 @@ func init() {
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []string{"Optionally, when the text represents the name of an (existing) object,", "the kind of the object in question."},
+				"--": []string{"Optionally, when the text represents the name of an (existing) object,", "the kind of the object in question."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": "Some literal text.",
+				"--": "Some literal text.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -482,7 +482,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify some constant text.",
+			"--": "Specify some constant text.",
 		},
 	}
 	Zt_TextList = typeinfo.Flow{
@@ -493,7 +493,7 @@ func init() {
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []string{"Optionally, when the text represents the names of (existing) objects,", "the kind of the objects in question."},
+				"--": []string{"Optionally, when the text represents the names of (existing) objects,", "the kind of the objects in question."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -501,7 +501,7 @@ func init() {
 			Label:   "values",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Zero or more text literals.",
+				"--": "Zero or more text literals.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -510,7 +510,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify a list of literal text values.",
+			"--": "Specify a list of literal text values.",
 		},
 	}
 	Zt_RecordValue = typeinfo.Flow{
@@ -519,7 +519,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "kind_name",
 			Markup: map[string]any{
-				"comment": []string{"The kind of the record being constructed.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
+				"--": []string{"The kind of the record being constructed.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -527,7 +527,7 @@ func init() {
 			Label:   "value",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []string{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
+				"--": []string{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
 			},
 			Type: &Zt_FieldValue,
 		}, {
@@ -540,7 +540,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify a record composed of literal values.",
+			"--": "Specify a record composed of literal values.",
 		},
 	}
 	Zt_RecordList = typeinfo.Flow{
@@ -549,7 +549,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "kind_name",
 			Markup: map[string]any{
-				"comment": []string{"The kind of the records being constructed.", "All of the records in the list must be of the same kind.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
+				"--": []string{"The kind of the records being constructed.", "All of the records in the list must be of the same kind.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -557,7 +557,7 @@ func init() {
 			Label:   "values",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "Zero or more record literals.",
+				"--": "Zero or more record literals.",
 			},
 			Type: &Zt_FieldList,
 		}, {
@@ -570,7 +570,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify a series of records, all of the same kind.",
+			"--": "Specify a series of records, all of the same kind.",
 		},
 	}
 	Zt_FieldList = typeinfo.Flow{
@@ -581,7 +581,7 @@ func init() {
 			Label:   "list",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": []string{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
+				"--": []string{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
 			},
 			Type: &Zt_FieldValue,
 		}},
@@ -589,7 +589,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "A series of values used to build a record.",
+			"--": "A series of values used to build a record.",
 		},
 	}
 	Zt_FieldValue = typeinfo.Flow{
@@ -598,19 +598,19 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "field_name",
 			Markup: map[string]any{
-				"comment": []string{"The name of a field in a record to initialize.", "New field names cannot be added to records at runtime;", "the field names must be part of the original declaration of the kind."},
+				"--": []string{"The name of a field in a record to initialize.", "New field names cannot be added to records at runtime;", "the field names must be part of the original declaration of the kind."},
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "value",
 			Label: "value",
 			Markup: map[string]any{
-				"comment": []string{"The literal value of the field.", "The type of value must match the original declaration of the field.", "( ex. If the field was declared as a number, only a number can be used to initialize it. )"},
+				"--": []string{"The literal value of the field.", "The type of value must match the original declaration of the field.", "( ex. If the field was declared as a number, only a number can be used to initialize it. )"},
 			},
 			Type: &Zt_LiteralValue,
 		}},
 		Markup: map[string]any{
-			"comment": "The name and value of a field used for initializing a literal record.",
+			"--": "The name and value of a field used for initializing a literal record.",
 		},
 	}
 }

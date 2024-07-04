@@ -36,6 +36,27 @@ func CreateBuildTime(mdlFile string) (ret *sql.DB, err error) {
 	return
 }
 
+// reuse the model file as the runtime file
+// ( useful sometimes for debugging )
+func ShareRunTime(mdlFile string) (ret *sql.DB, err error) {
+	if db, e := open(defaultDriver, mdlFile); e != nil {
+		err = fmt.Errorf("couldn't open db %s because %v", mdlFile, e)
+	} else {
+		if e := shareTables(db,
+			"runTables", "runViews"); e != nil {
+			err = e
+		} else {
+			ret = db
+		}
+		if err != nil {
+			db.Close()
+		}
+	}
+	return
+}
+
+// open the model as read-only, and
+// create a memory writable database for the runtime
 func CreateRunTime(mdlFile string) (ret *sql.DB, err error) {
 	if db, e := open(tapestryDriver, mdlFile+"?mode=ro"); e != nil {
 		err = e

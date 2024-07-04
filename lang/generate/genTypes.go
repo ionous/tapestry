@@ -55,7 +55,7 @@ type markup map[string]any
 func (m markup) Keys() []string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
-		if k != "pos" {
+		if k != compact.Position {
 			keys = append(keys, k)
 		}
 	}

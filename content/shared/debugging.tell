@@ -1,6 +1,5 @@
 ---
 # fix: doesnt work... for reasons...
-
 - Interpret:with:
     - "showme"
     - - One of:
@@ -9,7 +8,8 @@
               - - One noun: "objects"
                 - Action: "request debug details"
           - Action: "request debug location"
-- Define scene:requires:with:
+- # Test scene comment...
+  Define scene:requires:with:
     - "debugging"
     - "tapestry"
     - - Define pattern:requires:provides:do:
