@@ -1,19 +1,17 @@
-# ----------------------------------------------
-# This story was created by ionous using 'tap new'.
-# ----------------------------------------------
+# A very simple story containing a treasure chest with some coins inside.
+
 The title of the story is "Coins".
 The author of the story is "ionous".
 The Lobby is a room. You are in the lobby.
-The description of the lobby is "An empty space, waiting to filled with life."
+The description of the lobby is "You've arrived at the offices of Tapestry, Inc."
 The chest is a closed, openable container in lobby.
 Some coins are in the chest.
 The vase is on the table. A rose is in the vase.
 The table is in the lobby.
-# --------------------------------------------------------------------------------
-# Story Tests:
-# --------------------------------------------------------------------------------
+
 ---
-- Define scene:do:
+- # Test taking coins.
+  Define scene:do:
   - "Test taking coins"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"

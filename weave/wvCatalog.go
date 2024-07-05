@@ -2,6 +2,8 @@ package weave
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"log"
 	"strconv"
 
@@ -13,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
-	"github.com/ionous/errutil"
 )
 
 // Catalog - receives ephemera from the importer.
@@ -49,8 +50,8 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 	}
 	var logerr mdl.Log
 	if warn != nil {
-		logerr = func(fmt string, parts ...any) {
-			warn(errutil.Fmt(fmt, parts...))
+		logerr = func(str string, parts ...any) {
+			warn(fmt.Errorf(str, parts...))
 		}
 	}
 	m, e := mdl.NewModelerWithWarnings(db, logerr)
@@ -88,7 +89,7 @@ func (cat *Catalog) CurrentScene() (ret string) {
 func (cat *Catalog) AssembleCatalog() (err error) {
 	for {
 		if len(cat.processing) > 0 {
-			err = errutil.New("mismatched begin/end scene")
+			err = errors.New("mismatched begin/end scene")
 			break
 		} else if len(cat.pendingDomains) == 0 {
 			break
@@ -119,7 +120,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	}
 	if found < 0 && err == nil {
 		first := cat.pendingDomains[0]
-		err = errutil.Fmt("circular or unknown domain %q", first.name)
+		err = fmt.Errorf("circular or unknown domain %q", first.name)
 	}
 	if err == nil {
 		// chop this one out, then process
@@ -158,9 +159,9 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 // if currently processing, the first step will execute next phase.
 func (cat *Catalog) Step(cb StepFunction) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
-		err = errutil.New("step has no scene")
+		err = errors.New("step has no scene")
 	} else if z := d.currPhase; z < 0 {
-		err = errutil.Fmt("step scene %q already woven", d.name)
+		err = fmt.Errorf("step scene %q already woven", d.name)
 	} else {
 		d.steps = append(d.steps, cb)
 	}
@@ -178,7 +179,7 @@ func (cat *Catalog) Schedule(when weaver.Phase, cb func(weaver.Weaves, rt.Runtim
 // currently they just have line number.
 func (cat *Catalog) SchedulePos(t typeinfo.Markup, when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
-		err = errutil.New("schedule has no active scene")
+		err = errors.New("schedule has no active scene")
 	} else {
 		pos := mdl.MakeSource(t)
 		err = d.schedule(pos, when, cb)
@@ -200,13 +201,15 @@ func (cat *Catalog) EnsureScene(name string) (ret *Domain) {
 	return
 }
 
-func (cat *Catalog) PushScene(d *Domain, at mdl.Source) (ret *mdl.Pen, err error) {
+func (cat *Catalog) SceneBegin(d *Domain, at mdl.Source) (ret *mdl.Pen, err error) {
 	if d.currPhase != 0 {
-		err = errutil.New("trying to start an in-progress scene", d.name)
+		err = fmt.Errorf("trying to define scene %s for a second time", d.name)
 	} else {
+		// fix: maybe there should be a specific non Pen method for create?
 		pen := cat.PinPos(d.name, at)
-		cd := cat.CurrentScene()
-		if len(cd) > 0 {
+		if e := pen.AddScene(d.name, at.Comment); e != nil {
+			err = e
+		} else if cd := cat.CurrentScene(); len(cd) > 0 {
 			// we're implicitly dependent on the currently running domain
 			// noting that tests dont always have a current domain
 			// but really it shouldn't be a requirement anyway.
@@ -220,24 +223,18 @@ func (cat *Catalog) PushScene(d *Domain, at mdl.Source) (ret *mdl.Pen, err error
 	return
 }
 
-func (cat *Catalog) PopScene() {
+func (cat *Catalog) SceneEnd() {
 	if _, ok := cat.processing.Top(); !ok {
-		panic("mismatched PopScene")
+		panic("mismatched SceneEnd")
 	} else {
 		cat.processing.Pop()
 	}
 }
-
 func (cat *Catalog) findRivals() (err error) {
-	var rivals error
-	if e := findRivals(cat.db, func(group, domain, key, value, at string) (_ error) {
-		rivals = errutil.Append(rivals, errutil.Fmt("%w in domain %q at %q for %s %q",
-			mdl.ErrConflict, domain, at, group, value))
-		return
-	}); e != nil {
+	if res, e := findRivals(cat.db); e != nil {
 		err = e
-	} else {
-		err = rivals
+	} else if len(res) > 0 {
+		err = fmt.Errorf("%w in %w", mdl.ErrConflict, rivalErrorList(res))
 	}
 	return
 }

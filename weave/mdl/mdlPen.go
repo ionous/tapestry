@@ -34,6 +34,7 @@ func MakeSource(t typeinfo.Markup) Source {
 	var pos Source
 	if t != nil {
 		m := t.GetMarkup(false)
+		pos.Comment = compact.JoinComment(m)
 		if at, ok := m[compact.Position].([]int); ok {
 			pos.Line = at[1]
 		}

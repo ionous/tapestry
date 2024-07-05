@@ -27,7 +27,7 @@ var CmdServe = &base.Command{
 
 func goServe(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
-		err = fmt.Errorf("Unknown log level %s", cfg.logLevel)
+		err = fmt.Errorf("unknown log level %s", cfg.logLevel)
 	} else {
 		listenTo, _ := cfg.listen.GetPort(8080)
 		requestFrom, useBrowser := cfg.request.GetPort(3000)

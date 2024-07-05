@@ -50,9 +50,10 @@ type Modeler struct {
 }
 
 type Source struct {
-	File string // with extension
-	Path string // enough to locate the file
-	Line int    // a zero-offset printed as one-offset.
+	File    string // with extension
+	Path    string // enough to locate the file
+	Line    int    // a zero-offset printed as one-offset.
+	Comment string
 }
 
 func (p Source) String() (ret string) {

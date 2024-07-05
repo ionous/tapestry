@@ -1,12 +1,13 @@
 package rules_test
 
 import (
+	"errors"
+	"fmt"
 	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"git.sr.ht/~ionous/tapestry/weave/rules"
-	"github.com/ionous/errutil"
 )
 
 func TestPrefixing(t *testing.T) {
@@ -113,16 +114,17 @@ func TestPrefixing(t *testing.T) {
 type logger interface{ Logf(fmt string, args ...any) }
 
 func failDoubles(l logger, ks *testutil.Kinds, phrase string) (err error) {
+	var errs []error
 	xs := []string{"before", "after", "report"}
 	for i := range xs {
 		for j := range xs {
 			s := strings.Join([]string{xs[i], xs[j], phrase}, " ")
 			if e := fail(l, ks, s); e != nil {
-				err = errutil.Append(err, e)
+				errs = append(errs, e)
 			}
 		}
 	}
-	return
+	return errors.Join(errs...)
 }
 
 func fail(l logger, ks *testutil.Kinds, phrase string) (err error) {
@@ -136,7 +138,7 @@ func fail(l logger, ks *testutil.Kinds, phrase string) (err error) {
 		l.Logf("ok: %q failed with %s", phrase, err)
 		err = nil
 	} else {
-		err = errutil.New("expected failure for get rule info", phrase)
+		err = fmt.Errorf("expected %s failure for get rule info", phrase)
 	}
 	return
 }
@@ -149,9 +151,9 @@ func match(l logger, ks *testutil.Kinds, phrase, name string, rank int) (err err
 	} else if p, e := n.GetRuleInfo(); e != nil {
 		err = e
 	} else if p.Name != name {
-		err = errutil.Fmt("test %q: got name %q wanted %q", phrase, p.Name, name)
+		err = fmt.Errorf("test %q: got name %q wanted %q", phrase, p.Name, name)
 	} else if p.Rank != rank {
-		err = errutil.Fmt("test %q: got rank %d wanted %d", phrase, p.Rank, rank)
+		err = fmt.Errorf("test %q: got rank %d wanted %d", phrase, p.Rank, rank)
 	} else {
 		l.Logf("ok %q got %q rank %d", phrase, p.Name, p.Rank)
 	}

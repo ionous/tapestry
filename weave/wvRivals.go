@@ -2,10 +2,32 @@ package weave
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
+
+type rival struct {
+	Category, Domain, Key, Value, At string
+}
+
+func (r rival) Error() string {
+	return fmt.Sprintf("domain %q at %q for %s %q", r.Domain, r.At, r.Category, r.Value)
+}
+
+type rivalErrorList []rival
+
+func (rs rivalErrorList) Error() string {
+	var b strings.Builder
+	for i, r := range rs {
+		if i > 0 {
+			b.WriteRune('\n')
+		}
+		b.WriteString(r.Error())
+	}
+	return b.String()
+}
 
 // exposed for testing:
 // tbd: maybe this could pull in the newly relevant domains;
@@ -13,7 +35,7 @@ import (
 // currently it happens after the domains have been activated
 // and therefore compares everything to everything each time.
 // note: fields don't have rivals because they all exist in the same domain as their owner kind.
-func findRivals(db tables.Querier, onConflict func(group, domain, key, value, at string) error) (err error) {
+func findRivals(db tables.Querier) (ret []rival, err error) {
 	if rows, e := db.Query(`
 	with active_grammar as (
 		select mg.*
@@ -59,15 +81,14 @@ func findRivals(db tables.Querier, onConflict func(group, domain, key, value, at
 		where a.domain != b.domain
 		and a.one != b.one
 	`); e != nil {
-		err = errutil.New("database error", e)
+		err = fmt.Errorf("database error %s", e)
 	} else {
 		var group, domain, key, value string
 		var at sql.NullString
-		if e := tables.ScanAll(rows, func() error {
-			return onConflict(group, domain, key, value, at.String)
-		}, &group, &domain, &at, &key, &value); e != nil && e != sql.ErrNoRows {
-			err = e
-		}
+		err = tables.ScanAll(rows, func() (_ error) {
+			ret = append(ret, rival{group, domain, key, value, at.String})
+			return
+		}, &group, &domain, &at, &key, &value)
 	}
 	return
 }

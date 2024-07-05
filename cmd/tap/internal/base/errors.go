@@ -5,5 +5,5 @@ package base
 
 import "errors"
 
-// ex. fmt.Errorf("%w expected at least one word to transform", base.UsageError)
-var UsageError = errors.New("error: ")
+// ex. fmt.Errorf("%w expected at least one word to transform", base.ErrUsage)
+var ErrUsage = errors.New("error: ")

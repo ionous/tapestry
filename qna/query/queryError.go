@@ -17,7 +17,6 @@ func (e NotImplemented) Error() string {
 }
 
 func (q QueryNone) Close() {
-	return
 }
 
 func (q QueryNone) GetKindByName(rawName string) (_ *rt.Kind, err error) {

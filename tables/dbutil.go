@@ -2,6 +2,7 @@ package tables
 
 import (
 	"database/sql"
+	"errors"
 	"strings"
 
 	"github.com/ionous/errutil"
@@ -61,7 +62,7 @@ func ScanAll(rows *sql.Rows, cb func() error, dest ...any) (err error) {
 		}
 	}
 	if e := rows.Err(); e != nil {
-		err = errutil.Append(err, e)
+		err = errors.Join(err, e)
 	}
 	rows.Close()
 	return

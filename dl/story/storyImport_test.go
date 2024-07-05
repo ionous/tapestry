@@ -26,10 +26,10 @@ func TestImportStory(t *testing.T) {
 		cat := weave.NewCatalog(db)
 		//
 		d := cat.EnsureScene("tapestry")
-		if _, e := cat.PushScene(d, mdl.Source{}); e != nil {
+		if _, e := cat.SceneBegin(d, mdl.Source{}); e != nil {
 			t.Fatal(e)
 		} else {
-			defer cat.PopScene()
+			defer cat.SceneEnd()
 			if e := curr.Weave(cat); e != nil {
 				t.Fatal("failed story import", e)
 			} else {

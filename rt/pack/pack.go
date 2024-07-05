@@ -51,7 +51,6 @@ func packRecord(out *js.Builder, rec *rt.Record) {
 			}
 		})
 	})
-	return
 }
 
 func packValue(out *js.Builder, v rt.Value) {
@@ -99,5 +98,4 @@ func packValue(out *js.Builder, v rt.Value) {
 			}
 		})
 	}
-	return
 }

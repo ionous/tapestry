@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
-	"github.com/ionous/errutil"
 )
 
 type Domain struct {
@@ -21,7 +20,6 @@ type Domain struct {
 	steps      []StepFunction
 	scheduling [weaver.NumPhases][]memento // separates commands into phases
 	exe        []rt.Execute                // all of type object.SetValue
-	requires   []string
 }
 
 func (d *Domain) AddStartup(exe []rt.Execute) {
@@ -95,9 +93,9 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 func (d *Domain) schedule(at mdl.Source, when weaver.Phase, what ScheduledCallback) (err error) {
 	// when we are not running we are in phase zero; the first active phase is index 1
 	if z := d.currPhase; z < 0 {
-		err = errutil.Fmt("domain %q already finished", d.name)
+		err = fmt.Errorf("domain %q already finished", d.name)
 	} else if z > when {
-		err = errutil.Fmt("domain %q processing %s phase %s already passed",
+		err = fmt.Errorf("domain %q processing %s phase %s already passed",
 			d.name, z, when)
 	} else {
 		m := memento{what, at}

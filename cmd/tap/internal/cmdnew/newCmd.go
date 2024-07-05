@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"log"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -22,7 +23,7 @@ import (
 // called by tap.go
 func newCmd(ctx context.Context, _ *base.Command, args []string) (err error) {
 	if cnt := len(args); cnt == 0 || cnt > 2 {
-		err = fmt.Errorf("%w expected a story for the new story", base.UsageError)
+		err = fmt.Errorf("%w expected a story for the new story", base.ErrUsage)
 	} else {
 		if name := args[0]; name == "sample" {
 			if len(args) == 1 {
@@ -32,9 +33,9 @@ func newCmd(ctx context.Context, _ *base.Command, args []string) (err error) {
 				err = newFromSample(sample, cfg.forceOverwrite)
 			}
 		} else {
-			var title string
+			title := "Untitled"
 			if len(args) == 1 {
-				title = "Untitled"
+				title = args[0]
 			}
 			err = newFromTemplate(name, title, cfg.forceOverwrite)
 		}
@@ -46,7 +47,7 @@ func newCmd(ctx context.Context, _ *base.Command, args []string) (err error) {
 func newFromTemplate(name, title string, force bool) (err error) {
 	if n := inflect.Normalize(name); n != strings.ToLower(name) {
 		err = fmt.Errorf("%w prefer story names without special characters. For example, maybe %q",
-			base.UsageError, n)
+			base.ErrUsage, n)
 	} else if dst, out, e := createNamedFile(name, force); e != nil {
 		err = e
 	} else {
@@ -114,7 +115,8 @@ func createNamedFile(name string, force bool) (retFile *os.File, retName string,
 	folderPath := storyDir()
 	out := filepath.Join(folderPath, name+files.TellStory.String())
 	if _, e := os.Stat(out); e == nil && !force {
-		err = fmt.Errorf("The file %q already exists. Remove it first, or use -force to overwrite.", out)
+		log.Printf("The file %q already exists. Remove it first, or use -force to overwrite.", out)
+		err = fmt.Errorf("file %s already exists", out)
 	} else if e != nil && !errors.Is(e, fs.ErrNotExist) {
 		err = e
 	} else if e := os.MkdirAll(folderPath, os.ModePerm); e != nil {

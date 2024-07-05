@@ -82,7 +82,7 @@ func TestValueWriting(t *testing.T) {
 		// writing again should be okay:
 		if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, oneField), oneValue); e != nil {
 			t.Fatal(e)
-		} else if e := warnings.Expect("Duplicate noun value for 'a.record.record.oneField'."); e != nil {
+		} else if e := warnings.Expect("Duplicate noun value for 'a.record.record.oneField'"); e != nil {
 			t.Fatal(e)
 		}
 		// make sure we can't now write at the record itself

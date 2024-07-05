@@ -179,7 +179,7 @@ func invoke(cmd *base.Command, args []string) (err error) {
 	ctx := context.Background()
 	// ctx = maybeStartTrace(ctx)
 	// ctx, span := trace.StartSpan(ctx, fmt.Sprint("Running ", cmd.Name(), " command"))
-	if err = cmd.Run(ctx, cmd, args); errors.Is(err, base.UsageError) {
+	if err = cmd.Run(ctx, cmd, args); errors.Is(err, base.ErrUsage) {
 		err = usageError{Cmd: cmd, Cause: err}
 	}
 	return

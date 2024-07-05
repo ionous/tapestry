@@ -23,6 +23,14 @@ func SliceBools(slice []any) ([]bool, bool) {
 	return condition[bool](slice)
 }
 
+// ignores errors and returns a blank string
+func JoinComment(markup map[string]any) (ret string) {
+	if res, e := ExtractComment(markup); e == nil {
+		ret = strings.Join(res, "\n")
+	}
+	return
+}
+
 // extract a comment string or strings from the passed msg markup.
 // returns nil if no comment existed.
 // errors if some data existed that couldn't be interpreted.

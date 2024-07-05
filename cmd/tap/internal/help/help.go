@@ -80,7 +80,7 @@ func Help(w io.Writer, args []string) {
 		}
 	}
 	// not exit 2: succeeded at 'go help cmd'.
-	return
+	// return
 }
 
 // -----------------------------

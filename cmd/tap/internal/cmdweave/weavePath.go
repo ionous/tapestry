@@ -49,8 +49,8 @@ func WeavePaths(outFile string, stories ...NamedFS) (err error) {
 				run := qna.NewRuntime(q)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				d := cat.EnsureScene("tapestry")
-				pos := mdl.Source{File: "default kinds", Path: "internal"}
-				if pen, e := cat.PushScene(d, pos); e != nil {
+				pos := mdl.Source{File: "default kinds", Path: "internal", Comment: "the built-in types"}
+				if pen, e := cat.SceneBegin(d, pos); e != nil {
 					err = e
 				} else {
 					// mark it as a root scene:
@@ -62,7 +62,7 @@ func WeavePaths(outFile string, stories ...NamedFS) (err error) {
 					} else if e := importAll(cat, stories...); e != nil {
 						err = e
 					} else {
-						cat.PopScene() // doesn't pop on error; oh well.
+						cat.SceneEnd() // doesn't pop on error; oh well.
 						err = cat.AssembleCatalog()
 					}
 				}
@@ -110,10 +110,10 @@ func importDir(cat *weave.Catalog, fsys NamedFS, dirs []string) (err error) {
 				if d := cat.EnsureScene(scene); d.Name() != "tapestry" {
 					// tbd: what's a helpful source path
 					pos := mdl.Source{File: fsys.Name, Path: dir}
-					if pen, e := cat.PushScene(d, pos); e != nil {
+					if pen, e := cat.SceneBegin(d, pos); e != nil {
 						err = e
 					} else {
-						defer cat.PopScene() // called at end of function after collecting everything.
+						defer cat.SceneEnd() // called at end of function after collecting everything.
 						err = pen.AddDependency(req...)
 					}
 				}
@@ -139,7 +139,7 @@ func importDir(cat *weave.Catalog, fsys NamedFS, dirs []string) (err error) {
 						} else {
 							// without a scene index we need to have one for the file itself.
 							if scene == nil {
-								els = wrapScene(shortName, els)
+								els = wrapScene(shortName, namedPath, els)
 							}
 							if e := story.Weave(cat, els); e != nil {
 								err = fmt.Errorf("couldn't import %q because %s", namedPath, e)

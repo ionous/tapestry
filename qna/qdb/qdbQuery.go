@@ -26,7 +26,6 @@ type Query struct {
 	domainDeactivate,
 	domainDelete,
 	domainScope,
-	sceneGlob,
 	fieldsOf,
 	kindOfAncestors,
 	nounInfo,

@@ -57,7 +57,7 @@ type DomainValueError struct {
 }
 
 func (e DomainValueError) Error() string {
-	return fmt.Sprintf("initial values for noun %q (%q) must be in the same domain as its declaration.",
+	return fmt.Sprintf("initial values for noun %q (%q) must be in the same domain as its declaration",
 		e.Noun, e.Field)
 }
 
@@ -112,13 +112,13 @@ func (pen *Pen) addNounValue(noun nounInfo, final bool, outer fieldInfo, field, 
 		err = fmt.Errorf("database error: %s", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
 		if prev.dot.String != dot {
-			err = fmt.Errorf(`%w writing noun value for %s, had value for %s.`,
+			err = fmt.Errorf(`%w writing noun value for %s, had value for %s`,
 				ErrConflict, debugJoin(noun.name, field, dot), debugJoin(noun.name, field, prev.dot.String))
 		} else if prev.value != value {
-			err = fmt.Errorf(`%w mismatched noun value for %s.`,
+			err = fmt.Errorf(`%w mismatched noun value for %s`,
 				ErrConflict, debugJoin(noun.name, field, dot))
 		} else {
-			err = fmt.Errorf(`%w noun value for %s.`,
+			err = fmt.Errorf(`%w noun value for %s`,
 				ErrDuplicate, debugJoin(noun.name, field, dot))
 		}
 		return
@@ -168,10 +168,10 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 	} else if e := tables.ScanAll(rows, func() (err error) {
 		if prev.final {
 			if prev.value != value {
-				err = fmt.Errorf(`%w mismatched kind value for %s.`,
+				err = fmt.Errorf(`%w mismatched kind value for %s`,
 					ErrConflict, debugJoin(kind.name, field.name, ""))
 			} else {
-				err = fmt.Errorf(`%w kind value for %s.`,
+				err = fmt.Errorf(`%w kind value for %s`,
 					ErrDuplicate, debugJoin(kind.name, field.name, ""))
 			}
 		}
@@ -255,14 +255,6 @@ func marshalProvisional(val literal.LiteralValue, wantAff affine.Affinity) (ret 
 	if aff := literal.GetAffinity(val); aff != wantAff {
 		err = fmt.Errorf("%w literal wanted %s not %s", ErrConflict, aff, wantAff)
 	} else {
-		slot := literal.LiteralValue_Slot{Value: val}
-		ret, err = marshal(&slot)
-	}
-	return
-}
-
-func marshalLiteral(val literal.LiteralValue) (ret string, err error) {
-	if val != nil {
 		slot := literal.LiteralValue_Slot{Value: val}
 		ret, err = marshal(&slot)
 	}

@@ -26,7 +26,6 @@ type RawQuery struct {
 
 func (q RawQuery) Close() {
 	*q.Data = Data{} // sure, why not.
-	return
 }
 
 func (q RawQuery) IsDomainActive(name string) (okay bool, err error) {

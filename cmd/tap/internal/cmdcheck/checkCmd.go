@@ -21,7 +21,7 @@ func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error)
 	checkOne := strings.Join(args, " ")
 	log.Println("Checking", cfg.srcPath, checkOne)
 	if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
-		err = fmt.Errorf("Unknown log level %s", cfg.logLevel)
+		err = fmt.Errorf("unknown log level %s", cfg.logLevel)
 	} else if srcPath, e := filepath.Abs(cfg.srcPath); e != nil {
 		err = e
 	} else {

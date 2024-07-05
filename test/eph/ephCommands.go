@@ -60,7 +60,7 @@ type BeginDomain struct {
 
 func (op *BeginDomain) Assert(cat *weave.Catalog) (err error) {
 	d := cat.EnsureScene(op.Name)
-	if pen, e := cat.PushScene(d, mdl.Source{}); e != nil {
+	if pen, e := cat.SceneBegin(d, mdl.Source{}); e != nil {
 		err = e
 	} else if len(op.Requires) > 0 {
 		err = pen.AddDependency(op.Requires...)
@@ -85,7 +85,7 @@ type EndDomain struct {
 }
 
 func (op *EndDomain) Assert(cat *weave.Catalog) (_ error) {
-	cat.PopScene()
+	cat.SceneEnd()
 	return
 }
 

@@ -159,8 +159,6 @@ func BuildSpec(t *typeinfo.Flow) (ret string) {
 			str.WriteRune(':')
 			if t.Optional {
 				str.WriteRune(']')
-			} else {
-				// str.WriteRune(' ')
 			}
 		}
 	}

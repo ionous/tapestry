@@ -27,7 +27,8 @@ func (dot rootDot) Peek(c Cursor) (ret Cursor, err error) {
 	if c != nil {
 		err = errors.New("unexpected cursor at root")
 	} else {
-		ret = rootCursor{dot.run, dot.name}
+		copy := dot
+		ret = rootCursor(copy)
 	}
 	return
 }

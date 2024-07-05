@@ -20,11 +20,11 @@ import (
 // called by tap.go
 func playCmd(ctx context.Context, _ *base.Command, args []string) (err error) {
 	if len(args) != 1 {
-		err = fmt.Errorf("%w expected a scene name", base.UsageError)
+		err = fmt.Errorf("%w expected a scene name", base.ErrUsage)
 	} else if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
 		log.Println("Unknown logging level", cfg.logLevel)
 		log.Println("Expected one of:", strings.Join(debug.Zt_LoggingLevel.Options, ", "))
-		err = fmt.Errorf("%w expected a valid logging level", base.UsageError)
+		err = fmt.Errorf("%w expected a valid logging level", base.ErrUsage)
 	} else if saveDir, e := initSaveDir(cfg.saveDir); e != nil {
 		// could make this a warning i suppose; then just not save...
 		err = fmt.Errorf("couldn't initialize save directory because %s", e)

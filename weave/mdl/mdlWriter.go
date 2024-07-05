@@ -77,8 +77,19 @@ func (pen *Pen) addTraits(kid kindInfo, traits []string) (err error) {
 }
 
 // when elements are missing sometimes the same domain requirement pair gets inserted twice
-// fix? for now this ignores the duplicate values.
+// so this ignores duplicate values; tbd: log the source of each requirement?
 var mdl_domain = tables.InsertWith("mdl_domain", "on conflict do nothing", "domain", "requires", "at")
+
+var mdl_scene = tables.Insert("mdl_scene", "name", "start", "comment")
+
+func (pen *Pen) AddScene(name string, comment string) (err error) {
+	if name != pen.domain {
+		err = fmt.Errorf("mismatched domains: trying to write %q into %q", name, pen.domain)
+	} else if _, e := pen.db.Exec(mdl_scene, name, pen.pos.String(), comment); e != nil {
+		err = fmt.Errorf("database error: %s", e)
+	}
+	return
+}
 
 // pairs of domain name and (domain) dependencies
 func (pen *Pen) AddDependency(reqs ...string) (err error) {
@@ -312,36 +323,36 @@ func (pen *Pen) addAncestor(kind, parent kindInfo) (err error) {
 		err = fmt.Errorf("%w plural singular conflict for %q (in %q)",
 			ErrConflict, name, domain)
 	} else if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
-		err = fmt.Errorf("%w circular reference detected %q already declared as an ancestor of %q.",
+		err = fmt.Errorf("%w circular reference detected %q already declared as an ancestor of %q",
 			ErrConflict, parent.name, name)
 	} else if strings.HasSuffix(kind.path, parent.fullpath()) {
 		// did the existing path fully contain the new ancestor?
 		// then its a duplicate request (ex. `,c,b,a,` `,b,a,` )
-		pen.warn("%w %q already declared as an ancestor of %q.",
+		pen.warn("%w %q already declared as an ancestor of %q",
 			ErrDuplicate, parent.name, name)
 	} else if strings.HasSuffix(parent.fullpath(), kind.path) {
 		// is the newly specified ancestor more specific than the existing path?
 		// then we are ratcheting down. (ex. `,c,b,a,` `,b,a,` )
 		if kind.domain != domain {
 			// if it was declared in a different domain: we can't change it now.
-			err = fmt.Errorf("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
+			err = fmt.Errorf("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q",
 				ErrConflict, name, parent.name, kind.domain, domain)
 		} else if res, e := pen.db.Exec(`update mdl_kind set path = ?2 where rowid = ?1`,
 			kind.id, trimPath(parent.fullpath())); e != nil {
 			err = e
 		} else if cnt, e := res.RowsAffected(); cnt != 1 {
-			err = fmt.Errorf("unexpected error updating hierarchy of %q; %d rows affected.",
+			err = fmt.Errorf("unexpected error updating hierarchy of %q; %d rows affected",
 				name, cnt)
 		} else if e != nil {
 			err = e
 		}
 	} else if kind.domain != domain {
 		// unrelated completely? then its an error
-		err = fmt.Errorf("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
+		err = fmt.Errorf("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q",
 			ErrConflict, name, parent.name, kind.domain, domain)
 	} else {
 		// its possible some future definition might allow this to happen.
-		err = fmt.Errorf("%w a definition in domain %q that would allow %q to have the ancestor %q; the hierarchies differ.",
+		err = fmt.Errorf("%w a definition in domain %q that would allow %q to have the ancestor %q; the hierarchies differ",
 			ErrMissing, domain, name, parent.name)
 	}
 	return

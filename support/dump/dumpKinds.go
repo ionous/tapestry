@@ -2,7 +2,6 @@ package dump
 
 import (
 	"database/sql"
-	"slices"
 
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -51,10 +50,4 @@ func (kb kindBuilder) FieldsOf(k string) (ret []rt.Field, err error) {
 		ret = fs
 	}
 	return
-}
-
-func findField(k *rt.Kind, name string, last int) int {
-	return slices.IndexFunc(k.Fields[last:], func(n rt.Field) bool {
-		return n.Name == name
-	})
 }

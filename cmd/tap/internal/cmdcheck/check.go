@@ -83,7 +83,7 @@ func checkOne(run rt.Runtime, str string) (err error) {
 	if e := run.ActivateDomain(str); e != nil && !wasQuit(e) {
 		err = e
 	} else if e := run.ActivateDomain(""); e != nil {
-		err = fmt.Errorf("couldnt restore domain", e)
+		err = fmt.Errorf("couldnt restore domain %v", e)
 	}
 	return
 }

@@ -3,11 +3,10 @@ package qdb
 import (
 	"database/sql"
 	"encoding"
+
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
-
-type writeCb func(domain, noun, field string, value any) error
 
 func (q *Query) writeValues(d query.CacheMap) (err error) {
 	if tx, e := q.db.Begin(); e != nil {

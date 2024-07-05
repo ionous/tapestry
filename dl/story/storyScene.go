@@ -18,10 +18,10 @@ func (op *DefineScene) Weave(cat *weave.Catalog) (err error) {
 		err = e
 	} else {
 		domain := cat.EnsureScene(domain)
-		if pen, e := cat.PushScene(domain, mdl.MakeSource(op)); e != nil {
+		if pen, e := cat.SceneBegin(domain, mdl.MakeSource(op)); e != nil {
 			err = e
 		} else {
-			defer cat.PopScene()
+			defer cat.SceneEnd()
 			if e := pen.AddDependency(reqs...); e != nil {
 				err = e
 			} else if e := Weave(cat, op.Statements); e != nil {

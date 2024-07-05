@@ -13,9 +13,9 @@ import (
 
 func run(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	if len(args) == 0 {
-		err = fmt.Errorf("%w expected at least one word to transform", base.UsageError)
+		err = fmt.Errorf("%w expected at least one word to transform", base.ErrUsage)
 	} else if !hasAnyFlags() {
-		err = fmt.Errorf("%w expected at least one transform option", base.UsageError)
+		err = fmt.Errorf("%w expected at least one transform option", base.ErrUsage)
 	} else {
 		var fns = []func(word string) string{
 			porterstemmer.StemString,

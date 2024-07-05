@@ -42,9 +42,9 @@ func (w *Warnings) All() (ret []error) {
 // error if there is none, or if warning doesnt start with the passed prefix.
 func (w *Warnings) Expect(prefix string) (err error) {
 	if e := w.pop(); e == nil {
-		err = fmt.Errorf("expected %q, received nothing.", prefix)
+		err = fmt.Errorf("expected %q, received nothing", prefix)
 	} else if str := e.Error(); !strings.HasPrefix(str, prefix) {
-		err = fmt.Errorf("expected %q, received %q.", prefix, str)
+		err = fmt.Errorf("expected %q, received %q", prefix, str)
 	}
 	return
 }

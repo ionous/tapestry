@@ -1,6 +1,8 @@
 package rules
 
 import (
+	"fmt"
+	"log"
 	"slices"
 	"strings"
 
@@ -13,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
 )
 
 // results of reading author specified pairs of pattern name and rule name.
@@ -98,13 +99,13 @@ func (n RuleName) GetRuleInfo() (ret RuleInfo, err error) {
 	kind := n.Path[0]
 	switch pattern.Categorize(n.Path) {
 	default:
-		err = errutil.Fmt("can't have a %q event", kind)
+		err = fmt.Errorf("can't have a %q event", kind)
 
 	// for regular patterns, supports sorting rules before/after
 	case pattern.Calls:
 		switch n.Prefix {
 		case Instead, Report:
-			err = errutil.Fmt("%q isn't an action and doesn't support %q", kind, n.Prefix)
+			err = fmt.Errorf("%q isn't an action and doesn't support %q", kind, n.Prefix)
 		default:
 			// ex. "before normal pattern", return "normal pattern"
 			ret = RuleInfo{Name: kind, Rank: n.Prefix.rank()}
@@ -175,7 +176,7 @@ Out:
 					terminal = true
 					break Out
 				default:
-					panic(errutil.Sprintf("unknown type of branch %T", next))
+					log.Panicf("unknown type of branch %T", next)
 				}
 			}
 

@@ -4,17 +4,12 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/dot"
 )
 
 // Dot - access to a value inside another value.
 // ex. in objects, lists, or records.
 type Dot interface {
 	Resolve(rt.Runtime) (rt.Dotted, error)
-}
-
-func makeVarPath(name string, path []rt.Dotted) []rt.Dotted {
-	return append([]rt.Dotted{dot.Field(name)}, path...)
 }
 
 // change num and text evals into concrete index and member names

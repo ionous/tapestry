@@ -42,10 +42,6 @@ func DecodeSparseRecord(kd KindDecoder, kind string, vs []SparseValue) (ret *rt.
 	return
 }
 
-type recordValue struct {
-	rec *rt.Record
-}
-
 type recReader struct {
 	kd  KindDecoder
 	rec *rt.Record // target being built

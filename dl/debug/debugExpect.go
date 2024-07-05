@@ -1,7 +1,6 @@
 package debug
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -35,12 +34,7 @@ func (op *Expect) Execute(run rt.Runtime) (err error) {
 	if condition, e := safe.GetBool(run, op.Value); e != nil {
 		err = e
 	} else {
-		// print the comment at the point of expectation;
-		// or the value if that fails.
-		str, ok := op.Markup[compact.Comment]
-		if !ok {
-			str = fmt.Sprintf("%v", op.Value)
-		}
+		str := compact.JoinComment(op.Markup)
 		if !condition.Bool() {
 			err = errutil.New("expectation failed", str)
 			log.Println("ng:", str)
