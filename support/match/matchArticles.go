@@ -9,7 +9,7 @@ import (
 // eats any errors it encounters and returns the original name
 func StripArticle(str string) (ret string) {
 	var okay bool
-	if parts, e := Tokenize(str); e == nil && len(parts) > 1 {
+	if parts, e := Tokenize(str, 0); e == nil && len(parts) > 1 {
 		if _, width := FindCommonArticles(parts); width > 0 {
 			rest := parts[width:]
 			if s, n := Stringify(rest); n == len(rest) {

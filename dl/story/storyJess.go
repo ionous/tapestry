@@ -7,11 +7,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // private member of DeclareStatement
-type JessMatches jess.Paragraph
+type JessMatches = jess.Paragraph
 
 func MakeDeclaration(str string, tail rt.Assignment, ks JessMatches) *DeclareStatement {
 	return &DeclareStatement{
@@ -43,12 +44,13 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 }
 
 func (op *DeclareStatement) newParagraph(run rt.Runtime) (ret jess.Paragraph, err error) {
-	if m := op.matches; len(m) > 0 {
-		ret = jess.Paragraph(m)
+	if m := op.matches; m.NumLines() > 0 {
+		ret = m
 	} else if txt, e := safe.GetText(run, op.Text); e != nil {
 		err = e
 	} else {
-		ret, err = jess.NewParagraph(txt.String(), op.Assign)
+		pos := mdl.MakeSource(op)
+		ret, err = jess.ParagraphPos(pos, txt.String(), op.Assign)
 	}
 	return
 }

@@ -5,7 +5,7 @@
 --   ?1: base domain name
   with domains as (
   select md.requires as domain 
-  from mdl_domain  md
+  from mdl_domain md
   where md.domain = ?1
   union all  
   select ?1

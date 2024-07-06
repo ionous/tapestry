@@ -42,7 +42,7 @@ func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
 		// ... there also might be something clever here with rule_name matched
 		// ex. caching until Generate and then validating there are close parens
 		// no terminals, etc. in Generate....
-		if words, e := match.Tokenize(val.String()); e != nil {
+		if words, e := match.Tokenize(val.String(), 0); e != nil {
 			// on error tokeninzing, set an empty rule name and error in Generate
 			op.RuleName = new(RuleName)
 			*input, okay = input.Skip(1), true

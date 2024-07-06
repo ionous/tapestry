@@ -7,7 +7,6 @@ import (
 	"log"
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -170,18 +169,17 @@ func (cat *Catalog) Step(cb StepFunction) (err error) {
 
 // run the passed function now or in the future.
 func (cat *Catalog) Schedule(when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
-	return cat.SchedulePos(nil, when, cb)
+	return cat.SchedulePos(when, mdl.Source{}, cb)
 }
 
 // run the passed function now or in the future.
 // pass the line number of the operation.
 // tbd: maybe it would be better if the ops carried their full source pos
 // currently they just have line number.
-func (cat *Catalog) SchedulePos(t typeinfo.Markup, when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
+func (cat *Catalog) SchedulePos(when weaver.Phase, pos mdl.Source, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errors.New("schedule has no active scene")
 	} else {
-		pos := mdl.MakeSource(t)
 		err = d.schedule(pos, when, cb)
 	}
 	return

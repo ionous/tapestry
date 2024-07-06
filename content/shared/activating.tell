@@ -100,13 +100,14 @@
     - "Devices"
     - - Aspect: "activatability"
       - Aspect: "activation"
-- #
+- # Control whether the "activation" status of something can be changed.
   Declare: "Activatability is a kind of aspect."
 - Define state:names:
     - "activatability"
     - - "activatable"
       - "not activatable"
-- Declare: "Activation is a kind of aspect."
+- # States to distinguish between whether something is on or off.
+  Declare: "Activation is a kind of aspect."
 - Define state:names:
     - "activation"
     - - "deactivated"

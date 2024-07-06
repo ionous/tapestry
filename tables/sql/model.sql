@@ -4,7 +4,7 @@
 
 /* 
  * scenes are collections of objects and types; each object (or type) lives in exactly one scene.
- * name: dash-normalized and required to be globally unique.
+ * name: normalized and required to be globally unique.
  * start: the source location where the scene was defined; unlike most other types, 
  *        scenes can only be defined at a single location, and can't be modified after creation.
  * comment: author description of the scene.
@@ -38,9 +38,10 @@ create table mdl_field( domain text not null, kind int not null, field text, aff
  */
 create table mdl_grammar( domain text not null, name text, prog blob, at text, primary key( domain, name ));
 /* 
- * a class of objects with shared characteristics 
+ * a class of objects with shared characteristics  
+ * fix: id should become the key, but domain and kind should still be considered unique.
  */
-create table mdl_kind( domain text not null, kind text, singular text, path text, at text, primary key( domain, kind ));
+create table mdl_kind( uid text, domain text not null, kind text, singular text, path text, at text, comment text, primary key( domain, kind ));
 /* 
  * words which refer to nouns. in cases where two words may refer to the same noun, 
  * the lower rank of the association wins. 

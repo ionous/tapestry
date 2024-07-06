@@ -19,7 +19,7 @@ func (pen *Pen) checkPair(rel kindInfo, one, other nounInfo, reverse, multi bool
 		search, match = one, other
 	}
 	domain := pen.domain
-	if e := pen.db.QueryRow(q, domain, rel.id, search.id).Scan(&prevId, &prevString); e != nil && e != sql.ErrNoRows {
+	if e := pen.db.QueryRow(q, domain, rel.row, search.id).Scan(&prevId, &prevString); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else if prevId.Valid {
 		if prevId.Int64 == match.id {

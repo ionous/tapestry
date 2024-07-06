@@ -54,7 +54,7 @@ func (pen *Pen) addTraits(kid kindInfo, traits []string) (err error) {
 			select mf.field	
 			from mdl_field mf 
 			where mf.kind = ?1
-			order by mf.rowid`, kid.id); e != nil {
+			order by mf.rowid`, kid.row); e != nil {
 		err = fmt.Errorf("database error: %s", e)
 	} else if len(existingTraits) > 0 {
 		// fix? doesn't stop someone from adding new traits later though....
@@ -67,7 +67,7 @@ func (pen *Pen) addTraits(kid kindInfo, traits []string) (err error) {
 			kid.name, kid.domain, domain)
 	} else {
 		for _, t := range traits {
-			if _, e := pen.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
+			if _, e := pen.db.Exec(mdl_field, domain, kid.row, t, affine.Bool, nil, at); e != nil {
 				err = fmt.Errorf("database error: %s", e)
 				break
 			}
@@ -232,7 +232,7 @@ func (pen *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
 	return
 }
 
-var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "singular", "path", "at")
+var mdl_kind = tables.Insert("mdl_kind", "uid", "domain", "kind", "singular", "path", "at", "comment")
 
 // plural name of kind and materialized hierarchy of ancestors separated by commas
 // this (somewhat) duplicates the algorithm used by Noun()
@@ -242,16 +242,16 @@ func (pen *Pen) AddKind(name, parent string) (err error) {
 }
 
 func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
-	domain, at := pen.domain, pen.pos.String()
+	domain, pos := pen.domain, pen.pos
 	if parent, e := pen.findOptionalKind(parent); e != nil {
 		err = e
-	} else if len(parent.name) > 0 && parent.id == 0 {
+	} else if len(parent.name) > 0 && parent.row == 0 {
 		// a specified ancestor doesn't exist.
 		err = fmt.Errorf("%w ancestor %q", ErrMissing, parent.name)
 	} else if kind, e := pen.findKind(name); e != nil {
 		err = e
-	} else if kind.id != 0 {
-		if parent.id == 0 {
+	} else if kind.row != 0 {
+		if parent.row == 0 {
 			ret = kind
 		} else if e := pen.addAncestor(kind, parent); e != nil {
 			err = e
@@ -273,13 +273,23 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 			// easiest is if the name has never been mentioned before;
 			// we verified the other inputs already, so insert:
 			path := parent.fullpath()
-			if res, e := pen.db.Exec(mdl_kind, domain, name, optionalOne, trimPath(path), at); e != nil {
+			uid := makeId(domain, name)
+			if res, e := pen.db.Exec(
+				mdl_kind,
+				uid,
+				domain,
+				name,
+				optionalOne,
+				trimPath(path),
+				pos.String(),
+				pos.Comment); e != nil {
 				err = fmt.Errorf("database error: %s", e)
 			} else if newid, e := res.LastInsertId(); e != nil {
 				err = e
 			} else {
 				ret = kindInfo{
-					id:           newid,
+					row:          newid,
+					uid:          uid,
 					name:         name,
 					domain:       domain,
 					path:         path,
@@ -338,7 +348,7 @@ func (pen *Pen) addAncestor(kind, parent kindInfo) (err error) {
 			err = fmt.Errorf("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q",
 				ErrConflict, name, parent.name, kind.domain, domain)
 		} else if res, e := pen.db.Exec(`update mdl_kind set path = ?2 where rowid = ?1`,
-			kind.id, trimPath(parent.fullpath())); e != nil {
+			kind.row, trimPath(parent.fullpath())); e != nil {
 			err = e
 		} else if cnt, e := res.RowsAffected(); cnt != 1 {
 			err = fmt.Errorf("unexpected error updating hierarchy of %q; %d rows affected",
@@ -384,7 +394,7 @@ func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 	} else if prev.id == 0 {
 		// easiest is if the name has never been mentioned before;
 		// we verified the other inputs already, so just go ahead and insert:
-		if res, e := pen.db.Exec(mdl_noun, domain, name, parent.id, at); e != nil {
+		if res, e := pen.db.Exec(mdl_noun, domain, name, parent.row, at); e != nil {
 			err = fmt.Errorf("database error: %s", e)
 		} else if newid, e := res.LastInsertId(); e != nil {
 			err = e
@@ -393,7 +403,7 @@ func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 				id:       newid,
 				name:     name,
 				domain:   domain,
-				kid:      parent.id,
+				kid:      parent.row,
 				kind:     parent.name,
 				fullpath: parent.fullpath(),
 			}
@@ -417,7 +427,7 @@ func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 				ErrConflict, ancestor, name, prev.domain, domain)
 		} else {
 			if res, e := pen.db.Exec(`update mdl_noun set kind = ?2 where rowid = ?1`,
-				prev.id, parent.id); e != nil {
+				prev.id, parent.row); e != nil {
 				err = e
 			} else if cnt, e := res.RowsAffected(); cnt != 1 {
 				err = fmt.Errorf("unexpected error updating hierarchy of %q; %d rows affected",
@@ -510,7 +520,7 @@ func (pen *Pen) AddNounPair(rel, oneNoun, otherNoun string) (err error) {
 			if e := pen.checkPair(rel, one, other, reverse, multi); e != nil {
 				err = eatDuplicates(pen.warn, e)
 			} else {
-				_, err = pen.db.Exec(mdl_pair, pen.domain, rel.id, one.id, other.id, pen.pos.String())
+				_, err = pen.db.Exec(mdl_pair, pen.domain, rel.row, one.id, other.id, pen.pos.String())
 			}
 		}
 	}
@@ -523,7 +533,7 @@ func (pen *Pen) findCardinality(kind kindInfo) (ret string, err error) {
 	from mdl_rel
 	where relKind = ?1 
 	limit 1
-	`, kind.id).Scan(&ret); e == sql.ErrNoRows {
+	`, kind.row).Scan(&ret); e == sql.ErrNoRows {
 		err = fmt.Errorf("unknown or invalid cardinality for %q in %q", kind.name, kind.domain)
 	} else {
 		err = e
@@ -559,7 +569,7 @@ func (pen *Pen) addParameter(kid, cls kindInfo, field string, aff affine.Affinit
 		update mdl_pat
 		set labels = case when labels is null then (?2) else (labels ||','|| ?2) end
 		where kind = ?1 and result is null
-		`, kid.id, field); e != nil {
+		`, kid.row, field); e != nil {
 		err = e
 	} else if rows, e := res.RowsAffected(); e != nil {
 		err = e
@@ -659,7 +669,7 @@ func (pen *Pen) AddRelation(name, oneKind, otherKind string, amany bool, bmany b
 						err = e
 					} else if e := pen.addField(rel, other, b.rhs(), b.affinity()); e != nil {
 						err = e
-					} else if _, e := pen.db.Exec(mdl_rel, rel.id, one.id, other.id, info.cardinality, pen.pos.String()); e != nil {
+					} else if _, e := pen.db.Exec(mdl_rel, rel.row, one.row, other.row, info.cardinality, pen.pos.String()); e != nil {
 						err = e // improve the error result if the relation existed vefore?
 					}
 				}
@@ -683,7 +693,7 @@ func (pen *Pen) addResult(kid, cls kindInfo, field string, aff affine.Affinity) 
 		update mdl_pat
 		set result=?2
 		where kind = ?1 and result is null
-		`, kid.id, field); e != nil {
+		`, kid.row, field); e != nil {
 			err = e
 		} else if rows, e := res.RowsAffected(); e != nil {
 			err = e
@@ -703,7 +713,7 @@ func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump
 	// unique withing domain?
 	_, err = pen.db.Exec(mdl_rule,
 		pen.domain,
-		pattern.id,
+		pattern.row,
 		sql.NullString{
 			String: name,
 			Valid:  len(name) > 0,

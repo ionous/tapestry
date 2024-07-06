@@ -22,8 +22,9 @@ type Notifier interface {
 // read pieces of plain text documents
 type Tokenizer struct {
 	Notifier
-	curr, start Pos
-	follows     bool
+	curr    Pos // given to the charm parser; it updates this as it goes
+	start   Pos // snapped from curr when the token callback happens
+	follows bool
 }
 
 // special runes
@@ -33,9 +34,10 @@ const (
 	runeCloser = ')'
 )
 
-func Tokenize(str string) (ret []TokenValue, err error) {
+// lineOffset adjusts the positions in the parsed tokens.
+func Tokenize(str string, lineOffset int) (ret []TokenValue, err error) {
 	var at Collector
-	if e := at.Collect(str); e != nil {
+	if e := at.Collect(str, lineOffset); e != nil {
 		err = e
 	} else {
 		ret = at.Tokens
@@ -43,6 +45,7 @@ func Tokenize(str string) (ret []TokenValue, err error) {
 	return
 }
 
+// implements Notifier to accumulate tokens from the parser
 type Collector struct {
 	Tokens       []TokenValue
 	Lines        [][]TokenValue
@@ -50,8 +53,8 @@ type Collector struct {
 	BreakLines   bool
 }
 
-func (c *Collector) Collect(str string) (err error) {
-	t := Tokenizer{Notifier: c}
+func (c *Collector) Collect(str string, lineOffset int) (err error) {
+	t := Tokenizer{Notifier: c, curr: Pos{Y: lineOffset}}
 	return charm.ParseEof(str, t.Decode())
 }
 

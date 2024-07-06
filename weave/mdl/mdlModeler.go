@@ -49,6 +49,8 @@ type Modeler struct {
 	warn  Log
 }
 
+// this is in a weird spot.
+// would compact be any better?
 type Source struct {
 	File    string // with extension
 	Path    string // enough to locate the file

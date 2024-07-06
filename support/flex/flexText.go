@@ -6,16 +6,17 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/call"
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"github.com/ionous/tell/charm"
 )
 
 // consumes all text until eof ( and eats the eof error )
-// fix: allow line number offset
-func ReadText(runes io.RuneReader) (ret []story.StoryStatement, err error) {
-	var pt PlainText
+func ReadTextPos(runes io.RuneReader, ofs files.Ofs) (ret []story.StoryStatement, err error) {
+	pt := PlainText{start: ofs} // ofs contains the file name and the start of the section
 	run := match.NewTokenizer(&pt)
 	if e := charm.Read(runes, run); e != nil {
 		err = e
@@ -25,9 +26,14 @@ func ReadText(runes io.RuneReader) (ret []story.StoryStatement, err error) {
 	return
 }
 
+func ReadText(runes io.RuneReader) ([]story.StoryStatement, error) {
+	return ReadTextPos(runes, files.Ofs{})
+}
+
 // translate a plain text section to paragraphs of commands
 // containing comments and jess Declare statements.
 type PlainText struct {
+	start files.Ofs
 	// declare statements, or comments
 	out []story.StoryStatement
 	// accumulator for declare, and comments
@@ -128,7 +134,9 @@ func (pt *PlainText) endSentence() {
 func (pt *PlainText) writeAssignment(pos match.Pos, a rt.Assignment) error {
 	pt.writeToken(":", match.TokenValue{
 		Token: match.Tell,
-		Pos:   pos,
+		Pos: match.Pos{
+			X: pos.X,
+			Y: pos.Y + pt.start.Line}, // the position since the start of the section.
 		Value: a,
 	})
 	return pt.flushPhrases(a)
@@ -168,7 +176,11 @@ func (pt *PlainText) flushPhrases(tail rt.Assignment) (err error) {
 		str := pt.str.String()
 		pt.str.Reset()
 		// write the declare statement
-		out := story.MakeDeclaration(str, tail, ks)
+		// out := story.MakeDeclaration(str, tail, ks)
+
+		// pos := mdl.MakeSource(tail.(typeinfo.Markup))
+		para := jess.MakeParagraph(ks)
+		out := story.MakeDeclaration(str, tail, para)
 		pt.out = append(pt.out, out)
 	}
 	return

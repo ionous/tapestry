@@ -6,15 +6,27 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // represents a block of text
-type Paragraph [][]match.TokenValue
+type Paragraph struct {
+	file, path string
+	lines      [][]match.TokenValue // tokens have pos
+}
 
-func NewParagraph(str string, assign rt.Assignment) (ret Paragraph, err error) {
+func (p *Paragraph) NumLines() int {
+	return len(p.lines)
+}
+
+func MakeParagraph(lines [][]match.TokenValue) Paragraph {
+	return Paragraph{lines: lines}
+}
+
+func ParagraphPos(pos mdl.Source, str string, assign rt.Assignment) (ret Paragraph, err error) {
 	c := match.Collector{BreakLines: true}
-	if e := c.Collect(str); e != nil {
+	if e := c.Collect(str, pos.Line); e != nil {
 		err = fmt.Errorf("%w reading %s", e, str)
 	} else {
 		// tack on the assignment
@@ -29,7 +41,9 @@ func NewParagraph(str string, assign rt.Assignment) (ret Paragraph, err error) {
 				c.Tokens = append(c.Tokens, tv)
 				lines = append(lines, c.Tokens)
 			}
-			ret = lines
+			ret = Paragraph{
+				pos.File, pos.Path, lines,
+			}
 		}
 	}
 	return
@@ -39,12 +53,19 @@ func NewParagraph(str string, assign rt.Assignment) (ret Paragraph, err error) {
 // returns true when it no longer needs to be called because everything is scheduled
 func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, err error) {
 	var retry int
-	unmatched := (*p)
+	unmatched := p.lines
 	for i, n := range unmatched {
 		var best bestMatch
 		if matchSentence(z, q, n, &best) {
 			// try to generate if matched.
-			if e := best.match.Generate(Context{q, u}); e != nil {
+			lineOfs := n[0].Pos.Y
+			source := mdl.Source{
+				File:    p.file,
+				Path:    p.path,
+				Line:    lineOfs,
+				Comment: "a plain-text paragraph",
+			}
+			if e := best.match.Generate(Context{q, u, source}); e != nil {
 				err = e
 				break
 			}
@@ -63,9 +84,9 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 	// no errors? update the unmatched list
 	if err == nil {
 		if retry > 0 {
-			(*p) = unmatched[:retry]
+			p.lines = unmatched[:retry]
 		} else {
-			(*p) = nil
+			p.lines = nil
 			okay = true
 		}
 	}

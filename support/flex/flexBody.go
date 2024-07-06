@@ -15,11 +15,12 @@ type accum []story.StoryStatement
 // the body alternates between plain text and structured story ops
 func (a *accum) readBody(source string, k *Section) (err error) {
 	for story := false; err == nil && k.NextSection(); story = !story {
+		pos := files.Ofs{File: source, Line: k.line}
 		if story {
 			// note: line 0 is the first line.
-			err = a.readStory(k, files.Ofs{File: source, Line: k.line})
+			err = a.readStory(k, pos)
 		} else {
-			err = a.readText(k)
+			err = a.readText(k, pos)
 		}
 	}
 	return
@@ -36,8 +37,8 @@ func (a *accum) readStory(in io.RuneReader, ofs files.Ofs) (err error) {
 }
 
 // read and record a plain text section
-func (a *accum) readText(in io.RuneReader) (err error) {
-	if ops, e := ReadText(in); e != nil {
+func (a *accum) readText(in io.RuneReader, ofs files.Ofs) (err error) {
+	if ops, e := ReadTextPos(in, ofs); e != nil {
 		err = e
 	} else {
 		(*a) = append((*a), ops...)

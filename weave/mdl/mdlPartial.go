@@ -84,7 +84,7 @@ func (pen *Pen) GetPartialKind(str string) (ret MatchedKind, err error) {
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, words).Scan(&k.id, &k.name, &match, &k.path); e {
+			pen.domain, words).Scan(&k.row, &k.name, &match, &k.path); e {
 		case nil:
 			var base kindsOf.Kinds
 			fullPath := k.fullpath() // walk backwards to grab "actions" before "patterns"

@@ -17,10 +17,12 @@
   "scripts": {
     "mosaic": "npm run -w www dev",
     "build": "concurrently -m 1 -k \"npm:build-*\"",
-    "build-go": "go build ./...",
     "build-code": "go run ./cmd/tap code -in ./idl -out ./dl",
     "build-code-docs": "go run ./cmd/tap doc -out ./docs/bin/extra/codedocs/api",
     "build-code-schema": "go run ./cmd/tap code -in idl -schema ./docs/bin/extra/static/schema/tap.schema.json",
+    "build-weave": "go run ./cmd/tap weave", 
+    "build-dump": "go run ./cmd/tap dump cloak",
+    "build-go": "go build ./...",
     "build-wasm": "npm run -w wasm build",
     "build-wasm-docs": "cp -pfR ./engines/wasm/dist/ ./docs/bin/extra/wasm/cloak-of-darkness",
     "build-godot": "go build -C ./engines/godot/ext/src -o taplib.so -buildmode=c-shared taplib.go",
