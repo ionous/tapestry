@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/support/match"
@@ -43,8 +44,9 @@ type PlainText struct {
 	phrases [][]match.TokenValue
 	comment []string
 	// accumulator of phrases
-	str   strings.Builder // keeps an approximation of the original text
-	words []match.TokenValue
+	words        []match.TokenValue
+	str          strings.Builder // keeps an approximation of the original text
+	lastSentence int             // index into str of the most recent sentence
 }
 
 func (pt *PlainText) Finalize() (ret []story.StoryStatement, err error) {
@@ -133,6 +135,7 @@ func (pt *PlainText) flushAll() (err error) {
 }
 
 func (pt *PlainText) endSentence() {
+	pt.lastSentence = pt.str.Len()
 	pt.phrases = append(pt.phrases, pt.words)
 	pt.words = nil
 }
@@ -153,7 +156,7 @@ func (pt *PlainText) writeToken(str string, tv match.TokenValue) {
 	// because we write words ( and other such things )
 	// new text should have a space before;
 	// terminals wouldn't but they dont come round here no more.
-	if pt.str.Len() > 0 && tv.Token != match.Stop {
+	if pt.str.Len() > 0 && tv.Token != match.Stop && tv.Token != match.Tell {
 		pt.str.WriteRune(' ')
 	}
 	pt.str.WriteString(str)
@@ -180,10 +183,20 @@ func (pt *PlainText) flushPhrases(tail rt.Assignment) (err error) {
 		}
 		// get the paragraph as a solid block of text
 		// we've already written newlines and such
-		str := pt.str.String()
+		str, last := pt.str.String(), pt.lastSentence
 		pt.str.Reset()
+		pt.lastSentence = 0
 		// write the declare statement
 		para := jess.MakeParagraph(pt.start.File, ks)
+		// possibly could set phrase as the comment?
+		// note: the "tail" member is unused;
+		// the assignment is already a part of the token stream.
+		if tail != nil {
+			ruleMarkup := tail.(typeinfo.Markup).GetMarkup(true)
+			// phrase closest to the assignment
+			ruleName := strings.TrimSuffix(str[last:], ":")
+			ruleMarkup["ruleName"] = ruleName
+		}
 		out := story.MakeDeclaration(str, tail, para)
 		pt.out = append(pt.out, out)
 	}

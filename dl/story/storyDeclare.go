@@ -21,7 +21,7 @@ type JessMatches = jess.Paragraph
 func MakeDeclaration(str string, tail rt.Assignment, ks JessMatches) *DeclareStatement {
 	return &DeclareStatement{
 		Text:    &literal.TextValue{Value: str},
-		Assign:  tail,
+		Assign:  tail, // tail is here for reference; its already part of the token stream
 		matches: ks,
 	}
 }
@@ -47,9 +47,10 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 		})
 }
 
+// generate a paragraph, or keep whatever was assigned from the flex file.
 func (op *DeclareStatement) newParagraph(run rt.Runtime) (ret jess.Paragraph, err error) {
 	if m := op.matches; len(m.Lines) > 0 {
-		ret = m
+		ret = m // already parsed by flexText; keep what's there
 	} else if txt, e := safe.GetText(run, op.Text); e != nil {
 		err = e
 	} else {
