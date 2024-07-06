@@ -290,5 +290,6 @@ func marshalprog(prog []rt.Execute) (ret string, err error) {
 // uses literal marshaling but not core to avoid the packing and unpacking of patterns.
 func encoder() (ret *encode.Encoder) {
 	var enc encode.Encoder
+	enc.EatMarkup = true
 	return enc.Customize(literal.CustomEncoder)
 }

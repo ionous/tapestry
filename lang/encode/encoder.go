@@ -10,6 +10,7 @@ import (
 
 type Encoder struct {
 	customEncoder CustomEncoder
+	EatMarkup     bool // don't encode any of the markup data
 }
 
 func (enc *Encoder) Customize(c CustomEncoder) *Encoder {
@@ -57,7 +58,9 @@ func (enc *Encoder) writeFlow(src inspect.It) (ret any, err error) {
 		var out FlowBuilder
 		flow := src.TypeInfo().(*typeinfo.Flow)
 		out.WriteLede(flow.Lede)
-		out.SetMarkup(src.Markup(false))
+		if !enc.EatMarkup {
+			out.SetMarkup(src.Markup(false))
+		}
 		for it := src; it.Next(); { // -1 to end before the markup
 			f, val := it.Term(), it.RawValue()
 			if !f.Private && (!f.Optional || !val.IsZero()) {
