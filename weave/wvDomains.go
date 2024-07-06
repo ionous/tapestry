@@ -46,11 +46,12 @@ type memento struct {
 func (d *Domain) finalizeDomain() (err error) {
 	if len(d.exe) > 0 {
 		domainName := d.name
+		// fix: current domain changed looks for the pattern "... begins"
 		eventName := inflect.Normalize(domainName + " begins")
 		pin := d.cat.Modeler.Pin(domainName)
 		pb := mdl.NewPatternBuilder(eventName)
 		pb.AppendRule(0, rt.Rule{
-			Name: eventName, //
+			Name: "scene " + d.name, // arbitrary
 			Exe:  d.exe,
 		})
 		if e := pin.AddPattern(pb.Pattern); e != nil {

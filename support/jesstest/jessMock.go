@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -46,7 +47,7 @@ func (m *Mock) Generate(str string, val rt.Assignment) (ret []string, err error)
 }
 
 func (m *Mock) generate(str string, val rt.Assignment) (err error) {
-	if p, e := jess.NewParagraph(str, val); e != nil {
+	if p, e := jess.NewParagraph(compact.Source{}, str, val); e != nil {
 		err = e
 	} else {
 		for z := weaver.Phase(0); z < weaver.NumPhases; z++ {

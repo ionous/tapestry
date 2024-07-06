@@ -42,7 +42,7 @@ func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
 		// ... there also might be something clever here with rule_name matched
 		// ex. caching until Generate and then validating there are close parens
 		// no terminals, etc. in Generate....
-		if words, e := match.Tokenize(val.String(), 0); e != nil {
+		if words, e := match.TokenizeString(val.String()); e != nil {
 			// on error tokeninzing, set an empty rule name and error in Generate
 			op.RuleName = new(RuleName)
 			*input, okay = input.Skip(1), true
@@ -120,6 +120,8 @@ func (op *SubAssignment) Match(input *InputState) (okay bool) {
 	if a, ok := input.GetNext(match.Tell); ok {
 		// for now panic to catch setup errors;
 		// if there is a good reason to fail, could test for success.
+		// ( this might happen if a DeclareStatement from a command section
+		// includes a sub document: TokenizeString will read it but not decode it. )
 		op.Assignment = a.Value.(rt.Assignment)
 		*input, okay = input.Skip(1), true
 	}

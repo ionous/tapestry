@@ -33,7 +33,7 @@ func TestMatching(t *testing.T) {
 	}
 	prefixList := match.PanicSpans(prefixes...)
 	for i, w := range tests {
-		if h, e := match.Tokenize(w, 0); e != nil {
+		if h, e := match.TokenizeString(w); e != nil {
 			t.Fatal(e)
 		} else {
 			matched, skip := prefixList.FindPrefixIndex(h)

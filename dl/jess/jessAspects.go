@@ -29,8 +29,8 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 		org := next.Cut(index)
 		plural, width := match.Normalize(org)
 		if width == index {
-			one := inflect.Singularize(plural)               // fix! should use the db
-			if span, e := match.Tokenize(one, 0); e == nil { // fix! should find kind without span
+			one := inflect.Singularize(plural)                  // fix! should use the db
+			if span, e := match.TokenizeString(one); e == nil { // fix! should find kind without span
 				var ks kindsOf.Kinds
 				if k, w := q.FindKind(span, &ks); w == index && ks == kindsOf.Aspect {
 					// fix: clean this up some.

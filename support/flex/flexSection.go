@@ -7,6 +7,7 @@ import (
 
 // read a structured block until it hits a structured ending.
 type Section struct {
+	Source       string
 	StartingLine int // newline count at start of section
 	line         int // track total newlines
 
@@ -26,8 +27,8 @@ type Unreader interface {
 // return a reader that ends and restarts
 // on every dashed divider in a flex document.
 // must call "NextSection" to start reading.
-func MakeSection(r Unreader) Section {
-	return Section{runes: r, lastError: errNextSection}
+func MakeSection(source string, r Unreader) Section {
+	return Section{Source: source, runes: r, lastError: errNextSection}
 }
 
 var errNextSection = errors.New("a call to NextSection was expected")

@@ -34,10 +34,11 @@ const (
 	runeCloser = ')'
 )
 
-// lineOffset adjusts the positions in the parsed tokens.
-func Tokenize(str string, lineOffset int) (ret []TokenValue, err error) {
+// uses Collector to turn the passed string into a slice of tokens.
+// by default, throws out all comments and merges newlines.
+func TokenizeString(str string) (ret []TokenValue, err error) {
 	var at Collector
-	if e := at.Collect(str, lineOffset); e != nil {
+	if e := at.TokenizeString(str); e != nil {
 		err = e
 	} else {
 		ret = at.Tokens
@@ -48,22 +49,35 @@ func Tokenize(str string, lineOffset int) (ret []TokenValue, err error) {
 // implements Notifier to accumulate tokens from the parser
 type Collector struct {
 	Tokens       []TokenValue
-	Lines        [][]TokenValue
+	Lines        [][]TokenValue // empty if BreakLines is false
 	KeepComments bool
 	BreakLines   bool
+	LineOffset   int
 }
 
-func (c *Collector) Collect(str string, lineOffset int) (err error) {
-	t := Tokenizer{Notifier: c, curr: Pos{Y: lineOffset}}
-	return charm.ParseEof(str, t.Decode())
+// lineOffset adjusts the positions in the parsed tokens.
+func (c *Collector) TokenizeString(str string) (err error) {
+	t := Tokenizer{Notifier: c}
+	if e := charm.ParseEof(str, t.Decode()); e != nil {
+		err = e
+	} else if cnt := len(c.Tokens); c.BreakLines && cnt > 0 {
+		// not entirely sure this can happen; the eof should probably catch
+		// any dangling tokens before this, and error.
+		err = fmt.Errorf("string has %d trailing tokens", cnt)
+	}
+	return
 }
 
 func (at *Collector) Decoded(tv TokenValue) error {
+	// optionally: filter comments
 	if at.KeepComments || tv.Token != Comment {
+		// optionally: separate sentences at newlines
+		// ( otherwise, simply adds the newline token to the slice of tokens. (
 		if at.BreakLines && tv.Token == Stop {
 			at.Lines = append(at.Lines, at.Tokens)
 			at.Tokens = nil
 		} else {
+			tv.Pos.Y += at.LineOffset
 			at.Tokens = append(at.Tokens, tv)
 		}
 	}

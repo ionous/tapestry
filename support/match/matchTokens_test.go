@@ -12,7 +12,7 @@ import (
 )
 
 func TestTokenTerminal(t *testing.T) {
-	if vs, e := match.Tokenize(`"hello." world`, 0); e != nil {
+	if vs, e := match.TokenizeString(`"hello." world`); e != nil {
 		t.Fatal(e)
 	} else if e := compareTokens(vs, []match.TokenValue{
 		{Token: match.Quoted, Value: "hello."},

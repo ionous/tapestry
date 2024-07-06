@@ -1,7 +1,6 @@
 package flex
 
 import (
-	"io"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
@@ -13,22 +12,21 @@ import (
 type accum []story.StoryStatement
 
 // the body alternates between plain text and structured story ops
-func (a *accum) readBody(source string, k *Section) (err error) {
+func (a *accum) readBody(k *Section) (err error) {
 	for story := false; err == nil && k.NextSection(); story = !story {
-		pos := files.Ofs{File: source, Line: k.line}
 		if story {
 			// note: line 0 is the first line.
-			err = a.readStory(k, pos)
+			err = a.readStory(k)
 		} else {
-			err = a.readText(k, pos)
+			err = a.readText(k)
 		}
 	}
 	return
 }
 
 // read and record a story section
-func (a *accum) readStory(in io.RuneReader, ofs files.Ofs) (err error) {
-	if slots, e := decodeStorySection(in, ofs); e != nil {
+func (a *accum) readStory(k *Section) (err error) {
+	if slots, e := decodeStorySection(k); e != nil {
 		err = e
 	} else {
 		(*a) = append((*a), slots...)
@@ -37,8 +35,9 @@ func (a *accum) readStory(in io.RuneReader, ofs files.Ofs) (err error) {
 }
 
 // read and record a plain text section
-func (a *accum) readText(in io.RuneReader, ofs files.Ofs) (err error) {
-	if ops, e := ReadTextPos(in, ofs); e != nil {
+func (a *accum) readText(k *Section) (err error) {
+	file, line, runes := k.Source, k.line, k
+	if ops, e := ReadPlainText(file, line, runes); e != nil {
 		err = e
 	} else {
 		(*a) = append((*a), ops...)
@@ -50,8 +49,8 @@ func (a *accum) readText(in io.RuneReader, ofs files.Ofs) (err error) {
 // fix: maybe it'd be nice if the structured sections
 // could be of any uniform type ( same with plain text )
 // some sort of callback collector instead of specifically story/jess.
-func decodeStorySection(in io.RuneReader, ofs files.Ofs) (ret []story.StoryStatement, err error) {
-	if msg, e := readTellSection(in, ofs); e != nil {
+func decodeStorySection(k *Section) (ret []story.StoryStatement, err error) {
+	if msg, e := readTellSection(k); e != nil {
 		err = e
 	} else {
 		var slots story.StoryStatement_Slots
@@ -66,8 +65,9 @@ func decodeStorySection(in io.RuneReader, ofs files.Ofs) (ret []story.StoryState
 }
 
 // read one or more values; presumably mappings.
-func readTellSection(in io.RuneReader, ofs files.Ofs) (ret []any, err error) {
-	if d, e := files.ReadTellRunes(in, ofs, true); e != nil {
+func readTellSection(k *Section) (ret []any, err error) {
+	ofs := files.Ofs{File: k.Source, Line: k.line}
+	if d, e := files.ReadTellRunes(k, ofs, true); e != nil {
 		err = e
 	} else {
 		switch content := d.(type) {

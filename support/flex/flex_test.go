@@ -17,7 +17,7 @@ func TestSectionCount(t *testing.T) {
 	var got []int
 	// break the text into lines
 	in := strings.NewReader(testOne)
-	for k := flex.MakeSection(in); k.NextSection(); {
+	for k := flex.MakeSection("test", in); k.NextSection(); {
 		got = append(got, k.StartingLine)
 		for {
 			if _, _, e := k.ReadRune(); e != nil {

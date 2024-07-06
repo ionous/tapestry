@@ -50,7 +50,7 @@ func WeavePaths(outFile string, stories ...NamedFS) (err error) {
 				run := qna.NewRuntime(q)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				d := cat.EnsureScene("tapestry")
-				pos := compact.Source{File: "default kinds", Path: "internal", Comment: "the built-in types"}
+				pos := compact.Source{File: "internal/default kinds", Comment: "the built-in types"}
 				if pen, e := cat.SceneBegin(d, pos); e != nil {
 					err = e
 				} else {
@@ -110,7 +110,8 @@ func importDir(cat *weave.Catalog, fsys NamedFS, dirs []string) (err error) {
 				// hack for the shared library, so it doesnt try to depend on itself
 				if d := cat.EnsureScene(scene); d.Name() != "tapestry" {
 					// tbd: what's a helpful source path
-					pos := compact.Source{File: fsys.Name, Path: dir}
+					fullpath := path.Join(dir, indexName)
+					pos := compact.Source{File: fullpath}
 					if pen, e := cat.SceneBegin(d, pos); e != nil {
 						err = e
 					} else {

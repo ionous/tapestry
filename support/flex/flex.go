@@ -16,8 +16,8 @@ func ReadStory(in Unreader) (ret []story.StoryStatement, err error) {
 
 func ReadStorySource(source string, in Unreader) (ret []story.StoryStatement, err error) {
 	var els accum
-	k := MakeSection(in)
-	if e := els.readBody(source, &k); e != nil {
+	k := MakeSection(source, in)
+	if e := els.readBody(&k); e != nil {
 		err = e
 	} else {
 		ret = els

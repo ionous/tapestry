@@ -14,10 +14,19 @@ import (
 	"github.com/ionous/tell/charm"
 )
 
-// consumes all text until eof ( and eats the eof error )
-func ReadTextPos(runes io.RuneReader, ofs files.Ofs) (ret []story.StoryStatement, err error) {
+// Translate plain-text tell into StoryNote(s) and DeclareStatement(s).
+// Each DeclareStatment can contain an Assignment, parsed from an indented sub-document.
+// Because this wants to find those boundaries between comments and statements
+// this doesn't package the whole section into a single declaration for later parsing.
+func ReadPlainText(file string, lineOffset int, runes io.RuneReader) ([]story.StoryStatement, error) {
+	ofs := files.Ofs{File: file, Line: lineOffset}
 	pt := PlainText{start: ofs} // ofs contains the file name and the start of the section
-	run := match.NewTokenizer(&pt)
+	return pt.Read(runes)
+}
+
+// consumes all text until eof ( and eats the eof error )
+func (pt *PlainText) Read(runes io.RuneReader) (ret []story.StoryStatement, err error) {
+	run := match.NewTokenizer(pt)
 	if e := charm.Read(runes, run); e != nil {
 		err = e
 	} else {
@@ -26,12 +35,6 @@ func ReadTextPos(runes io.RuneReader, ofs files.Ofs) (ret []story.StoryStatement
 	return
 }
 
-func ReadText(runes io.RuneReader) ([]story.StoryStatement, error) {
-	return ReadTextPos(runes, files.Ofs{})
-}
-
-// translate a plain text section to paragraphs of commands
-// containing comments and jess Declare statements.
 type PlainText struct {
 	start files.Ofs
 	// declare statements, or comments
@@ -39,8 +42,8 @@ type PlainText struct {
 	// accumulator for declare, and comments
 	phrases [][]match.TokenValue
 	comment []string
-	// accumulator of a phrases
-	str   strings.Builder
+	// accumulator of phrases
+	str   strings.Builder // keeps an approximation of the original text
 	words []match.TokenValue
 }
 
@@ -53,7 +56,10 @@ func (pt *PlainText) Finalize() (ret []story.StoryStatement, err error) {
 	return
 }
 
-// handler for match tokenizer;
+// collects incoming tokens
+// reconstructs the original text
+// and parses tell sub-documents into assignments
+// ie. for `Instead of jumping:  - Say: "Hey, no way."`
 func (pt *PlainText) Decoded(tv match.TokenValue) (err error) {
 	switch tv.Token {
 	default:
@@ -154,6 +160,7 @@ func (pt *PlainText) writeToken(str string, tv match.TokenValue) {
 	if tv.Token == match.Stop {
 		pt.endSentence()
 	} else {
+		tv.Pos.Y += pt.start.Line
 		pt.words = append(pt.words, tv)
 	}
 }
@@ -176,7 +183,7 @@ func (pt *PlainText) flushPhrases(tail rt.Assignment) (err error) {
 		str := pt.str.String()
 		pt.str.Reset()
 		// write the declare statement
-		para := jess.MakeParagraph(ks)
+		para := jess.MakeParagraph(pt.start.File, ks)
 		out := story.MakeDeclaration(str, tail, para)
 		pt.out = append(pt.out, out)
 	}
