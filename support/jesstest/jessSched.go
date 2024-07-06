@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
@@ -16,8 +17,12 @@ type ProcessingList struct {
 	lastPhase weaver.Phase
 }
 
-// add to the post processing list.
 func (m *ProcessingList) Schedule(z weaver.Phase, p func(weaver.Weaves, rt.Runtime) error) (err error) {
+	return m.SchedulePos(compact.Source{}, z, p)
+}
+
+// add to the post processing list.
+func (m *ProcessingList) SchedulePos(at compact.Source, z weaver.Phase, p func(weaver.Weaves, rt.Runtime) error) (err error) {
 	if next := m.lastPhase + 1; z < next {
 		err = fmt.Errorf("scheduled %s(%d) while next phase is %s(%d)", z, z, next, next)
 		panic(err)

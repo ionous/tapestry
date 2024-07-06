@@ -129,7 +129,7 @@ func TestRivalConflict(t *testing.T) {
 type rivalFact string
 
 func (el rivalFact) Assert(cat *weave.Catalog) error {
-	return cat.ScheduleCmd(op, weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddFact("rivalFact", string(el))
 	})
 }

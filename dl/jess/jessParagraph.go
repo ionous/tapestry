@@ -23,6 +23,9 @@ func (p *Paragraph) NumLines() int {
 func MakeParagraph(lines [][]match.TokenValue) Paragraph {
 	return Paragraph{lines: lines}
 }
+func NewParagraph(str string, assign rt.Assignment) (ret Paragraph, err error) {
+	return ParagraphPos(compact.Source{}, str, assign)
+}
 
 func ParagraphPos(pos compact.Source, str string, assign rt.Assignment) (ret Paragraph, err error) {
 	c := match.Collector{BreakLines: true}

@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -18,7 +19,7 @@ type Aliases struct {
 }
 
 func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
-	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if n, e := run.GetField(meta.ObjectId, op.ShortName); e != nil {
 			err = e
 		} else {
@@ -42,7 +43,7 @@ type Aspects struct {
 }
 
 func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
-	return cat.ScheduleCmd(op, weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if e := w.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
 			err = e
 		} else {
@@ -74,7 +75,7 @@ type Directives struct {
 }
 
 func (op *Directives) Assert(cat *weave.Catalog) (err error) {
-	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddGrammar(op.Directive.Name, &op.Directive)
 	})
 }
@@ -100,11 +101,11 @@ type Kinds struct {
 }
 
 func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
-	return cat.ScheduleCmd(op, weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if e := w.AddKind(op.Kind, op.Ancestor); e != nil {
 			err = e
 		} else {
-			err = cat.ScheduleCmd(op, weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+			err = cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 				if ps := op.Contain; len(ps) > 0 {
 					err = w.AddKindFields(op.Kind, reduceFields(ps))
 				}
@@ -122,7 +123,7 @@ type Nouns struct {
 }
 
 func (op *Nouns) Assert(cat *weave.Catalog) error {
-	return cat.ScheduleCmd(op, weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) error {
 		_, err := mdl.AddNamedNoun(w, op.Noun, op.Kind)
 		return err
 	})
@@ -142,7 +143,7 @@ type Patterns struct {
 }
 
 func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
-	return cat.ScheduleCmd(op, weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		kb := mdl.NewPatternBuilder(op.PatternName)
 		kb.AddLocals(reduceFields(op.Locals))
 		kb.AddParams(reduceFields(op.Params))
@@ -162,7 +163,7 @@ type Plurals struct {
 }
 
 func (op *Plurals) Assert(cat *weave.Catalog) error {
-	return cat.ScheduleCmd(op, weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddPlural(op.Plural, op.Singular)
 	})
 }
@@ -174,7 +175,7 @@ type Relations struct {
 }
 
 func (op *Relations) Assert(cat *weave.Catalog) error {
-	return cat.ScheduleCmd(op, weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		switch c := op.Cardinality.(type) {
 		case *OneOne:
 			err = w.AddRelation(op.Rel, c.Kind, c.OtherKind, false, false)
@@ -197,7 +198,7 @@ type Relatives struct {
 }
 
 func (op *Relatives) Assert(cat *weave.Catalog) error {
-	return cat.ScheduleCmd(op, weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddNounPair(op.Rel, op.Noun, op.OtherNoun)
 	})
 }
@@ -209,7 +210,7 @@ type Rules struct {
 }
 
 func (op *Rules) Assert(cat *weave.Catalog) error {
-	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 		pb := mdl.NewPatternBuilder(op.PatternName)
 		pb.AppendRule(0, rt.Rule{
 			Exe: op.Exe,
@@ -231,7 +232,7 @@ type Values struct {
 }
 
 func (op *Values) Assert(cat *weave.Catalog) error {
-	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if n, e := run.GetField(meta.ObjectId, op.Noun); e != nil {
 			err = e
 		} else {
