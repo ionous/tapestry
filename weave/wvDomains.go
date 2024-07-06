@@ -15,20 +15,19 @@ import (
 )
 
 type Domain struct {
-	name       string
-	cat        *Catalog
-	currPhase  weaver.Phase // updated during weave, ends at NumPhases
-	steps      []StepFunction
-	scheduling [weaver.NumPhases][]memento // separates commands into phases
-	exe        []rt.Execute                // all of type object.SetValue
-}
-
-func (d *Domain) AddStartup(exe []rt.Execute) {
-	d.exe = append(d.exe, exe...)
+	name        string
+	cat         *Catalog
+	currPhase   weaver.Phase // updated during weave, ends at NumPhases
+	steps       []StepFunction
+	scheduling  [weaver.NumPhases][]memento // separates commands into phases
+	initializes []rt.Execute                // all of type object.SetValue
+	//
+	pos     compact.Source
+	startup []rt.Execute
 }
 
 func (d *Domain) AddInitialValue(noun, field string, val rt.Assignment) {
-	d.exe = append(d.exe, &object.SetValue{
+	d.initializes = append(d.initializes, &object.SetValue{
 		Target: &object.ObjectDot{
 			NounName: literal.T(noun),
 			Dot:      object.MakeDot(field),
@@ -42,22 +41,34 @@ type memento struct {
 	pos compact.Source
 }
 
+func WriteSceneStart(m *mdl.Modeler, scene string, pos compact.Source, rank int, exe []rt.Execute) (err error) {
+	// fix: current domain changed looks for the pattern "... begins"
+	eventName := inflect.Normalize(scene + " begins")
+	pin := m.PinPos(scene, pos)
+	pb := mdl.NewPatternBuilder(eventName)
+	pb.AppendRule(0, rt.Rule{
+		Name: "scene " + scene, // arbitrary
+		Exe:  exe,
+	})
+	return pin.AddPattern(pb.Pattern)
+}
+
 // write initial values....
 func (d *Domain) finalizeDomain() (err error) {
-	if len(d.exe) > 0 {
-		domainName := d.name
-		// fix: current domain changed looks for the pattern "... begins"
-		eventName := inflect.Normalize(domainName + " begins")
-		pin := d.cat.Modeler.Pin(domainName)
-		pb := mdl.NewPatternBuilder(eventName)
-		pb.AppendRule(0, rt.Rule{
-			Name: "scene " + d.name, // arbitrary
-			Exe:  d.exe,
-		})
-		if e := pin.AddPattern(pb.Pattern); e != nil {
+	if len(d.initializes) > 0 {
+		pos := compact.Source{File: "initialization", Line: -1}
+		if e := WriteSceneStart(d.cat.Modeler, d.name, pos, 0, d.initializes); e != nil {
 			err = e
 		} else {
-			d.exe = nil
+			d.initializes = nil
+		}
+
+	}
+	if len(d.startup) > 0 {
+		if e := WriteSceneStart(d.cat.Modeler, d.name, d.pos, 1, d.startup); e != nil {
+			err = e
+		} else {
+			d.startup = nil
 		}
 	}
 	return

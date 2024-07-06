@@ -19,7 +19,7 @@ func (op *DefineScene) Weave(cat *weave.Catalog) (err error) {
 	} else {
 		domain := cat.EnsureScene(domain)
 		pos := compact.MakeSource(op.GetMarkup(false))
-		if pen, e := cat.SceneBegin(domain, pos); e != nil {
+		if pen, e := cat.SceneBegin(domain, pos, op.Exe); e != nil {
 			err = e
 		} else {
 			defer cat.SceneEnd()
@@ -27,8 +27,6 @@ func (op *DefineScene) Weave(cat *weave.Catalog) (err error) {
 				err = e
 			} else if e := Weave(cat, op.Statements); e != nil {
 				err = e // add all the statements that are a part of this domain.
-			} else {
-				domain.AddStartup(op.Exe)
 			}
 		}
 	}

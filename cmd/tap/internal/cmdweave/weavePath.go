@@ -50,8 +50,12 @@ func WeavePaths(outFile string, stories ...NamedFS) (err error) {
 				run := qna.NewRuntime(q)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				d := cat.EnsureScene("tapestry")
-				pos := compact.Source{File: "internal/default kinds", Comment: "the built-in types"}
-				if pen, e := cat.SceneBegin(d, pos); e != nil {
+				pos := compact.Source{
+					File:    "default kinds",
+					Line:    -1,
+					Comment: "the built-in types",
+				}
+				if pen, e := cat.SceneBegin(d, pos, nil); e != nil {
 					err = e
 				} else {
 					// mark it as a root scene:
@@ -112,7 +116,7 @@ func importDir(cat *weave.Catalog, fsys NamedFS, dirs []string) (err error) {
 					// tbd: what's a helpful source path
 					fullpath := path.Join(dir, indexName)
 					pos := compact.Source{File: fullpath}
-					if pen, e := cat.SceneBegin(d, pos); e != nil {
+					if pen, e := cat.SceneBegin(d, pos, nil); e != nil {
 						err = e
 					} else {
 						defer cat.SceneEnd() // called at end of function after collecting everything.

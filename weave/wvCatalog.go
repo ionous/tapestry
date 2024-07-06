@@ -207,7 +207,7 @@ func (cat *Catalog) EnsureScene(name string) (ret *Domain) {
 	return
 }
 
-func (cat *Catalog) SceneBegin(d *Domain, at compact.Source) (ret *mdl.Pen, err error) {
+func (cat *Catalog) SceneBegin(d *Domain, at compact.Source, exe []rt.Execute) (ret *mdl.Pen, err error) {
 	if d.currPhase != 0 {
 		err = fmt.Errorf("trying to define scene %s for a second time", d.name)
 	} else {
@@ -222,6 +222,8 @@ func (cat *Catalog) SceneBegin(d *Domain, at compact.Source) (ret *mdl.Pen, err 
 			err = pen.AddDependency(cd)
 		}
 		if err == nil {
+			d.pos = at
+			d.startup = exe
 			cat.processing.Push(d)
 			ret = pen
 		}

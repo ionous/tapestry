@@ -14,10 +14,12 @@ type Source struct {
 
 // return the source position as line:base(path)
 func (p Source) String() (ret string) {
-	var rel string
 	if len(p.File) > 0 {
+		var rel string
 		base := path.Base(p.File) // extract the file from shared/something.tell
-		if full, part := len(p.File), len(base); full > part {
+		if p.Line < 0 {
+			rel = "internal"
+		} else if full, part := len(p.File), len(base); full > part {
 			rel = p.File[:full-(part+1)] // skip trailing slash before the filename
 		}
 		// padding the number sorts better
