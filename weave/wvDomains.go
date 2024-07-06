@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -38,7 +39,7 @@ func (d *Domain) AddInitialValue(noun, field string, val rt.Assignment) {
 
 type memento struct {
 	cb  ScheduledCallback
-	pos mdl.Source
+	pos compact.Source
 }
 
 // write initial values....
@@ -90,7 +91,7 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 	return
 }
 
-func (d *Domain) schedule(at mdl.Source, when weaver.Phase, what ScheduledCallback) (err error) {
+func (d *Domain) schedule(at compact.Source, when weaver.Phase, what ScheduledCallback) (err error) {
 	// when we are not running we are in phase zero; the first active phase is index 1
 	if z := d.currPhase; z < 0 {
 		err = fmt.Errorf("domain %q already finished", d.name)

@@ -1,11 +1,11 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 func (op *DefineScene) Weave(cat *weave.Catalog) (err error) {
@@ -13,12 +13,13 @@ func (op *DefineScene) Weave(cat *weave.Catalog) (err error) {
 	// so they cant schedule, and have to use the annoying cat.GetRuntime()
 	// maybe there could be a "current schedule" list
 	// and push stacks that ( rather than push creating the first schedule )
-	// return cat.Schedule(weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	// return cat.ScheduleCmd(op, weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 	if domain, reqs, e := op.GetSceneReqs(cat.GetRuntime()); e != nil {
 		err = e
 	} else {
 		domain := cat.EnsureScene(domain)
-		if pen, e := cat.SceneBegin(domain, mdl.MakeSource(op)); e != nil {
+		pos := compact.MakeSource(op.GetMarkup(false))
+		if pen, e := cat.SceneBegin(domain, pos); e != nil {
 			err = e
 		} else {
 			defer cat.SceneEnd()

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
@@ -24,7 +24,7 @@ func MakeParagraph(lines [][]match.TokenValue) Paragraph {
 	return Paragraph{lines: lines}
 }
 
-func ParagraphPos(pos mdl.Source, str string, assign rt.Assignment) (ret Paragraph, err error) {
+func ParagraphPos(pos compact.Source, str string, assign rt.Assignment) (ret Paragraph, err error) {
 	c := match.Collector{BreakLines: true}
 	if e := c.Collect(str, pos.Line); e != nil {
 		err = fmt.Errorf("%w reading %s", e, str)
@@ -59,7 +59,7 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 		if matchSentence(z, q, n, &best) {
 			// try to generate if matched.
 			lineOfs := n[0].Pos.Y
-			source := mdl.Source{
+			source := compact.Source{
 				File:    p.file,
 				Path:    p.path,
 				Line:    lineOfs,

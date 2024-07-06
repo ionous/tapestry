@@ -3,11 +3,11 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
@@ -24,7 +24,7 @@ func MakeDeclaration(str string, tail rt.Assignment, ks JessMatches) *DeclareSta
 
 // todo: move into jess/dl
 func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.LanguagePhase,
+	return cat.ScheduleCmd(op, weaver.LanguagePhase,
 		func(w weaver.Weaves, run rt.Runtime) (err error) {
 			if p, e := op.newParagraph(run); e != nil {
 				err = e
@@ -49,7 +49,7 @@ func (op *DeclareStatement) newParagraph(run rt.Runtime) (ret jess.Paragraph, er
 	} else if txt, e := safe.GetText(run, op.Text); e != nil {
 		err = e
 	} else {
-		pos := mdl.MakeSource(op)
+		pos := compact.MakeSource(op.GetMarkup(false))
 		ret, err = jess.ParagraphPos(pos, txt.String(), op.Assign)
 	}
 	return

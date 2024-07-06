@@ -10,8 +10,8 @@ import (
 // (ie. when using go's json encoder. )
 const (
 	Comment  = "--"
+	File     = "src"
 	Position = "pos"
-	Source   = "src"
 )
 
 func IsMarkup(s string) (okay bool) {

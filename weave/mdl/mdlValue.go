@@ -162,7 +162,7 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 		from mdl_value_kind mv 
 		where mv.kind = @1
 		and mv.field = @2`,
-		kind.row, field.id,
+		kind.rowid, field.id,
 	); e != nil {
 		err = fmt.Errorf("database error: %s", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
@@ -182,7 +182,7 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 		// this to simplify domain management (ex. would have to check rival values)
 		err = fmt.Errorf("the domain of the assignment (%s) must match the field %q domain (%s)",
 			pen.domain, field.name, field.domain)
-	} else if _, e := pen.db.Exec(mdl_value_kind, kind.row, field.id, value, final, pen.pos.String()); e != nil {
+	} else if _, e := pen.db.Exec(mdl_value_kind, kind.rowid, field.id, value, final, pen.pos.String()); e != nil {
 		err = e
 	}
 	return

@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
@@ -49,7 +50,7 @@ func WeavePaths(outFile string, stories ...NamedFS) (err error) {
 				run := qna.NewRuntime(q)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				d := cat.EnsureScene("tapestry")
-				pos := mdl.Source{File: "default kinds", Path: "internal", Comment: "the built-in types"}
+				pos := compact.Source{File: "default kinds", Path: "internal", Comment: "the built-in types"}
 				if pen, e := cat.SceneBegin(d, pos); e != nil {
 					err = e
 				} else {
@@ -109,7 +110,7 @@ func importDir(cat *weave.Catalog, fsys NamedFS, dirs []string) (err error) {
 				// hack for the shared library, so it doesnt try to depend on itself
 				if d := cat.EnsureScene(scene); d.Name() != "tapestry" {
 					// tbd: what's a helpful source path
-					pos := mdl.Source{File: fsys.Name, Path: dir}
+					pos := compact.Source{File: fsys.Name, Path: dir}
 					if pen, e := cat.SceneBegin(d, pos); e != nil {
 						err = e
 					} else {

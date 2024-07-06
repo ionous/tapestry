@@ -7,6 +7,8 @@ import (
 	"log"
 	"strconv"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -167,16 +169,22 @@ func (cat *Catalog) Step(cb StepFunction) (err error) {
 	return
 }
 
+func (cat *Catalog) Schedule(when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) error {
+	pos := compact.Source{}
+	return cat.SchedulePos(pos, when, cb)
+}
+
 // run the passed function now or in the future.
-func (cat *Catalog) Schedule(when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
-	return cat.SchedulePos(when, mdl.Source{}, cb)
+func (cat *Catalog) ScheduleCmd(key typeinfo.Markup, when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) error {
+	pos := compact.MakeSource(key.GetMarkup(false))
+	return cat.SchedulePos(pos, when, cb)
 }
 
 // run the passed function now or in the future.
 // pass the line number of the operation.
 // tbd: maybe it would be better if the ops carried their full source pos
 // currently they just have line number.
-func (cat *Catalog) SchedulePos(when weaver.Phase, pos mdl.Source, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
+func (cat *Catalog) SchedulePos(pos compact.Source, when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errors.New("schedule has no active scene")
 	} else {
@@ -199,7 +207,7 @@ func (cat *Catalog) EnsureScene(name string) (ret *Domain) {
 	return
 }
 
-func (cat *Catalog) SceneBegin(d *Domain, at mdl.Source) (ret *mdl.Pen, err error) {
+func (cat *Catalog) SceneBegin(d *Domain, at compact.Source) (ret *mdl.Pen, err error) {
 	if d.currPhase != 0 {
 		err = fmt.Errorf("trying to define scene %s for a second time", d.name)
 	} else {

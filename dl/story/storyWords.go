@@ -12,7 +12,7 @@ import (
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
 func (op *DefinePlural) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if plural, e := safe.GetText(run, op.Plural); e != nil {
 			err = e
 		} else if singular, e := safe.GetText(run, op.Singular); e != nil {

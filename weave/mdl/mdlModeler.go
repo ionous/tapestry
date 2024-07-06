@@ -2,10 +2,10 @@ package mdl
 
 import (
 	"database/sql"
-	"fmt"
 
 	"errors"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -49,28 +49,12 @@ type Modeler struct {
 	warn  Log
 }
 
-// this is in a weird spot.
-// would compact be any better?
-type Source struct {
-	File    string // with extension
-	Path    string // enough to locate the file
-	Line    int    // a zero-offset printed as one-offset.
-	Comment string
-}
-
-func (p Source) String() (ret string) {
-	if len(p.File) > 0 {
-		ret = fmt.Sprintf("%d:%s(%s)", p.Line+1, p.File, p.Path)
-	}
-	return
-}
-
-func (m *Modeler) PinPos(domain string, pos Source) *Pen {
+func (m *Modeler) PinPos(domain string, pos compact.Source) *Pen {
 	return &Pen{db: m.db, pos: pos, paths: m.paths, domain: domain, warn: m.warn}
 }
 
 func (m *Modeler) Pin(domain string) *Pen {
-	return m.PinPos(domain, Source{})
+	return m.PinPos(domain, compact.Source{})
 }
 
 // meant for tests which inject their own data outside of weave

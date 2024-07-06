@@ -176,9 +176,6 @@ func (pt *PlainText) flushPhrases(tail rt.Assignment) (err error) {
 		str := pt.str.String()
 		pt.str.Reset()
 		// write the declare statement
-		// out := story.MakeDeclaration(str, tail, ks)
-
-		// pos := mdl.MakeSource(tail.(typeinfo.Markup))
 		para := jess.MakeParagraph(ks)
 		out := story.MakeDeclaration(str, tail, para)
 		pt.out = append(pt.out, out)

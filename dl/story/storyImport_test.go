@@ -26,7 +26,7 @@ func TestImportStory(t *testing.T) {
 		cat := weave.NewCatalog(db)
 		//
 		d := cat.EnsureScene("tapestry")
-		if _, e := cat.SceneBegin(d, mdl.Source{}); e != nil {
+		if _, e := cat.SceneBegin(d, compact.Source{}); e != nil {
 			t.Fatal(e)
 		} else {
 			defer cat.SceneEnd()

@@ -13,7 +13,7 @@ import (
 )
 
 func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if name, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
 		} else if names, e := safe.GetTextList(run, op.Names); e != nil {
@@ -42,7 +42,7 @@ func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
 	name := strings.Join(op.Lede, "/")
 	words := &grammar.Words{Words: op.Lede}
 	scans := append([]grammar.ScannerMaker{words}, op.Scans...)
-	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddGrammar(name, &grammar.Directive{
 			Name:   name,
 			Series: scans,
@@ -54,7 +54,7 @@ func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
 // isnt dependent on story / weave
 func (op *DefineNamedGrammar) Weave(cat *weave.Catalog) (err error) {
 	name := inflect.Normalize(op.Name)
-	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddGrammar(name, &grammar.Directive{
 			Name:   name,
 			Series: op.Scans,

@@ -24,7 +24,7 @@ func wrapScene(name, path string, els []story.StoryStatement) []story.StoryState
 			SceneName:  &literal.TextValue{Value: name},
 			Statements: copy,
 			Markup: map[string]any{
-				compact.Source:  path,
+				compact.File:    path,
 				compact.Comment: note,
 			},
 		}

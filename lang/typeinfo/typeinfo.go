@@ -26,7 +26,7 @@ type Markup interface {
 // package listing of type data
 type TypeSet struct {
 	Name       string
-	Comment    []string
+	Comment    []string // comments describing the entire package.
 	Slot       []*Slot
 	Flow       []*Flow
 	Str        []*Str

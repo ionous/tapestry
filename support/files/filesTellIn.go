@@ -49,7 +49,7 @@ func ReadTellRunes(in io.RuneReader, ofs Ofs, includeComments bool) (ret any, er
 			x, y := dec.Position()
 			m[compact.Position] = []int{x, y + ofs.Line}
 			if len(ofs.File) > 0 {
-				m[compact.Source] = ofs.File
+				m[compact.File] = ofs.File
 			}
 			return m
 		})

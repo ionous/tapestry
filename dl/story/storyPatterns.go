@@ -17,7 +17,7 @@ import (
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if name, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else {
@@ -45,7 +45,7 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 }
 
 func (op *DefineAction) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if act, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else {
@@ -71,7 +71,7 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 }
 
 func (op *DefinePatternProvides) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if act, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else if ks, e := run.GetField(meta.KindAncestry, act.String()); e != nil {
@@ -88,7 +88,7 @@ func (op *DefinePatternProvides) Weave(cat *weave.Catalog) (err error) {
 }
 
 func (op *DefineRule) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if phrase, e := safe.GetText(run, op.RuleTiming); e != nil {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
@@ -98,7 +98,7 @@ func (op *DefineRule) Weave(cat *weave.Catalog) (err error) {
 		} else if rule, e := desc.GetRuleInfo(); e != nil {
 			err = e
 		} else {
-			err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+			err = cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 				return rule.WeaveRule(w, nil, op.Exe)
 			})
 		}
@@ -107,7 +107,7 @@ func (op *DefineRule) Weave(cat *weave.Catalog) (err error) {
 }
 
 func (op *DefineNounRule) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if noun, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
 		} else if noun, e := run.GetField(meta.ObjectId, noun.String()); e != nil {
@@ -128,7 +128,7 @@ func (op *DefineNounRule) Weave(cat *weave.Catalog) (err error) {
 				}
 				filters = rules.AddEventFilters(filters)
 			}
-			err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+			err = cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 				return rule.WeaveRule(w, filters, op.Exe)
 			})
 		}
@@ -137,7 +137,7 @@ func (op *DefineNounRule) Weave(cat *weave.Catalog) (err error) {
 }
 
 func (op *DefineKindRule) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if kind, e := safe.GetText(run, op.KindName); e != nil {
 			err = e
 		} else if ks, e := run.GetField(meta.KindAncestry, kind.String()); e != nil {
@@ -160,7 +160,7 @@ func (op *DefineKindRule) Weave(cat *weave.Catalog) (err error) {
 				}
 				filters = rules.AddEventFilters(filters)
 			}
-			err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+			err = cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 				return rule.WeaveRule(w, filters, op.Exe)
 			})
 		}

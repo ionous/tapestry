@@ -79,7 +79,7 @@ select origin, name, affinity, typeName, aspect
 from existingFields
 join pendingFields
 using(name)
-`, kid.fullpath(), field, cls.row, pen.getPath(kindsOf.Aspect)); e != nil {
+`, kid.fullpath(), field, cls.rowid, pen.getPath(kindsOf.Aspect)); e != nil {
 		err = fmt.Errorf("database error: %s", e)
 	} else {
 		var prev struct {
@@ -127,13 +127,13 @@ using(name)
 		} else {
 			// keep null instead of zero ids
 			var clsid *int64
-			if cls.row != 0 {
-				clsid = &cls.row
+			if cls.rowid != 0 {
+				clsid = &cls.rowid
 			}
-			if aff == affine.Record && cls.row == 0 {
+			if aff == affine.Record && cls.rowid == 0 {
 				// this should never happen, but has during field development;
 				err = errors.New("unexpected condition, records should always have a type")
-			} else if _, e := pen.db.Exec(mdl_field, domain, kid.row, field, aff, clsid, at); e != nil {
+			} else if _, e := pen.db.Exec(mdl_field, domain, kid.rowid, field, aff, clsid, at); e != nil {
 				err = fmt.Errorf("database error: %s", e)
 			}
 		}

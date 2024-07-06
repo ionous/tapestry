@@ -16,7 +16,7 @@ import (
 
 // (the) colors are red, blue, or green.
 func (op *DefineState) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if aspect, e := safe.GetText(run, op.AspectName); e != nil {
 			err = e
 		} else if traits, e := safe.GetTextList(run, op.StateNames); e != nil {
@@ -38,7 +38,7 @@ func (op *DefineState) Weave(cat *weave.Catalog) error {
 }
 
 func (op *DefineNounKind) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if noun, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
 		} else if kind, e := safe.GetText(run, op.KindName); e != nil {
@@ -53,7 +53,7 @@ func (op *DefineNounKind) Weave(cat *weave.Catalog) error {
 }
 
 func (op *DefineNounStates) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if name, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
 		} else if traits, e := safe.GetTextList(run, op.StateNames); e != nil {
@@ -81,7 +81,7 @@ func truly() rt.Assignment {
 
 // ex. The description of the nets is xxx
 func (op *DefineNounValue) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if name, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
 		} else if field, e := safe.GetText(run, op.FieldName); e != nil {
@@ -110,7 +110,7 @@ func (op *DefineNounValue) Weave(cat *weave.Catalog) error {
 }
 
 func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if rel, e := safe.GetText(run, op.RelationName); e != nil {
 			err = e
 		} else if nouns, e := safe.GetTextList(run, op.NounNames); e != nil {
