@@ -5,9 +5,12 @@ const (
 	// special names:
 	PlayerSelf    = "self"
 	FactDirection = "dir"
-	// kinds:
+	// the most basic kind of physical object;
+	// and sometimes used as a placeholder when the particular kind isnt known.
+	// ( esp. for instance, a potential room or door when building directions )
+	Objects = "objects"
+	// other kinds:
 	Actors     = "actors"     // for player self
-	Objects    = "objects"    // the kind of a potential room or door
 	Directions = "directions" // a special kind of object representing movement of travel
 	Rooms      = "rooms"      // possible player locale
 	Things     = "things"     // the default for named objects if nothing else is specified

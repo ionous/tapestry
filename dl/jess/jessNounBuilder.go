@@ -13,10 +13,11 @@ type NounBuilder interface {
 }
 
 // useful for dispatching a parent's call to build nouns to one of its matched children.
-func buildNounsFrom(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties, options ...nounBuilderRef) (ret []DesiredNoun, err error) {
-	for _, opt := range options {
-		if !opt.IsNil {
-			ret, err = opt.BuildNouns(q, w, run, props)
+// ( calls .BuildNoun() on the first non-nil builder )
+func buildNounsFrom(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties, builders ...nounBuilderRef) (ret []DesiredNoun, err error) {
+	for _, builder := range builders {
+		if !builder.IsNil {
+			ret, err = builder.BuildNouns(q, w, run, props)
 			break
 		}
 	}

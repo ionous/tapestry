@@ -22,7 +22,9 @@ func Optional[M any,
 }
 
 // go is unable to reliably test typed interfaces for nil without reflection.
-// however, look how easy this is. *sigh*
+// this, therefore, acts as a "cast" from the concrete type to the interface
+// and adds in a boolean IsNil so users of the interface can check the original value.
+// see? easy. *sigh* i still love you go. despite everything.
 // https://go.dev/doc/faq#nil_error
 func ref[M any,
 	IM interface {
