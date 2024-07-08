@@ -26,21 +26,12 @@ func (op *Noun) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Noun) matchNoun(q Query, input *InputState) (okay bool) {
 	if cnt := keywordScan(input.Words()); cnt > 0 {
+		var kind string
 		sub := input.Cut(cnt)
-		// fix? it'd be nice if the mapping of "you" to "self" was handled by script;
-		// or even not necessary at all.
-		if width := 1; len(sub) == width && sub[0].Hash() == keywords.You {
-			op.actualNoun = ActualNoun{Name: PlayerSelf, Kind: Actors}
+		if m, width := q.FindNoun(sub, &kind); width > 0 {
+			op.actualNoun = ActualNoun{Name: m, Kind: kind}
 			op.Matched = input.Cut(width)
 			*input, okay = input.Skip(width), true
-		} else {
-			// match the subsection normally:
-			var kind string
-			if m, width := q.FindNoun(sub, &kind); width > 0 {
-				op.actualNoun = ActualNoun{Name: m, Kind: kind}
-				op.Matched = input.Cut(width)
-				*input, okay = input.Skip(width), true
-			}
 		}
 	}
 	return

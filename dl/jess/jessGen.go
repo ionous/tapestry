@@ -62,7 +62,7 @@ func writeNounValues(w weaver.Weaves, ns []DesiredNoun) (err error) {
 	return
 }
 
-// creates a noun as a placeholder
+// creates a noun as a placeholder ( from a specified Name )
 // later, a pass ensures that all placeholder nouns have been given kinds;
 // or it upgrades them to things.
 // to simplify the code, this happens even if the kind might possibly be known.
