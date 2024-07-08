@@ -48,8 +48,13 @@ func TokenizeString(str string) (ret []TokenValue, err error) {
 
 // implements Notifier to accumulate tokens from the parser
 type Collector struct {
-	Tokens       []TokenValue
-	Lines        [][]TokenValue // empty if BreakLines is false
+	Tokens []TokenValue
+	// lines is filled from Tokens on every new line.
+	// its empty if BreakLines is false
+	// Tokens can have values with trailing assignments.
+	// ie. ':' isn't considered an end of line here....
+	// tbd: it might be nice to change that only lines *or* tokens is valid.
+	Lines        [][]TokenValue
 	KeepComments bool
 	BreakLines   bool
 	LineOffset   int
@@ -58,14 +63,7 @@ type Collector struct {
 // lineOffset adjusts the positions in the parsed tokens.
 func (c *Collector) TokenizeString(str string) (err error) {
 	t := Tokenizer{Notifier: c}
-	if e := charm.ParseEof(str, t.Decode()); e != nil {
-		err = e
-	} else if cnt := len(c.Tokens); c.BreakLines && cnt > 0 {
-		// not entirely sure this can happen; the eof should probably catch
-		// any dangling tokens before this, and error.
-		err = fmt.Errorf("string has %d trailing tokens", cnt)
-	}
-	return
+	return charm.ParseEof(str, t.Decode())
 }
 
 func (at *Collector) Decoded(tv TokenValue) error {
