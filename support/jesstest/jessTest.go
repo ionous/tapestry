@@ -392,7 +392,7 @@ var Phrases = []Phrase{
 		},
 	},
 	// ------------------------------------------------------------------------
-	// PropertyNounValue
+	// PropertyPropertyPropertyNounValue
 	// ------------------------------------------------------------------------
 	{
 		test: `The title of the story is "A Secret."`,

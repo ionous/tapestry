@@ -55,7 +55,6 @@ func (op *Linking) Match(q Query, input *InputState) (okay bool) {
 	if next := *input;        //
 	op.matchNowhere(&next) || // tbd. maybe this is better than context flags? i dunno.
 		Optional(q, &next, &op.KindCalled) ||
-		Optional(q, &next, &op.Noun) ||
 		Optional(q, &next, &op.Name) {
 		*input, okay = next, true
 	}
@@ -73,7 +72,7 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 // generate a room or door; an object if there's not enough information to know; or nil for nowhere.
 func (op *Linking) BuildNoun(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret *DesiredNoun, err error) {
 	if !op.Nowhere {
-		if els, e := buildNounsFrom(q, w, run, props, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
+		if els, e := buildNounsFrom(q, w, run, props, ref(op.KindCalled), ref(op.Name)); e != nil {
 			err = e
 		} else {
 			a := els[0]

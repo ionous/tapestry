@@ -88,6 +88,7 @@ Spec:requires:contains:
               - true
 
     - # Matches an existing noun, or if not: then something new.
+      # Noun property uses this to find the best property field based on a noun's kind.
       Flow:slots:terms:
         - "named_noun"
         - "noun_builder"
@@ -114,7 +115,9 @@ Spec:requires:contains:
               - true
           - Term: "kind"
           - Term: "called"
-          - Term: "named_noun"
+          - # tries to match an existing noun,
+            # generating a new noun if needed.
+            Term: "name"
 
     - # Specifies one or more nouns, in full or in part.
       # Only one of the options, plus possibly 'additional_names', will match.
@@ -130,16 +133,17 @@ Spec:requires:contains:
             Term:optional:
               - "kind_called"
               - true
-          - # matches existing nouns
-            Term:optional:
-              - "noun"
-              - true
           - # used primarily for anonymous nouns: ex. "the container"
             # note that anonymous nouns are prohibited from starting a sentence.
             Term:optional:
               - "kind"
               - true
-          - Term:optional:
+          - # tries to match an existing noun,
+            # generating a new noun if needed.
+            # ( kind needs to be before name because kind is more specific )
+            # ( however, that blocks singletons - where kind and noun are the same )
+            # ( could maybe remove kind for _match_ and handle it in generate )
+            Term:optional:
               - "name"
               - true
           - Term:optional:
@@ -442,7 +446,9 @@ Spec:requires:contains:
             Term:type:
               - "of"
               - "words"
-          - Term: "named_noun"
+          - # tries to match an existing noun,
+            # generating a new noun if needed.
+            Term: "named_noun"
           - Term: "are"
           - Term:optional:
               - "single_value"
@@ -457,7 +463,14 @@ Spec:requires:contains:
       # like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
       Flow:terms:
         - "noun_property_value"
-        - - Term: "named_noun"
+        - # tries to match an existing noun, or generates one.
+          # use the matched noun to guide property matching.
+          # 
+          # tdb: to avoid pre-matching the property ( and the noun )
+          # perhaps GetPartialNoun/Kind could optionally search/grow right to left.
+          # ( noun/kind matching is useful for verbs "The subject of supporting is supporters." )
+          # ( if the values were only number or quoted text, it'd be simpler )
+          - Term: "named_noun"
           - Term:type:
               - "has"
               - "words"
@@ -784,10 +797,9 @@ Spec:requires:contains:
           - Term:optional:
               - "kind_called"
               - true
-          - Term:optional:
-              - "noun"
-              - true
-          - Term:optional:
+          - # tries to match an existing room or door, 
+            # generating a new one if needed.
+            Term:optional:
               - "name"
               - true
 

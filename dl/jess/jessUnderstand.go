@@ -43,7 +43,7 @@ var pluralOf = match.PanicSpans("plural of")
 func (op *Understand) Generate(ctx Context) error {
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if len(op.PluralOf) > 0 {
-			err = op.applyPlurals(w)
+			err = op.applyPlurals(ctx, w)
 		} else {
 			// fix: parse lhs first, into a map keyed by its string
 			// then we can error better when strings or grammars appear on the wrong side.
@@ -112,40 +112,43 @@ func (op *Understand) applyAliases(w weaver.Weaves, rhsNouns []string) (err erro
 func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 	for it := op.Names.GetNames(); it.HasNext(); {
 		next := it.GetNext()
-		if n := next.Noun; n != nil {
-			nouns = append(nouns, n.actualNoun.Name)
-		} else if k := next.Kind; k != nil && k.actualKind.BaseKind == kindsOf.Action {
+		if k := next.Kind; k != nil && k.actualKind.BaseKind == kindsOf.Action {
 			actions = append(actions, k.actualKind.Name)
-		} else if n := next.Name; n == nil {
-			err = errors.New("understandings can only match existing nouns or existing actions")
+		} else if name := next.Name; name == nil {
+			err = errors.New("understandings can only match nouns or actions")
 			break
 		} else {
 			// fix? if we're going to check at the end; maybe shift to plain names instead.
 			// fix? pass a filter to FindNoun so you can't understand things that arent objects.
-			if noun, width := q.FindNoun(n.Matched, nil); width < 0 {
-				err = fmt.Errorf("no noun found called %q", n.Matched.DebugString())
+			if fullname, width := q.FindNoun(name.Matched, nil); width < 0 {
+				err = fmt.Errorf("no noun found called %q", name.Matched.DebugString())
 				break
 			} else {
-				nouns = append(nouns, noun)
+				nouns = append(nouns, fullname)
 			}
 		}
 	}
 	return
 }
 
-func (op *Understand) applyPlurals(w weaver.Weaves) (err error) {
+func (op *Understand) applyPlurals(q Query, w weaver.Weaves) (err error) {
 Loop:
-	for as := op.Names.GetNames(); as.HasNext(); {
-		// determine the "single" side of the plural request
-		if n := as.GetNext(); n.Noun == nil {
-			err = errors.New("unknown name, expected the name of an existing noun")
+	for it := op.Names.GetNames(); it.HasNext(); {
+		next := it.GetNext()
+		if name := next.Name; name == nil {
+			err = errors.New("plural understandings can only match existing nouns")
+			break
 		} else {
-			name := n.Noun.actualNoun.Name
-			for it := op.QuotedTexts.Iterate(); it.HasNext(); {
-				plural := it.GetNext()
-				if e := w.AddPlural(plural, name); e != nil {
-					err = e
-					break Loop
+			if fullname, width := q.FindNoun(name.Matched, nil); width < 0 {
+				err = fmt.Errorf("no noun found called %q", name.Matched.DebugString())
+				break
+			} else {
+				for qt := op.QuotedTexts.Iterate(); qt.HasNext(); {
+					plural := qt.GetNext()
+					if e := w.AddPlural(plural, fullname); e != nil {
+						err = e
+						break Loop
+					}
 				}
 			}
 		}

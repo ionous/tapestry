@@ -3,7 +3,6 @@ package jess
 const (
 	// only allow simple names when matching.
 	PlainNameMatching = (1 << iota)
-	ExcludeNounMatching
 	// this limits matching to kinds which can be instanced
 	// so that names which match other kinds can still become nouns
 	// for instance, there can be a pattern called "on" and a verb called "on".
@@ -42,12 +41,6 @@ func (q queryContext) GetContext() int {
 func matchKinds(q Query) bool {
 	flags := q.GetContext()
 	return (flags & PlainNameMatching) == 0
-}
-
-func matchNouns(q Query) bool {
-	flags := q.GetContext()
-	return (flags&PlainNameMatching) == 0 &&
-		(flags&ExcludeNounMatching) == 0
 }
 
 func matchKindsOfKinds(q Query) bool {

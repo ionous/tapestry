@@ -14,7 +14,7 @@ func (op *KindCalled) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props
 	} else {
 		// ignores the article of the kind,
 		// in favor of the article closest to the named noun
-		ret, err = op.NamedNoun.BuildNouns(q, w, run, NounProperties{
+		ret, err = op.Name.BuildNouns(q, w, run, NounProperties{
 			Traits: append(props.Traits, ReduceTraits(op.GetTraits())...),
 			Kinds:  append(props.Kinds, kind),
 		})
@@ -23,7 +23,7 @@ func (op *KindCalled) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props
 }
 
 func (op *KindCalled) GetNormalizedName() (string, error) {
-	return op.NamedNoun.GetNormalizedName()
+	return op.Name.GetNormalizedName()
 }
 
 func (op *KindCalled) GetKind() (string, error) {
@@ -42,7 +42,7 @@ func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
 	(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) &&
 		op.Called.Match(q, &next) &&
-		op.NamedNoun.Match(AddContext(q, CheckIndefiniteArticles), &next) {
+		op.Name.Match(AddContext(q, CheckIndefiniteArticles), &next) {
 		*input, okay = next, true
 	}
 	return

@@ -13,15 +13,6 @@ func (op *Name) GetNormalizedName() (string, error) {
 // names are often potential nouns;
 // this helper generates them as such.
 func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
-	if n, e := op.buildNoun(q, w, props); e != nil {
-		err = e
-	} else {
-		ret = []DesiredNoun{n}
-	}
-	return
-}
-
-func (op *Name) buildNoun(q Query, w weaver.Weaves, props NounProperties) (ret DesiredNoun, err error) {
 	if noun, created, e := ensureNoun(q, w, op.Matched, &props); e != nil {
 		err = e
 	} else if e := writeKinds(w, noun, props.Kinds); e != nil {
@@ -31,7 +22,7 @@ func (op *Name) buildNoun(q Query, w weaver.Weaves, props NounProperties) (ret D
 		if created {
 			n.appendArticle(op.Article)
 		}
-		ret = n
+		ret = []DesiredNoun{n}
 	}
 	return
 }

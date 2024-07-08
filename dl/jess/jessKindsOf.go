@@ -17,7 +17,7 @@ func (op *KindsAreKind) Phase() weaver.Phase {
 
 func (op *KindsAreKind) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	op.Names.Match(AddContext(q, ExcludeNounMatching), &next) &&
+	op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.matchKindsOf(&next) &&
 		(Optional(q, &next, &op.Traits) || true) &&
@@ -117,7 +117,7 @@ func getKindOfName(at *Names) (ret string) {
 		name = n
 	} else if kc := at.KindCalled; kc != nil {
 		// we excluded existing nouns; so only names must exist
-		name = kc.NamedNoun.Name
+		name = &kc.Name
 	}
 	if name == nil {
 		panic("unexpected match")

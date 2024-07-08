@@ -27,12 +27,8 @@ func (op *Names) GetTraits() (ret Traitor) {
 
 // checks Query flags to control matching
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
-	matchNouns := matchNouns(q)
 	matchKinds := matchKinds(q)
 	if next := *input; ( //
-	matchNouns &&
-		// "the bottle"
-		Optional(q, &next, &op.Noun)) || ( //
 	matchKinds &&
 		// "5 containers",
 		Optional(q, &next, &op.CountedKind) ||
@@ -40,7 +36,7 @@ func (op *Names) Match(q Query, input *InputState) (okay bool) {
 		Optional(q, &next, &op.KindCalled) ||
 		// "the container"
 		Optional(q, &next, &op.Kind)) || ( //
-	// "the unknown name"
+	// "the bottle", or "the unknown name"
 	Optional(q, &next, &op.Name)) {
 		// as long as one succeeded, try matching additional names too...
 		// inform seems to only allow "kind called" at the front of a list of names...
@@ -62,7 +58,6 @@ func (op Names) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounP
 			ref(at.KindCalled),
 			ref(at.Kind),
 			ref(at.Name),
-			ref(at.Noun), //
 		); e != nil {
 			err = e
 			break
