@@ -22,8 +22,13 @@ func (op *PropertyValues) Match(q Query, kind string, input *InputState) (okay b
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
 		op.Property.Match(q, kind, &next) &&
-		(op.matchOf(q, &next) || true) &&
+		(op.matchOf(q, &next) || true) && // optionally the wod "of"
 		op.Value.Match(q, &next) {
+		//
+		var optional AdditionalPropertyValues
+		if optional.Match(q, kind, &next) {
+			op.AdditionalPropertyValues = &optional
+		}
 		*input, okay = next, true
 	}
 	return

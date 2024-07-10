@@ -32,14 +32,15 @@ var Phrases = []Phrase{
 			"AddNounValue:", "bottle", "age", number(42),
 		},
 	},
-	// {
-	// 	test: `The bottle has an age of 42, and the description "A plain glass bottle."`,
-	// 	result: []string{
-	// 		"AddNounName:", "bottle", "bottle",
-	// 		"AddNounKind:", "bottle", "things",
-	// 		"AddNounValue:", "bottle", "age", number(42),
-	// 	},
-	// },
+	{
+		test: `The bottle has age 42 and the description "A plain glass bottle."`,
+		result: []string{
+			"AddNounName:", "bottle", "bottle",
+			"AddNounKind:", "bottle", "things",
+			"AddNounValue:", "bottle", "age", number(42),
+			"AddNounValue:", "bottle", "description", text("A plain glass bottle."),
+		},
+	},
 	// ------------------------------------------------------------------------
 	// TimedRule
 	// ( storing is one of the predefined patterns. )
