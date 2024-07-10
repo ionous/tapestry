@@ -34,7 +34,7 @@ func (op *MultipleKinds) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *MultipleKinds) matchName(input *InputState) (okay bool) {
-	if width := keywordScan(input.Words()); width > 0 {
+	if width := nameScan(input.Words()); width > 0 {
 		op.Matched = input.Cut(width)
 		*input, okay = input.Skip(width), true
 	}

@@ -25,7 +25,7 @@ func (op *Noun) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Noun) matchNoun(q Query, input *InputState) (okay bool) {
-	if cnt := keywordScan(input.Words()); cnt > 0 {
+	if cnt := nameScan(input.Words()); cnt > 0 {
 		var kind string
 		sub := input.Cut(cnt)
 		if m, width := q.FindNoun(sub, &kind); width > 0 {

@@ -25,7 +25,7 @@ const (
 	String                     // delimited by spaces and other special runes
 	Tell                       // tell subdoc
 
-	// Number? but need to handle trailing decimals: "the age is 45."
+	// Number? needs to recognize trailing decimals, embedded and trailing commas: "the age is 45."
 )
 
 type TokenValue struct {

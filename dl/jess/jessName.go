@@ -38,7 +38,7 @@ func (op *Name) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Name) matchName(input *InputState) (okay bool) {
-	if width := keywordScan(input.Words()); width > 0 {
+	if width := nameScan(input.Words()); width > 0 {
 		op.Matched = input.Cut(width)
 		*input, okay = input.Skip(width), true
 	}
@@ -48,7 +48,7 @@ func (op *Name) matchName(input *InputState) (okay bool) {
 // returns index of an "important" keyword
 // or the end of the string if none found.
 // inform also has troubles with names like "the has been."
-func keywordScan(ts []match.TokenValue) (ret int) {
+func nameScan(ts []match.TokenValue) (ret int) {
 	if i := scanUntil(ts, nameSeparators...); i < 0 {
 		ret = len(ts)
 	} else {
