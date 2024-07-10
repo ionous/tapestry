@@ -34,7 +34,7 @@ func (k *pronounSource) nextPronoun() (ret pronounSource) {
 
 // at least for now, only works with single nouns
 // and the matcher only understands "it"
-func (k *pronounSource) setPronounSource(ns Names) {
+func (k *pronounSource) setPronounSource(ns MultipleNames) {
 	if ns.Name != nil && ns.AdditionalNames == nil {
 		k.source = ns.Name
 		k.usedPronouns = true

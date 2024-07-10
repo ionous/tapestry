@@ -2,7 +2,14 @@ package jess
 
 import "git.sr.ht/~ionous/tapestry/rt/kindsOf"
 
-func (op *Adjectives) Match(q Query, input *InputState) (okay bool) {
+func (op *MultipleAdjectives) Next() (ret *MultipleAdjectives) {
+	if more := op.AdditionalAdjectives; more != nil {
+		ret = &more.Adjectives
+	}
+	return
+}
+
+func (op *MultipleAdjectives) Match(q Query, input *InputState) (okay bool) {
 	next := *input
 	traits := Optional(q, &next, &op.Traits)
 	if traits {
@@ -18,17 +25,17 @@ func (op *Adjectives) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Adjectives) GetTraits() (ret Traitor) {
+func (op *MultipleAdjectives) GetTraits() (ret *Traits) {
 	if ts := op.Traits; ts != nil {
 		ret = ts.GetTraits()
 	}
 	return
 }
 
-func (op Adjectives) Reduce() (ret NounProperties, err error) {
-	for t := op; ; {
+func (op MultipleAdjectives) Reduce() (ret NounProperties, err error) {
+	for it := &op; it != nil; it = it.Next() {
 		ret.Traits = append(ret.Traits, ReduceTraits(op.GetTraits())...)
-		if k := t.Kind; k != nil {
+		if k := it.Kind; k != nil {
 			// for something to have adjectives (ie. traits) it must be a noun of some sort
 			if kn, e := k.Validate(kindsOf.Kind); e != nil {
 				err = e
@@ -36,11 +43,6 @@ func (op Adjectives) Reduce() (ret NounProperties, err error) {
 			} else {
 				ret.Kinds = append(ret.Kinds, kn)
 			}
-		}
-		if next := t.AdditionalAdjectives; next == nil {
-			break
-		} else {
-			t = next.Adjectives
 		}
 	}
 	return

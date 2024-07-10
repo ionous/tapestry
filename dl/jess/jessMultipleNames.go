@@ -5,29 +5,30 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
+func (op *MultipleNames) Next() (ret *MultipleNames) {
+	if next := op.AdditionalNames; next != nil {
+		ret = &next.Names
+	}
+	return
+}
+
 // some callers want to fail matching on anonymous leading kinds
 // tbd: would it be better to match, and error on generation?
 // ( ie. to produce a message )
-func (op *Names) HasAnonymousKind() bool {
+func (op *MultipleNames) HasAnonymousKind() bool {
 	return op.Kind != nil
 }
 
-// unwind the tree of additional names
-func (op *Names) GetNames() Iterator {
-	return Iterator{op}
-}
-
 // unwind the traits ( if any ) of the names
-func (op *Names) GetTraits() (ret Traitor) {
+func (op *MultipleNames) GetTraits() (ret *Traits) {
 	if c := op.KindCalled; c != nil {
 		ret = c.GetTraits()
 	}
 	return
-
 }
 
 // checks Query flags to control matching
-func (op *Names) Match(q Query, input *InputState) (okay bool) {
+func (op *MultipleNames) Match(q Query, input *InputState) (okay bool) {
 	if next := *input;                   //
 	Optional(q, &next, &op.Pronoun) || ( //
 	//
@@ -54,9 +55,8 @@ func (op *Names) Match(q Query, input *InputState) (okay bool) {
 }
 
 // implements NounBuilder by calling BuildNouns on all matched names
-func (op *Names) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
-	for n := op.GetNames(); n.HasNext(); {
-		at := n.GetNext()
+func (op *MultipleNames) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+	for at := op; at != nil; at = at.Next() {
 		if ns, e := buildNounsFrom(q, w, run, props,
 			nillable(at.Pronoun),
 			nillable(at.CountedKind),
@@ -69,6 +69,15 @@ func (op *Names) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props Noun
 		} else {
 			ret = append(ret, ns...)
 		}
+	}
+	return
+}
+
+func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	op.CommaAnd.Match(q, &next) &&
+		op.Names.Match(q, &next) {
+		*input, okay = next, true
 	}
 	return
 }

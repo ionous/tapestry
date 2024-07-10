@@ -36,16 +36,6 @@ func (op *Property) matchProperty(q Query, kind string, input *InputState) (okay
 // `The description of the pen is "mightier than the sword.`
 // --------------------------------------------------------------
 
-// matches in the noun phase, but mostly runs in the fallback and value phase
-func (op *PropertyNounValue) Phase() weaver.Phase {
-	return weaver.NounPhase
-}
-func (op *PropertyNounValue) GetNamedNoun() NamedNoun {
-	return op.NamedNoun
-}
-func (op *PropertyNounValue) GetProperty() Property {
-	return op.Property
-}
 func (op *PropertyNounValue) GetValue() (ret rt.Assignment) {
 	if v := op.SingleValue; v != nil {
 		ret = v.Assignment()
@@ -74,7 +64,7 @@ func (op *PropertyNounValue) MatchLine(q Query, line InputState) (ret InputState
 			// the whole string must be consumed
 			property := next
 			property.words = next.Cut(index)
-			if op.Property.Match(q, namedKind(op.NamedNoun), &property) && //
+			if op.Property.Match(q, matchedKind(op.NamedNoun), &property) && //
 				property.Len() == 0 {
 				ret, okay = rest, true
 			}
@@ -84,7 +74,18 @@ func (op *PropertyNounValue) MatchLine(q Query, line InputState) (ret InputState
 }
 
 func (op *PropertyNounValue) Generate(ctx Context) error {
-	return genNounValuePhrase(ctx, op)
+	return ctx.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if ns, e := op.NamedNoun.BuildNouns(ctx, w, run, NounProperties{}); e != nil {
+			err = e
+		} else if e := tryAsThings(ctx, ns); e != nil {
+			err = e
+		} else {
+			err = genNounValues(ctx, ns, func(id string) error {
+				return w.AddNounValue(id, op.Property.String(), op.GetValue())
+			})
+		}
+		return
+	})
 }
 
 // --------------------------------------------------------------
@@ -92,85 +93,56 @@ func (op *PropertyNounValue) Generate(ctx Context) error {
 // `The pen has (a) description (of) "mightier than the sword.`
 // --------------------------------------------------------------
 
-// like PropertyNounValue, matches in the noun phase,
-// but mostly runs in the fallback and value phase
-func (op *NounPropertyValue) Phase() weaver.Phase {
-	return weaver.NounPhase
-}
-func (op *NounPropertyValue) GetNamedNoun() NamedNoun {
-	return op.NamedNoun
-}
-func (op *NounPropertyValue) GetProperty() Property {
-	return op.Property
-}
-func (op *NounPropertyValue) GetValue() rt.Assignment {
-	return op.SingleValue.Assignment()
-}
-
 func (op *NounPropertyValue) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	op.NamedNoun.Match(AddContext(q, MatchPronouns), &next) &&
 		op.Has.Match(q, &next, keywords.Has) &&
-		(Optional(q, &next, &op.Article) || true) &&
-		op.Property.Match(q, namedKind(op.NamedNoun), &next) &&
-		(op.matchOf(q, &next) || true) &&
-		op.SingleValue.Match(q, &next) {
+		op.PropertyValues.Match(q, matchedKind(op.NamedNoun), &next) {
 		ret, okay = next, true
 	}
 	return
 }
 
-func (op *NounPropertyValue) matchOf(q Query, input *InputState) (okay bool) {
-	var w Words
-	if w.Match(q, input, keywords.Of) {
-		op.Of, okay = &w, true
-	}
-	return
-}
-
 func (op *NounPropertyValue) Generate(ctx Context) error {
-	return genNounValuePhrase(ctx, op)
+	return ctx.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if ns, e := op.NamedNoun.BuildNouns(ctx, w, run, NounProperties{}); e != nil {
+			err = e
+		} else if e := tryAsThings(ctx, ns); e != nil {
+			err = e
+		} else {
+			err = genNounValues(ctx, ns, func(id string) (err error) {
+				for pv := &op.PropertyValues; pv != nil; pv = pv.Next() {
+					if e := w.AddNounValue(id,
+						pv.Property.String(),
+						pv.Value.Assignment()); e != nil {
+						err = e
+						break
+					}
+				}
+				return
+			})
+		}
+		return
+	})
 }
 
 // --------------------------------------------------------------
 // support for noun property handling
 // --------------------------------------------------------------
 
-func namedKind(named NamedNoun) (ret string) {
+func matchedKind(named NamedNoun) (ret string) {
 	if n := named.Noun; n != nil {
 		ret = n.actualNoun.Kind
 	} else if n := named.Name; n != nil {
-		ret = Things // if it hasn't matched this is the default that will be generated
+		ret = Things // if it hasn't matched, this is the default that will be generated
 	} else if n := named.Pronoun; n != nil {
-		ret = Things // Pronoun might have to hold a namedNoun so it can do the right thing
+		//  pronoun might have to hold a namedNoun so it can do the right thing.
+		// or even share constructed noun memory
+		ret = Things
 	} else {
-		panic("unexpected namedKind")
+		panic("unexpected matchedKind")
 	}
 	return
-}
-
-type nounValuePhrase interface {
-	Phase() weaver.Phase
-	GetNamedNoun() NamedNoun
-	GetProperty() Property
-	GetValue() rt.Assignment
-}
-
-func genNounValuePhrase(ctx Context, phrase nounValuePhrase) (err error) {
-	return ctx.Schedule(phrase.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
-		n, p, v := phrase.GetNamedNoun(), phrase.GetProperty(), phrase.GetValue()
-		if ns, e := n.BuildNouns(ctx, w, run, NounProperties{}); e != nil {
-			err = e
-		} else if e := tryAsThings(ctx, ns); e != nil {
-			err = e
-		} else {
-			err = genNounValues(ctx, ns, func(n string) error {
-				// fix: can i add this to "desired noun" instead of as a callback
-				return w.AddNounValue(n, p.String(), v)
-			})
-		}
-		return
-	})
 }
 
 // try to apply one of the passed kinds to each of the desired nouns

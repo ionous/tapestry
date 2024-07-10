@@ -4,6 +4,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
+// iterator helper
+func (op *MultipleKinds) Next() (ret *MultipleKinds) {
+	if next := op.AdditionalKinds; next != nil {
+		ret = &next.Kinds
+	}
+	return
+}
+
 func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
@@ -14,7 +22,7 @@ func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
 }
 
 // note: traits are matched, but prohibited by "kinds_are_traits"
-func (op *Kinds) Match(q Query, input *InputState) (okay bool) {
+func (op *MultipleKinds) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Traits) || true) &&
 		(Optional(q, &next, &op.Article) || true) &&
@@ -25,7 +33,7 @@ func (op *Kinds) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Kinds) matchName(input *InputState) (okay bool) {
+func (op *MultipleKinds) matchName(input *InputState) (okay bool) {
 	if width := keywordScan(input.Words()); width > 0 {
 		op.Matched = input.Cut(width)
 		*input, okay = input.Skip(width), true
@@ -33,36 +41,14 @@ func (op *Kinds) matchName(input *InputState) (okay bool) {
 	return
 }
 
-func (op *Kinds) GetNormalizedName() (string, error) {
+func (op *MultipleKinds) GetNormalizedName() (string, error) {
 	return match.NormalizeAll(op.Matched)
 }
 
 // unwind the tree of traits
-func (op *Kinds) GetTraits() (ret Traitor) {
+func (op *MultipleKinds) GetTraits() (ret *Traits) {
 	if ts := op.Traits; ts != nil {
 		ret = ts.GetTraits()
 	}
-	return
-}
-
-// unwind the tree of additional kinds
-func (op *Kinds) Iterate() Kinder {
-	return Kinder{op}
-}
-
-type Kinder struct {
-	next *Kinds
-}
-
-func (it Kinder) HasNext() bool {
-	return it.next != nil
-}
-
-func (it *Kinder) GetNext() (ret *Kinds) {
-	var next *Kinds
-	if more := it.next.AdditionalKinds; more != nil {
-		next = &more.Kinds
-	}
-	ret, it.next = it.next, next
 	return
 }

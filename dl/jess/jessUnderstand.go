@@ -70,8 +70,8 @@ func (op *Understand) Generate(ctx Context) error {
 
 func (op *Understand) applyActions(w weaver.Weaves, actions []string) (err error) {
 Loop:
-	for it := op.QuotedTexts.Iterate(); it.HasNext(); {
-		phrase := it.GetNext()
+	for it := &op.QuotedTexts; it != nil; it = it.Next() {
+		phrase := it.QuotedText.String()
 		if m, e := BuildPhrase(phrase); e != nil {
 			err = e
 		} else {
@@ -95,8 +95,8 @@ func (op *Understand) applyAliases(w weaver.Weaves, rhsNouns []string) (err erro
 	// for every noun on the rhs
 	for _, noun := range rhsNouns {
 		//  add the alias specified on the lhs
-		for it := op.QuotedTexts.Iterate(); it.HasNext(); {
-			alias := it.GetNext()
+		for it := &op.QuotedTexts; it != nil; it = it.Next() {
+			alias := it.QuotedText.String()
 			if alias = inflect.Normalize(alias); len(alias) > 0 {
 				// the -1 indicates that this is an alias; hrm.
 				if e := w.AddNounName(noun, alias, -1); e != nil {
@@ -110,11 +110,10 @@ func (op *Understand) applyAliases(w weaver.Weaves, rhsNouns []string) (err erro
 }
 
 func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
-	for it := op.Names.GetNames(); it.HasNext(); {
-		next := it.GetNext()
-		if k := next.Kind; k != nil && k.actualKind.BaseKind == kindsOf.Action {
+	for it := &op.Names; it != nil; it = it.Next() {
+		if k := it.Kind; k != nil && k.actualKind.BaseKind == kindsOf.Action {
 			actions = append(actions, k.actualKind.Name)
-		} else if name := next.Name; name == nil {
+		} else if name := it.Name; name == nil {
 			err = errors.New("understandings can only match nouns or actions")
 			break
 		} else {
@@ -133,9 +132,8 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 
 func (op *Understand) applyPlurals(q Query, w weaver.Weaves) (err error) {
 Loop:
-	for it := op.Names.GetNames(); it.HasNext(); {
-		next := it.GetNext()
-		if name := next.Name; name == nil {
+	for it := &op.Names; it != nil; it = it.Next() {
+		if name := it.Name; name == nil {
 			err = errors.New("plural understandings can only match existing nouns")
 			break
 		} else {
@@ -143,9 +141,9 @@ Loop:
 				err = fmt.Errorf("no noun found called %q", name.Matched.DebugString())
 				break
 			} else {
-				for qt := op.QuotedTexts.Iterate(); qt.HasNext(); {
-					plural := qt.GetNext()
-					if e := w.AddPlural(plural, fullname); e != nil {
+				for it := &op.QuotedTexts; it != nil; it = it.Next() {
+					str := it.QuotedText.String()
+					if e := w.AddPlural(str, fullname); e != nil {
 						err = e
 						break Loop
 					}

@@ -30,7 +30,7 @@ func (op *KindCalled) GetKind() (string, error) {
 	return op.Kind.Validate(kindsOf.Kind)
 }
 
-func (op *KindCalled) GetTraits() (ret Traitor) {
+func (op *KindCalled) GetTraits() (ret *Traits) {
 	if op.Traits != nil {
 		ret = op.Traits.GetTraits()
 	}

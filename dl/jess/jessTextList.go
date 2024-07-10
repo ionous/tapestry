@@ -9,6 +9,12 @@ import (
 // --------------------------------------------------------------
 // QuotedTexts
 // --------------------------------------------------------------
+func (op *QuotedTexts) Next() (ret *QuotedTexts) {
+	if next := op.AdditionalText; next != nil {
+		ret = &next.QuotedTexts
+	}
+	return
+}
 
 // its interesting that we dont have to store anything else
 // all the trait info is in this... even additional traits.
@@ -23,9 +29,8 @@ func (op *QuotedTexts) Match(q Query, input *InputState) (okay bool) {
 
 func (op *QuotedTexts) Assignment() (ret rt.Assignment) {
 	var els []rt.TextEval
-	for it := op.Iterate(); it.HasNext(); {
-		next := it.GetNextText()
-		els = append(els, next.TextEval())
+	for it := op; it != nil; it = it.Next() {
+		els = append(els, it.QuotedText.TextEval())
 	}
 	return &call.FromTextList{
 		Value: &list.MakeTextList{
@@ -34,14 +39,10 @@ func (op *QuotedTexts) Assignment() (ret rt.Assignment) {
 	}
 }
 
-// unwind the tree of additional traits
-func (op *QuotedTexts) Iterate() TextListIterator {
-	return TextListIterator{op}
-}
-
 func (op *QuotedTexts) Reduce() (ret []string) {
-	for it := op.Iterate(); it.HasNext(); {
-		ret = append(ret, it.GetNext())
+	for it := op; it != nil; it = it.Next() {
+		str := it.QuotedText.String()
+		ret = append(ret, str)
 	}
 	return
 }
@@ -56,30 +57,5 @@ func (op *AdditionalText) Match(q Query, input *InputState) (okay bool) {
 		op.QuotedTexts.Match(q, &next) {
 		*input, okay = next, true
 	}
-	return
-}
-
-// --------------------------------------------------------------
-// TextListIterator
-// --------------------------------------------------------------
-
-type TextListIterator struct {
-	next *QuotedTexts
-}
-
-func (it TextListIterator) HasNext() bool {
-	return it.next != nil
-}
-
-func (it *TextListIterator) GetNext() string {
-	return it.GetNextText().String()
-}
-
-func (it *TextListIterator) GetNextText() (ret *QuotedText) {
-	var next *QuotedTexts
-	if more := it.next.AdditionalText; more != nil {
-		next = &more.QuotedTexts
-	}
-	ret, it.next = &it.next.QuotedText, next
 	return
 }

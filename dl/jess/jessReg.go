@@ -6,10 +6,9 @@ import (
 )
 
 // setup the default traits for the passed kind
-func AddKindTraits(w weaver.Weaves, kind string, traits Traitor) (err error) {
-	for ts := traits; ts.HasNext(); {
-		t := ts.GetNext()
-		str := t.String()
+func AddKindTraits(w weaver.Weaves, kind string, it *Traits) (err error) {
+	for ; it != nil; it = it.Next() {
+		str := it.Trait.String()
 		if e := w.AddKindTrait(kind, inflect.Normalize(str)); e != nil {
 			err = e
 			break

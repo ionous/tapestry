@@ -55,9 +55,8 @@ func (op *AspectsAreTraits) Weave(w weaver.Weaves, _ rt.Runtime) (err error) {
 		err = e
 	} else {
 		var names []string
-		for it := op.PlainNames.GetNames(); it.HasNext(); {
-			n := it.GetNext()
-			if name, e := match.NormalizeAll(n.Name.Matched); e != nil {
+		for it := &op.PlainNames; it != nil; it = it.Next() {
+			if name, e := match.NormalizeAll(it.Name.Matched); e != nil {
 				err = e
 				break
 			} else {

@@ -38,7 +38,7 @@ func (op *KindsAreKind) matchKindsOf(input *InputState) (okay bool) {
 
 var kindsSpan = match.PanicSpans("a kind of", "kinds of")
 
-func (op *KindsAreKind) GetTraits() (ret Traitor) {
+func (op *KindsAreKind) GetTraits() (ret *Traits) {
 	if op.Traits != nil {
 		ret = op.Traits.GetTraits()
 	}
@@ -57,8 +57,7 @@ func (op *KindsAreKind) Generate(ctx Context) error {
 			traits := op.GetTraits()
 			isPlural, isAspect := op.Are.IsPlural(), base == kindsOf.Aspect
 			// the names are kinds we have not yet created
-			for it := op.Names.GetNames(); it.HasNext(); {
-				at := it.GetNext()
+			for at := &op.Names; at != nil; at = at.Next() {
 				if at.CountedKind != nil {
 					err = errors.New(countedKindMsg)
 					break
@@ -111,7 +110,7 @@ func (op *KindsAreKind) Generate(ctx Context) error {
 	})
 }
 
-func getKindOfName(at *Names) (ret string) {
+func getKindOfName(at *MultipleNames) (ret string) {
 	var name *Name
 	if n := at.Name; n != nil {
 		name = n

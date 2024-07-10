@@ -25,13 +25,12 @@ func (op *KindsAreTraits) MatchLine(q Query, line InputState) (ret InputState, o
 
 func (op *KindsAreTraits) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 	traits := op.Traits.GetTraits()
-	for kt := op.Kinds.Iterate(); kt.HasNext(); {
-		k := kt.GetNext()
+	for k := &op.Kinds; k != nil; k = k.Next() {
 		if name, e := k.GetNormalizedName(); e != nil {
 			err = e
 			break
 		} else {
-			if lhs := k.GetTraits(); lhs.HasNext() {
+			if lhs := k.GetTraits(); lhs != nil {
 				err = fmt.Errorf("unexpected traits before %s", name)
 				break
 			}

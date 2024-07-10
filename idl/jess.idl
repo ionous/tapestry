@@ -136,11 +136,12 @@ Spec:requires:contains:
             # generating a new noun if needed.
             Term: "name"
 
-    - # Specifies one or more nouns, in full or in part.
-      # Only one of the options, plus possibly 'additional_names', will match.
+    - # Matches one or more names for nouns or kinds. 
+      # Subsequent names are separated by ands ( or commas. )
+      # Only one of the options here, plus possibly 'additional_names', will match.
       # Not all options are valid in all contexts.
       Flow:slots:terms:
-        - "names"
+        - "multiple_names"
         - "noun_builder"
         - - # this only applies in some contexts
             # it can only appear as the first name in a list
@@ -178,7 +179,9 @@ Spec:requires:contains:
         - "additional_names"
         - - # a separator is required between names
             Term: "comma_and"
-          - Term: "names"
+          - Term:type:
+            - "names"
+            - "multiple_names"
 
     - # Provides English specification of a number of objects.
       # ( yes, `the five the containers` is permitted. )
@@ -212,7 +215,7 @@ Spec:requires:contains:
     - # Matches a set of possible kinds as part of kinds_are_traits.
       # jess looks for but prohibits leading traits.
       Flow:terms:
-        - "kinds"
+        - "multiple_kinds"
         - - # inform uses traits specified here to select
             # matching nouns; jess is not that clever.
             Term:optional:
@@ -232,7 +235,9 @@ Spec:requires:contains:
         - "additional_kinds"
         - - # a separator is required between the names of kinds
             Term: "comma_and"
-          - Term: "kinds"
+          - Term:type:
+            - "kinds"
+            - "multiple_kinds"
 
     - # Matches the name of a field in a kind.
       Flow:terms:
@@ -319,7 +324,9 @@ Spec:requires:contains:
         - "line_matcher"
         - - # can match plain names and existing kinds;
             # only allows a leading kind called, and errors on all counted kinds.
-            Term: "names"
+            Term:type:
+              - "names"
+              - "multiple_names"
           - Term: "are"
           - # the phrases "a kind of" or "kinds of"
             Term:type:
@@ -349,7 +356,9 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "kinds_are_traits"
         - "line_matcher"
-        - - Term: "kinds"
+        - - Term:type:
+            - "kinds"
+            - "multiple_kinds"
           - Term: "are"
           - Term:type:
               - "usually"
@@ -369,7 +378,7 @@ Spec:requires:contains:
           - Term: "are"
           - Term:type:
               - "plain_names"
-              - "names"
+              - "multiple_names"
 
     - # Verb names are (other) names.
       # ex.
@@ -381,11 +390,13 @@ Spec:requires:contains:
         - "verb_names_are_names"
         - "line_matcher"
         - - Term: "verb"
-          - Term: "names"
+          - Term:type:
+            - "names"
+            - "multiple_names"
           - Term: "are"
           - Term:type:
-              - "other_names"
-              - "names"
+            - "other_names"
+            - "multiple_names"
 
     - # Names are verb (other) names.
       # ex.
@@ -393,12 +404,14 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "names_verb_names"
         - "line_matcher"
-        - - Term: "names"
+        - - Term:type:
+            - "names"
+            - "multiple_names"
           - Term: "are"
           - Term: "verb"
           - Term:type:
               - "other_names"
-              - "names"
+              - "multiple_names"
 
     - # Names are adjectives [verb names].
       # ex.
@@ -409,12 +422,16 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "names_are_like_verbs"
         - "line_matcher"
-        - - Term: "names"
+        - - Term:type:
+            - "names"
+            - "multiple_names"
           - Term: "are"
           - # adjectives are *not* optional.
             # if there are no adjectives present,
             # then 'names_verb_names' (might) match instead.
-            Term: "adjectives"
+            Term:type: 
+              - "adjectives"
+              - "multiple_adjectives"
           - Term:optional:
               - "verb_phrase"
               - true
@@ -427,8 +444,8 @@ Spec:requires:contains:
         - "verb_phrase"
         - - Term: "verb"
           - Term:type:
-              - "plain_names"
-              - "names"
+            - "plain_names"
+            - "multiple_names"
 
     - # One or more phrases consisting of traits and a kind.
       # while all parts are marked as optional, matching expects
@@ -440,7 +457,7 @@ Spec:requires:contains:
       #   closed and fixed in place
       #   a closed container and a fixed in place thing
       Flow:terms:
-        - "adjectives"
+        - "multiple_adjectives"
         - - Term:optional:
               - "traits"
               - true
@@ -460,13 +477,17 @@ Spec:requires:contains:
       Flow:terms:
         - "additional_adjectives"
         - - Term: "comma_and"
-          - Term: "adjectives"
+          - Term:type: 
+            - "adjectives"
+            - "multiple_adjectives"
 
     - # Assigns a default value to a noun.
       # ex.
-      #   The description of the pen is "mightier than the sword.
-      # As a special case this also allows a list of quoted text
-      # indicated with "are" ( versus "is" )
+      #   The description of the pen is "mightier than the sword."
+      #
+      # As a special case this also allows a list of quoted text.
+      # ( indicated with "are", versus "is" )
+      # ex. The implications of carrying are "not worn" and "portable".
       Flow:slots:terms:
         - "property_noun_value"
         - "line_matcher"
@@ -507,16 +528,37 @@ Spec:requires:contains:
           - Term:type:
               - "has"
               - "words"
-          - Term:optional:
+          - Term: "property_values"
+
+    - # Matches one or more pairs of property and value,
+      # each pair separated by ands ( or commas. )
+      Flow:terms:
+        - "property_values"
+        - - Term:optional:
               - "article"
               - true
           - Term: "property"
-          - # the word "of", sometimes reads better this way
+          - # using the word "of" sometimes looks better.
+            # ( i think... )
             Term:type:optional:
               - "of"
               - "words"
               - true
-          - Term: "single_value"
+          - Term:type:
+            - "value"
+            - "single_value"
+          - Term:optional:
+              - "additional_property_values"
+              - true
+
+    - # Matches a value following another value.
+      Flow:terms:
+        - "additional_property_values"
+        - - # a separator is required between property value pairs
+            Term: "comma_and"
+          - Term:type:
+            - "values"
+            - "property_values"
 
     - # This matches only one of its options.
       # ( The options could be represented as a slot; this feels easier for now ).
@@ -747,7 +789,9 @@ Spec:requires:contains:
             # * aliases for kinds: Understand "cupboard" or "cupboards" or "cabinets" as a cabinet.
             # * grammar for actions: Understand "reach underneath/under/beneath/-- [something]" as looking under.
             # jess doesn't permit aliases for kinds, those generate errors.
-            Term: "names"
+            Term:type:
+              - "names"
+              - "multiple_names"
 
     - # A mapping declaration starting with a room or door.
       # ex.

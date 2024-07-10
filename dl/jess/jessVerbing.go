@@ -43,13 +43,13 @@ func (op *VerbPhrase) Match(q Query, input *InputState) (okay bool) {
 func (op *VerbNamesAreNames) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
-func (op *VerbNamesAreNames) GetNouns() *Names {
+func (op *VerbNamesAreNames) GetNouns() *MultipleNames {
 	return &op.OtherNames // reverse left and right sides
 }
-func (op *VerbNamesAreNames) GetOtherNouns() *Names {
+func (op *VerbNamesAreNames) GetOtherNouns() *MultipleNames {
 	return &op.Names
 }
-func (op *VerbNamesAreNames) GetAdjectives() (_ Adjectives) {
+func (op *VerbNamesAreNames) GetAdjectives() (_ MultipleAdjectives) {
 	return
 }
 func (op *VerbNamesAreNames) GetVerb() string {
@@ -80,13 +80,13 @@ func (op *VerbNamesAreNames) MatchLine(q Query, line InputState) (ret InputState
 func (op *NamesVerbNames) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
-func (op *NamesVerbNames) GetNouns() *Names {
+func (op *NamesVerbNames) GetNouns() *MultipleNames {
 	return &op.Names
 }
-func (op *NamesVerbNames) GetOtherNouns() *Names {
+func (op *NamesVerbNames) GetOtherNouns() *MultipleNames {
 	return &op.OtherNames
 }
-func (op *NamesVerbNames) GetAdjectives() (_ Adjectives) {
+func (op *NamesVerbNames) GetAdjectives() (_ MultipleAdjectives) {
 	return
 }
 func (op *NamesVerbNames) GetVerb() string {
@@ -123,16 +123,16 @@ func (op *NamesVerbNames) MatchLine(q Query, line InputState) (ret InputState, o
 func (op *NamesAreLikeVerbs) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
-func (op *NamesAreLikeVerbs) GetNouns() *Names {
+func (op *NamesAreLikeVerbs) GetNouns() *MultipleNames {
 	return &op.Names
 }
-func (op *NamesAreLikeVerbs) GetOtherNouns() (ret *Names) {
+func (op *NamesAreLikeVerbs) GetOtherNouns() (ret *MultipleNames) {
 	if v := op.VerbPhrase; v != nil {
 		ret = &v.PlainNames
 	}
 	return
 }
-func (op *NamesAreLikeVerbs) GetAdjectives() Adjectives {
+func (op *NamesAreLikeVerbs) GetAdjectives() MultipleAdjectives {
 	return op.Adjectives
 }
 func (op *NamesAreLikeVerbs) GetVerb() (ret string) {
@@ -175,9 +175,9 @@ func (op *NamesAreLikeVerbs) MatchLine(q Query, line InputState) (ret InputState
 // fix? this interface means that Names can contain zero matches.
 type jessVerbPhrase interface {
 	Phase() weaver.Phase
-	GetNouns() *Names
-	GetOtherNouns() *Names
-	GetAdjectives() Adjectives
+	GetNouns() *MultipleNames
+	GetOtherNouns() *MultipleNames
+	GetAdjectives() MultipleAdjectives
 	GetVerb() string
 }
 
