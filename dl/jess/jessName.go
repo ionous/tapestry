@@ -49,10 +49,14 @@ func (op *Name) matchName(input *InputState) (okay bool) {
 // or the end of the string if none found.
 // inform also has troubles with names like "the has been."
 func nameScan(ts []match.TokenValue) (ret int) {
-	if i := scanUntil(ts, nameSeparators...); i < 0 {
-		ret = len(ts)
-	} else {
-		ret = i
+	if cnt := len(ts); cnt > 0 {
+		if ts[0].Token == match.Quoted {
+			ret = 1
+		} else if i := scanUntil(ts, nameSeparators...); i < 0 {
+			ret = cnt
+		} else {
+			ret = i
+		}
 	}
 	return
 }

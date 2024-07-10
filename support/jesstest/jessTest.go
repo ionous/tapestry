@@ -41,6 +41,13 @@ var Phrases = []Phrase{
 			"AddNounValue:", "bottle", "description", text("A plain glass bottle."),
 		},
 	},
+	{
+		test: `The "bottle" is a container.`,
+		result: []string{
+			"AddNounKind:", "bottle", "containers",
+			// for now: it doesnt add the pieces of the noun as a name
+		},
+	},
 	// ------------------------------------------------------------------------
 	// TimedRule
 	// ( storing is one of the predefined patterns. )

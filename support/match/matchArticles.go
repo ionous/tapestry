@@ -38,40 +38,42 @@ func DebugStringify(ts []TokenValue) (ret string) {
 // turn a series of string tokens into a space padded string
 // returns the number of string tokens consumed.
 func Stringify(ts []TokenValue) (ret string, width int) {
-	var out strings.Builder
-	for _, tv := range ts {
-		if tv.Token != String {
-			break
-		} else {
-			str := tv.String()
-			if out.Len() > 0 {
-				out.WriteRune(' ')
-			}
-			out.WriteString(str)
-			width++
-		}
-	}
-	return out.String(), width
+	return toString(ts, false)
 }
 
 // turn a series of string tokens into a normalized string
 // returns the number of string tokens consumed.
 // somewhat dubious because it skips inflect.Normalize
 func Normalize(ts []TokenValue) (ret string, width int) {
+	return toString(ts, true)
+}
+
+func toString(ts []TokenValue, lower bool) (ret string, width int) {
 	var out strings.Builder
-	for _, tv := range ts {
-		if tv.Token != String {
+	for i, tv := range ts {
+		if i == 0 && tv.Token == Quoted {
+			addString(&out, tv, lower)
+			width++
+			break
+		} else if tv.Token != String {
 			break
 		} else {
 			if out.Len() > 0 {
 				out.WriteRune(' ')
 			}
-			str := tv.String()
-			out.WriteString(strings.ToLower(str))
+			addString(&out, tv, lower)
 			width++
 		}
 	}
 	return out.String(), width
+}
+
+func addString(out *strings.Builder, tv TokenValue, lower bool) {
+	str := tv.String()
+	if lower {
+		str = strings.ToLower(str)
+	}
+	out.WriteString(str)
 }
 
 // same as Normalize but errors if all of the tokens weren't consumed.
