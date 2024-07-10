@@ -28,19 +28,16 @@ func (op *Names) GetTraits() (ret Traitor) {
 
 // checks Query flags to control matching
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
-	matchPronouns := matchPronouns(q)
-	matchKinds := matchKinds(q)
-	if next := *input; //
-	(matchPronouns &&
-		Optional(q, &next, &op.Pronoun)) ||
-		//
-		(matchKinds &&
-			// "5 containers",
-			Optional(q, &next, &op.CountedKind) ||
-			// "the container called the bottle"
-			Optional(q, &next, &op.KindCalled) ||
-			// "the container"
-			Optional(q, &next, &op.Kind)) || ( //
+	if next := *input;                   //
+	Optional(q, &next, &op.Pronoun) || ( //
+	//
+	matchKinds(q) &&
+		// "5 containers",
+		Optional(q, &next, &op.CountedKind) ||
+		// "the container called the bottle"
+		Optional(q, &next, &op.KindCalled) ||
+		// "the container"
+		Optional(q, &next, &op.Kind)) || ( //
 	// "the bottle", or "the unknown name"
 	Optional(q, &next, &op.Name)) {
 		// can only match in the first name
@@ -57,14 +54,15 @@ func (op *Names) Match(q Query, input *InputState) (okay bool) {
 }
 
 // implements NounBuilder by calling BuildNouns on all matched names
-func (op Names) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *Names) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	for n := op.GetNames(); n.HasNext(); {
 		at := n.GetNext()
 		if ns, e := buildNounsFrom(q, w, run, props,
-			ref(at.CountedKind),
-			ref(at.KindCalled),
-			ref(at.Kind),
-			ref(at.Name),
+			nillable(at.Pronoun),
+			nillable(at.CountedKind),
+			nillable(at.KindCalled),
+			nillable(at.Kind),
+			nillable(at.Name),
 		); e != nil {
 			err = e
 			break

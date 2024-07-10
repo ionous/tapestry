@@ -26,7 +26,7 @@ func Optional[M any,
 // and adds in a boolean IsNil so users of the interface can check the original value.
 // see? easy. *sigh* i still love you go. despite everything.
 // https://go.dev/doc/faq#nil_error
-func ref[M any,
+func nillable[M any,
 	IM interface {
 		*M
 		NounBuilder

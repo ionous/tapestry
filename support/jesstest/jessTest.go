@@ -19,7 +19,19 @@ import (
 )
 
 var Phrases = []Phrase{
-
+	// ----------------
+	// context it.
+	// ----------------
+	{
+		// the definition as a container should win out over the default of a thing.
+		// NamesAreLikeVerbs, NounPropertyValue.
+		test: `The bottle is a container. It has an age of 42.`,
+		result: []string{
+			"AddNounKind:", "bottle", "containers",
+			"AddNounName:", "bottle", "bottle",
+			"AddNounValue:", "bottle", "age", number(42),
+		},
+	},
 	// ------------------------------------------------------------------------
 	// TimedRule
 	// ( storing is one of the predefined patterns. )

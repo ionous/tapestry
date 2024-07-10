@@ -57,13 +57,14 @@ func (op *PropertyNounValue) GetValue() (ret rt.Assignment) {
 	return
 }
 
+// tbd: should this match pronouns: `The age of it is 42.`?
 func (op *PropertyNounValue) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
 	next := line
 	Optional(q, &next, &op.Article)
 	//
 	if index := scanUntil(next.words, keywords.Of); index > 0 {
 		rest := next.Skip(index + 1) // everything after "of"
-		if op.NamedNoun.Match(AddContext(q, MatchPronouns), &rest) &&
+		if op.NamedNoun.Match(q, &rest) &&
 			op.Are.Match(q, &rest) &&
 			// either: single value or quoted texts
 			((op.Are.IsPlural() && Optional(q, &rest, &op.QuotedTexts)) ||
@@ -140,6 +141,8 @@ func namedKind(named NamedNoun) (ret string) {
 		ret = n.actualNoun.Kind
 	} else if n := named.Name; n != nil {
 		ret = Things // if it hasn't matched this is the default that will be generated
+	} else if n := named.Pronoun; n != nil {
+		ret = Things // Pronoun might have to hold a namedNoun so it can do the right thing
 	} else {
 		panic("unexpected namedKind")
 	}

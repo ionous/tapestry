@@ -72,7 +72,7 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 // generate a room or door; an object if there's not enough information to know; or nil for nowhere.
 func (op *Linking) BuildNoun(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret *DesiredNoun, err error) {
 	if !op.Nowhere {
-		if els, e := buildNounsFrom(q, w, run, props, ref(op.KindCalled), ref(op.Name)); e != nil {
+		if els, e := buildNounsFrom(q, w, run, props, nillable(op.KindCalled), nillable(op.Name)); e != nil {
 			err = e
 		} else {
 			a := els[0]

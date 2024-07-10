@@ -43,11 +43,11 @@ func (op *VerbPhrase) Match(q Query, input *InputState) (okay bool) {
 func (op *VerbNamesAreNames) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
-func (op *VerbNamesAreNames) GetNouns() Names {
-	return op.OtherNames // reverse left and right sides
+func (op *VerbNamesAreNames) GetNouns() *Names {
+	return &op.OtherNames // reverse left and right sides
 }
-func (op *VerbNamesAreNames) GetOtherNouns() Names {
-	return op.Names
+func (op *VerbNamesAreNames) GetOtherNouns() *Names {
+	return &op.Names
 }
 func (op *VerbNamesAreNames) GetAdjectives() (_ Adjectives) {
 	return
@@ -80,11 +80,11 @@ func (op *VerbNamesAreNames) MatchLine(q Query, line InputState) (ret InputState
 func (op *NamesVerbNames) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
-func (op *NamesVerbNames) GetNouns() Names {
-	return op.Names
+func (op *NamesVerbNames) GetNouns() *Names {
+	return &op.Names
 }
-func (op *NamesVerbNames) GetOtherNouns() Names {
-	return op.OtherNames
+func (op *NamesVerbNames) GetOtherNouns() *Names {
+	return &op.OtherNames
 }
 func (op *NamesVerbNames) GetAdjectives() (_ Adjectives) {
 	return
@@ -123,12 +123,12 @@ func (op *NamesVerbNames) MatchLine(q Query, line InputState) (ret InputState, o
 func (op *NamesAreLikeVerbs) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
-func (op *NamesAreLikeVerbs) GetNouns() Names {
-	return op.Names
+func (op *NamesAreLikeVerbs) GetNouns() *Names {
+	return &op.Names
 }
-func (op *NamesAreLikeVerbs) GetOtherNouns() (ret Names) {
+func (op *NamesAreLikeVerbs) GetOtherNouns() (ret *Names) {
 	if v := op.VerbPhrase; v != nil {
-		ret = v.PlainNames
+		ret = &v.PlainNames
 	}
 	return
 }
@@ -175,8 +175,8 @@ func (op *NamesAreLikeVerbs) MatchLine(q Query, line InputState) (ret InputState
 // fix? this interface means that Names can contain zero matches.
 type jessVerbPhrase interface {
 	Phase() weaver.Phase
-	GetNouns() Names
-	GetOtherNouns() Names
+	GetNouns() *Names
+	GetOtherNouns() *Names
 	GetAdjectives() Adjectives
 	GetVerb() string
 }

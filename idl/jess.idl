@@ -81,6 +81,10 @@ Spec:requires:contains:
               - "article"
               - true
           - Term: "matched"
+          - # cache for pronouns
+            Term:private:
+              - "desired_noun"
+              - true
 
     - # Matches an existing noun
       # ( by checking multiple words for the best match ).
@@ -103,6 +107,9 @@ Spec:requires:contains:
         - "named_noun"
         - "noun_builder"
         - - Term:optional:
+              - "pronoun"
+              - true
+          - Term:optional:
               - "noun"
               - true
           - Term:optional:

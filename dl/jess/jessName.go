@@ -22,6 +22,7 @@ func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounP
 		if created {
 			n.appendArticle(op.Article)
 		}
+		op.desiredNoun = n // cache for pronoun references
 		ret = []DesiredNoun{n}
 	}
 	return

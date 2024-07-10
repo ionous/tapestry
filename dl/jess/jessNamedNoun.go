@@ -19,12 +19,17 @@ func (op *NamedNoun) GetNormalizedName() (ret string, err error) {
 
 // panics if not matched
 func (op *NamedNoun) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) ([]DesiredNoun, error) {
-	return buildNounsFrom(q, w, run, props, ref(op.Noun), ref(op.Name))
+	return buildNounsFrom(q, w, run, props,
+		nillable(op.Pronoun),
+		nillable(op.Noun),
+		nillable(op.Name),
+	)
 }
 
 func (op *NamedNoun) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	Optional(q, &next, &op.Noun) ||
+	Optional(q, &next, &op.Pronoun) ||
+		Optional(q, &next, &op.Noun) ||
 		Optional(q, &next, &op.Name) {
 		*input, okay = next, true
 	}

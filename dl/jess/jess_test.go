@@ -12,7 +12,10 @@ import (
 
 func TestPhrases(t *testing.T) {
 	var skipped int
-	const at = 1
+	const at = -1
+	if at >= 0 {
+		defer println("***************** focused testing enabled ****************")
+	}
 	for i, p := range jesstest.Phrases {
 		if i != at && at >= 0 {
 			continue

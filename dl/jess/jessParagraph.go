@@ -74,7 +74,7 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 			}
 			// update the paragraph's context so other sentences can refer to it.
 			// ( or if no pronoun was matched, or reused, clear it )
-			p.pronouns = best.pronouns.nextPronoun()
+			p.pronouns = best.pronouns
 			// after matching: try to generate ( which inevitably calls schedule... )
 			// ( errors here are critical, and not a request to "retry" )
 			if e := best.match.Generate(Context{q, u, source}); e != nil {

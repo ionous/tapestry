@@ -333,9 +333,10 @@ func (op *Called_Slice) Repeats() bool {
 //
 // Future: allow quoted "titles" ( which are then allowed to break those assumptions )
 type Name struct {
-	Article *Article
-	Matched Matched
-	Markup  map[string]any `json:",omitempty"`
+	Article     *Article
+	Matched     Matched
+	desiredNoun DesiredNoun
+	Markup      map[string]any `json:",omitempty"`
 }
 
 // name, a type of flow.
@@ -414,9 +415,10 @@ func (op *Noun_Slice) Repeats() bool {
 // Matches an existing noun, or if not: then something new.
 // Noun property uses this to find the best property field based on a noun's kind.
 type NamedNoun struct {
-	Noun   *Noun
-	Name   *Name
-	Markup map[string]any `json:",omitempty"`
+	Pronoun *Pronoun
+	Noun    *Noun
+	Name    *Name
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // named_noun, a type of flow.
@@ -2585,6 +2587,10 @@ func init() {
 			Name:  "matched",
 			Label: "matched",
 			Type:  &Zt_Matched,
+		}, {
+			Name:    "desired_noun",
+			Label:   "desired_noun",
+			Private: true,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_NounBuilder,
@@ -2624,6 +2630,11 @@ func init() {
 		Name: "named_noun",
 		Lede: "named_noun",
 		Terms: []typeinfo.Term{{
+			Name:     "pronoun",
+			Label:    "pronoun",
+			Optional: true,
+			Type:     &Zt_Pronoun,
+		}, {
 			Name:     "noun",
 			Label:    "noun",
 			Optional: true,
@@ -4222,6 +4233,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15792878411416494446: (*NamedNoun)(nil),            /* noun_builder=NamedNoun name: */
 	4609637404391733803:  (*NamedNoun)(nil),            /* noun_builder=NamedNoun noun: */
 	12436910703333794014: (*NamedNoun)(nil),            /* noun_builder=NamedNoun noun:name: */
+	1305998967661273620:  (*NamedNoun)(nil),            /* noun_builder=NamedNoun pronoun: */
+	7839223505009909583:  (*NamedNoun)(nil),            /* noun_builder=NamedNoun pronoun:name: */
+	13596338099683082:    (*NamedNoun)(nil),            /* noun_builder=NamedNoun pronoun:noun: */
+	3835299996712127377:  (*NamedNoun)(nil),            /* noun_builder=NamedNoun pronoun:noun:name: */
 	2640583889409900672:  (*Names)(nil),                /* noun_builder=Names */
 	12738701442995129767: (*Names)(nil),                /* noun_builder=Names additionalNames: */
 	18240362602181459374: (*Names)(nil),                /* noun_builder=Names countedKind: */
