@@ -12,14 +12,14 @@ func (op *MapConnections) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
 
-func (op *MapConnections) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *MapConnections) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	op.matchThrough(&next) &&
 		op.Doors.Match(q, &next) &&
 		(Optional(q, &next, &op.AdditionalLinks) || true) &&
 		op.Are.Match(q, &next) &&
 		op.Room.Match(q, &next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }

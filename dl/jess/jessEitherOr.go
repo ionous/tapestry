@@ -14,12 +14,12 @@ func (op *KindsAreEither) Phase() weaver.Phase {
 	return weaver.PropertyPhase
 }
 
-func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *KindsAreEither) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	op.Kind.Match(q, &next) &&
 		op.matchEither(&next) &&
 		op.Traits.Match(q, &next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }
@@ -96,7 +96,7 @@ var canBeEither = match.PanicSpans("can be", "are either", "is either", "can be 
 func (op *NewTrait) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; next.Len() > 0 {
 		// look for 1) the end of the string, or 2) the separator "or"
-		if firstSpan := scanUntil(next, keywords.Or); firstSpan < 0 {
+		if firstSpan := scanUntil(next.words, keywords.Or); firstSpan < 0 {
 			width := next.Len()
 			op.Matched = next.Cut(width)          // eat everything
 			*input, okay = next.Skip(width), true // all done.

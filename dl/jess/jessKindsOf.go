@@ -15,14 +15,14 @@ func (op *KindsAreKind) Phase() weaver.Phase {
 	return weaver.AncestryPhase
 }
 
-func (op *KindsAreKind) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *KindsAreKind) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.matchKindsOf(&next) &&
 		(Optional(q, &next, &op.Traits) || true) &&
 		op.Name.Match(q, &next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }

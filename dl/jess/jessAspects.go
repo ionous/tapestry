@@ -18,13 +18,13 @@ func (op *AspectsAreTraits) Phase() weaver.Phase {
 
 // the colors are....
 // ( see also KindsOf )
-func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
-	next := *input
+func (op *AspectsAreTraits) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	next := line //
 	Optional(q, &next, &op.Aspect.Article)
 	// aspects are stored as *singular*
 	// ideally, fix. but the use of those aspects in kinds as fields is also singular
 	// and matching of the field to the field's type is used as a filter to detect aspects
-	if index := scanUntil(next, keywords.Are); index > 0 {
+	if index := scanUntil(next.words, keywords.Are); index > 0 {
 		// cut up to the index of "are"
 		org := next.Cut(index)
 		plural, width := match.Normalize(org)
@@ -41,7 +41,7 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 					op.Are.Matched = next.Cut(1) // cut the word are
 					next = next.Skip(1)          // move past are
 					if op.PlainNames.Match(AddContext(q, PlainNameMatching), &next) {
-						*input, okay = next, true
+						ret, okay = next, true
 					}
 				}
 			}

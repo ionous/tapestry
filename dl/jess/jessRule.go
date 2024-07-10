@@ -14,8 +14,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-func (op *TimedRule) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *TimedRule) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	/**/ op.RulePrefix.Match(q, &next) &&
 		(op.matchSomeone(q, &next) || true) &&
 		op.Pattern.Match(q, &next) &&
@@ -23,7 +23,7 @@ func (op *TimedRule) Match(q Query, input *InputState) (okay bool) {
 		(Optional(q, &next, &op.RuleSuffix) || true) &&
 		(op.matchName(q, &next) || true) &&
 		op.SubAssignment.Match(&next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }
@@ -48,7 +48,7 @@ func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
 			op.RuleName = new(RuleName)
 			*input, okay = input.Skip(1), true
 		} else {
-			words := InputState(words)
+			words := InputState{words: words}
 			if Optional(q, &words, &op.RuleName) {
 				*input, okay = input.Skip(1), true
 			}
@@ -207,7 +207,7 @@ func GetRuleName(op *RuleName) (ret string, err error) {
 
 // assumes we are inside the parens
 func (op *RuleName) Match(q Query, input *InputState) (okay bool) {
-	next := *input
+	next := input.words
 	// "this is"
 	if m, width := ruleNamePrefix.FindPrefix(next); m != nil {
 		op.Prefix = true
@@ -225,7 +225,7 @@ func (op *RuleName) Match(q Query, input *InputState) (okay bool) {
 	}
 	// and this is the actual rule name:
 	if len(next) > 0 {
-		op.Matched = next.Words()
+		op.Matched = next
 		okay = true
 	}
 	return

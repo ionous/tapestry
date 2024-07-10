@@ -14,13 +14,13 @@ func (op *MapLocations) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
 
-func (op *MapLocations) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *MapLocations) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	op.Linking.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.DirectionOfLinking.Match(q, &next) {
 		Optional(q, &next, &op.AdditionalDirections)
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }

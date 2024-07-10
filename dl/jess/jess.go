@@ -50,6 +50,6 @@ type Generator interface {
 }
 
 // used internally for matching some kinds of phrases.
-type Interpreter interface {
+type OptionalMatcher interface {
 	Match(Query, *InputState) bool
 }

@@ -6,18 +6,24 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
+// the top level matching interface implemented by members of MatchedPhrase.
+// "Line" here means "sentence of a paragraph"
+type LineMatcher interface {
+	MatchLine(Query, InputState) (InputState, bool)
+	typeinfo.Instance // for logging
+}
+
 // different phases (z) can match different phrases (ws)
 // should a match occur, return true; and set 'out' to the matched phrase.
-func matchSentence(z weaver.Phase, q Query, next []match.TokenValue, out *bestMatch) (okay bool) {
+func matchSentence(z weaver.Phase, q Query, line InputState, out *bestMatch) (okay bool) {
 	var op MatchedPhrase
 	switch z {
 	case weaver.LanguagePhase:
 		// "understand" {quoted text} as .....
-		okay = matchPhrase(q, next, &op.Understand, out)
+		okay = matchLine(q, line, &op.Understand, out)
 
 	case weaver.AncestryPhase:
 		// FIX -- KindsAreKind needs TRAITS to *match*
@@ -26,18 +32,18 @@ func matchSentence(z weaver.Phase, q Query, next []match.TokenValue, out *bestMa
 		// probably part of the phase has to be scheduled; while the basic naming does not.
 		// ---
 		// names {are} "a kind of"/"kinds of" [traits] kind.
-		okay = matchPhrase(q, next, &op.KindsAreKind, out) ||
+		okay = matchLine(q, line, &op.KindsAreKind, out) ||
 			// The colors are black and blue.
-			matchPhrase(q, next, schedule(&op.AspectsAreTraits), out)
+			matchLine(q, line, schedule(&op.AspectsAreTraits), out)
 
 	case weaver.PropertyPhase:
 		// fix? combine these to speed matching?
 		// kinds {are} "usually"
-		okay = matchPhrase(q, next, schedule(&op.KindsAreTraits), out) ||
+		okay = matchLine(q, line, schedule(&op.KindsAreTraits), out) ||
 			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
-			matchPhrase(q, next, schedule(&op.KindsHaveProperties), out) ||
+			matchLine(q, line, schedule(&op.KindsHaveProperties), out) ||
 			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
-			matchPhrase(q, next, schedule(&op.KindsAreEither), out)
+			matchLine(q, line, schedule(&op.KindsAreEither), out)
 
 	case weaver.NounPhase:
 		// note: the direction phrases have to be first
@@ -63,44 +69,47 @@ func matchSentence(z weaver.Phase, q Query, next []match.TokenValue, out *bestMa
 		// the property wins.
 		okay = //
 			// "through" door {is} place.
-			matchPhrase(q, next, &op.MapConnections, out) ||
+			matchLine(q, line, &op.MapConnections, out) ||
 				// direction "of/from" place {is} place.
-				matchPhrase(q, next, &op.MapDirections, out) ||
+				matchLine(q, line, &op.MapDirections, out) ||
 				// place {is} direction "of/from" places.
-				matchPhrase(q, next, &op.MapLocations, out) ||
+				matchLine(q, line, &op.MapLocations, out) ||
 
 				// field "of" noun {are} value
-				matchPhrase(q, next, &op.PropertyNounValue, out) ||
+				matchLine(q, line, &op.PropertyNounValue, out) ||
 				// noun "has" field value
-				matchPhrase(q, next, &op.NounPropertyValue, out) ||
+				matchLine(q, line, &op.NounPropertyValue, out) ||
 
 				// verb nouns {are} nouns
-				matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
+				matchLine(q, line, &op.VerbNamesAreNames, out) ||
 				// nouns {are} verbing nouns
-				matchPhrase(q, next, &op.NamesVerbNames, out) ||
+				matchLine(q, line, &op.NamesVerbNames, out) ||
 				// nouns {are} adjectives [verb nouns]
-				matchPhrase(q, next, &op.NamesAreLikeVerbs, out)
+				matchLine(q, line, &op.NamesAreLikeVerbs, out)
 
 	case weaver.VerbPhase:
-		okay = matchPhrase(q, next, &op.TimedRule, out)
+		okay = matchLine(q, line, &op.TimedRule, out)
 	}
 	return
 }
 
 type bestMatch struct {
-	match    Generator
+	match    matchGenerator
 	numWords int
 }
 
-type matcher interface {
-	Interpreter
+// each LineMatchers is either a Generator, a schedulee.
+// ( to manually schedule pieces of its data )
+type matchGenerator interface {
+	LineMatcher
 	Generator
-	typeinfo.Instance // for logging
 }
 
+// a variation that can weaves on a specific phase.
+// it gets wrapped with a call to "schedule()"
+// which turns it into a standard Generator.
 type schedulee interface {
-	Interpreter
-	typeinfo.Instance // for logging
+	LineMatcher
 	Phase() weaver.Phase
 	Weave(weaver.Weaves, rt.Runtime) error
 }
@@ -125,17 +134,17 @@ func (op genericSchedule) Generate(ctx Context) (err error) {
 // match the input against the passed parse tree.
 // passes out an object which can create nouns, define kinds, set properties, and so on.
 // returns the number of words *not* matched
-func matchPhrase(q Query, input InputState, op matcher, out *bestMatch) (okay bool) {
+func matchLine(q Query, line InputState, op matchGenerator, out *bestMatch) (okay bool) {
 	// "understand" {quoted text} as .....
-	if next := input; op.Match(q, &next) {
+	if next, ok := op.MatchLine(q, line); ok {
 		// was the whole phrase matched?
 		if remaining := next.Len(); remaining > 0 {
-			if cnt := input.Len() - remaining; cnt > out.numWords {
+			if cnt := line.Len() - remaining; cnt > out.numWords {
 				out.numWords = cnt
 			}
 		} else {
 			if useLogging(q) {
-				m := Matched(input)
+				m := Matched(line.words)
 				log.Printf("matched %s %q\n", op.TypeInfo().TypeName(), m.DebugString())
 			}
 			(*out) = bestMatch{match: op}

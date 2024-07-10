@@ -60,13 +60,14 @@ func (op *VerbNamesAreNames) Generate(ctx Context) error {
 	return generateVerbPhrase(ctx, op)
 }
 
-func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
-	if next, q := *input, AddContext(q, MatchKindsOfKinds); //
+func (op *VerbNamesAreNames) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next, q := line, //
+		AddContext(q, MatchKindsOfKinds); //
 	op.Verb.Match(q, &next) &&
 		op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.OtherNames.Match(q, &next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }
@@ -99,14 +100,15 @@ func (op *NamesVerbNames) Generate(ctx Context) (err error) {
 	}
 	return
 }
-func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
-	if next, q := *input, AddContext(q, MatchKindsOfKinds); //
+func (op *NamesVerbNames) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next, q := line, //
+		AddContext(q, MatchKindsOfKinds|MatchPronouns);
 	// like NamesAreLikeVerbs, this limits lhs matching to kinds which can be instanced
 	op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.Verb.Match(q, &next) &&
 		op.OtherNames.Match(q, &next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }
@@ -147,13 +149,16 @@ func (op *NamesAreLikeVerbs) Generate(ctx Context) (err error) {
 	}
 	return
 }
-func (op *NamesAreLikeVerbs) Match(q Query, input *InputState) (okay bool) {
-	if next, q := *input, AddContext(q, MatchKindsOfKinds); //
+func (op *NamesAreLikeVerbs) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next, q := line, //
+		AddContext(q, MatchKindsOfKinds); //
 	op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {
 		Optional(q, &next, &op.VerbPhrase)
-		*input, okay = next, true
+		//
+		next.pronoun.setPronous(op.Names)
+		ret, okay = next, true
 	}
 	return
 }

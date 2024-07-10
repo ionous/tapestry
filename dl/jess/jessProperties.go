@@ -29,15 +29,15 @@ func (op *KindsHaveProperties) Phase() weaver.Phase {
 	return weaver.PropertyPhase
 }
 
-func (op *KindsHaveProperties) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *KindsHaveProperties) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	op.Kind.Match(q, &next) &&
 		op.Have.Match(q, &next, keywords.Have, keywords.Has) &&
 		(Optional(q, &next, &op.Article) || true) &&
 		(op.matchListOf(&next) || true) &&
 		op.PropertyType.Match(q, &next) {
 		Optional(q, &next, &op.CalledName)
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }

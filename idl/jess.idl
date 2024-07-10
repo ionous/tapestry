@@ -48,6 +48,16 @@ Spec:requires:contains:
         - "are"
         - - Term: "matched"
 
+    - # Matches the word "it".
+      Flow:terms:
+        - "pronoun"
+        - - Term: "matched"
+          - # the database info that matched
+            Term:type:private:
+              - "proref"
+              - "pronoun_reference"
+              - true
+
     - # Matches the word "called".
       Flow:terms:
         - "called"
@@ -125,7 +135,13 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "names"
         - "noun_builder"
-        - - Term:optional:
+        - - # this only applies in some contexts
+            # it can only appear as the first name in a list
+            # and will block additional names from matching.
+            Term:optional:
+              - "pronoun"
+              - true
+          - Term:optional:
               - "counted_kind"
               - true
           - # note that because this phrase is greedy
@@ -260,7 +276,9 @@ Spec:requires:contains:
         - "verb"
         - - Term: "text"
 
-    - # This is the union of all possible matching phrases.
+    - Slot: "line_matcher"
+
+    - # This is the union of all possible line matchers.
       # For any given plain text sentence,
       # jess tries each of these looking for the first to succeed.
       # Different phrases belong to different scheduled phases;
@@ -289,8 +307,9 @@ Spec:requires:contains:
       # Interesting to note that inform allows "some kind/s of", but
       # this is more strict.
       # Like inform `The animals called kittens are a kind of things.` is legal.
-      Flow:terms:
+      Flow:slots:terms:
         - "kinds_are_kind"
+        - "line_matcher"
         - - # can match plain names and existing kinds;
             # only allows a leading kind called, and errors on all counted kinds.
             Term: "names"
@@ -320,8 +339,9 @@ Spec:requires:contains:
       # For example, in Inform:
       #  The closed containers are fixed in place.
       # makes any containers that are *initially* closed also immovable.
-      Flow:terms:
+      Flow:slots:terms:
         - "kinds_are_traits"
+        - "line_matcher"
         - - Term: "kinds"
           - Term: "are"
           - Term:type:
@@ -333,8 +353,9 @@ Spec:requires:contains:
       # ex.
       #   The colors are a kind of aspect. The colors are red, blue, and greasy green.
       # The commands aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.
-      Flow:terms:
+      Flow:slots:terms:
         - "aspects_are_traits"
+        - "line_matcher"
         - - Term:type:
               - "aspect"
               - "kind"
@@ -349,8 +370,9 @@ Spec:requires:contains:
       # This intentionally doesn't recognize adjectives attached to named names.
       # "In the closed coffin" generates a name with the name "closed coffin"
       # not a coffin in an initially closed state.
-      Flow:terms:
+      Flow:slots:terms:
         - "verb_names_are_names"
+        - "line_matcher"
         - - Term: "verb"
           - Term: "names"
           - Term: "are"
@@ -361,8 +383,9 @@ Spec:requires:contains:
     - # Names are verb (other) names.
       # ex.
       #  The thing called the stake is on the supporter called the altar.
-      Flow:terms:
+      Flow:slots:terms:
         - "names_verb_names"
+        - "line_matcher"
         - - Term: "names"
           - Term: "are"
           - Term: "verb"
@@ -376,8 +399,9 @@ Spec:requires:contains:
       #    The coffin is a closed container [in the antechamber].
       # This is the *only* way of assigning names initial states directly.
       # All other phrases require a kind to be involved, here the kind is optional.
-      Flow:terms:
+      Flow:slots:terms:
         - "names_are_like_verbs"
+        - "line_matcher"
         - - Term: "names"
           - Term: "are"
           - # adjectives are *not* optional.
@@ -436,8 +460,9 @@ Spec:requires:contains:
       #   The description of the pen is "mightier than the sword.
       # As a special case this also allows a list of quoted text
       # indicated with "are" ( versus "is" )
-      Flow:terms:
+      Flow:slots:terms:
         - "property_noun_value"
+        - "line_matcher"
         - - Term:optional:
               - "article"
               - true
@@ -461,8 +486,9 @@ Spec:requires:contains:
       # ex.
       #   The pen has (the) description (of) "mightier than the sword."
       # like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
-      Flow:terms:
+      Flow:slots:terms:
         - "noun_property_value"
+        - "line_matcher"
         - # tries to match an existing noun, or generates one.
           # use the matched noun to guide property matching.
           # 
@@ -521,8 +547,9 @@ Spec:requires:contains:
     - # Kinds "have" a ("list of") type ("called" name).
       # ex.
       #   Things have some text called a description.
-      Flow:terms:
+      Flow:slots:terms:
         - "kinds_have_properties"
+        - "line_matcher"
         - - Term: "kind"
           - Term:type:
               - "have" # or has
@@ -563,8 +590,9 @@ Spec:requires:contains:
     - # Kinds ("can be"|"are either") new_trait [or new_trait...].
       # ex.
       #  A thing can be open or closed.
-      Flow:terms:
+      Flow:slots:terms:
         - "kinds_are_either"
+        - "line_matcher"
         - - Term: "kind"
           - Term:type:
               - "can_be" # ("can be"|"are either")
@@ -657,8 +685,9 @@ Spec:requires:contains:
         - - Term: "assignment"
 
     - # Matches pattern rule definitions.
-      Flow:terms:
+      Flow:slots:terms:
         - "timed_rule"
+        - "line_matcher"
         - - Term: "rule_prefix"
           - Term:type:optional:
               - "someone"
@@ -683,8 +712,9 @@ Spec:requires:contains:
           - Term: "sub_assignment"
 
     - # Various phrases, all starting with the word "Understand".
-      Flow:terms:
+      Flow:slots:terms:
         - "understand"
+        - "line_matcher"
         - - Term:type:
               - "understand" # the word "understand"
               - "words"
@@ -715,8 +745,9 @@ Spec:requires:contains:
     - # A mapping declaration starting with a room or door.
       # ex.
       #   A dead end called the Airport is west of the Road and north of the Farm.
-      Flow:terms:
+      Flow:slots:terms:
         - "map_locations"
+        - "line_matcher"
         - - Term: "linking"
           - Term: "are"
           - Term: "direction_of_linking"
@@ -735,8 +766,9 @@ Spec:requires:contains:
               - true
 
     - # A mapping declaration starting with a direction.
-      Flow:terms:
+      Flow:slots:terms:
         - "map_directions"
+        - "line_matcher"
         - - Term: "direction_of_linking"
           - Term: "are"
           - # ex. `[Inside from the Meadow] is... the woodcutter's hut.`
@@ -755,8 +787,9 @@ Spec:requires:contains:
       #  Through the blue door and the red door is the kitchen.
       # The destination of a door is always treated as a room or nowhere.
       # ( Inform doesn't allow nowhere, but it seems like a good idea. )
-      Flow:terms:
+      Flow:slots:terms:
         - "map_connections"
+        - "line_matcher"
         - - Term:type:
               - "through"
               - "bool"

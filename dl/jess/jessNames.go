@@ -23,21 +23,28 @@ func (op *Names) GetTraits() (ret Traitor) {
 		ret = c.GetTraits()
 	}
 	return
+
 }
 
 // checks Query flags to control matching
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
+	matchPronouns := matchPronouns(q)
 	matchKinds := matchKinds(q)
-	if next := *input; ( //
-	matchKinds &&
-		// "5 containers",
-		Optional(q, &next, &op.CountedKind) ||
-		// "the container called the bottle"
-		Optional(q, &next, &op.KindCalled) ||
-		// "the container"
-		Optional(q, &next, &op.Kind)) || ( //
+	if next := *input; //
+	(matchPronouns &&
+		Optional(q, &next, &op.Pronoun)) ||
+		//
+		(matchKinds &&
+			// "5 containers",
+			Optional(q, &next, &op.CountedKind) ||
+			// "the container called the bottle"
+			Optional(q, &next, &op.KindCalled) ||
+			// "the container"
+			Optional(q, &next, &op.Kind)) || ( //
 	// "the bottle", or "the unknown name"
 	Optional(q, &next, &op.Name)) {
+		// can only match in the first name
+		q = ClearContext(q, MatchPronouns)
 		// as long as one succeeded, try matching additional names too...
 		// inform seems to only allow "kind called" at the front of a list of names...
 		// fix? but maybe it'd be better to match and reject when used incorrectly.

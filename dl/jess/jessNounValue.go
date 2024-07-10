@@ -25,7 +25,7 @@ func (op *Property) Match(q Query, kind string, input *InputState) (okay bool) {
 }
 
 func (op *Property) matchProperty(q Query, kind string, input *InputState) (okay bool) {
-	if m, width := q.FindField(kind, *input); width > 0 {
+	if m, width := q.FindField(kind, input.words); width > 0 {
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}
 	return
@@ -57,12 +57,13 @@ func (op *PropertyNounValue) GetValue() (ret rt.Assignment) {
 	return
 }
 
-func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
-	next := *input
+func (op *PropertyNounValue) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	next := line
 	Optional(q, &next, &op.Article)
-	if index := scanUntil(next, keywords.Of); index > 0 {
+	//
+	if index := scanUntil(next.words, keywords.Of); index > 0 {
 		rest := next.Skip(index + 1) // everything after "of"
-		if op.NamedNoun.Match(q, &rest) &&
+		if op.NamedNoun.Match(AddContext(q, MatchPronouns), &rest) &&
 			op.Are.Match(q, &rest) &&
 			// either: single value or quoted texts
 			((op.Are.IsPlural() && Optional(q, &rest, &op.QuotedTexts)) ||
@@ -70,10 +71,11 @@ func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 
 			// try the phrase before the word "of"
 			// the whole string must be consumed
-			property := InputState(next.Cut(index))
+			property := next
+			property.words = next.Cut(index)
 			if op.Property.Match(q, namedKind(op.NamedNoun), &property) && //
 				property.Len() == 0 {
-				*input, okay = rest, true
+				ret, okay = rest, true
 			}
 		}
 	}
@@ -104,15 +106,15 @@ func (op *NounPropertyValue) GetValue() rt.Assignment {
 	return op.SingleValue.Assignment()
 }
 
-func (op *NounPropertyValue) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.NamedNoun.Match(q, &next) &&
+func (op *NounPropertyValue) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
+	op.NamedNoun.Match(AddContext(q, MatchPronouns), &next) &&
 		op.Has.Match(q, &next, keywords.Has) &&
 		(Optional(q, &next, &op.Article) || true) &&
 		op.Property.Match(q, namedKind(op.NamedNoun), &next) &&
 		(op.matchOf(q, &next) || true) &&
 		op.SingleValue.Match(q, &next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }

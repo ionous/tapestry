@@ -12,13 +12,13 @@ func (op *MapDirections) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
 
-func (op *MapDirections) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *MapDirections) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	op.DirectionOfLinking.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		(Optional(q, &next, &op.Redirect) ||
 			Optional(q, &next, &op.Linking)) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }

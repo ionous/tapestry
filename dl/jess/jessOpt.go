@@ -12,7 +12,7 @@ func Optional[M any,
 		// it means we want pointers to M to implement Interpreter.
 		// *phew*
 		*M
-		Interpreter
+		OptionalMatcher
 	}](q Query, input *InputState, out **M) (okay bool) {
 	var v M
 	if next := *input; IM(&v).Match(q, &next) {

@@ -17,15 +17,15 @@ func (op *Understand) Phase() weaver.Phase {
 	return weaver.LanguagePhase
 }
 
-func (op *Understand) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *Understand) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	op.Understand.Match(q, &next, keywords.Understand) &&
 		op.QuotedTexts.Match(q, &next) &&
 		op.As.Match(q, &next, keywords.As) &&
 		(Optional(q, &next, &op.Article) || true) &&
 		(op.matchPluralOf(&next) || true) &&
 		op.Names.Match(q, &next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }

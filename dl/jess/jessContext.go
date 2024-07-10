@@ -8,6 +8,8 @@ const (
 	// for instance, there can be a pattern called "on" and a verb called "on".
 	MatchKindsOfKinds
 	MatchKindsOfAspects
+	//
+	MatchPronouns
 	// "called" checks for when the indefinite article
 	// is *not* an indefinite article (a/an), and records it.
 	// printing references to the noun will the specified article.
@@ -29,6 +31,17 @@ func AddContext(q Query, flags int) (ret Query) {
 	return
 }
 
+// remove flags from the query
+func ClearContext(q Query, flags int) (ret Query) {
+	if ctx, ok := q.(queryContext); !ok {
+		ret = q // unchanged, b/c only a context can have flags.
+	} else {
+		ctx.flags &= ^flags
+		ret = ctx
+	}
+	return
+}
+
 type queryContext struct {
 	Query
 	flags int
@@ -41,6 +54,11 @@ func (q queryContext) GetContext() int {
 func matchKinds(q Query) bool {
 	flags := q.GetContext()
 	return (flags & PlainNameMatching) == 0
+}
+
+func matchPronouns(q Query) bool {
+	flags := q.GetContext()
+	return (flags & MatchPronouns) != 0
 }
 
 func matchKindsOfKinds(q Query) bool {

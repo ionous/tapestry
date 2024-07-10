@@ -17,12 +17,16 @@ type Paragraph struct {
 	// each sentence is its own slice of tokens.
 	// weaving winnows this list.
 	Lines [][]match.TokenValue // tokens have pos
+	// keeps pronoun context for the most recent line
+	// across multiple calls to "schedule"
+	// ( if scheduling was channel based, we could put currentPronoun on the stack )
+	currentPronoun
 }
 
 // use the existing tokens as a paragraph
 // ( ex. from parsing a plain text section )
 func MakeParagraph(file string, lines [][]match.TokenValue) Paragraph {
-	return Paragraph{file, lines}
+	return Paragraph{File: file, Lines: lines}
 }
 
 // parse the passed string into a paragraph of sentences.
@@ -44,9 +48,7 @@ func NewParagraph(pos compact.Source, str string, assign rt.Assignment) (ret Par
 				c.Tokens = append(c.Tokens, tv)
 				lines = append(lines, c.Tokens)
 			}
-			ret = Paragraph{
-				pos.File, lines,
-			}
+			ret = MakeParagraph(pos.File, lines)
 		}
 	}
 	return
@@ -60,24 +62,25 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 	unmatched := p.Lines
 	for i, n := range unmatched { // n: is a sentence of tokens
 		var best bestMatch
-		if matchSentence(z, q, n, &best) {
-			// try to generate if matched.
+		line := InputState{words: n, pronoun: p.nextPronoun()}
+		// match a sentence,
+		// and if matched Generate/Schedule it for weaving database info
+		if matchSentence(z, q, line, &best) {
 			lineOfs := n[0].Pos.Y
 			source := compact.Source{
 				File:    p.File,
 				Line:    lineOfs,
 				Comment: "a plain-text paragraph",
 			}
-			// when we hit here --
-			// the pos isnt offset... interestingly... it is for the  LAST element of unmatched.
-			// re: tell versus everything else.
+			// immediately after matching; try to generate
+			// ( which invariably calls schedule after possibly some preliminary error checking )
 			if e := best.match.Generate(Context{q, u, source}); e != nil {
 				err = e
 				break
 			}
 		} else {
-			// retry if not in final phase
-			// otherwise generate an error
+			// if it didn't match; retry in a later phase
+			// ( but error if we've gone through all the phases without success )
 			if z == weaver.NextPhase {
 				err = fmt.Errorf("failed to match line %d %s", i, Matched(n).DebugString())
 				break

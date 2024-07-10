@@ -12,13 +12,13 @@ func (op *KindsAreTraits) Phase() weaver.Phase {
 	return weaver.PropertyPhase
 }
 
-func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+func (op *KindsAreTraits) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+	if next := line; //
 	op.Kinds.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.Usually.Match(q, &next, keywords.Usually) &&
 		op.Traits.Match(q, &next) {
-		*input, okay = next, true
+		ret, okay = next, true
 	}
 	return
 }
