@@ -149,6 +149,7 @@ func (op *NamesAreLikeVerbs) Generate(ctx Context) (err error) {
 	}
 	return
 }
+
 func (op *NamesAreLikeVerbs) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
 	if next, q := line, //
 		AddContext(q, MatchKindsOfKinds); //
@@ -157,7 +158,7 @@ func (op *NamesAreLikeVerbs) MatchLine(q Query, line InputState) (ret InputState
 		op.Adjectives.Match(q, &next) {
 		Optional(q, &next, &op.VerbPhrase)
 		//
-		next.pronoun.setPronous(op.Names)
+		next.pronouns.setPronounSource(op.Names)
 		ret, okay = next, true
 	}
 	return

@@ -5,12 +5,10 @@ import (
 )
 
 // helper for line matching
-// the input state consists of a series of hashes
-// and chunks of the original string.
-// fix? change to a "reader" ( pull ) rather than pre-process?
 type InputState struct {
-	pronoun pronounSource
-	words   []match.TokenValue // the current line from the paragraph
+	pronouns pronounSource
+	// fix? change to a "reader" ( pull ) rather than pre-process?
+	words []match.TokenValue // the current line from the paragraph
 }
 
 func (in InputState) Len() int {
@@ -31,8 +29,8 @@ func (in InputState) GetNext(t match.Token) (ret match.TokenValue, okay bool) {
 // return an input state that is the passed number of words after this one.
 func (in InputState) Skip(skip int) InputState {
 	return InputState{
-		pronoun: in.pronoun,
-		words:   in.words[skip:],
+		pronouns: in.pronouns,
+		words:    in.words[skip:],
 	}
 }
 

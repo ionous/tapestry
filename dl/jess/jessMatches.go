@@ -96,6 +96,7 @@ func matchSentence(z weaver.Phase, q Query, line InputState, out *bestMatch) (ok
 type bestMatch struct {
 	match    matchGenerator
 	numWords int
+	pronouns pronounSource
 }
 
 // each LineMatchers is either a Generator, a schedulee.
@@ -137,17 +138,18 @@ func (op genericSchedule) Generate(ctx Context) (err error) {
 func matchLine(q Query, line InputState, op matchGenerator, out *bestMatch) (okay bool) {
 	// "understand" {quoted text} as .....
 	if next, ok := op.MatchLine(q, line); ok {
-		// was the whole phrase matched?
+		// was the phrase only partially matched?
 		if remaining := next.Len(); remaining > 0 {
-			if cnt := line.Len() - remaining; cnt > out.numWords {
-				out.numWords = cnt
+			wordsMatched := line.Len() - remaining
+			if wordsMatched > out.numWords {
+				out.numWords = wordsMatched
 			}
 		} else {
 			if useLogging(q) {
 				m := Matched(line.words)
 				log.Printf("matched %s %q\n", op.TypeInfo().TypeName(), m.DebugString())
 			}
-			(*out) = bestMatch{match: op}
+			(*out) = bestMatch{match: op, pronouns: next.pronouns}
 			okay = true
 		}
 	}

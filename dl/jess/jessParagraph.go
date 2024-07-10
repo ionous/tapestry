@@ -19,8 +19,8 @@ type Paragraph struct {
 	Lines [][]match.TokenValue // tokens have pos
 	// keeps pronoun context for the most recent line
 	// across multiple calls to "schedule"
-	// ( if scheduling was channel based, we could put currentPronoun on the stack )
-	currentPronoun
+	// ( if scheduling was channel based, we could put pronounSource on the stack )
+	pronouns pronounSource
 }
 
 // use the existing tokens as a paragraph
@@ -62,7 +62,7 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 	unmatched := p.Lines
 	for i, n := range unmatched { // n: is a sentence of tokens
 		var best bestMatch
-		line := InputState{words: n, pronoun: p.nextPronoun()}
+		line := InputState{words: n, pronouns: p.pronouns.nextPronoun()}
 		// match a sentence,
 		// and if matched Generate/Schedule it for weaving database info
 		if matchSentence(z, q, line, &best) {
@@ -72,8 +72,11 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 				Line:    lineOfs,
 				Comment: "a plain-text paragraph",
 			}
-			// immediately after matching; try to generate
-			// ( which invariably calls schedule after possibly some preliminary error checking )
+			// update the paragraph's context so other sentences can refer to it.
+			// ( or if no pronoun was matched, or reused, clear it )
+			p.pronouns = best.pronouns.nextPronoun()
+			// after matching: try to generate ( which inevitably calls schedule... )
+			// ( errors here are critical, and not a request to "retry" )
 			if e := best.match.Generate(Context{q, u, source}); e != nil {
 				err = e
 				break
