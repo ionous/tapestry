@@ -611,6 +611,123 @@ func (op *Singularize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Separate a piece of text into several parts
+// wherever a newline (\n) occurs.
+type SplitLines struct {
+	Text   rtti.TextEval
+	Markup map[string]any `json:",omitempty"`
+}
+
+// split_lines, a type of flow.
+var Zt_SplitLines typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*SplitLines) TypeInfo() typeinfo.T {
+	return &Zt_SplitLines
+}
+
+// Implements [typeinfo.Markup]
+func (op *SplitLines) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextListEval = (*SplitLines)(nil)
+
+// Holds a slice of type SplitLines.
+type SplitLines_Slice []SplitLines
+
+// Implements [typeinfo.Instance] for a slice of SplitLines.
+func (*SplitLines_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SplitLines
+}
+
+// Implements [typeinfo.Repeats] for a slice of SplitLines.
+func (op *SplitLines_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Separate a piece of text into several parts
+// wherever a space between words occurs.
+type SplitWords struct {
+	Text   rtti.TextEval
+	Markup map[string]any `json:",omitempty"`
+}
+
+// split_words, a type of flow.
+var Zt_SplitWords typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*SplitWords) TypeInfo() typeinfo.T {
+	return &Zt_SplitWords
+}
+
+// Implements [typeinfo.Markup]
+func (op *SplitWords) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextListEval = (*SplitWords)(nil)
+
+// Holds a slice of type SplitWords.
+type SplitWords_Slice []SplitWords
+
+// Implements [typeinfo.Instance] for a slice of SplitWords.
+func (*SplitWords_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SplitWords
+}
+
+// Implements [typeinfo.Repeats] for a slice of SplitWords.
+func (op *SplitWords_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Separate a piece of text into several parts.
+type SplitText struct {
+	Text      rtti.TextEval
+	Separator rtti.TextEval
+	Markup    map[string]any `json:",omitempty"`
+}
+
+// split_text, a type of flow.
+var Zt_SplitText typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*SplitText) TypeInfo() typeinfo.T {
+	return &Zt_SplitText
+}
+
+// Implements [typeinfo.Markup]
+func (op *SplitText) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextListEval = (*SplitText)(nil)
+
+// Holds a slice of type SplitText.
+type SplitText_Slice []SplitText
+
+// Implements [typeinfo.Instance] for a slice of SplitText.
+func (*SplitText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SplitText
+}
+
+// Implements [typeinfo.Repeats] for a slice of SplitText.
+func (op *SplitText_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -919,6 +1036,67 @@ func init() {
 			"--": []string{"Change a plural word into its singular form.", "A plural word only has one singular form.", "For example, given the word \"people\", return \"person\".", "See [pluralize] for more information."},
 		},
 	}
+	Zt_SplitLines = typeinfo.Flow{
+		Name: "split_lines",
+		Lede: "split",
+		Terms: []typeinfo.Term{{
+			Name:  "text",
+			Label: "lines",
+			Markup: map[string]any{
+				"--": "The text to split.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextListEval,
+		},
+		Markup: map[string]any{
+			"--": []string{"Separate a piece of text into several parts ", "wherever a newline (\\n) occurs."},
+		},
+	}
+	Zt_SplitWords = typeinfo.Flow{
+		Name: "split_words",
+		Lede: "split",
+		Terms: []typeinfo.Term{{
+			Name:  "text",
+			Label: "words",
+			Markup: map[string]any{
+				"--": "The text to split.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextListEval,
+		},
+		Markup: map[string]any{
+			"--": []string{"Separate a piece of text into several parts ", "wherever a space between words occurs."},
+		},
+	}
+	Zt_SplitText = typeinfo.Flow{
+		Name: "split_text",
+		Lede: "split",
+		Terms: []typeinfo.Term{{
+			Name:  "text",
+			Label: "text",
+			Markup: map[string]any{
+				"--": "The text to split.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:  "separator",
+			Label: "separator",
+			Markup: map[string]any{
+				"--": []string{"The text to search for and split at. ", "This text gets removed from the result."},
+			},
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextListEval,
+		},
+		Markup: map[string]any{
+			"--": "Separate a piece of text into several parts.",
+		},
+	}
 }
 
 // package listing of type data
@@ -950,6 +1128,9 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_MakeUppercase,
 	&Zt_Pluralize,
 	&Zt_Singularize,
+	&Zt_SplitLines,
+	&Zt_SplitWords,
+	&Zt_SplitText,
 }
 
 // gob like registration
@@ -969,6 +1150,9 @@ func Register(reg func(any)) {
 	reg((*MakeUppercase)(nil))
 	reg((*Pluralize)(nil))
 	reg((*Singularize)(nil))
+	reg((*SplitLines)(nil))
+	reg((*SplitWords)(nil))
+	reg((*SplitText)(nil))
 }
 
 // a list of all command signatures
@@ -988,6 +1172,9 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12963686195606417453: (*MakeReversed)(nil),     /* text_eval=Reverse text: */
 	10747671703915852065: (*MakeSentenceCase)(nil), /* text_eval=Sentence: */
 	2397382738676796596:  (*Singularize)(nil),      /* text_eval=Singular of: */
+	14093550589265110462: (*SplitLines)(nil),       /* text_list_eval=Split lines: */
+	2806610082659226535:  (*SplitText)(nil),        /* text_list_eval=Split text:separator: */
+	7431062617678886652:  (*SplitWords)(nil),       /* text_list_eval=Split words: */
 	5968278258259888036:  (*TextLen)(nil),          /* num_eval=Text length: */
 	10878271994667616824: (*MakeTitleCase)(nil),    /* text_eval=Title: */
 	5481656653805454214:  (*MakeUppercase)(nil),    /* text_eval=Upper: */

@@ -217,3 +217,42 @@ Spec:requires:contains:
               - "of"
               - "text"
               - "text_eval"
+
+    - # Separate a piece of text into several parts 
+      # wherever a newline (\n) occurs.
+      Flow:slots:lede:terms:
+        - "split_lines"
+        - "text_list_eval"
+        - "split"
+        - - # The text to split.
+            Term:name:type:
+              - "lines"
+              - "text"
+              - "text_eval"
+    
+    - # Separate a piece of text into several parts 
+      # wherever a space between words occurs.
+      Flow:slots:lede:terms:
+        - "split_words"
+        - "text_list_eval"
+        - "split"
+        - - # The text to split.
+            Term:name:type:
+              - "words"
+              - "text"
+              - "text_eval"
+
+    - # Separate a piece of text into several parts.
+      Flow:slots:lede:terms:
+        - "split_text"
+        - "text_list_eval"
+        - "split"
+        - - # The text to split.
+            Term:type:
+              - "text"
+              - "text_eval"
+          - # The text to search for and split at. 
+            # This text gets removed from the result.
+            Term:type:
+              - "separator"
+              - "text_eval"
