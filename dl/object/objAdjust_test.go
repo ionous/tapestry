@@ -19,8 +19,8 @@ func TestAdjustTraits(t *testing.T) {
 	)
 	objs.AddObjects(kinds.Kind("messages"), "msg")
 	lt := testutil.Runtime{
-		Kinds:     &kinds,
-		ObjectMap: objs,
+		Kinds:   &kinds,
+		Objects: objs,
 	}
 
 	if v, e := safe.GetText(&lt, &object.IncrementAspect{
