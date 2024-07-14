@@ -2,13 +2,13 @@ package testutil
 
 import (
 	"fmt"
+	"log"
 	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
 )
 
 type Kinds struct {
@@ -29,13 +29,19 @@ type KindBuilder struct {
 // register kinds from a struct using reflection
 // note: this doesnt actually create the kinds....
 // it preps them for use -- they are created on Get()
-func (ks *Kinds) AddKinds(is ...interface{}) {
+func (ks *Kinds) AddKinds(is ...any) {
 	for _, el := range is {
 		ks.Builder.addType(ks, r.TypeOf(el).Elem())
 	}
 }
 
-func (ks *Kinds) NewRecord(name string, valuePairs ...interface{}) *rt.Record {
+func (ks *Kinds) AddKind(el any) *rt.Kind {
+	t := r.TypeOf(el).Elem()
+	ks.Builder.addType(ks, t)
+	return ks.Kind(nameOfType(t))
+}
+
+func (ks *Kinds) NewRecord(name string, valuePairs ...any) *rt.Record {
 	v := rt.NewRecord(ks.Kind(name))
 	if len(valuePairs) > 0 {
 		if e := SetRecord(v, valuePairs...); e != nil {
@@ -69,7 +75,7 @@ func (ks *Kinds) GetKindByName(name string) (ret *rt.Kind, err error) {
 			} else if k != nil {
 				ret = k
 			} else if fs, ok := ks.Builder.Fields[name]; !ok {
-				err = errutil.Fmt("unknown kind %q", name)
+				err = fmt.Errorf("unknown kind %q", name)
 			} else {
 				if k, e := ks.makeKind(name, fs); e != nil {
 					err = e
@@ -157,7 +163,7 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 		}
 		switch k := fieldType.Kind(); k {
 		default:
-			panic(errutil.Sprint("unknown kind", k))
+			log.Panic("unknown kind", k)
 
 		case r.Bool:
 			b.Aff = affine.Bool
@@ -205,7 +211,7 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 				kb.addType(ks, elType)
 
 			default:
-				panic(errutil.Sprint("unknown slice", elType.String()))
+				log.Panic("unknown slice", elType.String())
 			}
 
 		case r.Float64:
@@ -215,7 +221,7 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 			aspect := nameOfType(fieldType)
 			b.Aff, b.Type = affine.Text, aspect
 			if !fieldType.Implements(rstringer) {
-				panic("unknown enum")
+				log.Panic("unknown enum", aspect)
 			}
 			x := r.New(fieldType).Elem()
 			var traits []string

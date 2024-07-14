@@ -40,11 +40,11 @@ Spec:requires:contains:
           - # The one-based index at which to start removing values.
             # If not specified, starts with the first value.
             Term:type:optional:
-              - "index"
+              - "start"
               - "num_eval"
               - true
           - # The number of values to remove.
-            # If not specified, removes one value.
+            # If not specified, removes as many as it can.
             Term:type:optional:
               - "count"
               - "num_eval"
@@ -65,11 +65,11 @@ Spec:requires:contains:
           - # The one-based index at which to start removing values.
             # If not specified, starts with the first value.
             Term:type:optional:
-              - "index"
+              - "start"
               - "num_eval"
               - true
           - # The number of values to remove.
-            # If not specified, removes one value.
+            # If not specified, removes as many as it can.
             Term:type:optional:
               - "count"
               - "num_eval"
@@ -267,12 +267,12 @@ Spec:requires:contains:
       # The designated pattern is called with a pair of parameters for each value in the list:
       #   1. the current value from the list;
       #   2. the value being packed.
-      # The pattern is expected to return the newly updated value.
+      # The pattern is expected to combine the two parameters and return the newly updated value.
       Flow:slots:lede:terms:
         - "list_reduce"
         - "execute"
         - "reduce"
-        - - # The value being packed.
+        - - # The value the list is getting packed into.
             Term:name:type:
               - "_"
               - "target"
@@ -333,6 +333,8 @@ Spec:requires:contains:
               - true
 
     - # Rearrange the values in a list.
+      # This can sort lists of numbers and text,
+      # as well as lists of records and object names given a sorting field.
       Flow:slots:lede:terms:
         - "list_sort"
         - "execute"
@@ -342,8 +344,15 @@ Spec:requires:contains:
               - "_"
               - "target"
               - "address"
-          - # Use the specified field to compare values.
-            # Optional, and only makes sense for lists containing records or objects.
+          - # Treat a list of text as objects of the specified kind.
+            # ( Ignored when sorting other lists. )
+            Term:name:type:optional:
+              - "kind"
+              - "kind_name"
+              - "text_eval"
+              - true
+          - # Extract a value from the specified field and use that value when sorting.
+            # Specifying a field name only makes sense for lists containing records or objects, and its required for the former. 
             Term:name:type:optional:
               - "field"
               - "field_name"

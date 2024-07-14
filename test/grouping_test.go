@@ -25,8 +25,8 @@ func TestGrouping(t *testing.T) {
 	locals := kinds.NewRecord("locals", "objects", objs.Names())
 	lt := testpat.Runtime{
 		Runtime: testutil.Runtime{
-			Kinds:     &kinds,
-			ObjectMap: objs,
+			Kinds:   &kinds,
+			Objects: objs,
 		},
 		Map: testpat.Map{
 			"assign grouping": &assignGrouping,

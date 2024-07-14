@@ -16,7 +16,7 @@ type panicTime struct {
 // Runtime - a simple runtime for testing
 type Runtime struct {
 	panicTime
-	ObjectMap map[string]*rt.Record
+	Objects map[string]*rt.Record
 	scope.Chain
 	*Kinds
 }
@@ -30,7 +30,7 @@ func (x *Runtime) SetField(target, field string, value rt.Value) (err error) {
 	case meta.Variables:
 		err = x.Chain.SetFieldByName(field, rt.CopyValue(value))
 	default:
-		if a, ok := x.ObjectMap[target]; !ok {
+		if a, ok := x.Objects[target]; !ok {
 			err = rt.UnknownField(target, field)
 		} else {
 			err = a.SetNamedField(field, value)
@@ -42,7 +42,7 @@ func (x *Runtime) SetField(target, field string, value rt.Value) (err error) {
 func (x *Runtime) GetField(target, field string) (ret rt.Value, err error) {
 	switch target {
 	case meta.ObjectId:
-		if _, ok := x.ObjectMap[field]; !ok {
+		if _, ok := x.Objects[field]; !ok {
 			err = rt.UnknownObject(field)
 		} else {
 			// in the test runtime the name of the object is generally the same as id
@@ -51,7 +51,7 @@ func (x *Runtime) GetField(target, field string) (ret rt.Value, err error) {
 
 	// return type of an object
 	case meta.ObjectKind:
-		if a, ok := x.ObjectMap[field]; !ok {
+		if a, ok := x.Objects[field]; !ok {
 			err = rt.UnknownObject(field)
 		} else {
 			ret = rt.StringOf(a.Name())
@@ -59,7 +59,7 @@ func (x *Runtime) GetField(target, field string) (ret rt.Value, err error) {
 
 		// hierarchy of an object's types ( a path )
 	case meta.ObjectKinds:
-		if a, ok := x.ObjectMap[field]; !ok {
+		if a, ok := x.Objects[field]; !ok {
 			err = rt.UnknownObject(field)
 		} else {
 			ret = rt.StringsOf(a.Ancestors())
@@ -69,7 +69,7 @@ func (x *Runtime) GetField(target, field string) (ret rt.Value, err error) {
 		ret, err = x.Chain.FieldByName(field)
 
 	default:
-		if a, ok := x.ObjectMap[target]; !ok {
+		if a, ok := x.Objects[target]; !ok {
 			err = rt.UnknownField(target, field)
 		} else {
 			ret, err = a.GetNamedField(field)

@@ -1,5 +1,7 @@
 package test
 
+import "strconv"
+
 // a simple noun
 type Things struct {
 }
@@ -47,4 +49,32 @@ type GroupCollation struct {
 type GroupedObjects struct {
 	Settings GroupSettings // the settings of the first object in the group
 	Objects  []string      // the list of objects with the same settings
+}
+
+// a noun with an aspect
+type Messages struct {
+	Neatness Neatness
+}
+
+// make a fake aspect for testing
+type Neatness int
+
+const (
+	Neat Neatness = iota
+	Scuffed
+	Trampled
+	NumNeatness = iota
+)
+
+func (i Neatness) String() string {
+	switch i {
+	case Neat:
+		return "neat"
+	case Scuffed:
+		return "scuffed"
+	case Trampled:
+		return "trampled"
+	default:
+		return "Neatness(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
 }

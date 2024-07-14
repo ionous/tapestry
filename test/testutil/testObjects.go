@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
+// nouns in the test runtime are represented by records
 type Objects map[string]*rt.Record
 
 func (or *Objects) AddObjects(kind *rt.Kind, names ...string) int {
@@ -16,6 +17,17 @@ func (or *Objects) AddObjects(kind *rt.Kind, names ...string) int {
 		(*or)[name] = rt.NewRecord(kind)
 	}
 	return len(names)
+}
+
+func (or *Objects) AddObject(kind *rt.Kind, name string) (ret *rt.Record) {
+	if *or == nil {
+		*or = make(Objects)
+	} else if _, exists := (*or)[name]; exists {
+		panic("can't add the same name twice")
+	}
+	obj := rt.NewRecord(kind)
+	(*or)[name] = obj
+	return obj
 }
 
 func (or *Objects) Names() (ret []string) {

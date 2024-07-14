@@ -15,7 +15,7 @@ func (op *ListErasing) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListErasing) erasingIndex(run rt.Runtime) (err error) {
-	if els, e := eraseIndex(run, op.Count, op.Target, op.Index); e != nil {
+	if els, e := eraseIndex(run, op.Count, op.Target, op.Start); e != nil {
 		err = e
 	} else if cnt, otherwise := els.Len(), op.Else; otherwise != nil && cnt == 0 {
 		err = otherwise.Branch(run)

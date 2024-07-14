@@ -37,7 +37,7 @@ func popTest(front bool, amt int, src ...string) []string {
 	// this will be run "amt" times
 	pop := &list.ListErasing{
 		Count:  literal.I(1),
-		Index:  literal.I(start),
+		Start:  literal.I(start),
 		Target: object.Variable("source"),
 		As:     "text",
 		Exe: []rt.Execute{

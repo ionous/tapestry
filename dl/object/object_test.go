@@ -26,8 +26,8 @@ func TestObjectCommands(t *testing.T) {
 	objs.AddObjects(kinds.Kind("derived"), "that")
 
 	run := testutil.Runtime{
-		Kinds:     &kinds,
-		ObjectMap: objs,
+		Kinds:   &kinds,
+		Objects: objs,
 	}
 	base := literal.T("base")
 	derived := literal.T("derived")

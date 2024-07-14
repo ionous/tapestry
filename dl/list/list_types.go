@@ -58,7 +58,7 @@ func (op *ListPop_Slice) Repeats() bool {
 // Remove one or more values from a list.
 type ListErase struct {
 	Target rtti.Address
-	Index  rtti.NumEval
+	Start  rtti.NumEval
 	Count  rtti.NumEval
 	Markup map[string]any `json:",omitempty"`
 }
@@ -100,7 +100,7 @@ func (op *ListErase_Slice) Repeats() bool {
 // containing a list of removed values.
 type ListErasing struct {
 	Target rtti.Address
-	Index  rtti.NumEval
+	Start  rtti.NumEval
 	Count  rtti.NumEval
 	As     string
 	Exe    []rtti.Execute
@@ -511,7 +511,7 @@ func (op *ListMap_Slice) Repeats() bool {
 //  1. the current value from the list;
 //  2. the value being packed.
 //
-// The pattern is expected to return the newly updated value.
+// The pattern is expected to combine the two parameters and return the newly updated value.
 type ListReduce struct {
 	Target      rtti.Address
 	PatternName string
@@ -640,8 +640,11 @@ func (op *ListSlice_Slice) Repeats() bool {
 }
 
 // Rearrange the values in a list.
+// This can sort lists of numbers and text,
+// as well as lists of records and object names given a sorting field.
 type ListSort struct {
 	Target     rtti.Address
+	KindName   rtti.TextEval
 	FieldName  rtti.TextEval
 	Descending rtti.BoolEval
 	Case       rtti.BoolEval
@@ -851,8 +854,8 @@ func init() {
 			},
 			Type: &rtti.Zt_Address,
 		}, {
-			Name:     "index",
-			Label:    "index",
+			Name:     "start",
+			Label:    "start",
 			Optional: true,
 			Markup: map[string]any{
 				"--": []string{"The one-based index at which to start removing values.", "If not specified, starts with the first value."},
@@ -863,7 +866,7 @@ func init() {
 			Label:    "count",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"The number of values to remove.", "If not specified, removes one value."},
+				"--": []string{"The number of values to remove.", "If not specified, removes as many as it can."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -884,8 +887,8 @@ func init() {
 			},
 			Type: &rtti.Zt_Address,
 		}, {
-			Name:     "index",
-			Label:    "index",
+			Name:     "start",
+			Label:    "start",
 			Optional: true,
 			Markup: map[string]any{
 				"--": []string{"The one-based index at which to start removing values.", "If not specified, starts with the first value."},
@@ -896,7 +899,7 @@ func init() {
 			Label:    "count",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"The number of values to remove.", "If not specified, removes one value."},
+				"--": []string{"The number of values to remove.", "If not specified, removes as many as it can."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1174,7 +1177,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Markup: map[string]any{
-				"--": "The value being packed.",
+				"--": "The value the list is getting packed into.",
 			},
 			Type: &rtti.Zt_Address,
 		}, {
@@ -1196,7 +1199,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"--": []string{"Pack the values of a list down into a single value.", "The designated pattern is called with a pair of parameters for each value in the list:", "  1. the current value from the list;", "  2. the value being packed.", "The pattern is expected to return the newly updated value."},
+			"--": []string{"Pack the values of a list down into a single value.", "The designated pattern is called with a pair of parameters for each value in the list:", "  1. the current value from the list;", "  2. the value being packed.", "The pattern is expected to combine the two parameters and return the newly updated value."},
 		},
 	}
 	Zt_ListReverse = typeinfo.Flow{
@@ -1262,11 +1265,19 @@ func init() {
 			},
 			Type: &rtti.Zt_Address,
 		}, {
+			Name:     "kind_name",
+			Label:    "kind",
+			Optional: true,
+			Markup: map[string]any{
+				"--": []string{"Treat a list of text as objects of the specified kind.", "( Ignored when sorting other lists. )"},
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
 			Name:     "field_name",
 			Label:    "field",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"Use the specified field to compare values.", "Optional, and only makes sense for lists containing records or objects."},
+				"--": []string{"Extract a value from the specified field and use that value when sorting.", "Specifying a field name only makes sense for lists containing records or objects, and its required for the former. "},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -1290,7 +1301,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"--": "Rearrange the values in a list.",
+			"--": []string{"Rearrange the values in a list.", "This can sort lists of numbers and text,", "as well as lists of records and object names given a sorting field."},
 		},
 	}
 	Zt_ListSplice = typeinfo.Flow{
@@ -1475,12 +1486,12 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	4935186310301037552:  (*ListErase)(nil),      /* execute=Erase:count: */
 	5630304856645386123:  (*ListErasing)(nil),    /* execute=Erase:count:as:do: */
 	10246968512856977800: (*ListErasing)(nil),    /* execute=Erase:count:as:do:else: */
-	2649838441048209265:  (*ListErase)(nil),      /* execute=Erase:index: */
-	13384410876430298214: (*ListErasing)(nil),    /* execute=Erase:index:as:do: */
-	12174102460828399291: (*ListErasing)(nil),    /* execute=Erase:index:as:do:else: */
-	6567377258605402518:  (*ListErase)(nil),      /* execute=Erase:index:count: */
-	6921811775972398241:  (*ListErasing)(nil),    /* execute=Erase:index:count:as:do: */
-	9114433845950072538:  (*ListErasing)(nil),    /* execute=Erase:index:count:as:do:else: */
+	17180173614285184697: (*ListErase)(nil),      /* execute=Erase:start: */
+	332264396687396446:   (*ListErasing)(nil),    /* execute=Erase:start:as:do: */
+	16537774391214658019: (*ListErasing)(nil),    /* execute=Erase:start:as:do:else: */
+	5822664654624245166:  (*ListErase)(nil),      /* execute=Erase:start:count: */
+	15625294835730398089: (*ListErasing)(nil),    /* execute=Erase:start:count:as:do: */
+	12268716552163826:    (*ListErasing)(nil),    /* execute=Erase:start:count:as:do:else: */
 	18153283510173426603: (*ListFind)(nil),       /* bool_eval=Find:value: */
 	1621463986020822393:  (*ListFind)(nil),       /* num_eval=Find:value: */
 	10867951538760575464: (*ListEmpty)(nil),      /* bool_eval=Is empty: */
@@ -1524,6 +1535,14 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	5490427700489040725:  (*ListSort)(nil),       /* execute=Sort:field:case: */
 	1904845790482056663:  (*ListSort)(nil),       /* execute=Sort:field:descending: */
 	2661691058664653875:  (*ListSort)(nil),       /* execute=Sort:field:descending:case: */
+	9216353230674034149:  (*ListSort)(nil),       /* execute=Sort:kind: */
+	8718627259396578449:  (*ListSort)(nil),       /* execute=Sort:kind:case: */
+	1512328177516435795:  (*ListSort)(nil),       /* execute=Sort:kind:descending: */
+	14706940026810305167: (*ListSort)(nil),       /* execute=Sort:kind:descending:case: */
+	11007262525127222823: (*ListSort)(nil),       /* execute=Sort:kind:field: */
+	11609137863971794851: (*ListSort)(nil),       /* execute=Sort:kind:field:case: */
+	10317693201609685849: (*ListSort)(nil),       /* execute=Sort:kind:field:descending: */
+	13878566001245722405: (*ListSort)(nil),       /* execute=Sort:kind:field:descending:case: */
 	830852984930243991:   (*ListSplice)(nil),     /* execute=Splice: */
 	14996467539506847192: (*ListSplice)(nil),     /* num_list_eval=Splice: */
 	15790718770209085807: (*ListSplice)(nil),     /* record_list_eval=Splice: */

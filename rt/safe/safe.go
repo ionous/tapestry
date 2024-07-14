@@ -138,6 +138,18 @@ func GetOptionalNumber(run rt.Runtime, eval rt.NumEval, fallback float64) (ret r
 	return
 }
 
+// GetOptionalInt runs the optionally specified eval.
+func GetOptionalInt(run rt.Runtime, eval rt.NumEval, fallback int) (ret int, err error) {
+	if eval == nil {
+		ret = fallback
+	} else if v, e := eval.GetNum(run); e != nil {
+		err = e
+	} else {
+		ret = v.Int()
+	}
+	return
+}
+
 // GetOptionalText runs the optionally specified eval.
 func GetOptionalText(run rt.Runtime, eval rt.TextEval, fallback string) (ret rt.Value, err error) {
 	if eval == nil {
