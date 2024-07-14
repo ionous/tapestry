@@ -20,7 +20,7 @@
     - "printed name"
     - FromText: "you"
 - Declare: "You are proper named and privately named."
-- #
+- # Given a noun, return true if its the player's actor or the player agent.
   Define pattern:requires:provides:
     - "is player"
     - - Text:kind:
@@ -29,7 +29,7 @@
     - - Bool: "success"
 - Define rule:named:do:
     - "is player"
-    - "play from agent"
+    - "player from agent"
     - - If:do:
           - Is compatible:kind:
               - "@obj"

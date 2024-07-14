@@ -506,7 +506,8 @@ Spec:requires:contains:
               - "other_noun_names"
               - "text_list_eval"
 
-    - # Print templated text. Templates contain commands executed at runtime.
+    - # This is the simplest way to display text for the player. 
+      # The text can contain a "template" which holds commands executed at runtime.
       # See the Tapestry guide for more information.
       Flow:slots:lede:terms:
         - "say_template"

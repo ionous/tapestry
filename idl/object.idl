@@ -223,7 +223,8 @@ Spec:requires:contains:
               - "bool"
               - true
 
-    - # A list of all objects accessible by the current scene that compatible with the specified kind.
+    - # A list of all objects accessible by the current scene 
+      # and compatible with the specified kind.
       Flow:slots:lede:terms:
         - "kinds_of"
         - "text_list_eval"

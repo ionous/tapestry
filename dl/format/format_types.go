@@ -640,6 +640,47 @@ func (op *PrintCount_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Have a particular actor say some text to the player.
+// The text can contain a "template" which holds commands executed at runtime.
+// See the Tapestry guide for more information.
+type SayActor struct {
+	Actor  rtti.TextEval
+	Text   rtti.TextEval
+	Markup map[string]any `json:",omitempty"`
+}
+
+// say_actor, a type of flow.
+var Zt_SayActor typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*SayActor) TypeInfo() typeinfo.T {
+	return &Zt_SayActor
+}
+
+// Implements [typeinfo.Markup]
+func (op *SayActor) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Execute = (*SayActor)(nil)
+
+// Holds a slice of type SayActor.
+type SayActor_Slice []SayActor
+
+// Implements [typeinfo.Instance] for a slice of SayActor.
+func (*SayActor_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SayActor
+}
+
+// Implements [typeinfo.Repeats] for a slice of SayActor.
+func (op *SayActor_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -941,6 +982,25 @@ func init() {
 			"--": []string{"Express an integer in plain english ( aka a cardinal number ).", "For example, given the number `12` return the text \"tweleve\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
+	Zt_SayActor = typeinfo.Flow{
+		Name: "say_actor",
+		Lede: "say",
+		Terms: []typeinfo.Term{{
+			Name:  "actor",
+			Label: "actor",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "text",
+			Label: "text",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"--": []string{"Have a particular actor say some text to the player.", "The text can contain a \"template\" which holds commands executed at runtime.", "See the Tapestry guide for more information."},
+		},
+	}
 }
 
 // package listing of type data
@@ -980,6 +1040,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_PrintRow,
 	&Zt_PrintNum,
 	&Zt_PrintCount,
+	&Zt_SayActor,
 }
 
 // gob like registration
@@ -999,6 +1060,7 @@ func Register(reg func(any)) {
 	reg((*PrintRow)(nil))
 	reg((*PrintNum)(nil))
 	reg((*PrintCount)(nil))
+	reg((*SayActor)(nil))
 }
 
 // a list of all command signatures
@@ -1028,6 +1090,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1331651249232124175:  (*PrintWords)(nil),     /* execute=Print words: */
 	17978150574109115948: (*PrintWords)(nil),     /* text_eval=Print words: */
 	4512128922644282356:  (*PrintText)(nil),      /* execute=Print: */
+	5755388447583507062:  (*SayActor)(nil),       /* execute=Say actor:text: */
 	12460624099586212271: (*ShuffleText)(nil),    /* counter=Shuffle name:text: */
 	8909818107999898193:  (*ShuffleText)(nil),    /* text_eval=Shuffle name:text: */
 	3444877746271964624:  (*ShuffleText)(nil),    /* counter=Shuffle text: */

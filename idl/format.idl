@@ -203,3 +203,17 @@ Spec:requires:contains:
               - "num"
               - "num_eval"
 
+    - # Have a particular actor say some text to the player.
+      # The text can contain a "template" which holds commands executed at runtime.
+      # See the Tapestry guide for more information.
+      Flow:slots:lede:terms:
+        - "say_actor"
+        - "execute"
+        - "say"
+        - - Term:type:
+              - "actor"
+              - "text_eval"
+          - Term:type:
+              - "text"
+              - "text_eval"
+

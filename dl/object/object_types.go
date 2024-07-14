@@ -522,7 +522,8 @@ func (op *KindOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// A list of all objects accessible by the current scene that compatible with the specified kind.
+// A list of all objects accessible by the current scene
+// and compatible with the specified kind.
 type KindsOf struct {
 	KindName rtti.TextEval
 	Markup   map[string]any `json:",omitempty"`
@@ -977,7 +978,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"--": "A list of all objects accessible by the current scene that compatible with the specified kind.",
+			"--": []string{"A list of all objects accessible by the current scene ", "and compatible with the specified kind."},
 		},
 	}
 	Zt_FieldsOfKind = typeinfo.Flow{

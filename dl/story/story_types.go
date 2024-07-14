@@ -977,7 +977,8 @@ func (op *DefineRelatives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Print templated text. Templates contain commands executed at runtime.
+// This is the simplest way to display text for the player.
+// The text can contain a "template" which holds commands executed at runtime.
 // See the Tapestry guide for more information.
 type SayTemplate struct {
 	Template string
@@ -2167,7 +2168,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"--": []string{"Print templated text. Templates contain commands executed at runtime.", "See the Tapestry guide for more information."},
+			"--": []string{"This is the simplest way to display text for the player. ", "The text can contain a \"template\" which holds commands executed at runtime.", "See the Tapestry guide for more information."},
 		},
 	}
 	Zt_SayResponse = typeinfo.Flow{
