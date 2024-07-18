@@ -39,7 +39,7 @@ func (op *ListSort) sortByText(run rt.Runtime) (err error) {
 			if len(opt.Field) == 0 {
 				opt.SortStrings(vs.Strings())
 			} else if kind := opt.Kind; len(kind) == 0 {
-				err = fmt.Errorf("field %s specified but the text list has no particular type", opt.Field)
+				err = fmt.Errorf("trying to sort by field %s but the sort didn't specify a kind", opt.Field)
 			} else {
 				err = opt.sortObjects(run, kind, vs.Strings())
 			}

@@ -227,8 +227,9 @@
                 Object:dot:
                   - "@room"
                   - At field: "description"
-      - Sort:field:
+      - Sort:kind:field:
           - "@kids"
+          - "things"
           - "grouping label"
       - Repeat across:as:do:
           - FromTextList: "@kids"
