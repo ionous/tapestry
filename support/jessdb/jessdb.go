@@ -14,6 +14,10 @@ func MakeQuery(m *mdl.Modeler, domain string) jess.Query {
 	return dbWrapper{m.Pin(domain)}
 }
 
+func MakeQueryFromPen(pen *mdl.Pen) jess.Query {
+	return dbWrapper{pen}
+}
+
 // implements jess.Query; returned by dbWrapper.
 type dbWrapper struct {
 	*mdl.Pen

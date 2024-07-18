@@ -17,7 +17,6 @@ func (op *DefineScene) Weave(cat *weave.Catalog) (err error) {
 	if domain, reqs, e := op.GetSceneReqs(cat.GetRuntime()); e != nil {
 		err = e
 	} else {
-		domain := cat.EnsureScene(domain)
 		pos := compact.MakeSource(op.GetMarkup(false))
 		if pen, e := cat.SceneBegin(domain, pos, op.Exe); e != nil {
 			err = e

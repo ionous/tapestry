@@ -1,6 +1,7 @@
 package weave_test
 
 import (
+	"reflect"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/test/eph"
@@ -29,15 +30,15 @@ func TestAncestryFormation(t *testing.T) {
 		t.Fatal("failed assembly", e)
 	} else if out, e := dt.ReadKinds(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out, []string{
+	} else if !reflect.DeepEqual(out, []string{
+		// domain, kind
 		"a:k:",
 		"b:m:k",
 		"c:n:k",
 		"c:j:m,k",
 		"c:q:j,m,k",
-	}); len(diff) > 0 {
-		t.Log(pretty.Sprint(out))
-		t.Fatal(diff)
+	}) {
+		t.Fatalf("%#v", out)
 	}
 }
 

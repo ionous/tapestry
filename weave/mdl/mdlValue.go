@@ -167,13 +167,15 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 		err = fmt.Errorf("database error: %s", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
 		if prev.final {
-			if prev.value != value {
-				err = fmt.Errorf(`%w mismatched kind value for %s`,
-					ErrConflict, debugJoin(kind.name, field.name, ""))
+			var e error
+			// note: ignore previously final traits if this one isn't.
+			// ( not exactly a duplicate but sort of. )
+			if final && prev.value != value {
+				e = ErrConflict
 			} else {
-				err = fmt.Errorf(`%w kind value for %s`,
-					ErrDuplicate, debugJoin(kind.name, field.name, ""))
+				e = ErrDuplicate
 			}
+			err = fmt.Errorf(`%w default value for kind %s field %s`, e, kind.name, field.name)
 		}
 		return
 	}, &prev.value, &prev.final); e != nil {

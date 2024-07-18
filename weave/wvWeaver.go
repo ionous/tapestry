@@ -7,10 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
-	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
-
-type ScheduledCallback func(weaver.Weaves, rt.Runtime) error
 
 type localWeaver struct {
 	d *Domain
@@ -18,6 +15,7 @@ type localWeaver struct {
 }
 
 func (ja localWeaver) GenerateUniqueName(category string) string {
+	// FIX: this should probably be part of pen.
 	return ja.d.cat.NewCounter(category)
 }
 

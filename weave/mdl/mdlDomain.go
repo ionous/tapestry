@@ -4,6 +4,9 @@ import (
 	"database/sql"
 
 	"fmt"
+
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 // findScene validates that the named domain exists
@@ -19,4 +22,15 @@ func (pen *Pen) findScene() (ret string, err error) {
 		err = e
 	}
 	return
+}
+
+func (pen *Pen) WriteSceneStart(rank int, exe []rt.Execute) (err error) {
+	// fix: current domain changed looks for the pattern "... begins"
+	eventName := inflect.Normalize(pen.domain + " begins")
+	pb := NewPatternBuilder(eventName)
+	pb.AppendRule(0, rt.Rule{
+		Name: "scene " + pen.domain, // arbitrary name
+		Exe:  exe,
+	})
+	return pen.AddPattern(pb.Pattern)
 }
