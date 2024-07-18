@@ -60,9 +60,12 @@ func NewParagraph(pos compact.Source, str string, assign rt.Assignment) (ret Par
 func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, err error) {
 	var retry int
 	unmatched := p.Lines
-	for i, n := range unmatched { // n: is a sentence of tokens
+	for _, n := range unmatched { // n: is a sentence of tokens
+		if len(n) == 0 {
+			continue
+		}
 		var best bestMatch
-		line := InputState{words: n, pronouns: p.pronouns.nextPronoun()}
+		line := InputState{p: p, words: n, pronouns: p.pronouns.nextPronoun()}
 		// match a sentence,
 		// and if matched Generate/Schedule it for weaving database info
 		if matchSentence(z, q, line, &best) {
@@ -85,7 +88,7 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 			// if it didn't match; retry in a later phase
 			// ( but error if we've gone through all the phases without success )
 			if z == weaver.NextPhase {
-				err = fmt.Errorf("failed to match line %d %s", i, Matched(n).DebugString())
+				err = fmt.Errorf("failed to match %s %s %q", p.File, n[0].Pos, Matched(n).DebugString())
 				break
 			} else {
 				unmatched[retry] = n

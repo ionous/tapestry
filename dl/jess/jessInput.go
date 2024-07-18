@@ -6,6 +6,7 @@ import (
 
 // helper for line matching
 type InputState struct {
+	p        *Paragraph // helpful for debugging
 	pronouns pronounSource
 	// fix? change to a "reader" ( pull ) rather than pre-process?
 	words []match.TokenValue // the current line from the paragraph
@@ -29,6 +30,7 @@ func (in InputState) GetNext(t match.Token) (ret match.TokenValue, okay bool) {
 // return an input state that is the passed number of words after this one.
 func (in InputState) Skip(skip int) InputState {
 	return InputState{
+		p:        in.p,
 		pronouns: in.pronouns,
 		words:    in.words[skip:],
 	}

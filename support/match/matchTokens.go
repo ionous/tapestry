@@ -8,7 +8,7 @@ import (
 type Pos struct{ X, Y int }
 
 func (p Pos) String() string {
-	return fmt.Sprintf("pos: %d,%d", p.Y, p.X)
+	return fmt.Sprintf("line %d (col %d)", p.Y+1, p.X)
 }
 
 //go:generate stringer -type=Token
