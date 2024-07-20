@@ -87,6 +87,11 @@ func NewTokenizer(n Notifier) charm.State {
 	return t.Decode()
 }
 
+func NewTokenizerAtLine(n Notifier, lineOfs int) charm.State {
+	t := Tokenizer{Notifier: n, curr: Pos{Y: lineOfs}}
+	return t.Decode()
+}
+
 // return a state to parse a stream of runes and notify as they are detected.
 func (n *Tokenizer) Decode() charm.State {
 	return charm.Parallel("decode",
@@ -128,20 +133,8 @@ func (n *Tokenizer) tokenize() charm.State {
 			ret = n.readQuotes(charmed.DecodeRaw)
 
 		case runes.Colon:
-			includeComments := true
-			ret = DecodeDoc(includeComments, func(q rune, doc AsyncDoc) (ret charm.State) {
-				// after the async document has finished:
-				// notifier the reader using a token
-				if e, ok := doc.Content.(error); ok {
-					ret = charm.Error(e)
-				} else if e := n.notifyToken(Tell, doc.Content); e != nil {
-					ret = charm.Error(e)
-				} else {
-					// then start processing the rune(s) which the document couldnt handle
-					ret = doc.post(n.readNext(), q)
-				}
-				return
-			})
+			includeComments, lineOfs := true, n.start.Y
+			ret = decodeDoc(includeComments, lineOfs, n.docDecoder)
 
 		case runeComma:
 			if e := n.notifyToken(Comma, ","); e != nil {
@@ -169,6 +162,20 @@ func (n *Tokenizer) tokenize() charm.State {
 		}
 		return
 	})
+}
+
+func (n *Tokenizer) docDecoder(q rune, doc AsyncDoc) (ret charm.State) {
+	// after the async document has finished:
+	// notifier the reader using a token
+	if e, ok := doc.Content.(error); ok {
+		ret = charm.Error(e)
+	} else if e := n.notifyToken(Tell, doc.Content); e != nil {
+		ret = charm.Error(e)
+	} else {
+		// then start processing the rune(s) which the document couldnt handle
+		ret = doc.post(n.readNext(), q)
+	}
+	return
 }
 
 // a single word -- roughly, letters and numbers ending with space (or eof)

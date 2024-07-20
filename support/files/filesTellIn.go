@@ -38,6 +38,8 @@ func ReadTell(in io.Reader) (any, error) {
 // returns nil error when finished.
 // includeComments helps with testing
 func ReadTellRunes(in io.RuneReader, ofs Ofs, includeComments bool) (ret any, err error) {
+	// fix: the decoder should should take a line offset
+	// rather than the mucking about done in here.
 	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
 	if !includeComments {
 		dec.SetMapper(stdmap.Make)
@@ -58,7 +60,15 @@ func ReadTellRunes(in io.RuneReader, ofs Ofs, includeComments bool) (ret any, er
 		})
 		dec.UseNotes(&docComments)
 	}
-	return dec.Decode(in)
+	if v, e := dec.Decode(in); e == nil {
+		ret = v
+	} else if pos, ok := e.(decode.ErrorPos); !ok {
+		err = e
+	} else {
+		y, x := pos.Pos()
+		err = decode.ErrorAt(y+ofs.Line, x, pos.Unwrap())
+	}
+	return
 }
 
 // tapestry sequences never have comments; so throw out the zeroth element

@@ -140,7 +140,7 @@ func importDir(cat *weave.Catalog, fsys NamedFS, dirs []string) (err error) {
 					} else {
 						namedPath := path.Join(fsys.Name, fullpath)
 						if els, e := flex.ReadStorySource(namedPath, bufio.NewReader(fp)); e != nil {
-							err = fmt.Errorf("couldn't read %q because %s", namedPath, e)
+							err = fmt.Errorf("couldn't read %q %s", namedPath, e)
 						} else {
 							// without a scene index we need to have one for the file itself.
 							if scene == nil {

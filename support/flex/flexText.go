@@ -28,7 +28,7 @@ func ReadPlainText(file string, lineOffset int, runes io.RuneReader) ([]story.St
 // consumes all text until eof ( and eats the eof error )
 func (pt *PlainText) Read(runes io.RuneReader) (ret []story.StoryStatement, err error) {
 	p := charm.MakeParser(runes)
-	if e := p.ParseEof(match.NewTokenizer(pt)); e != nil {
+	if e := p.ParseEof(match.NewTokenizerAtLine(pt, pt.start.Line)); e != nil {
 		err = e
 	} else {
 		ret, err = pt.Finalize()
@@ -143,9 +143,7 @@ func (pt *PlainText) endSentence() {
 func (pt *PlainText) writeAssignment(pos match.Pos, a rt.Assignment) error {
 	pt.writeToken(":", match.TokenValue{
 		Token: match.Tell,
-		Pos: match.Pos{
-			X: pos.X,
-			Y: pos.Y + pt.start.Line}, // the position since the start of the section.
+		Pos:   pos,
 		Value: a,
 	})
 	return pt.flushPhrases(a)
@@ -163,7 +161,6 @@ func (pt *PlainText) writeToken(str string, tv match.TokenValue) {
 	if tv.Token == match.Stop {
 		pt.endSentence()
 	} else {
-		tv.Pos.Y += pt.start.Line
 		pt.words = append(pt.words, tv)
 	}
 }

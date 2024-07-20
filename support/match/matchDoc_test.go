@@ -15,7 +15,7 @@ func TestSubDocument(t *testing.T) {
 		var doc any
 		p := charm.MakeParser(strings.NewReader(str))
 		if e := p.ParseEof(
-			match.DecodeDoc(false, func(q rune, a match.AsyncDoc) charm.State {
+			match.DecodeTestDoc(func(q rune, a match.AsyncDoc) charm.State {
 				doc = a.Content
 				return charm.Finished()
 			})); e != nil {

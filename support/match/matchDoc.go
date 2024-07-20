@@ -27,7 +27,8 @@ func (doc AsyncDoc) post(n charm.State, pending rune) charm.State {
 }
 
 // public for testing
-func DecodeDoc(includeComments bool, notify AfterDocument) (ret charm.State) {
+// ofs is line offset for error reporting
+func decodeDoc(includeComments bool, ofs int, notify AfterDocument) (ret charm.State) {
 	var indent int
 	return charm.Step(
 		// determine the indentation of the first line of the tell document
@@ -37,7 +38,7 @@ func DecodeDoc(includeComments bool, notify AfterDocument) (ret charm.State) {
 			out := make(chan AsyncDoc)
 			async := tellDocDecoder{
 				out:    out,
-				runes:  newAsyncDoc(out, indent, includeComments),
+				runes:  newAsyncDoc(out, ofs, indent, includeComments),
 				notify: notify,
 			}
 			return async.NewRune(q)
@@ -73,14 +74,14 @@ func (n *tellDocDecoder) NewRune(q rune) (ret charm.State) {
 // however, the charm states only get runes one by one.
 // so, this creates a channel that all of the runes can post to.
 // assumes we start already indented to 'indent'
-func newAsyncDoc(out chan<- AsyncDoc, indent int, includeComments bool) chan rune {
+func newAsyncDoc(out chan<- AsyncDoc, ofs, indent int, includeComments bool) chan rune {
 	in := channelReader{
 		indent: indent,
 		runes:  make(chan rune),
 		// spaces is zero, because we start at the right indentation
 	}
 	go func() {
-		if content, e := files.ReadTellRunes(&in, files.Ofs{}, includeComments); e != nil {
+		if content, e := files.ReadTellRunes(&in, files.Ofs{Line: ofs}, includeComments); e != nil {
 			out <- AsyncDoc{Content: e}
 		} else {
 			out <- AsyncDoc{Content: content, indent: in.ending}
