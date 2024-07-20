@@ -36,7 +36,8 @@ func (op *SayTemplate) PreImport(cat *weave.Catalog) (ret typeinfo.Instance, err
 // ( post import so it happens after any transforms in its evals have been processed )
 func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Instance, err error) {
 	// render by lookup if there's no text
-	if name := inflect.Normalize(op.ResponseName); op.Text == nil {
+	name := inflect.Normalize(op.ResponseName)
+	if op.Text == nil {
 		ret = &render.RenderResponse{Name: name}
 	} else {
 		if txt, e := convertEval(op.Text); e != nil {
