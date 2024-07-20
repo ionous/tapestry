@@ -184,10 +184,15 @@ func GetRuleSuffix(op *RuleSuffix) (ret rules.Suffix) {
 	return
 }
 
+// ", and then continue"
 func (op *RuleSuffix) Match(q Query, input *InputState) (okay bool) {
-	if idx, width := suffixes.FindPrefixIndex(input.Words()); width > 0 {
-		op.suffixValue = SuffixValue(idx)
-		*input, okay = input.Skip(width), true
+	if sep, e := ReadCommaAnd(input.Words()); e == nil && sep != 0 {
+		width := sep.Len()
+		next := input.Skip(width)
+		if idx, width := suffixes.FindPrefixIndex(next.Words()); width > 0 {
+			op.suffixValue = SuffixValue(idx)
+			*input, okay = next.Skip(width), true
+		}
 	}
 	return
 }

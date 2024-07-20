@@ -64,6 +64,15 @@ var Phrases = []Phrase{
 		},
 	},
 	{
+		// fix? these phrases aren't very satisfying.
+		test:   `Instead of storing, then continue`,
+		assign: true,
+		result: []string{
+			"ExtendPattern:", "before storing",
+			"Rule:", "<unnamed>, Stop:false, Jump:JumpLater, Updates:false",
+		},
+	},
+	{
 		// since actions are always actor initiated,
 		// the LHS ( the "someone" between prefix and the verb ) can only really be an actor
 		// when its nothing, it implies the player;
