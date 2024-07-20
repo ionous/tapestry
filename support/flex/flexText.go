@@ -27,8 +27,8 @@ func ReadPlainText(file string, lineOffset int, runes io.RuneReader) ([]story.St
 
 // consumes all text until eof ( and eats the eof error )
 func (pt *PlainText) Read(runes io.RuneReader) (ret []story.StoryStatement, err error) {
-	run := match.NewTokenizer(pt)
-	if e := charm.Read(runes, run); e != nil {
+	p := charm.MakeParser(runes)
+	if e := p.ParseEof(match.NewTokenizer(pt)); e != nil {
 		err = e
 	} else {
 		ret, err = pt.Finalize()

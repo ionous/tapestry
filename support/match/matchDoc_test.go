@@ -1,8 +1,8 @@
 package match_test
 
 import (
-	"errors"
 	"reflect"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/support/match"
@@ -13,12 +13,12 @@ import (
 func TestSubDocument(t *testing.T) {
 	test := func(name, str string, expect any) {
 		var doc any
-		var err charm.EndpointError
-		if e := charm.ParseEof(str,
-			match.DecodeDoc(false, func(q rune, content any) charm.State {
-				doc = content
+		p := charm.MakeParser(strings.NewReader(str))
+		if e := p.ParseEof(
+			match.DecodeDoc(false, func(q rune, a match.AsyncDoc) charm.State {
+				doc = a.Content
 				return charm.Finished()
-			})); e != nil && !errors.As(e, &err) {
+			})); e != nil {
 			t.Logf("failed %s with %s", name, e)
 			t.Fail()
 		} else if !reflect.DeepEqual(doc, expect) {
@@ -38,6 +38,7 @@ type subTest struct {
 	expect any
 }
 
+// just the one
 var subTests = map[string]subTest{
 	"assignText": {str: `
   FromText: "text"
@@ -45,17 +46,4 @@ Plain text again.`,
 		expect: map[string]any{
 			"FromText:": "text",
 		}},
-
-	//		"assignExe": {str: `
-	//	  - Say: "hello"
-	//	  - Say: "world"
-	//
-	//	`, expect: []any{
-	//			map[string]any{
-	//				"Say:": "hello",
-	//			},
-	//			map[string]any{
-	//				"Say:": "world",
-	//			},
-	//		}},
 }
