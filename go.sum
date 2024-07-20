@@ -7,8 +7,8 @@ github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842 h1:K/aFsqWoWaqdjo
 github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842/go.mod h1:wHkp9uwaQwPnxNpUblAkQsJz2q0Rdvuxk1WTN5zO1p8=
 github.com/ionous/sliceOf v0.0.0-20231013204913-2f9ceef9e224 h1:TddzAi4qM5WMUmywEf5Bigstz7RTdrm4CvDtw+lWngU=
 github.com/ionous/sliceOf v0.0.0-20231013204913-2f9ceef9e224/go.mod h1:l0XYSHRaNw8qImDaNqe4cd4kAG9HHj6799UaA7NvRjE=
-github.com/ionous/tell v0.9.1 h1:Y6BaX4wRsFqbXFBAuExNJvrBohOQn0bUuMzA/sbTuZY=
-github.com/ionous/tell v0.9.1/go.mod h1:UWqqRyE4v3lqFSA4LsgnEBXPTAaHjjSBBr+8bZbOFGY=
+github.com/ionous/tell v0.9.2 h1:K82KC1DQjcGhyVpFjmcAY0wKC4CG3f/PFE7bb+n02uY=
+github.com/ionous/tell v0.9.2/go.mod h1:UWqqRyE4v3lqFSA4LsgnEBXPTAaHjjSBBr+8bZbOFGY=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
 github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3xk=
 github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=

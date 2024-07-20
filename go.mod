@@ -7,7 +7,7 @@ require (
 	github.com/ionous/inflect v0.0.0-20211113032332-adfb17b87f92
 	github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842
 	github.com/ionous/sliceOf v0.0.0-20231013204913-2f9ceef9e224
-	github.com/ionous/tell v0.9.1
+	github.com/ionous/tell v0.9.2
 	github.com/kr/pretty v0.3.1
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/mitchellh/go-wordwrap v1.0.1
