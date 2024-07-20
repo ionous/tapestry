@@ -87,9 +87,8 @@ func NewTokenizer(n Notifier) charm.State {
 	return t.Decode()
 }
 
-func NewTokenizerAtLine(n Notifier, lineOfs int) charm.State {
-	t := Tokenizer{Notifier: n, curr: Pos{Y: lineOfs}}
-	return t.Decode()
+func TokenizerAtLine(n Notifier, lineOfs int) Tokenizer {
+	return Tokenizer{Notifier: n, curr: Pos{Y: lineOfs}}
 }
 
 // return a state to parse a stream of runes and notify as they are detected.
@@ -164,16 +163,16 @@ func (n *Tokenizer) tokenize() charm.State {
 	})
 }
 
-func (n *Tokenizer) docDecoder(q rune, doc AsyncDoc) (ret charm.State) {
-	// after the async document has finished:
-	// notifier the reader using a token
+// after the async document has finished
+// generate a next state for any unhandled rune ( ex. eof, or a deindent )
+func (n *Tokenizer) docDecoder(doc AsyncDoc) (ret charm.State) {
 	if e, ok := doc.Content.(error); ok {
 		ret = charm.Error(e)
 	} else if e := n.notifyToken(Tell, doc.Content); e != nil {
 		ret = charm.Error(e)
 	} else {
 		// then start processing the rune(s) which the document couldnt handle
-		ret = doc.post(n.readNext(), q)
+		ret = doc.ParseUnhandledContent(n.readNext())
 	}
 	return
 }

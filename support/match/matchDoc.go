@@ -9,26 +9,34 @@ import (
 	"github.com/ionous/tell/runes"
 )
 
-// hands the rune that wasn't accepted, plus the content
-type AfterDocument func(rune, AsyncDoc) charm.State
+// handle the parsed document.
+// the document data also includes the unprocessed content which ended the document.
+// ( ex. deindentation )
+type AfterDocument func(AsyncDoc) charm.State
 
+// reads a document via channels
+// ( which allows reading a (sub) document to become a state in a larger document )
 type AsyncDoc struct {
 	// the final document ( or error if file.ReadTellRunes failed )
 	Content any
 	indent  mismatchedIndent
 }
 
-// process the unhandled indent and pending rune through the passed state.
-func (doc AsyncDoc) post(n charm.State, pending rune) charm.State {
+// Sub-documents are defined by their indentation level.
+// And, on each new line they have to collect enough whitespace
+// to determine whether the line is part of their content.
+// If the line has a lesser indent, the doc ends,
+// but it still has the whitespace it collected (which the parent doc needs.)
+// ParseUnhandledContent() sends that whitespace to the passed state.
+func (doc AsyncDoc) ParseUnhandledContent(n charm.State) charm.State {
 	for range doc.indent.spaces {
 		n = n.NewRune(runes.Space)
 	}
-	return n.NewRune(doc.indent.unhandled).NewRune(pending)
+	return n.NewRune(doc.indent.unhandled)
 }
 
-// public for testing
 // ofs is line offset for error reporting
-func decodeDoc(includeComments bool, ofs int, notify AfterDocument) (ret charm.State) {
+func decodeDoc(includeComments bool, lineOfs int, notify AfterDocument) charm.State {
 	var indent int
 	return charm.Step(
 		// determine the indentation of the first line of the tell document
@@ -38,7 +46,7 @@ func decodeDoc(includeComments bool, ofs int, notify AfterDocument) (ret charm.S
 			out := make(chan AsyncDoc)
 			async := tellDocDecoder{
 				out:    out,
-				runes:  newAsyncDoc(out, ofs, indent, includeComments),
+				runes:  newAsyncDoc(out, lineOfs, indent, includeComments),
 				notify: notify,
 			}
 			return async.NewRune(q)
@@ -55,16 +63,26 @@ type tellDocDecoder struct {
 func (n *tellDocDecoder) NewRune(q rune) (ret charm.State) {
 	select {
 	// check if the previous rune ended the document
+	// (ex. on error, or on a return to an earlier indent level )
 	case res := <-n.out:
-		close(n.runes)
-		ret = n.notify(q, res)
+		// the result has the *previous* rune, but not the current rune.
+		// after handling all the collected data, send the new state the new rune.
+		if next := n.notify(res); next != nil {
+			ret = next.NewRune(q)
+		}
 
-	// send to the background tell reader.
-	// if the former rune finished the document ( error'd, etc. )
-	// then this blocks forever; the async routine will have stopped reading
-	// ( the other select statement will proceed eventually )
+	// send the rune to the background tell reader.
 	case n.runes <- q:
-		ret = n // keep looping after every accepted rune.
+		if q != charm.Eof {
+			// keep looping after every normal rune.
+			ret = n
+		} else {
+			// if we've sent the eof: wait until the async document has finished.
+			// ( it will have the eof we just sent in its content,
+			// - so we don't need to manually send it to the next state. )
+			res := <-n.out
+			ret = n.notify(res)
+		}
 	}
 	return
 }
@@ -110,9 +128,6 @@ func (n *channelReader) ReadRune() (ret rune, size int, err error) {
 			// after we set n.ending below, files.ReadTellRunes and newAsyncDoc should exit.
 			panic("unexpectedly reading after failure")
 		} else {
-			if q == runes.Eof {
-				println("xxx")
-			}
 			// start matching indent after newlines by continuing to read from the channel
 			// ( even in we haven't reached the proper indent. )
 			if q == runes.Newline {
