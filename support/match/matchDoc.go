@@ -9,8 +9,22 @@ import (
 	"github.com/ionous/tell/runes"
 )
 
-// hands the rune that ended the document, plus the content
-type AfterDocument func(q rune, content any) charm.State
+// hands the rune that wasn't accepted, plus the content
+type AfterDocument func(rune, AsyncDoc) charm.State
+
+type AsyncDoc struct {
+	// the final document ( or error if file.ReadTellRunes failed )
+	Content any
+	indent  mismatchedIndent
+}
+
+// process the unhandled indent and pending rune through the passed state.
+func (doc AsyncDoc) post(n charm.State, pending rune) charm.State {
+	for range doc.indent.spaces {
+		n = n.NewRune(runes.Space)
+	}
+	return n.NewRune(doc.indent.unhandled).NewRune(pending)
+}
 
 // public for testing
 func DecodeDoc(includeComments bool, notify AfterDocument) (ret charm.State) {
@@ -19,111 +33,118 @@ func DecodeDoc(includeComments bool, notify AfterDocument) (ret charm.State) {
 		// determine the indentation of the first line of the tell document
 		findIndent(2, &indent),
 		charm.Statement("startSubDoc", func(q rune) (ret charm.State) {
-			// async routine receives runes via runes
-			// and posts final results to out
-			out := make(chan tellDoc)
-			runes := newAsyncDoc(out, includeComments)
-			dec := tellDocDecoder{
+			// async routine pulls runes from the 'runes' channel.
+			out := make(chan AsyncDoc)
+			async := tellDocDecoder{
 				out:    out,
-				runes:  runes,
-				indent: indent,
+				runes:  newAsyncDoc(out, indent, includeComments),
 				notify: notify,
 			}
-			return dec.NewRune(q)
+			return async.NewRune(q)
 		}))
 }
 
 type tellDocDecoder struct {
-	out    chan tellDoc
-	runes  chan<- rune
-	indent int
+	out    chan AsyncDoc
+	runes  chan rune
 	notify AfterDocument
-}
-
-// send the pending document and unhandled rune to the after document handler
-func (n *tellDocDecoder) finishDoc(q rune) (ret charm.State) {
-	close(n.runes)
-	return n.notify(q, <-n.out)
 }
 
 // send runes to the document
 func (n *tellDocDecoder) NewRune(q rune) (ret charm.State) {
-	switch q {
-	case runes.Eof:
-		ret = n.finishDoc(q)
+	select {
+	// check if the previous rune ended the document
+	case res := <-n.out:
+		close(n.runes)
+		ret = n.notify(q, res)
 
-	default:
-		select {
-		// check if the *last* rune ended the document
-		// ( ex. with an error )
-		case content := <-n.out:
-			ret = n.notify(q, content)
-
-		// or, send the new rune into the reader
-		case n.runes <- q:
-			// if it was a newline, on the next line,
-			// we want to eat whitespace until we match the original indent
-			if q != runes.Newline {
-				ret = n
-			} else {
-				ret = n.matchIndent()
-			}
-		}
+	// send to the background tell reader.
+	// if the former rune finished the document ( error'd, etc. )
+	// then this blocks forever; the async routine will have stopped reading
+	// ( the other select statement will proceed eventually )
+	case n.runes <- q:
+		ret = n // keep looping after every accepted rune.
 	}
 	return
 }
 
-// assume we're just past a newline
-// waits until we've reached an equal indent then passes control to after;
-// treats everything other than a space (or newline) as unhandled.
-// assumes indent is at least 1.
-func (n *tellDocDecoder) matchIndent() charm.State {
-	var spaces int
-	return charm.Self("matchIndent", func(matchIndent charm.State, q rune) (ret charm.State) {
-		switch q {
-		default: // unhandled, use whatever doc data we have
-			ret = n.finishDoc(q)
-		case runes.Newline:
-			spaces = 0
-			ret = matchIndent
-		case runes.Space:
-			if spaces = spaces + 1; spaces < n.indent {
-				ret = matchIndent // keep reading spaces
-			} else {
-				ret = n // matchedIndent, decode more of the doc
-			}
-		}
-		return
-	})
-}
-
-// a error, a mapping, or sequence
-type tellDoc any
-
-// read a tell document from a channel.
-// this posts the final document, or any error, to out;
-// returns a channel to put document runes into.
-func newAsyncDoc(out chan<- tellDoc, includeComments bool) chan<- rune {
-	in := make(channelReader)
+// the existing tell document reader expects a "RuneReader"
+// it wants to pull values at its own pace.
+// however, the charm states only get runes one by one.
+// so, this creates a channel that all of the runes can post to.
+// assumes we start already indented to 'indent'
+func newAsyncDoc(out chan<- AsyncDoc, indent int, includeComments bool) chan rune {
+	in := channelReader{
+		indent: indent,
+		runes:  make(chan rune),
+		// spaces is zero, because we start at the right indentation
+	}
 	go func() {
-		if content, e := files.ReadTellRunes(in, files.Ofs{}, includeComments); e != nil {
-			out <- e
+		if content, e := files.ReadTellRunes(&in, files.Ofs{}, includeComments); e != nil {
+			out <- AsyncDoc{Content: e}
 		} else {
-			out <- content
+			out <- AsyncDoc{Content: content, indent: in.ending}
 		}
 	}()
-	return in
+	return in.runes
 }
 
 // a rune reader that pulls from a channel.
 // uses a -1 rune to indicate eof.
-type channelReader chan rune
+type channelReader struct {
+	indent int
+	runes  chan rune
+	ending mismatchedIndent
+	spaces int // ranges from indent down to 0
+}
 
-func (c channelReader) ReadRune() (ret rune, size int, err error) {
-	if q, ok := <-c; q == -1 || !ok {
-		err = io.EOF
-	} else {
-		ret, size = q, utf8.RuneLen(q)
+func (n *channelReader) ReadRune() (ret rune, size int, err error) {
+	for {
+		// read from the channel;
+		// close happens only if ReadRune() returns an error ( ex. EOF )
+		// ( which causes files.ReadTellRunes to fail, which causes newAsyncDoc to return )
+		q := <-n.runes
+		if n.ending.unhandled != 0 {
+			// this should never happen, and is unrecoverable.
+			// after we set n.ending below, files.ReadTellRunes and newAsyncDoc should exit.
+			panic("unexpectedly reading after failure")
+		} else {
+			if q == runes.Eof {
+				println("xxx")
+			}
+			// start matching indent after newlines by continuing to read from the channel
+			// ( even in we haven't reached the proper indent. )
+			if q == runes.Newline {
+				n.spaces = n.indent
+				ret, size = q, utf8.RuneLen(q)
+				break
+			} else if n.spaces == 0 {
+				// after we have eaten enough spaces
+				// return the rune as is.
+				ret, size = q, utf8.RuneLen(q)
+				break
+			} else if q != runes.Space {
+				// not enough spaces is an error... or the end of the document.
+				// we can't know which.
+				n.ending = mismatchedIndent{n.indent - n.spaces, q}
+				err = io.EOF
+				break
+			} else {
+				n.spaces--
+				continue
+			}
+		}
 	}
 	return
+}
+
+// a series of left aligned spaces followed by some unexpected character
+// ( the character was expected to be another space, but wasn't )
+type mismatchedIndent struct {
+	spaces    int
+	unhandled rune
+}
+
+func (m mismatchedIndent) Error() string {
+	return "mismatched indent"
 }

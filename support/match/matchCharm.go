@@ -48,10 +48,9 @@ func eatWhitespace() charm.State {
 		switch q {
 		case runes.Space, runes.Newline:
 			ret = self
-		case runes.Eof:
-			ret = charm.Finished()
 		default:
 			// otherwise, not whitespace so return unhandled
+			// ( dont handle Eof, we want the states themselves to be allowed to handle that. )
 		}
 		return
 	})

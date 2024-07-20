@@ -129,16 +129,16 @@ func (n *Tokenizer) tokenize() charm.State {
 
 		case runes.Colon:
 			includeComments := true
-			ret = DecodeDoc(includeComments, func(q rune, content any) (ret charm.State) {
+			ret = DecodeDoc(includeComments, func(q rune, doc AsyncDoc) (ret charm.State) {
 				// after the async document has finished:
 				// notifier the reader using a token
-				if e, ok := content.(error); ok {
+				if e, ok := doc.Content.(error); ok {
 					ret = charm.Error(e)
-				} else if e := n.notifyToken(Tell, content); e != nil {
+				} else if e := n.notifyToken(Tell, doc.Content); e != nil {
 					ret = charm.Error(e)
 				} else {
-					// then start processing the rune which the document couldnt handle
-					ret = n.sendNext(q)
+					// then start processing the rune(s) which the document couldnt handle
+					ret = doc.post(n.readNext(), q)
 				}
 				return
 			})
