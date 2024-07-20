@@ -16,6 +16,11 @@ type Message struct {
 	Markup map[string]any // from lowercase keys and comments
 }
 
+// attempts to read a source position from the markup data.
+func (op *Message) Source() Source {
+	return MakeSource(op.Markup)
+}
+
 // panics if the value is a type gob encoding cant handle
 func (op *Message) AddMarkup(k string, v any) {
 	if op.Markup == nil {

@@ -42,6 +42,7 @@ type CustomDecoder func(dec *Decoder, slot *typeinfo.Slot, plainData any) (typei
 type PatternDecoder func(dec *Decoder, slot *typeinfo.Slot, msg compact.Message) (typeinfo.Instance, error)
 
 // given a desired output structure, read the passed plain data
+// note: since plainData can be a primitive value, it's difficult to provide a line offset in error messages here.
 func (dec *Decoder) Decode(out typeinfo.Instance, plainData any) (err error) {
 	w := inspect.Walk(out)
 	if t := w.TypeInfo(); !w.Repeating() {

@@ -61,7 +61,7 @@ func tryPatternArgs(dec *decode.Decoder, msg compact.Message) (ret []call.Arg, e
 	for i, p := range msg.Labels {
 		var val rtti.Assignment_Slot
 		if e := dec.Decode(&val, msg.Args[i]); e != nil {
-			err = e
+			err = compact.MessageError(msg, e)
 			break
 		} else {
 			ret = append(ret, call.Arg{Name: p, Value: val.Value})
