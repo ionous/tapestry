@@ -1,6 +1,8 @@
 package story
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -38,7 +40,8 @@ func NewDecoder() *decode.Decoder {
 func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message) (ret typeinfo.Instance, err error) {
 	switch slot {
 	default:
-		err = compact.Unhandled("pattern")
+		str := fmt.Sprintf("pattern named %q", msg.Key)
+		err = compact.MessageError(msg, compact.Unhandled(str))
 	case
 		&rtti.Zt_Execute,
 		&rtti.Zt_BoolEval,

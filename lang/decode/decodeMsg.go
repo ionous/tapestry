@@ -11,7 +11,8 @@ import (
 func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 	defer func() {
 		if err != nil {
-			err = fmt.Errorf("%w decoding %#v", err, msg)
+			pos := compact.MakeSource(msg)
+			err = compact.MakeSourceError(pos, err)
 		}
 	}()
 	var out compact.Message

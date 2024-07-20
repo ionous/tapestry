@@ -43,3 +43,7 @@ func (e SourceError) Error() (ret string) {
 func MessageError(msg Message, err error) SourceError {
 	return SourceError{MakeSource(msg.Markup), err}
 }
+
+func MakeSourceError(src Source, err error) SourceError {
+	return SourceError{src, err}
+}
