@@ -120,7 +120,7 @@ Break:
 			}
 		}
 		if err != nil {
-			err = fmt.Errorf("%q(@%s:) %w", msg.Key, p, err)
+			err = compact.MessageError(msg, err)
 			break Break
 		}
 	} // for

@@ -40,10 +40,18 @@ func (e SourceError) Error() (ret string) {
 	return
 }
 
-func MessageError(msg Message, err error) SourceError {
-	return SourceError{MakeSource(msg.Markup), err}
+func MessageError(msg Message, e error) error {
+	return MakeSourceError(MakeSource(msg.Markup), e)
 }
 
-func MakeSourceError(src Source, err error) SourceError {
-	return SourceError{src, err}
+func MakeSourceError(src Source, e error) (err error) {
+	// avoid stacking multiple line number errors:
+	// keep the inner most
+	var prev SourceError
+	if errors.As(e, &prev) {
+		err = prev
+	} else {
+		err = SourceError{src, e}
+	}
+	return
 }
