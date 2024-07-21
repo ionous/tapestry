@@ -4,12 +4,16 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
-	"github.com/ionous/errutil"
 )
 
 type cmdError struct {
 	Cmd typeinfo.Instance
 	Ctx string
+	Err error
+}
+
+func (my cmdError) Unwrap() error {
+	return my.Err
 }
 
 func (e cmdError) Error() string {
@@ -22,15 +26,20 @@ func (e cmdError) Error() string {
 	if len(e.Ctx) > 0 {
 		padding = " "
 	}
-	return fmt.Sprintf("# %s%s%s", name, padding, e.Ctx)
+	return fmt.Sprintf("%s%s%s %s", name, padding, e.Ctx, e.Err)
 }
 
-func Error(op typeinfo.Instance, err error) error {
-	return ErrorCtx(op, "", err)
+// add error context... if there is an error
+func Error(op typeinfo.Instance, e error) (err error) {
+	if e == nil {
+		panic("nil error")
+	}
+	return cmdError{Cmd: op, Err: e}
 }
 
-func ErrorCtx(op typeinfo.Instance, ctx string, err error) error {
-	// fix: implement As and Is
-	e := &cmdError{Cmd: op, Ctx: ctx}
-	return errutil.Append(e, err)
+func ErrorCtx(op typeinfo.Instance, ctx string, e error) (err error) {
+	if e == nil {
+		panic("nil error")
+	}
+	return cmdError{Cmd: op, Ctx: ctx, Err: e}
 }
