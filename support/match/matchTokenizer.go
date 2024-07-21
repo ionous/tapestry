@@ -288,8 +288,9 @@ func (n *Tokenizer) notifyToken(t Token, v any) error {
 	tv := TokenValue{Token: t, Pos: n.start, Value: v, First: !n.follows}
 	// when t is a Comment, make no decision about the start of a sentence.
 	if t != Comment {
-		// when t is Stop, the next token will be considered the start of a sentence.
-		n.follows = t != Stop
+		// when t is Stop (or was a subdocument), the next token will be considered the start of a sentence.
+		firstAgain := t == Stop || t == Tell
+		n.follows = !firstAgain
 	}
 	return n.Notifier.Decoded(tv)
 }
