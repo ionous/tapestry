@@ -1,0 +1,320 @@
+# Conversations
+---
+- Define scene:requires:
+    - "quips"
+    - "tapestry" 
+
+# Each quip is a pair of "call and response" lines for the player and another actor.
+# Quips are the units of this particular conversation system.
+- Define kind:fields:
+    - "quips"
+    - - # The npc involved in the conversation.
+        Text:kind:
+        - "speaker"
+        - "actor"
+      - # Topics can be used to influence the options available to the player to choose from.
+        Text:kind:
+        - "topic"
+        - "object"
+      - # The slug is the choice presented to the player.
+        Text: "slug"
+      - # The remark is the bit of text said by the player's character as a result of that choice.
+        Text: "remark"
+      - # The reply is the response of the speaker: the other actor.
+        Text: "reply"
+
+- Define relation:kind:otherKind:cardinality:
+    - "quip followers"
+    - "quips"
+    - "quips"
+    - "many_to_many"    
+
+- # if a quip has any prohibitions; then, the player must know none of them.
+  Define relation:kind:otherKind:cardinality:
+    - "quip prohibitions"
+    - "quips"
+    - "quips"
+    - "many_to_many"    
+
+- # if a quip has any requirements; then, the player must know all of them.
+  Define relation:kind:otherKind:cardinality:
+    - "quip requirements"
+    - "quips"
+    - "quips"
+    - "many_to_many"    
+
+- # Conversations is a singleton.
+  # It implies that the player and a single other actor are talking.
+  Define noun:kind:
+    - "conversation"
+    - "conversations"
+
+- Define kind:fields:
+    - "conversations"
+    - - Text:kind:
+        - "speaker"
+        - "actor"
+      - Text:kind:
+        - "topic"
+        - "object"
+      - TextList:kind:
+        - "history"
+        - "quip"
+
+---
+
+A fact is a kind of object. A fact can be unknown or known.
+A quip is a kind of fact. 
+Conversations are a kind of kinds.
+The default greeting is a quip. # with all default values
+
+# # The urgencies influence the order of choices presented to the players. They are sorted from most important to least. ( gets the name "urgent status" )
+A quip can be urgent or casual or trivial or leave-taking. A quip is usually casual. 
+
+# # Restrictive quips limit which quips can follow them.
+A quip is either unrestricted or restrictive.
+
+# x is directly following y; y is directly followed by x
+Directly following is a verb. Directly following has the subject quips, the object quips, and the relation quip followers.
+
+# x is prohibited by y:
+# if a quip has any prohibitions, then, the player must know none of them.
+Prohibited by is a verb. Prohibited by has the subject quips, the object quips, and the relation quip prohibitions.
+
+# x is required by y.
+# if a quip has any prohibitions; then, the player must know all of them.
+Required by is a verb. Required by has the subject quips, the object quips, and the relation quip requirements.
+
+# Actors who are reticent will refuse to talk to the player.
+An actor is either chatty or reticent.
+The actors have a quip called the greeting.
+
+---
+- # Start a conversation.
+  # This is the only conversation action which has two actors.
+  # The "other actor" here becomes the global conversation object's speaker.
+  Define action:requires:
+    - "greeting"
+    - - # the actor starting the conversation (ex. the player).
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the actor being talked to.
+        Text:kind:
+          - "other actor"
+          - "actor"
+      - # optional, falls back to the blank default greeting.
+        Text:kind:initially:
+          - "quip"
+          - "quip"
+          - "@default_greeting"
+
+- # end a conversation.
+  Define action:requires:
+    - "departing"
+    - - # the actor saying goodbye.
+        # ( often, but not always the player )
+        Text:kind:
+          - "actor"
+          - "actor"
+
+- # A conversation choice by the player.
+  Define action:requires:
+    - "remarking"
+    - - # the player's actor.
+        Text:kind:
+        - "actor"
+        - "actor"
+      - # the line the player has chosen.
+        Text:kind:
+        - "quip"
+        - "quip"
+
+- # Replying to something something the player said. 
+  Define action:requires:
+    - "replying"
+    - - # the actor responding.
+        Text:kind:
+        - "actor"
+        - "actor"
+      - # the line they are saying.
+        Text:kind:
+        - "quip"
+        - "quip"
+
+---
+Understand "t|greet|ask [actors]" as greeting. Understand "talk to/with/-- [actors]" as greeting.
+
+Instead of greeting:
+  - # Reticence stops a conversation from starting if the actor doesn't want to talk. 
+    If:do:
+      - "@speaker.reticence" 
+      - - Say: "There's no response."
+
+Instead of greeting:
+  - # Already talking to one actor or another.
+    If:do:else:
+      - Is:matching:text:
+          - "@speaker"
+          - "equal_to"
+          - "#conversation.speaker"
+      - - Say: "You're already talking to them!"
+      - # Otherwise: already talking to some other actor
+        If:do:
+          - Not: 
+                Is nothing:
+                - "#conversation.speaker"
+          - - Say: "You're already talking to someone!"
+
+When greeting:
+  - Set:value:
+      - "#conversation.speaker"
+      - FromText: "@speaker"
+  - Set:value:
+    - "#conversation.topic"
+    - FromText: "@quip.topic"
+  - Remarking actor:quip:
+    - FromText: "#self"
+    - FromText: "@quip" 
+
+# Reset the conversation
+When departing:
+  - Erase: "#conversation.history"
+  - Set:value:
+    - "#conversation.speaker"
+    - FromText: ""
+  - Set:value:
+    - "#conversation.topic"
+    - FromText: ""
+
+# Remarking is always the player.
+When remarking:
+  - # Let the player speak:
+    Say actor:text:
+    - "@actor"
+    - "@quip.remark"
+  - # Remember that the player made this particular choice.
+    RememberConversation quip: 
+      FromText: "@quip"
+  - # Let the npc respond:
+    Replying actor:quip: 
+      - FromText: "#conversation.npc"
+      - FromText: "@quip"
+
+# Replying is the always the npc.
+When replying:
+  - Set:value:
+    - "#conversation.topic"
+    - FromText: "@quip.topic"
+  - # Make the npc speak the line.
+    If:do:
+      - Not:
+          Is nothing: "@quip.reply"
+      - - Say actor:text:
+          - "@actor"
+          - "@quip.reply"
+  - # Now the player knows what the npc has said.
+    Set:state:
+    - "@quip"
+    - "known"
+  - # Perform a mic drop if the quip says to.
+    If:do:
+    - "@quip.departing"
+    - - Departing actor: 
+          FromText: "@actor"
+
+---
+- # Display the dialog options the player can choose from.
+  Define pattern:requires:provides:do:
+    - "print conversation choices"
+    - Text:kind:
+      - "actor"
+      - "actors"
+    - TextList:initially:
+      - "quips"
+      - # XXX get the sorted quips.PlayerQuips
+    - If:do:else:
+      - Is nothing: "@quips"
+      - - # do:
+          Departing actor: 
+            FromText: "#self"
+      - # else:
+        Finally do:
+          - Set:value:
+            - "#player" # agent vs actor...
+            - FromText: "inputting dialog"
+          - Repeat across:as:do:
+            - FromTextList: "@quips"
+            - "quip"
+            - # do:
+              OfferQuip quip: 
+                FromText: "@quip"
+---
+After pass time, then continue (this is the print conversation rule):
+  - # If in conversation, print conversation choices
+    If:do:
+      - Not: 
+          Is nothing: "#conversation.speaker"
+      - - PrintConversationChoices actor:
+            FromText: "@actor"
+
+# a state to track when the player needs to select a conversational choice.
+An agent can be inputting dialog.
+
+# todo: connect with the main game parsing...
+# When parsing player input:
+#   - If:do:
+#     - "#player.inputting_dialog"
+#     - - Set:state:
+#         - "#player"
+#         - "not inputting dialog"
+#       - If:assuming:do:
+#         - Is nothing: "@input"
+#         - Arg:from:
+#           - "input"
+#           - FromText: "@story.player_input"
+#         - - Say response:with:
+#             - "Invalid input option" 
+#             - "Please choose a valid option."
+#           - PrintConversationChoices actor:
+#               FromText: "#player"
+
+  
+
+
+---
+- # display a choice during conversation
+  Define pattern:requires:provides:do:
+    - "offer quip"
+    - Text:kind:
+        - "quip"
+        - "quip"
+    - Text:initially:
+        - "slug"
+        - Text if:then:else:
+            - Not: 
+                Is nothing: "@quip.slug"
+            - "@quip.slug"
+            - Text list:at: 
+                - Split lines: "@quip.remark"
+                - 1 
+    - # do:
+      - Say: "@slug"
+
+- # record the passed quip to the recent history
+  Define pattern:requires:provides:do:
+    - "remember conversation"
+    - - Text:kind:
+        - "quip"
+        - "quip"
+    - - Nothing:
+    - - # push the new quip
+        Push:value:front:
+        - "#conversation.history"
+        - FromText:
+            "@quip"
+        - true 
+      - # make sure the history doesnt get too large. 3 is what alice used.
+        Erase:start:
+          - "#conversation.history"
+          - 4 # remove starting with the fourth element; keep the first three.
