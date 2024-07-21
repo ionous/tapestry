@@ -256,6 +256,13 @@ Spec:requires:contains:
               - "of"
               - "kind_name"
               - "text_eval"
+          - # A pattern, called per object, to filter the results.
+            # The pattern should return 'true' for all desired objects.
+            Term:name:type:optional:
+              - "pattern"
+              - "bool_pattern_name"
+              - "text"
+              - true
 
     - # A list of the fields of a given kind.
       Flow:slots:lede:terms:

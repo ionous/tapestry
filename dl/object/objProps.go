@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
+	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -69,9 +70,15 @@ func (op *ObjectStates) getTraits(run rt.Runtime) (ret []string, err error) {
 func (op *KindsOf) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if k, e := safe.GetText(run, op.KindName); e != nil {
 		err = cmd.Error(op, e)
+	} else if vs, e := run.GetField(meta.ObjectsOfKind, k.String()); e != nil {
+		err = e
 	} else {
-		kind := inflect.Normalize(k.String())
-		ret, err = run.GetField(meta.ObjectsOfKind, kind)
+		// alt: maybe a backdoor into runtime that lets it call the pattern
+		// as it builds the list so there aren't gigantic temporaries being passed around.
+		if pat := op.BoolPatternName; len(pat) > 0 && vs.Len() > 0 {
+			err = list.FilterByPattern(run, vs, pat)
+		}
+		ret = vs
 	}
 	return
 }

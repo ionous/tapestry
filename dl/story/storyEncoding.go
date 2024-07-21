@@ -37,6 +37,7 @@ func NewDecoder() *decode.Decoder {
 	return &dec
 }
 
+// fix: move to call ( that's where encoding lives )
 func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message) (ret typeinfo.Instance, err error) {
 	switch slot {
 	default:

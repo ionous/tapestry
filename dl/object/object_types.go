@@ -571,8 +571,9 @@ func (op *KindOf_Slice) Repeats() bool {
 // A list of all objects accessible by the current scene
 // and compatible with the specified kind.
 type KindsOf struct {
-	KindName rtti.TextEval
-	Markup   map[string]any `json:",omitempty"`
+	KindName        rtti.TextEval
+	BoolPatternName string
+	Markup          map[string]any `json:",omitempty"`
 }
 
 // kinds_of, a type of flow.
@@ -1050,6 +1051,14 @@ func init() {
 				"--": "The kind in question.",
 			},
 			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "bool_pattern_name",
+			Label:    "pattern",
+			Optional: true,
+			Markup: map[string]any{
+				"--": []string{"A pattern, called per object, to filter the results.", "The pattern should return 'true' for all desired objects."},
+			},
+			Type: &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextListEval,
@@ -1265,6 +1274,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17663678026468030644: (*ObjectDot)(nil),       /* text_eval=Object:dot: */
 	725008522959645559:   (*ObjectDot)(nil),       /* text_list_eval=Object:dot: */
 	13479346777286647466: (*KindsOf)(nil),         /* text_list_eval=Objects of: */
+	12232168245148948542: (*KindsOf)(nil),         /* text_list_eval=Objects of:pattern: */
 	7909779041221295763:  (*RecordDot)(nil),       /* bool_eval=Record:dot: */
 	6646689152519216673:  (*RecordDot)(nil),       /* num_eval=Record:dot: */
 	16076168783079774776: (*RecordDot)(nil),       /* num_list_eval=Record:dot: */
