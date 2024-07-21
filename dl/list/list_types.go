@@ -16,23 +16,23 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// Remove a value from the end ( or the start ) of a list.
-type ListPop struct {
-	Target rtti.Address
-	Edge   rtti.BoolEval
+// Read a text value from a list of text values.
+type ListTextAt struct {
+	List   rtti.TextListEval
+	Index  rtti.NumEval
 	Markup map[string]any `json:",omitempty"`
 }
 
-// list_pop, a type of flow.
-var Zt_ListPop typeinfo.Flow
+// list_text_at, a type of flow.
+var Zt_ListTextAt typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*ListPop) TypeInfo() typeinfo.T {
-	return &Zt_ListPop
+func (*ListTextAt) TypeInfo() typeinfo.T {
+	return &Zt_ListTextAt
 }
 
 // Implements [typeinfo.Markup]
-func (op *ListPop) GetMarkup(ensure bool) map[string]any {
+func (op *ListTextAt) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -40,18 +40,177 @@ func (op *ListPop) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.Execute = (*ListPop)(nil)
+var _ rtti.TextEval = (*ListTextAt)(nil)
 
-// Holds a slice of type ListPop.
-type ListPop_Slice []ListPop
+// Holds a slice of type ListTextAt.
+type ListTextAt_Slice []ListTextAt
 
-// Implements [typeinfo.Instance] for a slice of ListPop.
-func (*ListPop_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ListPop
+// Implements [typeinfo.Instance] for a slice of ListTextAt.
+func (*ListTextAt_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ListTextAt
 }
 
-// Implements [typeinfo.Repeats] for a slice of ListPop.
-func (op *ListPop_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of ListTextAt.
+func (op *ListTextAt_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Read a number from a list of numbers.
+type ListNumAt struct {
+	List   rtti.NumListEval
+	Index  rtti.NumEval
+	Markup map[string]any `json:",omitempty"`
+}
+
+// list_num_at, a type of flow.
+var Zt_ListNumAt typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*ListNumAt) TypeInfo() typeinfo.T {
+	return &Zt_ListNumAt
+}
+
+// Implements [typeinfo.Markup]
+func (op *ListNumAt) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.NumEval = (*ListNumAt)(nil)
+
+// Holds a slice of type ListNumAt.
+type ListNumAt_Slice []ListNumAt
+
+// Implements [typeinfo.Instance] for a slice of ListNumAt.
+func (*ListNumAt_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ListNumAt
+}
+
+// Implements [typeinfo.Repeats] for a slice of ListNumAt.
+func (op *ListNumAt_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Remove a text value from the end ( or the start ) of a list.
+type ListPopText struct {
+	Target rtti.Address
+	Edge   rtti.BoolEval
+	Markup map[string]any `json:",omitempty"`
+}
+
+// list_pop_text, a type of flow.
+var Zt_ListPopText typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*ListPopText) TypeInfo() typeinfo.T {
+	return &Zt_ListPopText
+}
+
+// Implements [typeinfo.Markup]
+func (op *ListPopText) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextEval = (*ListPopText)(nil)
+var _ rtti.Execute = (*ListPopText)(nil)
+
+// Holds a slice of type ListPopText.
+type ListPopText_Slice []ListPopText
+
+// Implements [typeinfo.Instance] for a slice of ListPopText.
+func (*ListPopText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ListPopText
+}
+
+// Implements [typeinfo.Repeats] for a slice of ListPopText.
+func (op *ListPopText_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Remove a num value from the end ( or the start ) of a list.
+type ListPopNum struct {
+	Target rtti.Address
+	Edge   rtti.BoolEval
+	Markup map[string]any `json:",omitempty"`
+}
+
+// list_pop_num, a type of flow.
+var Zt_ListPopNum typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*ListPopNum) TypeInfo() typeinfo.T {
+	return &Zt_ListPopNum
+}
+
+// Implements [typeinfo.Markup]
+func (op *ListPopNum) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.NumEval = (*ListPopNum)(nil)
+var _ rtti.Execute = (*ListPopNum)(nil)
+
+// Holds a slice of type ListPopNum.
+type ListPopNum_Slice []ListPopNum
+
+// Implements [typeinfo.Instance] for a slice of ListPopNum.
+func (*ListPopNum_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ListPopNum
+}
+
+// Implements [typeinfo.Repeats] for a slice of ListPopNum.
+func (op *ListPopNum_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Remove a record value from the end ( or the start ) of a list.
+type ListPopRecord struct {
+	Target rtti.Address
+	Edge   rtti.BoolEval
+	Markup map[string]any `json:",omitempty"`
+}
+
+// list_pop_record, a type of flow.
+var Zt_ListPopRecord typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*ListPopRecord) TypeInfo() typeinfo.T {
+	return &Zt_ListPopRecord
+}
+
+// Implements [typeinfo.Markup]
+func (op *ListPopRecord) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.RecordEval = (*ListPopRecord)(nil)
+var _ rtti.Execute = (*ListPopRecord)(nil)
+
+// Holds a slice of type ListPopRecord.
+type ListPopRecord_Slice []ListPopRecord
+
+// Implements [typeinfo.Instance] for a slice of ListPopRecord.
+func (*ListPopRecord_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ListPopRecord
+}
+
+// Implements [typeinfo.Repeats] for a slice of ListPopRecord.
+func (op *ListPopRecord_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -819,11 +978,62 @@ func (op *Range_Slice) Repeats() bool {
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
-	Zt_ListPop = typeinfo.Flow{
-		Name: "list_pop",
+	Zt_ListTextAt = typeinfo.Flow{
+		Name: "list_text_at",
+		Lede: "text",
+		Terms: []typeinfo.Term{{
+			Name:  "list",
+			Label: "list",
+			Markup: map[string]any{
+				"--": "The list to read from.",
+			},
+			Type: &rtti.Zt_TextListEval,
+		}, {
+			Name:  "index",
+			Label: "at",
+			Markup: map[string]any{
+				"--": "The one-based index within the list to read.",
+			},
+			Type: &rtti.Zt_NumEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"--": "Read a text value from a list of text values.",
+		},
+	}
+	Zt_ListNumAt = typeinfo.Flow{
+		Name: "list_num_at",
+		Lede: "num",
+		Terms: []typeinfo.Term{{
+			Name:  "list",
+			Label: "list",
+			Markup: map[string]any{
+				"--": "The list to read from.",
+			},
+			Type: &rtti.Zt_NumListEval,
+		}, {
+			Name:  "index",
+			Label: "at",
+			Markup: map[string]any{
+				"--": "The one-based index within the list to read.",
+			},
+			Type: &rtti.Zt_NumEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_NumEval,
+		},
+		Markup: map[string]any{
+			"--": "Read a number from a list of numbers.",
+		},
+	}
+	Zt_ListPopText = typeinfo.Flow{
+		Name: "list_pop_text",
 		Lede: "pop",
 		Terms: []typeinfo.Term{{
-			Name: "target",
+			Name:  "target",
+			Label: "text",
 			Markup: map[string]any{
 				"--": "The list to modify.",
 			},
@@ -838,10 +1048,65 @@ func init() {
 			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"--": "Remove a value from the end ( or the start ) of a list.",
+			"--": "Remove a text value from the end ( or the start ) of a list.",
+		},
+	}
+	Zt_ListPopNum = typeinfo.Flow{
+		Name: "list_pop_num",
+		Lede: "pop",
+		Terms: []typeinfo.Term{{
+			Name:  "target",
+			Label: "num",
+			Markup: map[string]any{
+				"--": "The list to modify.",
+			},
+			Type: &rtti.Zt_Address,
+		}, {
+			Name:     "edge",
+			Label:    "front",
+			Optional: true,
+			Markup: map[string]any{
+				"--": []string{"Whether to remove from the front or the back of the list.", "If not specified, removes from the back."},
+			},
+			Type: &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_NumEval,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"--": "Remove a num value from the end ( or the start ) of a list.",
+		},
+	}
+	Zt_ListPopRecord = typeinfo.Flow{
+		Name: "list_pop_record",
+		Lede: "pop",
+		Terms: []typeinfo.Term{{
+			Name:  "target",
+			Label: "record",
+			Markup: map[string]any{
+				"--": "The list to modify.",
+			},
+			Type: &rtti.Zt_Address,
+		}, {
+			Name:     "edge",
+			Label:    "front",
+			Optional: true,
+			Markup: map[string]any{
+				"--": []string{"Whether to remove from the front or the back of the list.", "If not specified, removes from the back."},
+			},
+			Type: &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_RecordEval,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"--": "Remove a record value from the end ( or the start ) of a list.",
 		},
 	}
 	Zt_ListErase = typeinfo.Flow{
@@ -1433,7 +1698,11 @@ var Z_Types = typeinfo.TypeSet{
 // A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Zt_ListPop,
+	&Zt_ListTextAt,
+	&Zt_ListNumAt,
+	&Zt_ListPopText,
+	&Zt_ListPopNum,
+	&Zt_ListPopRecord,
 	&Zt_ListErase,
 	&Zt_ListErasing,
 	&Zt_ListPopping,
@@ -1456,7 +1725,11 @@ var z_flow_list = []*typeinfo.Flow{
 
 // gob like registration
 func Register(reg func(any)) {
-	reg((*ListPop)(nil))
+	reg((*ListTextAt)(nil))
+	reg((*ListNumAt)(nil))
+	reg((*ListPopText)(nil))
+	reg((*ListPopNum)(nil))
+	reg((*ListPopRecord)(nil))
 	reg((*ListErase)(nil))
 	reg((*ListErasing)(nil))
 	reg((*ListPopping)(nil))
@@ -1498,10 +1771,21 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17357997793114147131: (*ListLength)(nil),     /* num_eval=List length: */
 	17885543535270178165: (*ListMap)(nil),        /* execute=Map:using:list: */
 	4715091378117636320:  (*MakeNumList)(nil),    /* num_list_eval=Num list: */
-	18395754738475377848: (*ListPop)(nil),        /* execute=Pop: */
+	2225093038246604534:  (*ListNumAt)(nil),      /* num_eval=Num list:at: */
+	12837368085835684620: (*ListPopNum)(nil),     /* execute=Pop num: */
+	1340064070914031398:  (*ListPopNum)(nil),     /* num_eval=Pop num: */
+	13935052606176581267: (*ListPopNum)(nil),     /* execute=Pop num:front: */
+	3022579111471336417:  (*ListPopNum)(nil),     /* num_eval=Pop num:front: */
+	7407186149208922123:  (*ListPopRecord)(nil),  /* execute=Pop record: */
+	8898233259920505192:  (*ListPopRecord)(nil),  /* record_eval=Pop record: */
+	15074334201585036752: (*ListPopRecord)(nil),  /* execute=Pop record:front: */
+	11713700458575689791: (*ListPopRecord)(nil),  /* record_eval=Pop record:front: */
+	1325609760003207437:  (*ListPopText)(nil),    /* execute=Pop text: */
+	12837710781058255384: (*ListPopText)(nil),    /* text_eval=Pop text: */
+	8202516233675301246:  (*ListPopText)(nil),    /* execute=Pop text:front: */
+	6884973490915362575:  (*ListPopText)(nil),    /* text_eval=Pop text:front: */
 	2834274314643341603:  (*ListPopping)(nil),    /* execute=Pop:as:do: */
 	17936996789180811568: (*ListPopping)(nil),    /* execute=Pop:as:do:else: */
-	8721541976877287343:  (*ListPop)(nil),        /* execute=Pop:front: */
 	4282442249803169980:  (*ListPopping)(nil),    /* execute=Pop:front:as:do: */
 	8093836208928123645:  (*ListPopping)(nil),    /* execute=Pop:front:as:do:else: */
 	16025703306596342142: (*ListPush)(nil),       /* execute=Push:value: */
@@ -1576,4 +1860,5 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15742117235756185822: (*ListSplice)(nil),     /* record_list_eval=Splice:start:insert: */
 	8889360521765815116:  (*ListSplice)(nil),     /* text_list_eval=Splice:start:insert: */
 	3361062536970077668:  (*MakeTextList)(nil),   /* text_list_eval=Text list: */
+	10637178953455693166: (*ListTextAt)(nil),     /* text_eval=Text list:at: */
 }

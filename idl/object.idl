@@ -111,6 +111,28 @@ Spec:requires:contains:
               - "dot"
               - true
               - true
+    
+    - # Read a value from a record.
+      # WARNING: This doesn't convert values from one type to another.
+      Flow:slots:lede:terms:
+        - "record_dot"
+        - - "bool_eval"
+          - "num_eval"
+          - "text_eval"
+          - "record_eval"
+          - "num_list_eval"
+          - "text_list_eval"
+          - "record_list_eval"
+        - "record"
+        - - # Exact name of the variable in question.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "record_eval"
+          - # The field or path within the record.
+            Term:repeats:
+              - "dot"
+              - true
 
     - # Select a named field from a record, or a named property from an object.
       Flow:slots:lede:terms:

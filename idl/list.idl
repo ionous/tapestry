@@ -9,14 +9,83 @@ Spec:requires:contains:
     - "idl/core"
     - "idl/prim"
     - "idl/rtti"
-  - - # Remove a value from the end ( or the start ) of a list.
+  - - # Read a text value from a list of text values.
       Flow:slots:lede:terms:
-        - "list_pop"
-        - "execute"
+        - "list_text_at"
+        - "text_eval"
+        - "text"
+        - - # The list to read from.
+            Term:type:
+              - "list"
+              - "text_list_eval"
+          - # The one-based index within the list to read.
+            Term:name:type:
+              - "at"
+              - "index"
+              - "num_eval"
+    
+    - # Read a number from a list of numbers.
+      Flow:slots:lede:terms:
+        - "list_num_at"
+        - "num_eval"
+        - "num"
+        - - # The list to read from.
+            Term:type:
+              - "list"
+              - "num_list_eval"
+          - # The one-based index within the list to read.
+            Term:name:type:
+              - "at"
+              - "index"
+              - "num_eval"
+
+    - # Remove a text value from the end ( or the start ) of a list.
+      Flow:slots:lede:terms:
+        - "list_pop_text"
+        - - "text_eval"
+          - "execute"
         - "pop"
         - - # The list to modify.
             Term:name:type:
-              - "_"
+              - "text"
+              - "target"
+              - "address"
+          - # Whether to remove from the front or the back of the list.
+            # If not specified, removes from the back.
+            Term:name:type:optional:
+              - "front"
+              - "edge"
+              - "bool_eval"
+              - true          
+
+    - # Remove a num value from the end ( or the start ) of a list.
+      Flow:slots:lede:terms:
+        - "list_pop_num"
+        - - "num_eval"
+          - "execute"
+        - "pop"
+        - - # The list to modify.
+            Term:name:type:
+              - "num"
+              - "target"
+              - "address"
+          - # Whether to remove from the front or the back of the list.
+            # If not specified, removes from the back.
+            Term:name:type:optional:
+              - "front"
+              - "edge"
+              - "bool_eval"
+              - true
+    
+    - # Remove a record value from the end ( or the start ) of a list.
+      Flow:slots:lede:terms:
+        - "list_pop_record"
+        - - "record_eval"
+          - "execute"
+        - "pop"
+        - - # The list to modify.
+            Term:name:type:
+              - "record"
               - "target"
               - "address"
           - # Whether to remove from the front or the back of the list.

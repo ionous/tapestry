@@ -13,6 +13,11 @@ func MakeReference(run rt.Runtime, name string) Reference {
 	return Reference{child: root}
 }
 
+func MakeReferenceValue(run rt.Runtime, rec rt.Value) Reference {
+	root := recordDot{run, rec}
+	return Reference{child: root}
+}
+
 // the final position in a path where we might want to get or put a value.
 // implements rt.Reference
 type Reference struct {

@@ -242,6 +242,52 @@ func (op *VariableDot_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Read a value from a record.
+// WARNING: This doesn't convert values from one type to another.
+type RecordDot struct {
+	Value  rtti.RecordEval
+	Dot    []Dot
+	Markup map[string]any `json:",omitempty"`
+}
+
+// record_dot, a type of flow.
+var Zt_RecordDot typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*RecordDot) TypeInfo() typeinfo.T {
+	return &Zt_RecordDot
+}
+
+// Implements [typeinfo.Markup]
+func (op *RecordDot) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.BoolEval = (*RecordDot)(nil)
+var _ rtti.NumEval = (*RecordDot)(nil)
+var _ rtti.TextEval = (*RecordDot)(nil)
+var _ rtti.RecordEval = (*RecordDot)(nil)
+var _ rtti.NumListEval = (*RecordDot)(nil)
+var _ rtti.TextListEval = (*RecordDot)(nil)
+var _ rtti.RecordListEval = (*RecordDot)(nil)
+
+// Holds a slice of type RecordDot.
+type RecordDot_Slice []RecordDot
+
+// Implements [typeinfo.Instance] for a slice of RecordDot.
+func (*RecordDot_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RecordDot
+}
+
+// Implements [typeinfo.Repeats] for a slice of RecordDot.
+func (op *RecordDot_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // Select a named field from a record, or a named property from an object.
 type AtField struct {
 	FieldName rtti.TextEval
@@ -807,6 +853,37 @@ func init() {
 			"blockly-color": "MATH_HUE",
 		},
 	}
+	Zt_RecordDot = typeinfo.Flow{
+		Name: "record_dot",
+		Lede: "record",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"--": "Exact name of the variable in question.",
+			},
+			Type: &rtti.Zt_RecordEval,
+		}, {
+			Name:    "dot",
+			Label:   "dot",
+			Repeats: true,
+			Markup: map[string]any{
+				"--": "The field or path within the record.",
+			},
+			Type: &Zt_Dot,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_BoolEval,
+			&rtti.Zt_NumEval,
+			&rtti.Zt_TextEval,
+			&rtti.Zt_RecordEval,
+			&rtti.Zt_NumListEval,
+			&rtti.Zt_TextListEval,
+			&rtti.Zt_RecordListEval,
+		},
+		Markup: map[string]any{
+			"--": []string{"Read a value from a record.", "WARNING: This doesn't convert values from one type to another."},
+		},
+	}
 	Zt_AtField = typeinfo.Flow{
 		Name: "at_field",
 		Lede: "at",
@@ -1108,6 +1185,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_SetState,
 	&Zt_ObjectDot,
 	&Zt_VariableDot,
+	&Zt_RecordDot,
 	&Zt_AtField,
 	&Zt_AtIndex,
 	&Zt_ObjectName,
@@ -1127,6 +1205,7 @@ func Register(reg func(any)) {
 	reg((*SetState)(nil))
 	reg((*ObjectDot)(nil))
 	reg((*VariableDot)(nil))
+	reg((*RecordDot)(nil))
 	reg((*AtField)(nil))
 	reg((*AtIndex)(nil))
 	reg((*ObjectName)(nil))
@@ -1186,6 +1265,13 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17663678026468030644: (*ObjectDot)(nil),       /* text_eval=Object:dot: */
 	725008522959645559:   (*ObjectDot)(nil),       /* text_list_eval=Object:dot: */
 	13479346777286647466: (*KindsOf)(nil),         /* text_list_eval=Objects of: */
+	7909779041221295763:  (*RecordDot)(nil),       /* bool_eval=Record:dot: */
+	6646689152519216673:  (*RecordDot)(nil),       /* num_eval=Record:dot: */
+	16076168783079774776: (*RecordDot)(nil),       /* num_list_eval=Record:dot: */
+	8828077584500414584:  (*RecordDot)(nil),       /* record_eval=Record:dot: */
+	257500016186131851:   (*RecordDot)(nil),       /* record_list_eval=Record:dot: */
+	9702839738011694802:  (*RecordDot)(nil),       /* text_eval=Record:dot: */
+	4733069711040627369:  (*RecordDot)(nil),       /* text_list_eval=Record:dot: */
 	9616350989753725148:  (*SetState)(nil),        /* execute=Set:state: */
 	3912570011939708664:  (*SetValue)(nil),        /* execute=Set:value: */
 	13692207992970428220: (*VariableDot)(nil),     /* address=Variable: */
