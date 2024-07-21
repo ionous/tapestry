@@ -54,9 +54,6 @@
     - - Text:kind:
         - "speaker"
         - "actor"
-      - Text:kind:
-        - "topic"
-        - "object"
       - TextList:kind:
         - "history"
         - "quip"
@@ -170,23 +167,19 @@ When greeting:
   - Set:value:
       - "#conversation.speaker"
       - FromText: "@speaker"
-  - Set:value:
-    - "#conversation.topic"
-    - FromText: "@quip.topic"
+  - RememberConversation quip:
+      FromText: "@quip"
   - Remarking actor:quip:
     - FromText: "#self"
     - FromText: "@quip" 
 
 # Reset the conversation
 When departing:
-  - Erase: "#conversation.history"
   - Set:value:
     - "#conversation.speaker"
     - FromText: ""
-  - Set:value:
-    - "#conversation.topic"
-    - FromText: ""
-
+  - Erase: "#conversation.history"
+  
 # Remarking is always the player.
 When remarking:
   - # Let the player speak:
@@ -203,9 +196,6 @@ When remarking:
 
 # Replying is the always the npc.
 When replying:
-  - Set:value:
-    - "#conversation.topic"
-    - FromText: "@quip.topic"
   - # Make the npc speak the line.
     If:do:
       - Not:
@@ -227,12 +217,12 @@ When replying:
 - # Display the dialog options the player can choose from.
   Define pattern:requires:provides:do:
     - "print conversation choices"
-    - Text:kind:
-      - "actor"
-      - "actors"
-    - TextList:initially:
-      - "quips"
-      - # XXX get the sorted quips.PlayerQuips
+    - - Text:kind:
+        - "actor"
+        - "actors"
+    - - TextList:initially:
+        - "quips"
+        - GetPlayerQuips:
     - If:do:else:
       - Is nothing: "@quips"
       - - # do:
@@ -279,9 +269,6 @@ An agent can be inputting dialog.
 #           - PrintConversationChoices actor:
 #               FromText: "#player"
 
-  
-
-
 ---
 - # display a choice during conversation
   Define pattern:requires:provides:do:
@@ -318,3 +305,170 @@ An agent can be inputting dialog.
         Erase:start:
           - "#conversation.history"
           - 4 # remove starting with the fourth element; keep the first three.
+
+- # Determine whether a quip can appear as a choice for the player.
+  # By default, this checks that all of the quip's "permitted by" facts are known.
+  # ( Authors can add their own rules to modify this behavior. )
+  Define pattern:requires:provides:do:
+    - "is quip permitted"
+    - - Text:kind:
+        - "quip"
+        - "quip"
+    - - TextList:kind:initially:
+        - "requirements"
+        - "facts"
+        - Relatives:object:
+          - "quip requirements"
+          - "@quip"
+      - # returns:
+        Bool:initially:
+        - "permitted"
+        - true 
+    - - Repeat across:as:do:
+        - FromText: "@requirements"
+        - "fact"
+        - - If:do:
+            - "@fact.unknown"
+            - - Set:value:
+                - "@permitted"
+                - FromBool: false 
+              - # any missing permission prevents usage.
+                Break: 
+
+- # Determine whether a quip can't appear as a choice for the player.
+  # By default, this checks that none of a quip's "prohibited by" facts are known.
+  # ( Authors can add their own rules to modify this behavior. )
+  Define pattern:requires:provides:do:
+  - "is quip prohibited"
+  - - Text:kind:
+      - "quip"
+      - "quip"
+  - - TextList:kind:initially:
+      - "prohibitions"
+      - "facts"
+      - Relatives:object:
+        - "quip prohibitions"
+        - "@quip"
+    - # returns:
+      Bool:initially:
+      - "prohibited"
+      - false 
+  - - Repeat across:as:do:
+      - FromText:
+        - "@prohibitions"
+      - "fact"
+      - - If:do:
+          - "@fact.known"
+          - - Set:value:
+              - "@prohibited"
+              - FromBool: true
+            - # a single prohibition prevents usage.
+              Break:
+
+- # Determine whether one quip was defined as directly following another.
+  Define pattern:requires:provides:do:
+  - "is quip directly following"
+  - - Text:kind:
+      - "quip"
+      - "quip"
+    - Text:kind:
+      - "before"
+      - "quip"  
+  - - # returns:
+      Bool: "follows"
+  - - Set:value:
+      - "@follows"
+      - FromText:
+          Find:value:
+          - FromTextList: 
+              Relatives:object:
+                - "quip followers"
+                - "@before"
+          - FromText: "@quip"
+
+- # called when determining which quips to present to the player.
+  Define pattern:requires:provides:do:
+  - "get player quips"
+  - # requires:
+    - Nothing:
+  - # returns a list of quips:
+    - TextList:kind:
+      - "quips"
+      - "quips"
+  - # do:
+    - # all possible quips, filtered by the 'filter quip' pattern.
+      Set:value:
+      - "@quips"
+      - FromTextList:
+          Objects of:pattern:
+            - "quips"
+            - "filter quips"  
+    - # sort those quips by quip urgency.
+      Sort:kind:field:
+      - "@quips"
+      - "quips"
+      - "urgent status"
+
+- # called when determining which quips to present to the player.
+  # by default filters to speaker, topic, is permitted/prohibited settings.
+  # restrictive quips additionally limit to "directly following" quips.
+  Define pattern:requires:provides:do:
+  - "filter quips"
+  - - Text:kind:
+      - "quip"
+      - "quip"
+  - - # conversation history during greeting 
+      # ( and after the player has chosen a quip )
+      # so there's always a valid current quip.
+      Text:kind:initially:
+      - "current"
+      - "quip"
+      - "#conversation.history.1"
+    - # return true to include a quip.
+      # unless specifically included, quips are filtered out.
+      Bool:initially:
+      - "result"
+      - false
+  - # do:
+    - If:do:
+      - Is all:
+        - # only quips which involve this speaker.
+          # note: the default greeting is shared by many speakers
+          # so we can't use "@current.speaker" here.
+          Is:matching:text:
+          - "#conversation.speaker"
+          - "equal_to"
+          - "@quip.speaker"
+        - # only quips where the player to has something to say.
+          Is any:
+            - Not:
+               Is nothing: "@quip.remark"
+            - Not:
+               Is nothing: "@quip.slug"
+        - # only quips with the current topic
+          Is:matching:text:
+            - "@current.topic"
+            - "equal_to"
+            - "@quip.topic"
+        - # specifically permitted 
+          IsQuipPermitted quip: 
+            FromText: "@quip"
+        - # and not specifically prevented 
+          Not:
+            IsQuipProhibited quip: 
+              FromText: "@quip"
+          
+      - # do:
+        If:do:else:
+        - Not: "@current.restrictive"
+        - - Set:value:
+            - "@result"
+            - FromBool: true
+        - If:do:
+          - IsQuipDirectlyFollowing quip:before:
+            - FromText: "@quip"
+            - FromText: "@current"
+          - # do: restrictive and directly follows
+            - Set:value:
+              - "@result"
+              - FromBool: true
