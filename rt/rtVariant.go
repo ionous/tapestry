@@ -201,7 +201,7 @@ func (n variant) Slice(i, j int) (ret Value, err error) {
 }
 
 // Splice replaces a range of values
-func (n variant) Splice(i, j int, add Value) (ret Value, err error) {
+func (n variant) Splice(i, j int, add Value, cutList *Value) (err error) {
 	if i < 0 {
 		err = fmt.Errorf("slice at %d can't be negative", i)
 	} else if cnt := n.Len(); j > cnt {
@@ -213,41 +213,46 @@ func (n variant) Splice(i, j int, add Value) (ret Value, err error) {
 		case affine.NumList:
 			vp := n.i.(*[]float64)
 			els := (*vp)
-			cut := copyFloats(els[i:j])
+			if cutList != nil {
+				cut := copyFloats(els[i:j])
+				*cutList = FloatsOf(cut)
+			}
 			ins := normalizeFloats(add)
 			(*vp) = append(els[:i], append(ins, els[j:]...)...)
-			ret = FloatsOf(cut)
 
 		case affine.TextList:
-			if len(n.t) > 0 && n.t != add.Type() {
-				err = fmt.Errorf("Splice(%s) doesnt match value(%s)", n.t, add.Type())
+			// if this list has a type, then the other list must have a type and they must match;
+			// or the other list must have no type and be empty. ( kind of restrictive... not sure what's best )
+			if add != nil && len(n.t) > 0 && (n.t != add.Type() && !(add.Type() == "" && add.Len() == 0)) {
+				err = fmt.Errorf("Splice additions of %q don't match text type %q", n.t, add.Type())
 			} else {
 				vp := n.i.(*[]string)
 				els := (*vp)
-				cut := copyStrings(els[i:j])
+				if cutList != nil {
+					cut := copyStrings(els[i:j])
+					*cutList = StringsOf(cut)
+				}
 				ins := normalizeStrings(add)
 				(*vp) = append(els[:i], append(ins, els[j:]...)...)
-				ret = StringsOf(cut)
 			}
 
 		case affine.RecordList:
 			vp := n.i.(*[]*Record)
-			if n.t != add.Type() {
-				err = errors.New("record types dont match")
-			} else if src, e := normalizeRecords(add); e != nil {
-				err = e // // make a list out of one or more records from add
+			if add != nil && n.t != add.Type() {
+				err = fmt.Errorf("Splice additions of %q don't match record type %q", n.t, add.Type())
 			} else {
 				els := (*vp)
-				// move the record pointers
-				// no need to copy the record values
-				// only one list will have the pointers at a time
-				cut := make([]*Record, j-i)
-				copy(cut, els[i:j])
-				ins := copyRecords(src)
+				if cutList != nil {
+					// move the record pointers
+					// no need to copy the record values
+					// only one list will have the pointers at a time
+					cut := make([]*Record, j-i)
+					copy(cut, els[i:j])
+					*cutList = RecordsFrom(cut, n.t)
+				}
+				ins := copyRecords(normalizeRecords(add))
 				// read from els before adding to els to avoid stomping overlapping memory.
 				(*vp) = append(els[:i], append(ins, els[j:]...)...)
-				// return our cut pointers
-				ret = RecordsFrom(cut, n.t)
 			}
 		default:
 			log.Panicf("%s is not spliceable", n.a)
@@ -276,10 +281,8 @@ func (n variant) Appends(add Value) (err error) {
 		vp := n.i.(*[]*Record)
 		if n.t != add.Type() {
 			err = errors.New("record types dont match")
-		} else if els, e := normalizeRecords(add); e != nil {
-			err = e
 		} else {
-			ins := copyRecords(els)
+			ins := copyRecords(normalizeRecords(add))
 			(*vp) = append((*vp), ins...)
 		}
 

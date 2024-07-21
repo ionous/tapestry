@@ -46,7 +46,7 @@ func normalizeStrings(v Value) (ret []string) {
 
 // change a record or record_list into a slice of record pointers
 // panics if the passed value isnt one of those two types.
-func normalizeRecords(v Value) (ret []*Record, err error) {
+func normalizeRecords(v Value) (ret []*Record) {
 	switch a := safeAffinity(v); a {
 	case "": // nil
 	case affine.Record:

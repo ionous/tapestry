@@ -7,7 +7,7 @@ import (
 )
 
 func (op *ListErase) Execute(run rt.Runtime) (err error) {
-	if _, e := eraseIndex(run, op.Count, op.Target, op.Start); e != nil {
+	if e := eraseIndex(run, op.Count, op.Target, op.Start, nil); e != nil {
 		err = cmd.Error(op, e)
 	}
 	return
@@ -17,7 +17,8 @@ func eraseIndex(run rt.Runtime,
 	count rt.NumEval,
 	target rt.Address,
 	atIndex rt.NumEval,
-) (ret rt.Value, err error) {
+	cutList *rt.Value,
+) (err error) {
 	if at, e := safe.GetReference(run, target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
@@ -55,7 +56,7 @@ func eraseIndex(run rt.Runtime,
 				}
 			}
 			// always splice unless there was a critical error.
-			ret, err = vs.Splice(start, end, nil)
+			err = vs.Splice(start, end, nil, cutList)
 		}
 	}
 	return

@@ -9,7 +9,8 @@ import (
 
 func TestSplices(t *testing.T) {
 	zeroSplice := func(src rt.Value) {
-		if vs, e := src.Splice(0, 0, nil); e != nil {
+		var vs rt.Value
+		if e := src.Splice(0, 0, nil, &vs); e != nil {
 			t.Fatal("empty splice should be legal")
 		} else if vs == nil {
 			t.Fatal("empty splice should return value")

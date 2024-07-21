@@ -99,6 +99,6 @@ func (n PanicValue) Slice(i, j int) (Value, error) {
 }
 
 // Splice panics
-func (n PanicValue) Splice(start, end int, add Value) (Value, error) {
+func (n PanicValue) Splice(start, end int, add Value, cutList *Value) error {
 	panic("value is not spliceable")
 }

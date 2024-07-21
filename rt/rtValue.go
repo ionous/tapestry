@@ -57,8 +57,10 @@ type Value interface {
 	// panics if this value isn't a slice.
 	Slice(i, j int) (Value, error)
 	// cut elements out of this slice from start to end,
-	// adding copies of the passed additional elements (if any) at the start of the cut point.
-	// Returns the cut elements, or an error if the start and end indices are bad.
+	// and add copies of the passed additional element(s) at the start of the cut point.
+	// returns the cut element if cutList if non-nil.
+	// errors if the start and end indices are bad.
 	// panics if this value isn't a slice, or if additional element(s) are of an incompatible affinity.
-	Splice(start, end int, add Value) (Value, error)
+	// 'add' can be a single value, a list of values, or nil.
+	Splice(start, end int, add Value, cutList *Value) error
 }

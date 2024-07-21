@@ -62,7 +62,7 @@ func (op *ListSplice) spliceList(run rt.Runtime, _ affine.Affinity) (retVal rt.V
 		err = e
 	} else {
 		if i >= 0 && j >= i {
-			retVal, err = vs.Splice(i, j, ins)
+			err = vs.Splice(i, j, ins, &retVal)
 		}
 		if err == nil {
 			retType = vs.Type()

@@ -31,7 +31,7 @@ func (op *ListPush) push(run rt.Runtime) (err error) {
 			if !atFront.Bool() {
 				err = vs.Appends(ins)
 			} else {
-				_, err = vs.Splice(0, 0, ins)
+				err = vs.Splice(0, 0, ins, nil)
 			}
 		}
 	}
