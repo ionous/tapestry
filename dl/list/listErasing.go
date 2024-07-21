@@ -38,7 +38,7 @@ func (op *ListPopping) Execute(run rt.Runtime) (err error) {
 
 func (op *ListPopping) erasingEdge(run rt.Runtime) (err error) {
 	var vs rt.Value
-	if e := popEdge(run, op, affine.None, op.Target, op.Edge, &vs); e != nil {
+	if e := popList(run, op, affine.None, op.Target, op.Edge, &vs); e != nil {
 		err = e
 	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {
 		err = otherwise.Branch(run)

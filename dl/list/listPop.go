@@ -1,6 +1,8 @@
 package list
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -9,32 +11,45 @@ import (
 )
 
 func (op *ListPopNum) Execute(run rt.Runtime) error {
-	return popEdge(run, op, affine.NumList, op.Target, op.Edge, nil)
+	return popList(run, op, affine.NumList, op.Target, op.Edge, nil)
 }
-func (op *ListPopNum) GetNum(run rt.Runtime) (ret rt.Value, err error) {
-	err = popEdge(run, op, affine.NumList, op.Target, op.Edge, &ret)
-	return
+func (op *ListPopNum) GetNum(run rt.Runtime) (rt.Value, error) {
+	return popValue(run, op, affine.NumList, op.Target, op.Edge)
 }
 
 func (op *ListPopText) Execute(run rt.Runtime) error {
-	return popEdge(run, op, affine.TextList, op.Target, op.Edge, nil)
+	return popList(run, op, affine.TextList, op.Target, op.Edge, nil)
+}
+func (op *ListPopText) GetText(run rt.Runtime) (rt.Value, error) {
+	return popValue(run, op, affine.TextList, op.Target, op.Edge)
 }
 
-func (op *ListPopText) GetText(run rt.Runtime) (ret rt.Value, err error) {
-	err = popEdge(run, op, affine.TextList, op.Target, op.Edge, &ret)
+func (op *ListPopRecord) Execute(run rt.Runtime) error {
+	return popList(run, op, affine.RecordList, op.Target, op.Edge, nil)
+}
+func (op *ListPopRecord) GetRecord(run rt.Runtime) (rt.Value, error) {
+	return popValue(run, op, affine.Record, op.Target, op.Edge)
+}
+
+func popValue(
+	run rt.Runtime,
+	op typeinfo.Instance,
+	aff affine.Affinity,
+	tgt rt.Address,
+	atFront rt.BoolEval) (ret rt.Value, err error) {
+	var vs rt.Value
+	if e := popList(run, op, aff, tgt, atFront, &vs); e != nil {
+		err = e
+	} else if vs.Len() == 0 {
+		err = cmd.Error(op, errors.New("popped empty list"))
+	} else {
+		ret = vs.Index(0)
+	}
 	return
 }
 
-func (op *ListPopRecord) Execute(run rt.Runtime) (err error) {
-	return popEdge(run, op, affine.RecordList, op.Target, op.Edge, nil)
-}
-
-func (op *ListPopRecord) GetRecord(run rt.Runtime) (ret rt.Value, err error) {
-	err = popEdge(run, op, affine.Record, op.Target, op.Edge, &ret)
-	return
-}
-
-func popEdge(
+// cutList will contain a *list* of values
+func popList(
 	run rt.Runtime,
 	op typeinfo.Instance,
 	aff affine.Affinity,
@@ -56,11 +71,7 @@ func popEdge(
 			if !atFront.Bool() {
 				idx = cnt - 1
 			}
-			if e := vs.Splice(idx, idx+1, nil, cutList); e != nil {
-				err = e
-			} else if cutList != nil {
-				*cutList = (*cutList).Index(0)
-			}
+			err = vs.Splice(idx, idx+1, nil, cutList)
 		}
 	}
 	if err != nil {
