@@ -171,14 +171,14 @@ func readNumber(n Notifier, pos int) charm.State {
 			ret = self
 
 		case q == Eof:
-			if e := n.Decoded(PlainName, accum); e != nil {
+			if e := n.Decoded(Number, accum); e != nil {
 				ret = errorAt(e, pos)
 			} else {
 				ret = charm.Finished() // done!
 			}
 
 		case q == FieldSeparator:
-			if e := n.Decoded(PlainName, accum); e != nil {
+			if e := n.Decoded(Number, accum); e != nil {
 				ret = errorAt(e, pos)
 			} else {
 				ret = readName(n, 0, pos)
