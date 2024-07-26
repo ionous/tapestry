@@ -20,7 +20,8 @@
 //	<br>  - new line
 //	<p>   - soft-paragraph ( there is no "hard" paragraph marker )
 //	<wbr> - soft-newline
-//	<ol></ul> - ordered list
+//	<a="ref"></a> - link text
+//	<ol></ol> - ordered list
 //	<ul></ul> - unordered list
 //	<li></li> - line item in a list
 //
@@ -36,5 +37,6 @@
 // will cause trouble.
 //
 // Unknown tags are left as is.
-// Tags attributes ( <b class="..."> ) are not supported.
+//
+// Generalized tags attributes ( `<b class="...">` ) are not supported. Links using `<a>` were added for use with menus. Their interpretation depends on the host and context.
 package markup

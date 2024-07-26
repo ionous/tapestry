@@ -1,34 +1,45 @@
 package markup
 
 import (
-	"bytes"
+	"errors"
 	"io"
 	"strings"
 	"unicode/utf8"
 
 	"git.sr.ht/~ionous/tapestry/rt/writer"
-	"github.com/ionous/errutil"
 )
 
 type converter struct {
-	out   io.Writer
-	buf   bytes.Buffer
-	tag   strings.Builder
-	tabs, // desired horizontal spacing
-	line int // current vertical spacing ( ie. are we at the start of a new line )
+	out         io.Writer
+	buf         strings.Builder
+	listIndent, // desired horizontal spacing
+	newLineCount int // current vertical spacing ( ie. are we at the start of a new line )
+	spaces int
 }
 
-func (c *converter) dispatchTag(tag string, open bool) (okay bool, err error) {
+// return the contents of buf as a string, and reset it.
+func flush(buf *strings.Builder) string {
+	str := buf.String()
+	buf.Reset()
+	return str
+}
+
+// closing tags start with a forward slash (/)
+func (c *converter) dispatchTag(tag, attr string) (okay bool, err error) {
+	opening := tag[0] != '/'
+	if !opening {
+		tag = tag[1:]
+	}
 	switch tag {
 	case "ol", "ul":
-		if open {
-			c.tabs++
+		if opening {
+			c.listIndent++
 		} else {
-			c.tabs--
+			c.listIndent--
 		}
 		okay = true
 	default:
-		okay, err = Formats.WriteTag(c, tag, open)
+		okay, err = Formats.WriteTag(c, tag, attr, opening)
 	}
 	return
 }
@@ -37,50 +48,12 @@ func (c *converter) dispatchTag(tag string, open bool) (okay bool, err error) {
 func (c *converter) Write(b []byte) (ret int, err error) {
 	for p := b; len(p) > 0; {
 		if q, width := utf8.DecodeRune(p); width == 0 {
-			err = errutil.New("error decoding runes")
+			err = errors.New("error decoding runes")
 			break
 		} else {
 			c.WriteRune(q)
 			p = b[width:]
 		}
-	}
-	return
-}
-
-// watches for newlines, etc.
-func (c *converter) WriteRune(q rune) (ret int, err error) {
-	switch q {
-	case Newline:
-		ret = 1 // we know the size of the rune
-		writer.WriteRune(c.out, Newline)
-		c.line++
-
-	case Paragraph:
-		ret = 1 // we know the size of the rune
-		for c.line < 2 {
-			writer.WriteRune(c.out, Newline)
-			c.line++
-		}
-
-	case Softline:
-		ret = 1 // we know the size of the rune
-		for c.line < 1 {
-			writer.WriteRune(c.out, Newline)
-			c.line++
-		}
-
-	default:
-		// we arent writing a line ( caught by the other cases )
-		// but we might be writing something just *after* a line
-		// in which case, we should write tabs
-		if c.line > 0 && c.tabs > 0 {
-			for i := 0; i < c.tabs*Tabwidth; i++ {
-				c.out.Write([]byte{Space})
-			}
-		}
-		// write the rune
-		ret, err = writer.WriteRune(c.out, q)
-		c.line = 0
 	}
 	return
 }
@@ -95,5 +68,66 @@ func (c *converter) WriteString(s string) (ret int, err error) {
 			ret += n
 		}
 	}
+	return
+}
+
+// watches for newlines, etc.
+func (c *converter) WriteRune(q rune) (ret int, err error) {
+	ret = 1 // provisionally
+	switch q {
+	case Newline:
+		c.spaces = 0
+		writer.WriteRune(c.out, Newline)
+		c.newLineCount++
+
+	case Paragraph:
+		c.spaces = 0
+		for c.newLineCount < 2 {
+			writer.WriteRune(c.out, Newline)
+			c.newLineCount++
+		}
+
+	case Softline:
+		c.spaces = 0
+		for c.newLineCount < 1 {
+			writer.WriteRune(c.out, Newline)
+			c.newLineCount++
+		}
+
+	case Space:
+		c.spaces++
+
+	default:
+		c.writeIndent()
+		ret, err = writer.WriteRune(c.out, q)
+	}
+	return
+}
+
+func (c *converter) writeIndent() {
+	// we arent writing a line ( caught by the other cases )
+	// but we might be writing something just *after* a line
+	// in which case, we should write any pending indentation
+	// ( and note: the very first line starts at line count 2 )
+	if c.newLineCount > 0 {
+		for range c.listIndent * Tabwidth {
+			c.out.Write([]byte{Space})
+		}
+		c.newLineCount = 0
+	} else if c.spaces > 0 {
+		for range c.spaces {
+			c.out.Write([]byte{Space})
+		}
+	}
+	c.newLineCount = 0
+	c.spaces = 0
+}
+
+func (c *converter) flushOut(eatTrailing bool) (err error) {
+	str := flush(&c.buf)
+	if !eatTrailing || len(str) > 0 {
+		c.writeIndent()
+	}
+	_, err = io.WriteString(c.out, str)
 	return
 }

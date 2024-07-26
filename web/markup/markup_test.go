@@ -23,20 +23,20 @@ func TestMarkup(t *testing.T) {
 		"\vLorem ipsum dolor\vsit amet,\v\vconsectetur\n\vadipiscing elit.",
 		"Lorem ipsum dolor\n\nsit amet,\n\nconsectetur\n\nadipiscing elit.",
 		// 5. bold
-		"nadipiscing <b>elit</b>",
-		"nadipiscing **elit**",
+		"<b> gold </b> <b>tile</b><i>!!!</i>",
+		"** gold ** **tile***!!!",
 		// 6. italic
-		"nadipiscing <i>elit</i>",
-		"nadipiscing *elit*",
+		"leading <i>elit</i>",
+		"leading *elit*",
 		// 7. strike
-		"nadipiscing <s>elit</s>",
-		"nadipiscing ~~elit~~",
+		"<s>elit</s>",
+		"~~elit~~",
 		// 8. underline
-		"nadipiscing <u>elit</u>",
-		"nadipiscing __elit__",
+		"<u>elit</u>",
+		"__elit__",
 		// 9. divider
-		"nadipiscing<hr>elit",
-		"nadipiscing\n-----------------------------\nelit",
+		"first <hr>elit", // eats trailing space
+		"first\n-----------------------------\nelit",
 		// 10. hard lines
 		"<br>Lorem ipsum dolor<br>sit amet,<br><br>consectetur<br><br>adipiscing elit.",
 		"\nLorem ipsum dolor\nsit amet,\n\nconsectetur\n\nadipiscing elit.",
@@ -70,9 +70,16 @@ elit.`,
 		// 15. unknown tag
 		"<beep><bop>",
 		"<beep><bop>",
-		// 16. explicitly closing self-closing tags should be eaten silently with no change to the output
+		// 16. self-closing tags are currently treated as malformed.
+		"<br/>",
+		"<br/>",
+		// 17. unmatched closing tags should also be treated as malformed
+		// fix? currently, they are eaten.
 		"</p></br></wbr>",
 		"",
+		// 18. "links" -- used for menu choices -- outputs the link text as a label.
+		`<a="Link Text">content</a>`,
+		"Link Text: content",
 	}
 	//
 	for i, cnt := 0, len(tests); i < cnt; i += 2 {
@@ -84,7 +91,7 @@ elit.`,
 		} else if wantLen := len(test); n != wantLen {
 			t.Fatal(which, "mismatched count", n, "!=", wantLen)
 		} else if res := buf.String(); res != want {
-			t.Fatal(res)
+			t.Errorf("failed at %d\nhave: %q\nwant: %q", which, res, test)
 		} else {
 			t.Log("okay", which)
 		}

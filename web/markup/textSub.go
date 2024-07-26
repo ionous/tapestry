@@ -1,8 +1,8 @@
 package markup
 
-// Format - replacement text for certain html tags.
-// If a substitution string exists, it replaces the opening and closing html tags;
-// otherwise the specified rune replaces just the opening tag, and the closing tag gets ignored.
+// Format - replacement text for certain html-like tags.
+// If a substitution string exists, it replaces the opening and closing tags;
+// otherwise the specified rune replaces the opening tag, and Close is ignored.
 type Format struct {
 	Sub, Close string
 	Rune       rune
@@ -43,9 +43,14 @@ const (
 	Space    = ' '
 )
 
-func (fs *Formatting) Select(tag string) (ret Format, okay bool) {
+func (fs *Formatting) Select(tag, attr string) (ret Format, okay bool) {
 	okay = true // provisionally
 	switch tag {
+	case "a":
+		ret = Format{
+			Sub:   attr + ": ",
+			Close: " ", // adds a space after a tags. but will get eaten at eol
+		}
 	case "b":
 		ret = fs.Bold
 	case "hr":
@@ -72,8 +77,8 @@ func (fs *Formatting) Select(tag string) (ret Format, okay bool) {
 }
 
 // returns true if it recognized the tag
-func (fs *Formatting) WriteTag(c *converter, tag string, open bool) (okay bool, err error) {
-	if g, ok := Formats.Select(tag); ok {
+func (fs *Formatting) WriteTag(c *converter, tag, attr string, open bool) (okay bool, err error) {
+	if g, ok := Formats.Select(tag, attr); ok {
 		if !open && len(g.Close) > 0 {
 			_, err = c.WriteString(g.Close)
 		} else if len(g.Sub) > 0 {
