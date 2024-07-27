@@ -17,8 +17,9 @@ The table is in the lobby.
       - FromText: "#player.pawn"
       - FromBool: true
     - Fabricate input: "open chest; take coins"
-    - Expect:
-        Is:matching:text:
+    - Expect:test:
+      - "we have the coins"
+      - Is:matching:text:
         - ParentOf obj:
             FromText: "coins"
         - "equal_to"

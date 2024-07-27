@@ -6,6 +6,7 @@ package debug
 //
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"strconv"
@@ -53,6 +54,7 @@ func (op *DoNothing_Slice) Repeats() bool {
 
 // Evaluate a boolean command and ensure it returns true.
 type Expect struct {
+	Label  string
 	Value  rtti.BoolEval
 	Markup map[string]any `json:",omitempty"`
 }
@@ -308,7 +310,14 @@ func init() {
 		Name: "expect",
 		Lede: "expect",
 		Terms: []typeinfo.Term{{
-			Name: "value",
+			Name: "label",
+			Markup: map[string]any{
+				"--": "A description of the test.",
+			},
+			Type: &prim.Zt_Text,
+		}, {
+			Name:  "value",
+			Label: "test",
 			Markup: map[string]any{
 				"--": "The boolean command. If the command returns false, the expectation will fail and the game will generate an error.",
 			},
@@ -448,7 +457,7 @@ func Register(reg func(any)) {
 var z_signatures = map[uint64]typeinfo.Instance{
 	14645287343365598707: (*DoNothing)(nil),  /* execute=DoNothing */
 	16489874106085927697: (*ExpectText)(nil), /* execute=Expect text: */
-	11108202414968227788: (*Expect)(nil),     /* execute=Expect: */
+	355907131262944118:   (*Expect)(nil),     /* execute=Expect:test: */
 	12332403919453206336: (*Fabricate)(nil),  /* execute=Fabricate input: */
 	14196615958578686010: (*LogValue)(nil),   /* execute=Log:value: */
 	16242102660676547183: (*Note)(nil),       /* execute=Note: */

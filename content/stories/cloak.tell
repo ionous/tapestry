@@ -147,9 +147,12 @@ Instead of storing the cloak:
       - FromText: "#player.pawn"
       - FromBool: true
     - Fabricate input: "e; take off cloak; drop cloak; w; s; x message"
-    - Expect: "#story.completed"
-    - Expect:
-        Is:matching:num:
+    - Expect:test:
+      - "examining completed the game"
+      -  "#story.completed"
+    - Expect:test:
+      - "some points"
+      - Is:matching:num:
         - "#story.score"
         - "equal_to"
         - 1
@@ -161,9 +164,12 @@ Instead of storing the cloak:
       - FromText: "#player.pawn"
       - FromBool: true
     - Fabricate input: "e; take off cloak; put cloak on peg; w; s; x message"
-    - Expect: "#story.completed"
-    - Expect:
-        Is:matching:num:
+    - Expect:test:
+      - "examining completed the game"
+      - "#story.completed"
+    - Expect:test:
+      - "perfect points"
+      - Is:matching:num:
         - "#story.score"
         - "equal_to"
         - 2
@@ -175,11 +181,14 @@ Instead of storing the cloak:
       - FromText: "#player.pawn"
       - FromBool: true
     - Fabricate input: "s; jump; jump; n; e; take off cloak; drop cloak; w; s; x message"
-    - # Game should be finished, but not completed.
-      Expect: "#story.concluded"
+    - # Game should be over, but not completed.
+      Expect:test:
+      - "game over"
+      -  "#story.concluded"
     - # Dropping the cloak shouldn't have earned you any points.
-      Expect:
-        Is:matching:num:
+      Expect:test:
+      - "dropping is zero points"
+      - Is:matching:num:
         - "#story.score"
         - "equal_to"
         - 0

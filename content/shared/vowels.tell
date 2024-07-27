@@ -28,21 +28,25 @@
                         - FromBool: true
 - Define scene:do:
   - "Test vowels"
-  - - # "House" starts with a consonant.
-      Expect:  
-        Not:
+  - - # edge case consonant
+      Expect:test:  
+      - "'House' starts with a consonant."
+      - Not:
           StartsWithVowel text: 
             FromText: "house"
-    - # "Hour" starts with a vowel sound.
-      Expect:
-        StartsWithVowel text:
+    - # edge case vowel
+      Expect:test:
+      - "'Hour' starts with a vowel sound."
+      - StartsWithVowel text:
          FromText: "hour"
-    - # "Beta" starts with a consonant.
-      Expect:
-        Not:
+    - # simple constant
+      Expect:test:
+      - "'Beta' starts with a consonant."
+      - Not:
           StartsWithVowel text:
             FromText: "beta"
-    - # "Alpha" starts with a vowel sound.
-      Expect:
-        StartsWithVowel text:
+    - # simple vowel
+      Expect:test:
+      - "'Alpha' starts with a vowel sound."
+      - StartsWithVowel text:
           FromText: "alpha"

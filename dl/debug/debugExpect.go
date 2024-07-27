@@ -4,7 +4,6 @@ import (
 	"log"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -34,11 +33,11 @@ func (op *Expect) Execute(run rt.Runtime) (err error) {
 	if condition, e := safe.GetBool(run, op.Value); e != nil {
 		err = e
 	} else {
-		str := compact.JoinComment(op.Markup)
+		str := op.Label
 		if !condition.Bool() {
 			err = errutil.New("expectation failed", str)
 			log.Println("ng:", str)
-		} else {
+		} else if len(str) > 0 && LogLevel == C_LoggingLevel_Debug {
 			log.Println("ok:", str)
 		}
 	}

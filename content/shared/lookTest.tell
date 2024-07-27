@@ -21,8 +21,8 @@
           - "cabinet and Kitchen."
           - "Kitchen."
           - "shelf and Kitchen."
-      - Note: "Close the cabinet door, and its list of visible objects should change."
-      - Set:value:
+      - # Close the cabinet door, and its list of visible objects should change.
+        Set:value:
           - Object:dot:
               - "cabinet"
               - At field: "closed"
@@ -34,23 +34,25 @@
           - "it"
           - - Say: "{.it}."
       - Expect text: "cabinet."
-      - Note: "( Validate the number of items in the list directly. )"
-      - Expect:
-          Is:matching:num:
+      - # Validate the number of items in the list directly.
+        Expect:test:
+        - "cabinet item count"
+        - Is:matching:num:
             - List length:
                 FromTextList:
                   TransparentList obj:
                     FromText: "cabinet"
             - "equal_to"
             - 1
-      - Note: "Open the cabinet again, and validate the number of visible objects again."
-      - Set:value:
+      - # "Open the cabinet again, and validate the number of visible objects again."
+        Set:value:
           - Object:dot:
               - "cabinet"
               - At field: "open"
           - FromBool: true
-      - Expect:
-          Is:matching:num:
+      - Expect:test:
+        - "visible cabinet items"
+        - Is:matching:num:
             - List length:
                 FromTextList:
                   TransparentList obj:
@@ -109,8 +111,8 @@
           - "**The cabinet**"
           - "Beneath your feet is a bright and shiny hook."
           - "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
-      - Note: "remove the hook from the cabinet"
-      - Relate:to:via:
+      - # remove the hook from the cabinet
+        Relate:to:via:
           - "kitchen"
           - "hook"
           - "whereabouts"

@@ -132,9 +132,10 @@
         Nothing:
     - - # verify we are trying to update the lighting of a valid actor.
         # ( was start game called? )
-        Expect:
-          Not:
-            Is nothing: "@actor"
+        Expect:test:
+          - "actor exists"
+          - Not:
+              Is nothing: "@actor"
       - If:do:
           - Is any:
               - "@refresh"

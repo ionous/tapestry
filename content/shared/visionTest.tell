@@ -8,21 +8,22 @@
           - - Print: "The light, it burns."
     - # Initialize the story as if we had started a game.
       - # expect that the kitchen is lit.
-        Expect:
-          Object:dot:
-            - "kitchen"
-            - At field: "lit"
+        Expect:test:
+          - "the kitchen is lit"
+          - "#kitchen.lit"
       - # check that the outermost light source is the kitchen.
-        Expect:
-          Is:matching:value:
+        Expect:test:
+        - "light source is kitchen"
+        - Is:matching:value:
             - FromText:
                 TransparentOf obj:
                   FromText: "self"
             - "equal_to"
             - FromText: "kitchen"
       - # verify the low level call to see the kitchen lighting.
-        Expect:
-          ContainsLight object:
+        Expect:test: 
+        - "kitchen contains light"
+        - ContainsLight object:
             FromText: "self"
       - StartGame actor:quietly:
           - FromText:
@@ -31,19 +32,22 @@
                 - At field:  "pawn"
           - FromBool: true
       - # start game should set the actor to is illuminated.
-        Expect:
-          Object:dot:
+        Expect:test:
+        - "actor starts illuminated"
+        - Object:dot:
             - "self"
             - - At field: "lighting"
               - At field: "illuminated"
       - # start game should set the story's cache.
-        Expect:
-          Object:dot:
+        Expect:test:
+        - "story starts illuminated"
+        - Object:dot:
             - "story"
             - At field: "illuminated"
       - # and asking through the illuminates pattern should be fine.
-        Expect:
-          Illuminates actor:
+        Expect:test:
+        - "illuminates starts true"
+        - Illuminates actor:
             FromText: "self"
       - Note: "Change the kitchen lighting, update time, and verify the game prints the arrival of darkness."
       - Set:state:
@@ -51,20 +55,17 @@
           - "unlit"
       - PassTime:
       - # update should clear actor illuminated
-        Expect:
-          Not:
-            Object:dot:
-              - "self"
-              - - At field: "lighting"
-                - At field: "illuminated"
+        Expect:test:
+        - "update cleared actor lighting"
+        - Not: "#self.lighting.illuminated"
       - # update should set the story to not is illuminated
-        Expect:
-          Object:dot:
-            - "story"
-            - At field: "not illuminated"
+        Expect:test:
+        - "update cleared story lighting"
+        - "#story.not_illuminated"
       - # asking through the pattern should also be fine.
-        Expect:
-          Not:
+        Expect:test:
+        - "illuminates no longer true"
+        - Not:
             Illuminates actor:
               FromText: "self"
       - Expect text: "It is now pitch dark in here!"

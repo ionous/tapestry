@@ -9,8 +9,9 @@
           - FromRecordList:
               CollectObjects:
                 FromText: "counter"
-      - Expect:
-          Is:matching:value:
+      - Expect:test:
+         - "collection matches" 
+         - Is:matching:value:
             - FromRecordList:
                 CollectObjects:
                   FromText: "counter"

@@ -58,8 +58,9 @@
 - #
   Define scene:do:
     - "Test that the player exists"
-    - - Expect:
-          IsPlayer obj:
+    - - Expect:test:
+        - "player exists"
+        - IsPlayer obj:
             FromText: "self"
 - # self is the actor
   Interpret alias:as:
