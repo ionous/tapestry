@@ -161,8 +161,7 @@ func (w *It) Repeating() bool {
 // change the size of the container
 func (w *It) Resize(cnt int) {
 	if !w.Repeating() {
-		log.Printf("can't resize a %s(%s)", w.curr.Kind(), w.curr.Type())
-		panic("not a slice")
+		log.Panicf("can't resize a %s(%s)", w.curr.Kind(), w.curr.Type())
 	}
 	w.curr.Grow(cnt)
 	w.curr.SetLen(cnt)
@@ -172,15 +171,15 @@ func (w *It) Resize(cnt int) {
 // doesn't change over the course of iteration.
 // Filled slots have one element; empty slots zero elements.
 func (w *It) Len() (ret int) {
-	switch w.curr.Kind() {
+	switch k := w.curr.Kind(); k {
 	default:
-		panic("can't measure the length of primitive values")
+		log.Panicf("can't measure the length of type %s", k)
 	case r.Slice:
 		ret = w.curr.Len()
 	case r.Struct:
 		p := w.currType.(*typeinfo.Flow)
 		ret = len(p.Terms)
-	case r.Interface:
+	case r.Interface, r.Pointer:
 		if !w.curr.IsNil() {
 			ret = 1
 		}
