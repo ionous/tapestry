@@ -6,9 +6,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-// Currently good up to twenty.
-// maybe https://github.com/donna-legal/word2number?
+// Convert from a string containing numbers as digits, or as words.
+// For words, good up to "twenty".
 func WordsToNum(s string) (ret int, okay bool) {
+	// todo: investigate something like https://github.com/donna-legal/word2number
 	if cnt, e := strconv.Atoi(s); e == nil {
 		ret, okay = cnt, true
 	} else {
