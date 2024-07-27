@@ -85,9 +85,9 @@ func (op *Directive_Slice) Repeats() bool {
 // This command usually appears last in a series of sub-scanners,
 // after all of the earlier scanners have successfully matched.
 type Action struct {
-	Action    string
-	Arguments []call.Arg
-	Markup    map[string]any `json:",omitempty"`
+	ActionName string
+	Arguments  []call.Arg
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // action, a type of flow.
@@ -441,7 +441,7 @@ func init() {
 		Name: "action",
 		Lede: "action",
 		Terms: []typeinfo.Term{{
-			Name: "action",
+			Name: "action_name",
 			Markup: map[string]any{
 				"--": []string{"Name of the action.", "See also: [DefineAction]."},
 			},

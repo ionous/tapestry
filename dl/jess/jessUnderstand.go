@@ -79,7 +79,7 @@ Loop:
 				if e := w.AddGrammar(phrase, &grammar.Directive{
 					Name: phrase,
 					Series: []grammar.ScannerMaker{
-						m, &grammar.Action{Action: act},
+						m, &grammar.Action{ActionName: act},
 					}}); e != nil {
 					err = e
 					break Loop

@@ -10,7 +10,7 @@ type ScannerMaker interface{ MakeScanner() parser.Scanner }
 
 func (op *Action) MakeScanner() parser.Scanner {
 	return &parser.Action{
-		Name: inflect.Normalize(op.Action),
+		Name: inflect.Normalize(op.ActionName),
 		Args: op.Arguments, // resolved when the action is executed
 	}
 }

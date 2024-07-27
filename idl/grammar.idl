@@ -36,7 +36,7 @@ Spec:requires:contains:
             # See also: [DefineAction].
             Term:name:type:
               - "_"
-              - "action"
+              - "action_name"
               - "text"
           - # Optional additional arguments to pass to the action.
             Term:name:type:optional:repeats:
