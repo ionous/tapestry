@@ -31,15 +31,15 @@ func (e cmdError) Error() string {
 
 // add error context... if there is an error
 func Error(op typeinfo.Instance, e error) (err error) {
-	if e == nil {
-		panic("nil error")
+	if e != nil {
+		err = cmdError{Cmd: op, Err: e}
 	}
-	return cmdError{Cmd: op, Err: e}
+	return
 }
 
 func ErrorCtx(op typeinfo.Instance, ctx string, e error) (err error) {
-	if e == nil {
-		panic("nil error")
+	if e != nil {
+		err = cmdError{Cmd: op, Ctx: ctx, Err: e}
 	}
-	return cmdError{Cmd: op, Ctx: ctx, Err: e}
+	return
 }
