@@ -24,7 +24,7 @@ func TestMarkup(t *testing.T) {
 		"Lorem ipsum dolor\n\nsit amet,\n\nconsectetur\n\nadipiscing elit.",
 		// 5. bold
 		"<b> gold </b> <b>tile</b><i>!!!</i>",
-		"** gold ** **tile***!!!",
+		"** gold ** **tile***!!!*",
 		// 6. italic
 		"leading <i>elit</i>",
 		"leading *elit*",
@@ -91,7 +91,7 @@ elit.`,
 		} else if wantLen := len(test); n != wantLen {
 			t.Fatal(which, "mismatched count", n, "!=", wantLen)
 		} else if res := buf.String(); res != want {
-			t.Errorf("failed at %d\nhave: %q\nwant: %q", which, res, test)
+			t.Errorf("failed at %d\nhave: %q\nwant: %q", which, res, want)
 		} else {
 			t.Log("okay", which)
 		}
