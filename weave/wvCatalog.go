@@ -153,9 +153,6 @@ func (cat *Catalog) ScheduleCmd(key typeinfo.Markup, when weaver.Phase, cb func(
 
 // run the passed function now or in the future.
 func (cat *Catalog) SchedulePos(pos compact.Source, when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) error {
-	if when == 0 {
-		panic("xxx")
-	}
 	d, _ := cat.sceneStack.Top()
 	return d.proc.schedule(when, func(now weaver.Phase) error {
 		pen := cat.Modeler.PinPos(d.name, pos)
