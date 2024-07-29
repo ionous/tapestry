@@ -20,7 +20,7 @@ func TestGrammar(t *testing.T) {
 				Name: `jump/skip/hop`,
 				Series: []grammar.ScannerMaker{
 					&grammar.Words{Words: []string{"jump", "skip", "hop"}},
-					&grammar.Action{Action: "jumping"},
+					&grammar.Action{ActionName: "jumping"},
 				},
 			},
 		},
