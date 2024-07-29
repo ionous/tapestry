@@ -49,7 +49,7 @@ func (pen *Pen) addAspect(aspect string, traits []string) (ret kindInfo, err err
 }
 
 func (pen *Pen) addTraits(kid kindInfo, traits []string) (err error) {
-	domain, at := pen.domain, pen.pos.String()
+	domain, at := pen.domain, pen.pos.CompactPos()
 	if existingTraits, e := tables.QueryStrings(pen.db, `
 			select mf.field	
 			from mdl_field mf 
@@ -85,7 +85,7 @@ var mdl_scene = tables.Insert("mdl_scene", "name", "start", "comment")
 func (pen *Pen) AddScene(name string, comment string) (err error) {
 	if name != pen.domain {
 		err = fmt.Errorf("mismatched domains: trying to write %q into %q", name, pen.domain)
-	} else if _, e := pen.db.Exec(mdl_scene, name, pen.pos.String(), comment); e != nil {
+	} else if _, e := pen.db.Exec(mdl_scene, name, pen.pos.CompactPos(), comment); e != nil {
 		err = fmt.Errorf("database error: %s", e)
 	}
 	return
@@ -93,7 +93,7 @@ func (pen *Pen) AddScene(name string, comment string) (err error) {
 
 // pairs of domain name and (domain) dependencies
 func (pen *Pen) AddDependency(reqs ...string) (err error) {
-	domain, at := pen.domain, pen.pos.String()
+	domain, at := pen.domain, pen.pos.CompactPos()
 	for _, req := range reqs {
 		// check for circular references:
 		if domain == req {
@@ -165,7 +165,7 @@ func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err err
 		and fact = ?2`, domain, fact)
 		switch e := q.Scan(&prev.domain, &prev.value); e {
 		case sql.ErrNoRows:
-			if _, e := pen.db.Exec(mdl_fact, domain, fact, value, pen.pos.String()); e != nil {
+			if _, e := pen.db.Exec(mdl_fact, domain, fact, value, pen.pos.CompactPos()); e != nil {
 				err = fmt.Errorf("database error: %s", e)
 			} else {
 				okay = true
@@ -195,7 +195,7 @@ var mdl_grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 
 // player input parsing
 func (pen *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
-	domain, at := pen.domain, pen.pos.String()
+	domain, at := pen.domain, pen.pos.CompactPos()
 	if prog, e := marshal(prog); e != nil {
 		err = e
 	} else if d, e := pen.findScene(); e != nil {
@@ -281,7 +281,7 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 				name,
 				optionalOne,
 				trimPath(path),
-				pos.String(),
+				pos.CompactPos(),
 				pos.Comment); e != nil {
 				err = fmt.Errorf("database error: %s", e)
 			} else if newid, e := res.LastInsertId(); e != nil {
@@ -386,7 +386,7 @@ func (pen *Pen) AddNounKind(noun, kind string) (err error) {
 // ( the same as - or a child of - the domain of the kind ) error
 // this duplicates the algorithm used by Kind()
 func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
-	domain, at := pen.domain, pen.pos.String()
+	domain, at := pen.domain, pen.pos.CompactPos()
 	if parent, e := pen.findRequiredKind(ancestor); e != nil {
 		err = e
 	} else if prev, e := pen.findNoun(name, nounWithKind); e != nil {
@@ -470,7 +470,7 @@ func (pen *Pen) addName(noun nounInfo, name string, rank int) (err error) {
 		// tbd: silence duplicates?
 		// since these are generated, there's probably very little the user could do about them.
 		pen.warn("%w %q already an alias of %q", ErrDuplicate, name, noun.name)
-	} else if _, e := pen.db.Exec(mdl_name, pen.domain, noun.id, name, rank, pen.pos.String()); e != nil {
+	} else if _, e := pen.db.Exec(mdl_name, pen.domain, noun.id, name, rank, pen.pos.CompactPos()); e != nil {
 		err = fmt.Errorf("database error: %s", e)
 	}
 	return
@@ -520,7 +520,7 @@ func (pen *Pen) AddNounPair(rel, oneNoun, otherNoun string) (err error) {
 			if e := pen.checkPair(rel, one, other, reverse, multi); e != nil {
 				err = eatDuplicates(pen.warn, e)
 			} else {
-				_, err = pen.db.Exec(mdl_pair, pen.domain, rel.rowid, one.id, other.id, pen.pos.String())
+				_, err = pen.db.Exec(mdl_pair, pen.domain, rel.rowid, one.id, other.id, pen.pos.CompactPos())
 			}
 		}
 	}
@@ -613,7 +613,7 @@ func (pen *Pen) AddPlural(many, one string) (err error) {
 		}, &prev, &from); e != nil {
 			err = eatDuplicates(pen.warn, e)
 		} else {
-			_, err = pen.db.Exec(mdl_plural, domain, many, one, pen.pos.String())
+			_, err = pen.db.Exec(mdl_plural, domain, many, one, pen.pos.CompactPos())
 		}
 	}
 	return
@@ -669,7 +669,7 @@ func (pen *Pen) AddRelation(name, oneKind, otherKind string, amany bool, bmany b
 						err = e
 					} else if e := pen.addField(rel, other, b.rhs(), b.affinity()); e != nil {
 						err = e
-					} else if _, e := pen.db.Exec(mdl_rel, rel.rowid, one.rowid, other.rowid, info.cardinality, pen.pos.String()); e != nil {
+					} else if _, e := pen.db.Exec(mdl_rel, rel.rowid, one.rowid, other.rowid, info.cardinality, pen.pos.CompactPos()); e != nil {
 						err = e // improve the error result if the relation existed vefore?
 					}
 				}
@@ -723,7 +723,7 @@ func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump
 		jump,
 		updates,
 		prog,
-		pen.pos.String())
+		pen.pos.CompactPos())
 	return
 }
 

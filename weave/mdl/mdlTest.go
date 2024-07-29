@@ -93,7 +93,7 @@ func (pen *Pen) AddTestResult(kind, field string, aff affine.Affinity, cls strin
 
 // public for tests:
 func (pen *Pen) AddTestRule(pattern string, rank int, prog string) (err error) {
-	domain, at := pen.domain, pen.pos.String()
+	domain, at := pen.domain, pen.pos.CompactPos()
 	if kid, e := pen.findRequiredKind(pattern); e != nil {
 		err = e
 	} else {

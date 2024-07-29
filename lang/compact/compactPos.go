@@ -12,8 +12,15 @@ type Source struct {
 	Comment string
 }
 
+func (p Source) ErrorString() (ret string) {
+	if len(p.File) > 0 {
+		ret = fmt.Sprintf("%s line %d", p.File, p.Line+1)
+	}
+	return
+}
+
 // return the source position as line:base(path)
-func (p Source) String() (ret string) {
+func (p Source) CompactPos() (ret string) {
 	if len(p.File) > 0 {
 		var rel string
 		base := path.Base(p.File) // extract the file from shared/something.tell

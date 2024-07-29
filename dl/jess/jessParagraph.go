@@ -83,7 +83,7 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 			// if it didn't match; retry in a later phase
 			// ( but error if we've gone through all the phases without success )
 			if z == weaver.NextPhase {
-				err = fmt.Errorf("failed to match %s %s %q", p.File, line.Source(), Matched(n).DebugString())
+				err = fmt.Errorf("failed to match %s %s %q", p.File, line.Source().ErrorString(), Matched(n).DebugString())
 				break
 			} else {
 				unmatched[retry] = n

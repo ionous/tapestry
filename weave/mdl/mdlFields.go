@@ -23,7 +23,7 @@ var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity"
 // fix? i dont think there's anything to stop a "record" of an object kind, or a "record" of text type from being added.
 // is it worth considering making all such references text, and generating anonymous nouns for each noun's records?
 func (pen *Pen) addField(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
-	domain, at := pen.domain, pen.pos.String()
+	domain, at := pen.domain, pen.pos.CompactPos()
 	if rows, e := pen.db.Query(`
 -- all possible traits:
 with allTraits as (	

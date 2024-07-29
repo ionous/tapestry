@@ -31,7 +31,7 @@ func (e SourceError) Unwrap() error {
 
 func (e SourceError) Error() (ret string) {
 	if len(e.src.File) > 0 {
-		ret = fmt.Sprintf("error at %s: %s", e.src, e.err)
+		ret = fmt.Sprintf("error at %s: %s", e.src.ErrorString(), e.err)
 	} else if ofs := e.src.Line; ofs > 0 {
 		ret = fmt.Sprintf("error near line %d: %s", ofs+1, e.err)
 	} else {

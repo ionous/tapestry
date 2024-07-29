@@ -147,8 +147,8 @@ func (e schedulingError) Unwrap() error {
 }
 
 func (e schedulingError) Error() string {
-	src := e.op.line.Source()
-	return fmt.Sprintf("%s during %q at %s for %s", e.err, e.phase, src, e.op.TypeInfo().TypeName())
+	src := e.op.line.Source().ErrorString()
+	return fmt.Sprintf("%s during %s at %s for %s", e.err, e.phase, src, e.op.TypeInfo().TypeName())
 }
 
 // match the input against the passed parse tree.
