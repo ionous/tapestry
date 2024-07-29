@@ -24,9 +24,6 @@ func (PanicRuntime) GetField(target, field string) (rt.Value, error) {
 func (PanicRuntime) GetKindByName(string) (*rt.Kind, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) GetRules(pattern, target string) ([]rt.Rule, error) {
-	panic("Runtime panic")
-}
 func (PanicRuntime) PluralOf(single string) string {
 	panic("Runtime panic")
 }
@@ -58,8 +55,5 @@ func (PanicRuntime) Writer() io.Writer {
 	panic("Runtime panic")
 }
 func (PanicRuntime) Random(inclusiveMin, exclusiveMax int) int {
-	panic("Runtime panic")
-}
-func (PanicRuntime) SetNotifier(rt.Notifier) rt.Notifier {
 	panic("Runtime panic")
 }

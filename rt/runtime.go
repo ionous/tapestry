@@ -70,5 +70,4 @@ type Runtime interface {
 	Writer() io.Writer
 	// SetWriter - Override the current writer.
 	SetWriter(io.Writer) (prev io.Writer)
-	SetNotifier(Notifier) (prev Notifier)
 }

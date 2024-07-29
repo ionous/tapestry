@@ -9,12 +9,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
+	"git.sr.ht/~ionous/tapestry/support/play"
 )
 
-func NewShuttle(run rt.Runtime, dec *query.QueryDecoder) *Shuttle {
+func NewShuttle(run *qna.Runner, dec *query.QueryDecoder) *Shuttle {
 	c := &Shuttle{
 		run: run,
 		dec: dec,
@@ -48,7 +50,7 @@ func (c *Shuttle) Restart(scene string) (err error) {
 	if e := run.ActivateDomain(scene); e != nil {
 		err = e
 	} else {
-		_, err = run.Call("start game", affine.None, nil, []rt.Value{focus})
+		_, err = run.Call(play.StartGame, affine.None, nil, []rt.Value{focus})
 	}
 	return
 }

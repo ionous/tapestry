@@ -54,7 +54,7 @@ func makeShuttle(db *sql.DB, opts qna.Options) (ret *frame.Shuttle, err error) {
 		survey := play.MakeDefaultSurveyor(run)
 		pt := play.NewPlaytime(run, survey, grammar)
 		play.CaptureInput(pt)
-		ret = frame.NewShuttle(pt, decoder)
+		ret = frame.NewShuttle(run, decoder)
 	}
 	return
 }
