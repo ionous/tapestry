@@ -14,6 +14,7 @@ import (
 type LineMatcher interface {
 	MatchLine(Query, InputState) (InputState, bool)
 	typeinfo.Instance // for logging
+	typeinfo.Markup
 }
 
 // different phases (z) can match different phrases (ws)
@@ -34,16 +35,16 @@ func matchSentence(z weaver.Phase, q Query, line InputState, out *bestMatch) (ok
 		// names {are} "a kind of"/"kinds of" [traits] kind.
 		okay = matchLine(q, line, &op.KindsAreKind, out) ||
 			// The colors are black and blue.
-			matchLine(q, line, schedule(&op.AspectsAreTraits), out)
+			matchLine(q, line, schedule(line, &op.AspectsAreTraits), out)
 
 	case weaver.PropertyPhase:
 		// fix? combine these to speed matching?
 		// kinds {are} "usually"
-		okay = matchLine(q, line, schedule(&op.KindsAreTraits), out) ||
+		okay = matchLine(q, line, schedule(line, &op.KindsAreTraits), out) ||
 			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
-			matchLine(q, line, schedule(&op.KindsHaveProperties), out) ||
+			matchLine(q, line, schedule(line, &op.KindsHaveProperties), out) ||
 			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
-			matchLine(q, line, schedule(&op.KindsAreEither), out)
+			matchLine(q, line, schedule(line, &op.KindsAreEither), out)
 
 	case weaver.NounPhase:
 		// note: the direction phrases have to be first
@@ -117,19 +118,37 @@ type schedulee interface {
 
 // phases that can weave immediately, without needing to schedule more phases
 // can use this to define a Generate method
-func schedule(s schedulee) genericSchedule {
-	return genericSchedule{s}
+func schedule(line InputState, s schedulee) genericSchedule {
+	return genericSchedule{line, s}
 }
 
-type genericSchedule struct{ schedulee }
+type genericSchedule struct {
+	line InputState
+	schedulee
+}
 
 func (op genericSchedule) Generate(ctx Context) (err error) {
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if e := op.Weave(w, run); e != nil {
-			err = fmt.Errorf("%w during %q", e, op.TypeInfo().TypeName())
+			err = schedulingError{op, e, op.Phase()}
 		}
 		return
 	})
+}
+
+type schedulingError struct {
+	op    genericSchedule
+	err   error
+	phase weaver.Phase
+}
+
+func (e schedulingError) Unwrap() error {
+	return e.err
+}
+
+func (e schedulingError) Error() string {
+	src := e.op.line.Source()
+	return fmt.Sprintf("%s during %q at %s for %s", e.err, e.phase, src, e.op.TypeInfo().TypeName())
 }
 
 // match the input against the passed parse tree.

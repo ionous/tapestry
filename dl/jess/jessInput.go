@@ -1,6 +1,7 @@
 package jess
 
 import (
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
@@ -10,6 +11,18 @@ type InputState struct {
 	pronouns pronounSource
 	// fix? change to a "reader" ( pull ) rather than pre-process?
 	words []match.TokenValue // the current line from the paragraph
+}
+
+func (in InputState) Source() (ret compact.Source) {
+	if p, ws := in.p, in.words; len(ws) > 0 {
+		lineOfs := ws[0].Pos.Y
+		ret = compact.Source{
+			File:    p.File,
+			Line:    lineOfs,
+			Comment: "a plain-text paragraph",
+		}
+	}
+	return
 }
 
 func (in InputState) Len() int {

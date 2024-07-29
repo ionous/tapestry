@@ -69,12 +69,7 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 		// match a sentence,
 		// and if matched Generate/Schedule it for weaving database info
 		if matchSentence(z, q, line, &best) {
-			lineOfs := n[0].Pos.Y
-			source := compact.Source{
-				File:    p.File,
-				Line:    lineOfs,
-				Comment: "a plain-text paragraph",
-			}
+			source := line.Source()
 			// update the paragraph's context so other sentences can refer to it.
 			// ( or if no pronoun was matched, or reused, clear it )
 			p.pronouns = best.pronouns
@@ -88,7 +83,7 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 			// if it didn't match; retry in a later phase
 			// ( but error if we've gone through all the phases without success )
 			if z == weaver.NextPhase {
-				err = fmt.Errorf("failed to match %s %s %q", p.File, n[0].Pos, Matched(n).DebugString())
+				err = fmt.Errorf("failed to match %s %s %q", p.File, line.Source(), Matched(n).DebugString())
 				break
 			} else {
 				unmatched[retry] = n
