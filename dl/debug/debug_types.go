@@ -310,7 +310,8 @@ func init() {
 		Name: "expect",
 		Lede: "expect",
 		Terms: []typeinfo.Term{{
-			Name: "label",
+			Name:     "label",
+			Optional: true,
 			Markup: map[string]any{
 				"--": "A description of the test.",
 			},
@@ -456,6 +457,7 @@ func Register(reg func(any)) {
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	14645287343365598707: (*DoNothing)(nil),  /* execute=DoNothing */
+	3760008855920941312:  (*Expect)(nil),     /* execute=Expect test: */
 	16489874106085927697: (*ExpectText)(nil), /* execute=Expect text: */
 	355907131262944118:   (*Expect)(nil),     /* execute=Expect:test: */
 	12332403919453206336: (*Fabricate)(nil),  /* execute=Fabricate input: */

@@ -15,10 +15,11 @@ Spec:requires:contains:
         - "execute"
         - "expect"
         - - # A description of the test.
-            Term:name:type:
+            Term:name:type:optional:
               - "_"
               - "label"
               - "text"
+              - true
           - # The boolean command. If the command returns false, the expectation will fail and the game will generate an error.
             Term:name:type:
               - "test"
