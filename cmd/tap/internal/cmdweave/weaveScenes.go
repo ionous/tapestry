@@ -8,13 +8,13 @@ import (
 
 // ensure there's a scene to contain the passed statements
 // name will be the scene name if no existing scene was found.
+// note: we're implicitly dependent on the scene index ( if any. )
 func wrapScene(scene *story.DefineScene, name, path string, src []story.StoryStatement) []story.StoryStatement {
 	note, content := splitHeader(src)
-	// note: we're implicitly dependent on the scene index ( if any. )
 	if fileScene, ok := hasScene(content); ok {
-		// put the rest of the file content into it.
+		// put the rest of the file content into the scene's content
 		// ( copy to avoid aliasing slice memory. )
-		fileScene.Statements = append([]story.StoryStatement{}, content[1:]...)
+		fileScene.Statements = append(fileScene.Statements, content[1:]...)
 		// keep the starting comments and fileScene
 		src = src[:len(note)+1]
 	} else if scene == nil {
@@ -37,15 +37,6 @@ func wrapScene(scene *story.DefineScene, name, path string, src []story.StorySta
 func hasScene(content []story.StoryStatement) (ret *story.DefineScene, okay bool) {
 	if len(content) > 0 {
 		ret, okay = content[0].(*story.DefineScene)
-	}
-	return
-}
-
-func hasEmptyScene(content []story.StoryStatement) (okay bool) {
-	if len(content) > 0 {
-		if scene, ok := content[0].(*story.DefineScene); ok && len(scene.Statements) == 0 {
-			okay = true
-		}
 	}
 	return
 }
