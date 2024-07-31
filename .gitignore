@@ -21,3 +21,4 @@ docs/themes
 docs/bin
 www/dist
 .DS_Store
+__debug*
