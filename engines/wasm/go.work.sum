@@ -1,8 +1,13 @@
 github.com/ionous/sliceOf v0.0.0-20170627065049-c4e57a86cb77/go.mod h1:l0XYSHRaNw8qImDaNqe4cd4kAG9HHj6799UaA7NvRjE=
+github.com/ionous/sliceOf v0.0.0-20231013204913-2f9ceef9e224/go.mod h1:l0XYSHRaNw8qImDaNqe4cd4kAG9HHj6799UaA7NvRjE=
+github.com/ionous/tell v0.9.2 h1:K82KC1DQjcGhyVpFjmcAY0wKC4CG3f/PFE7bb+n02uY=
+github.com/ionous/tell v0.9.2/go.mod h1:UWqqRyE4v3lqFSA4LsgnEBXPTAaHjjSBBr+8bZbOFGY=
 github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3xk=
 github.com/kr/text v0.2.0/go.mod h1:eLer722TekiGuMkidMxC/pM04lWEeraHUUmBw8l2grE=
 github.com/mattn/go-sqlite3 v1.14.16/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
+github.com/mattn/go-sqlite3 v1.14.22/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxUwlHK0RXw+Y=
 github.com/mitchellh/go-wordwrap v1.0.1/go.mod h1:R62XHJLzvMFRBbcrT7m7WgmE1eOyTSsCt+hzestvNj0=
 github.com/reiver/go-porterstemmer v1.0.1/go.mod h1:Z8uL/f/7UEwaeAJNwx1sO8kbqXiEuQieNuD735hLrSU=
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 golang.org/x/sys v0.21.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
+golang.org/x/sys v0.22.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=

@@ -4,7 +4,6 @@ go 1.22.4
 
 require (
 	git.sr.ht/~ionous/tapestry v0.24.6
-	git.sr.ht/~ionous/tapestry/cmd/tap v0.0.0-20240620204557-8aeb6ef2aa93
 	github.com/ionous/errutil v0.0.0-20231013205411-87ce252b8e2a
 	github.com/wailsapp/wails/v2 v2.9.1
 )
