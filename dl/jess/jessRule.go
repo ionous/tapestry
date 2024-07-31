@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/rules"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -137,7 +138,7 @@ func (op *SubAssignment) Match(input *InputState) (okay bool) {
 func (op *SubAssignment) GetRuleName() (ret string) {
 	if markup, ok := op.Assignment.(typeinfo.Markup); ok {
 		if str, ok := markup.GetMarkup(false)["ruleName"].(string); ok {
-			ret = str
+			ret = inflect.Normalize(str)
 		}
 	}
 	return

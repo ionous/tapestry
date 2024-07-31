@@ -38,7 +38,7 @@ func (p Prefix) stopJump() (stop bool, jump rt.Jump) {
 	switch p {
 	case Before:
 		// before falls through
-		stop, jump = true, rt.JumpLater
+		stop, jump = false, rt.JumpLater
 	case Instead:
 		// instead stops immediately
 		stop, jump = true, rt.JumpNow
