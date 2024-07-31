@@ -125,8 +125,13 @@ func readString(run rt.Runtime, noun, field string) (ret string, err error) {
 		err = e
 	} else if aff := b.Affinity(); aff != affine.Text {
 		err = fmt.Errorf(`expected that "%s.%s" was text, not %s`, noun, field, aff)
+	} else if str := b.String(); len(str) == 0 {
+		// the values of the verb have to be established first
+		// currently that means an earlier domain
+		// ( so its Value phase is before the sub-domain's Verb phrase )
+		err = fmt.Errorf("%w %s.%s", weaver.ErrMissing, noun, field)
 	} else {
-		ret = b.String()
+		ret = str
 	}
 	return
 }

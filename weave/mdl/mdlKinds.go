@@ -97,7 +97,7 @@ func (pen *Pen) findRequiredKind(kind string) (ret kindInfo, err error) {
 // if not specified errors, makes no assumptions about the results
 func (pen *Pen) findKind(kind string) (ret kindInfo, err error) {
 	if len(kind) == 0 {
-		err = errors.New("empty name for kind")
+		err = errors.New("can't find the name of an empty kind")
 	} else if singular, e := pen.singularize(kind); e != nil {
 		err = e
 	} else {

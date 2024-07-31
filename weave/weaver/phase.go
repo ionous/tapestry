@@ -11,7 +11,7 @@ const (
 	AncestryPhase                    // kinds and their derivation
 	PropertyPhase                    // the members of kinds ( after ancestry because fields depend on kind )
 	NounPhase                        // generate explicit nouns
-	VerbPhase                        // apply existing verbs
+	VerbPhase                        // apply existing verbs and rules
 	ConnectionPhase                  // pairings and map connections
 	FallbackPhase                    // generate kinds for nouns that didn't derive during connections
 	ValuePhase                       // apply any collected values

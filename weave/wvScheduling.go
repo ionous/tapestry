@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
@@ -17,40 +18,36 @@ type Processing struct {
 }
 
 type scheduled struct {
-	on weaver.Phase
+	on  weaver.Phase   //
+	pos compact.Source // source of the request
 	// because the requested phase can be zero
 	// ( for "try every phrase" ) the actual phase is passed in the callback
-	req func(weaver.Phase) error
+	req func(weaver.Phase, *mdl.Pen) error
+}
+
+// manufacture a particular weaver for a particular phase and source position
+type PenCreator interface {
+	NewPen(weaver.Phase, compact.Source) *mdl.Pen
 }
 
 // queue the scheduled callback for processing.
-// or, if the desired phase is the current phase, try to run immediately.
-// ( trying immediately allows jess sentence matching to rely on prior sentences. )
-func (proc *Processing) schedule(when weaver.Phase, req func(weaver.Phase) error) (err error) {
+func (proc *Processing) schedule(when weaver.Phase, pos compact.Source, req func(weaver.Phase, *mdl.Pen) error) (err error) {
+	// phase is the past?
 	if now := proc.phase; now > when && when != 0 {
 		err = fmt.Errorf("processing %s phase %s already passed", now, when)
 	} else {
-		if when == now && now != 0 {
-			// if its the same phase, try to run immediately:
-			if e := req(now); e != nil && !errors.Is(e, mdl.ErrMissing) {
-				// queue on missing, otherwise error
-				err = e
-			}
-		}
-		if err == nil {
-			proc.queue = append(proc.queue, scheduled{when, req})
-		}
+		proc.queue = append(proc.queue, scheduled{when, pos, req})
 	}
 	return
 }
 
-func (proc *Processing) runAll() (err error) {
+func (proc *Processing) runAll(cp PenCreator) (err error) {
 	for z := weaver.Phase(1); z < weaver.NumPhases; z++ {
 		// fix? necessary for re entrant scheduling
 		// if the weave callback contained a scheduler
 		// this ( and the processing object itself ) could probably go on the stack
 		proc.phase = z
-		if e := proc.runPhase(z); e != nil {
+		if e := proc.runPhase(cp, z); e != nil {
 			err = e
 			break
 		}
@@ -60,64 +57,65 @@ func (proc *Processing) runAll() (err error) {
 
 // run the passed phase until all scheduled callbacks have finished.
 // error if they didn't finish ( for example, after trying all of them and failing )
-func (proc *Processing) runPhase(now weaver.Phase) (err error) {
-	var afterFirst bool
+func (proc *Processing) runPhase(cp PenCreator, now weaver.Phase) (err error) {
+	var exitNextLoop bool
 Error:
 	for {
 		var lastRetry error
-		var progress []scheduled
-		// empty out the queue so we can see newly scheduled requests
-		progress, proc.queue = proc.queue, nil
-		prevCount := len(progress)
-		// loop through the queue, compacting into "keep"
-		keep := progress[:0]
-		for _, next := range progress {
-			// phase zero is special ( for jess )
-			// run once per phase, and keep in the original order.
-			if ((next.on != 0) && (next.on != now)) ||
-				(next.on == 0 && afterFirst) {
+		keep := proc.queue[:0] // compact onto the same memory block
+		var pending, successes, jessCount int
+		// loop through the queue
+		// additions might happen as we process elements
+		for len(proc.queue) > 0 {
+			// pop the front element
+			next := proc.queue[0]
+			proc.queue = proc.queue[1:]
+			// phase zero always runs ( for jess )
+			if (next.on != 0) && (next.on != now) {
 				keep = append(keep, next)
 			} else {
-				// run a scheduled request for this phase
+				// run the scheduled request:
 				// on success, drop it ( don't place into keep. )
-				if e := next.req(now); e != nil {
-					// exit on error:
-					if !errors.Is(e, mdl.ErrMissing) {
-						err = e
-						break Error
+				if e := next.req(now, cp.NewPen(now, next.pos)); e == nil {
+					successes++
+				} else if !errors.Is(e, mdl.ErrMissing) {
+					// stop on critical error
+					err = e
+					break Error
+				} else {
+					// if it's the special continuous phase
+					// don't consider it pending
+					if next.on == 0 {
+						jessCount++
 					} else {
-						// otherwise, keep and retry.
-						keep = append(keep, next)
-						// we dont want "try every frame" to mean error
-						if next.on != 0 {
-							lastRetry = e
-						}
+						lastRetry = e
+						pending++
 					}
+					keep = append(keep, next)
 				}
 			}
 		}
-		//
-		newlyScheduled := len(proc.queue)
-		succeded := len(keep) < prevCount || newlyScheduled > 0
-		// if nothing was removed, and nothing added
-		// then any error in trying to remove is critical.
-		if !succeded && lastRetry != nil {
-			e := fmt.Errorf("couldn't finish phase %s", now)
+		// after emptying the queue
+		// restore it with everything we kept.
+		proc.queue = keep
+		// if nothing is pending for this phase,
+		// make sure we've tried all the jess phrases
+		// against whatever just got finished.
+		if pending == 0 {
+			if jessCount == 0 || exitNextLoop {
+				break
+			} else {
+				exitNextLoop = true
+				continue
+			}
+		} else if successes == 0 {
+			// if nothing progressed; error.
+			e := fmt.Errorf("couldn't finish %s", now)
 			err = errors.Join(lastRetry, e)
 			break
-		} else {
-			// append any newly scheduled elements
-			if newlyScheduled > 0 {
-				keep = append(keep, proc.queue...)
-			}
-			// restore the queue
-			proc.queue = keep
-			afterFirst = true
-			// exit the loop if nothing was attempted.
-			if lastRetry == nil {
-				break
-			}
 		}
+		// otherwise, loop.
+		exitNextLoop = false
 	}
 	return
 }

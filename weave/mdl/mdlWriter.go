@@ -146,8 +146,17 @@ func makeKeyValue(key string, partsAndValue []string) (k, v string, err error) {
 }
 
 // arbitrary key-value storage
+func (pen *Pen) AddFact(key string, partsAndValue ...string) (err error) {
+	if ok, e := pen.addFact(key, partsAndValue...); e != nil {
+		err = e
+	} else if !ok {
+		err = ErrDuplicate
+	}
+	return
+}
+
 // returns true if its a new fact, false otherwise or on error.
-func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err error) {
+func (pen *Pen) addFact(key string, partsAndValue ...string) (okay bool, err error) {
 	if fact, value, e := makeKeyValue(key, partsAndValue); e != nil {
 		err = e
 	} else if domain, e := pen.findScene(); e != nil {
@@ -419,8 +428,8 @@ func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 
 		} else if !strings.HasSuffix(parent.fullpath(), prev.fullpath) {
 			// unrelated completely? then its an error
-			err = fmt.Errorf("%w can't redefine kind of %q as %q",
-				ErrConflict, name, ancestor)
+			err = fmt.Errorf("%w can't redefine noun %q of kind %q as kind %q",
+				ErrConflict, name, prev.kind, ancestor)
 		} else if prev.domain != domain {
 			// if it was declared in a different domain: we can't change it now.
 			err = fmt.Errorf("%w new ancestor %q of %q expected in the same domain as the original declaration; was %q now %q",

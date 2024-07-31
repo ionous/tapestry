@@ -43,9 +43,18 @@ func Stringify(ts []TokenValue) (ret string, width int) {
 
 // turn a series of string tokens into a normalized string
 // returns the number of string tokens consumed.
-// somewhat dubious because it skips inflect.Normalize
-func Normalize(ts []TokenValue) (ret string, width int) {
-	return toString(ts, true)
+// somewhat dubious because it mimics inflect.Normalize without calling it.
+func NormalizeTokens(ts []TokenValue) (ret string, width int) {
+	if len(ts) > 0 {
+		if tv := ts[0]; tv.Token == Quoted {
+			var out strings.Builder
+			addString(&out, tv, true)
+			ret, width = out.String(), -1
+		} else {
+			ret, width = toString(ts, true)
+		}
+	}
+	return
 }
 
 func toString(ts []TokenValue, lower bool) (ret string, width int) {
@@ -78,7 +87,7 @@ func addString(out *strings.Builder, tv TokenValue, lower bool) {
 
 // same as Normalize but errors if all of the tokens weren't consumed.
 func NormalizeAll(ts []TokenValue) (ret string, err error) {
-	if str, n := Normalize(ts); n == len(ts) {
+	if str, n := NormalizeTokens(ts); n == len(ts) || (n < 0 && len(ts) == 1) {
 		ret = str
 	} else {
 		out := DebugStringify(ts)

@@ -32,8 +32,8 @@ func (d *Domain) AddInitialValue(noun, field string, val rt.Assignment) {
 	})
 }
 
-func (d *Domain) runAll() error {
-	return d.proc.runAll()
+func (d *Domain) runAll(pen PenCreator) error {
+	return d.proc.runAll(pen)
 }
 
 // write initial values....

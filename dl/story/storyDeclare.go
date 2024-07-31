@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
@@ -35,14 +36,15 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 			} else {
 				// fix: MakeQueryFromPen; shouldn't this be passed in?
 				q := jessdb.MakeQuery(cat.Modeler, cat.CurrentScene())
-				// a little gross: run a step manually in the language phase
-				if ok, e := p.Generate(weaver.LanguagePhase, q, cat); e != nil {
-					err = e
-				} else if !ok {
-					err = cat.Step(func(z weaver.Phase) (bool, error) {
-						return p.Generate(z, q, cat)
-					})
-				}
+				pos := compact.MakeSource(op.GetMarkup(false))
+				err = cat.Step(pos, func(z weaver.Phase, _ *mdl.Pen) (err error) {
+					if ok, e := p.WeaveParagraph(z, q, cat); e != nil {
+						err = e
+					} else if !ok {
+						err = weaver.ErrMissing
+					}
+					return
+				})
 			}
 			return
 		})

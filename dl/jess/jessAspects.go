@@ -27,7 +27,7 @@ func (op *AspectsAreTraits) MatchLine(q Query, line InputState) (ret InputState,
 	if index := scanUntil(next.words, keywords.Are); index > 0 {
 		// cut up to the index of "are"
 		org := next.Cut(index)
-		plural, width := match.Normalize(org)
+		plural, width := match.NormalizeTokens(org)
 		if width == index {
 			one := inflect.Singularize(plural)                  // fix! should use the db
 			if span, e := match.TokenizeString(one); e == nil { // fix! should find kind without span

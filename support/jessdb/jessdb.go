@@ -28,36 +28,36 @@ func (d dbWrapper) GetContext() int {
 }
 
 func (d dbWrapper) FindKind(ws []match.TokenValue, out *kindsOf.Kinds) (ret string, width int) {
-	if str, min := match.Normalize(ws); min > 0 {
+	if str, min := match.NormalizeTokens(ws); min > 0 {
 		if m, e := d.GetPartialKind(str); e != nil {
 			log.Println("FindKind", e)
-		} else {
+		} else if name := m.Name; len(name) > 0 {
 			if out != nil {
 				*out = m.Base
 			}
-			ret, width = m.Name, m.WordCount()
+			ret, width = name, m.WordCount()
 		}
 	}
 	return
 }
 
 func (d dbWrapper) FindTrait(ws []match.TokenValue) (ret string, width int) {
-	if str, min := match.Normalize(ws); min > 0 {
+	if str, min := match.NormalizeTokens(ws); min > 0 {
 		if m, e := d.GetPartialTrait(str); e != nil {
 			log.Println("FindTrait", e)
-		} else {
-			ret, width = m.Name, m.WordCount()
+		} else if name := m.Name; len(name) > 0 {
+			ret, width = name, m.WordCount()
 		}
 	}
 	return
 }
 
 func (d dbWrapper) FindField(kind string, ws []match.TokenValue) (ret string, width int) {
-	if str, min := match.Normalize(ws); min > 0 {
+	if str, min := match.NormalizeTokens(ws); min > 0 {
 		if m, e := d.GetPartialField(kind, str); e != nil {
 			log.Println("FindField", e)
-		} else {
-			ret, width = m.Name, m.WordCount()
+		} else if name := m.Name; len(name) > 0 {
+			ret, width = name, m.WordCount()
 		}
 	}
 	return
@@ -68,7 +68,7 @@ func (d dbWrapper) FindNoun(ws []match.TokenValue, pkind *string) (ret string, w
 		if !errors.Is(e, mdl.ErrMissing) {
 			log.Println("FindNoun", e)
 		}
-	} else {
+	} else if name := m.Name; len(name) > 0 {
 		ret, width = m.Name, m.WordCount()
 		if pkind != nil {
 			*pkind = m.Kind
@@ -78,7 +78,7 @@ func (d dbWrapper) FindNoun(ws []match.TokenValue, pkind *string) (ret string, w
 }
 
 func (d dbWrapper) findNoun(ws []match.TokenValue, pkind *string) (ret mdl.MatchedNoun, err error) {
-	if str, min := match.Normalize(ws); min > 0 {
+	if str, min := match.NormalizeTokens(ws); min > 0 {
 		var kind string
 		if pkind != nil {
 			kind = *pkind

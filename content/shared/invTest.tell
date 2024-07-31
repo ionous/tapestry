@@ -1,4 +1,10 @@
 ---
+- # an empty root scene
+  # otherwise the second test is a dependency of the first test
+  Define scene:requires:
+    - "inv testing"
+    - "tapestry"
+
 - Define scene:requires:stage:do:
     - "Test status printing"
     - "thingaverse"

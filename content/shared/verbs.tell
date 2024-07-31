@@ -6,9 +6,10 @@ Verbs have some text called a relation.
 Verbs have a list of text called the implications.
 
 Verbs can be reversed.
-Carrying is a verb. The subject of carrying is actors. The object of carrying is things. The relation of carrying is whereabouts. The implications of carrying are "not worn" and "portable".
-Carried by is a verb. The subject of carried by is actors. The object of carried by is things. The relation of carried by is whereabouts. The implications of carried by are "not worn" and "portable". Carried by is reversed.
-On is a verb. The subject of on is supporters. The object of on is things. The relation of on is whereabouts. The implications of on are "not worn". On is reversed.
-In is a verb. The subject of in is containers. The alternate subject of in is rooms. The object of in is things. The relation of in is whereabouts. The implications of in are "not worn". In is reversed.
-Wearing is a verb. The subject of wearing is actors. The object of wearing is things. The relation of wearing is whereabouts. The implications of wearing are "worn", "wearable", and "portable".
-Supporting is a verb. The subject of supporting is supporters. The object of supporting is things. The relation of supporting is whereabouts. The implications of supporting are "not worn". Supporting is reversed.
+Carrying is a verb. The subject of carrying is "actors". The object of carrying is "things". 
+The relation of carrying is "whereabouts". The implications of carrying are "not worn" and "portable".
+Carried by is a verb. The subject of carried by is "actors". The object of carried by is "things". The relation of carried by is "whereabouts". The implications of carried by are "not worn" and "portable". Carried by is reversed.
+On is a verb. The subject of on is "supporters". The object of on is "things". The relation of on is whereabouts. The implications of on are "not worn". On is reversed.
+In is a verb. The subject of in is "containers". The alternate subject of in is "rooms". The object of in is "things". The relation of in is "whereabouts". The implications of in are "not worn". In is reversed.
+Wearing is a verb. The subject of wearing is "actors". The object of wearing is "things". The relation of wearing is "whereabouts". The implications of wearing are "worn", "wearable", and "portable".
+Supporting is a verb. The subject of supporting is "supporters". The object of supporting is "things". The relation of supporting is "whereabouts". The implications of supporting are "not worn". Supporting is reversed.

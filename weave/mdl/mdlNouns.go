@@ -119,7 +119,7 @@ func (pen *Pen) findRequiredNoun(noun string, q nounFinder) (ret nounInfo, err e
 // if not specified errors, makes no assumptions about the results
 func (pen *Pen) findNoun(noun string, q nounFinder) (ret nounInfo, err error) {
 	if len(noun) == 0 {
-		err = errors.New("empty name for noun")
+		err = errors.New("can't find the name of an empty noun")
 	} else if out, e := q(pen.db, pen.domain, noun); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else {

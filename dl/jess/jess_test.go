@@ -62,7 +62,11 @@ func (n *info) GetContext() int {
 }
 
 func (n *info) FindKind(ws []match.TokenValue, out *kindsOf.Kinds) (ret string, width int) {
-	if str, w := match.Normalize(ws); w > 0 {
+	// don't allow kinds to be quoted (w == -1)
+	// so that verbs.tell can quote its relations, etc
+	// and not get picked up as NamesAreLikeVerbs
+	// see also notes for jessMatches.go
+	if str, w := match.NormalizeTokens(ws); w > 0 {
 		for i, k := range n.kinds {
 			if strings.HasPrefix(str, k) {
 				if i&1 == 0 { // singular are the even numbers
@@ -117,7 +121,7 @@ func (n *info) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width
 		m, width = n.verbNames.FindPrefix(ws)
 		ret = m.String()
 	case "":
-		if str, w := match.Normalize(ws); w > 0 {
+		if str, w := match.NormalizeTokens(ws); w > 0 {
 			if noun, ok := n.nounPool[str]; ok {
 				ret, width = noun, w
 				if pkind != nil {

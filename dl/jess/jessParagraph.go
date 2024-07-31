@@ -57,10 +57,11 @@ func NewParagraph(pos compact.Source, str string, assign rt.Assignment) (ret Par
 // tries to match every (remaining) sentence of the paragraph.
 // expects to be called every phase
 // returns true when it no longer needs to be called because everything is scheduled
-func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, err error) {
+func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay bool, err error) {
 	var retry int
 	unmatched := p.Lines
-	for _, n := range unmatched { // n: is a sentence of tokens
+	for i, n := range unmatched { // n: is a sentence of tokens
+		_ = i // i is useful for debugging.
 		if len(n) == 0 {
 			continue
 		}

@@ -201,7 +201,7 @@ func (op *RuleSuffix) Match(q Query, input *InputState) (okay bool) {
 
 func GetRuleName(op *RuleName) (ret string, err error) {
 	if op != nil {
-		if str, w := match.Normalize(op.Matched); w != len(op.Matched) || w == 0 {
+		if str, w := match.NormalizeTokens(op.Matched); w != len(op.Matched) || w == 0 {
 			err = fmt.Errorf("couldn't determine rule name")
 		} else {
 			ret = str

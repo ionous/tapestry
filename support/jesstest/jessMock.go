@@ -51,7 +51,7 @@ func (m *Mock) generate(str string, val rt.Assignment) (err error) {
 		err = e
 	} else {
 		for z := weaver.Phase(0); z < weaver.NumPhases; z++ {
-			if _, e := p.Generate(z, m.q, m); e != nil {
+			if _, e := p.WeaveParagraph(z, m.q, m); e != nil {
 				err = e // match, and schedule callbacks for (later) phases
 				break
 			} else {

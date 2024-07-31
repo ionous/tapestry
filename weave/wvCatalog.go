@@ -129,7 +129,7 @@ func (cat *Catalog) assembleNext() (err error) {
 			// sets up the domain stack in case new scheduling comes in.
 			log.Printf("weaving %s...\n", d.name)
 			cat.sceneStack.Push(d)
-			err = d.runAll()
+			err = d.runAll(penCreator{d})
 			cat.sceneStack.Pop()
 			if err == nil {
 				pos := compact.Source{File: "initialization", Line: -1}
@@ -154,8 +154,7 @@ func (cat *Catalog) ScheduleCmd(key typeinfo.Markup, when weaver.Phase, cb func(
 // run the passed function now or in the future.
 func (cat *Catalog) SchedulePos(pos compact.Source, when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) error {
 	d, _ := cat.sceneStack.Top()
-	return d.proc.schedule(when, func(now weaver.Phase) error {
-		pen := cat.Modeler.PinPos(d.name, pos)
+	return d.proc.schedule(when, pos, func(now weaver.Phase, pen *mdl.Pen) error {
 		w := localWeaver{d, pen}
 		return cb(w, cat.run)
 	})
@@ -164,16 +163,9 @@ func (cat *Catalog) SchedulePos(pos compact.Source, when weaver.Phase, cb func(w
 // used for jess:
 // runs the passed function until it returns true or errors
 // if currently processing, the first step will execute next phase.
-func (cat *Catalog) Step(cb func(weaver.Phase) (bool, error)) error {
+func (cat *Catalog) Step(pos compact.Source, cb func(weaver.Phase, *mdl.Pen) error) error {
 	d, _ := cat.sceneStack.Top()
-	return d.proc.schedule(0, func(now weaver.Phase) (err error) {
-		if ok, e := cb(now); e != nil {
-			err = e
-		} else if !ok {
-			err = fmt.Errorf("%w step", weaver.ErrMissing)
-		}
-		return
-	})
+	return d.proc.schedule(0, pos, cb)
 }
 
 // find or create the named domain
