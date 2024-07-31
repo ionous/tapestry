@@ -1,0 +1,36 @@
+---
+- Define scene:requires:stage:
+  - "menu test"
+  - "tapestry"
+  - # an action for handling the menu
+    - Define action:requires:
+      - "menu selected"
+      - - # always the player
+          Text:kind:
+          - "actor"
+          - "actor"
+        - # the menu item selected
+          Text: "menu choice"
+---
+# a location for testing
+The restaurant is a room. You are in the restaurant.
+
+Before requesting player input:
+  - Print menu:do:
+    - # the name of the action when selected:
+      "menu selected"
+    - - Say: "<b>Choose something from the menu:</b>"
+      - Print menu:choice:
+        - "one"
+        - "Here's something to say."
+      - Print menu:choice:
+        - "two"
+        - "Here's nothing to say."
+      - Print menu:choice:
+        - "three"
+        - "All of the above."
+
+# The action specified by the menu.
+When menu selected:
+  - Say: "You selected {.menuChoice}." 
+

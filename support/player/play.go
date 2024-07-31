@@ -12,7 +12,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry"
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -107,39 +106,43 @@ func createSqlContext(mdlFile string) (ret context, err error) {
 }
 
 func goPlay(ctx context, scene string, opts qna.Options, testString string) (err error) {
-	const prompt = "> "
 	run := qna.NewRuntimeOptions(ctx.q, opts)
 	run.SetWriter(print.NewLineSentences(markup.ToText(os.Stdout)))
-	if e := run.ActivateDomain(scene); e != nil {
+	survey := play.MakeDefaultSurveyor(run)
+	pt := play.NewPlaytime(run, survey, ctx.grammar)
+	if e := pt.ActivateDomain(scene); e != nil {
 		err = e
-	} else {
-		survey := play.MakeDefaultSurveyor(run)
-		play := play.NewPlaytime(run, survey, ctx.grammar)
-		if _, e := play.Call("start game", affine.None, nil, []rt.Value{survey.GetFocalObject()}); e != nil {
-			err = e
-		} else if len(testString) > 0 {
-			for _, cmd := range strings.Split(testString, ";") {
-				fmt.Println(prompt, cmd)
-				if step(play, nil, scene, cmd) {
+	} else if e := pt.RunPlayerAction(play.StartGame); e != nil {
+		err = e
+	} else if len(testString) > 0 {
+		for _, cmd := range strings.Split(testString, ";") {
+			//
+			if e := pt.RunPlayerAction(play.RequestingPlayerInput); e != nil {
+				err = e
+				break
+			} else {
+				fmt.Println(cmd)
+				if handleTurn(pt, nil, scene, cmd) {
 					break // done
 				}
 			}
-		} else {
-			reader := bufio.NewReader(os.Stdin)
-			persist := Persistence{run, ctx.q}
-		Out:
-			for {
-				if len(prompt) > 0 {
-					fmt.Print(prompt)
-				}
-				if in, _ := reader.ReadString('\n'); len(in) <= 1 {
-					break
-				} else {
-					words := in[:len(in)-1]
-					for _, cmd := range strings.Split(words, ";") {
-						if step(play, &persist, scene, cmd) {
-							break Out
-						}
+		}
+	} else {
+		reader := bufio.NewReader(os.Stdin)
+		persist := Persistence{run, ctx.q}
+	Out:
+		// loop forever
+		for {
+			if e := pt.RunPlayerAction(play.RequestingPlayerInput); e != nil {
+				err = e
+				break
+			} else if in, _ := reader.ReadString('\n'); len(in) <= 1 {
+				break
+			} else {
+				words := in[:len(in)-1]
+				for _, cmd := range strings.Split(words, ";") {
+					if handleTurn(pt, &persist, scene, cmd) {
+						break Out
 					}
 				}
 			}
@@ -148,26 +151,26 @@ func goPlay(ctx context, scene string, opts qna.Options, testString string) (err
 	return
 }
 
-func step(pt *play.Playtime, ps *Persistence, story string, s string) (done bool) {
+func handleTurn(pt *play.Playtime, ps *Persistence, story string, s string) (done bool) {
 	var sig rt.Signal
-	if res, e := pt.Step(s); errors.As(e, &sig) {
+	if res, e := pt.HandleTurn(s); errors.As(e, &sig) {
 		switch sig {
 		case rt.SignalLoad:
 			if ps == nil {
 				log.Println("this runtime doesn't support save/load")
-			} else if res, e := ps.LoadGame(story); e != nil {
+			} else if str, e := ps.LoadGame(story); e != nil {
 				log.Printf("couldn't load game because %v\n", e)
 			} else {
-				log.Printf("loaded %s from %s\n", story, res)
+				log.Printf("loaded %s from %s\n", story, str)
 			}
 
 		case rt.SignalSave:
 			if ps == nil {
 				log.Print("this runtime doesn't support save/load")
-			} else if res, e := ps.SaveGame(story); e != nil {
+			} else if str, e := ps.SaveGame(story); e != nil {
 				log.Printf("couldn't save game because %v\n", e)
 			} else {
-				log.Printf("saved %s to %s\n", story, res)
+				log.Printf("saved %s to %s\n", story, str)
 			}
 		case rt.SignalQuit:
 			done = true

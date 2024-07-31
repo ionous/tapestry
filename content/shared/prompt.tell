@@ -1,0 +1,14 @@
+---
+- # By default, prints the greater-than sign (>) indicating where a player can type.
+  Define action:requires:
+    - "requesting player input"
+    - - Text:kind:
+        - "actor"
+        - "actor"
+        
+- # print the prompt.
+  Define rule:do:
+    - "requesting player input"
+    - - Say response:with:
+        - "the default prompt"
+        - ">"  # note: a regular space after the prompt gets eaten but a non-breaking space works

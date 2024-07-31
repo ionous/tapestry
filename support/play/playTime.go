@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/call"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -24,8 +25,8 @@ func NewPlaytime(run rt.Runtime, survey Survey, grammar []parser.Scanner) *Playt
 	return &Playtime{Runtime: run, grammar: g, survey: survey}
 }
 
-func (p *Playtime) Survey() *Survey {
-	return &p.survey
+func (pt *Playtime) Survey() *Survey {
+	return &pt.survey
 }
 
 type Result struct {
@@ -33,8 +34,39 @@ type Result struct {
 	Nouns  []string
 }
 
+func (pt *Playtime) RunPlayerAction(name string) (err error) {
+	_, err = pt.Call(name, affine.None, nil, []rt.Value{pt.survey.GetFocalObject()})
+	return
+}
+
 // advance time
-func (pt *Playtime) Step(words string) (ret *Result, err error) {
+func (pt *Playtime) HandleTurn(words string) (ret *Result, err error) {
+	var menu format.MenuData // swap and reset
+	format.CurrentMenu, menu = menu, format.CurrentMenu
+	if len(menu.Action) > 0 {
+		ret, err = pt.handleMenus(menu, words)
+	} else {
+		ret, err = pt.handlePhrases(words)
+	}
+	return
+}
+
+func (pt *Playtime) handleMenus(menu format.MenuData, w string) (ret *Result, err error) {
+	str, _ := menu.Match(w)
+	nouns := []string{str} // .play adds the player's actor in automatically.
+	if e := pt.play(menu.Action, nouns, nil); e != nil {
+		err = e
+	} else {
+		// fix: shouldnt play return result? ( do we even need result? )
+		ret = &Result{
+			Action: menu.Action,
+			Nouns:  nouns,
+		}
+	}
+	return
+}
+
+func (pt *Playtime) handlePhrases(words string) (ret *Result, err error) {
 	w := pt.Writer()
 	switch res, e := pt.scan(words); e.(type) {
 	default:
@@ -117,7 +149,7 @@ func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
 
 // execute a command
 func (pt *Playtime) play(act string, nouns []string, args []call.Arg) (err error) {
-	if outOfWorld := strings.HasPrefix(act, "request "); outOfWorld {
+	if outOfWorld := strings.HasPrefix(act, OutOfWorldPrefix); outOfWorld {
 		if len(nouns) != 0 {
 			// fix: check at weave?
 			err = errutil.New("out of world actions don't expect any nouns")
@@ -133,7 +165,7 @@ func (pt *Playtime) play(act string, nouns []string, args []call.Arg) (err error
 		} else if ok, e := raiseRunAction(pt, focus, act, nouns); e != nil {
 			err = e
 		} else if !ok {
-			_, err = pt.Runtime.Call("pass time", affine.None, nil, nil)
+			_, err = pt.Runtime.Call(PassTime, affine.None, nil, nil)
 		} else {
 			if ks, vs, e := call.ExpandArgs(pt, args); e != nil {
 				err = e
@@ -148,7 +180,7 @@ func (pt *Playtime) play(act string, nouns []string, args []call.Arg) (err error
 				if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
 					err = e
 				} else {
-					_, err = pt.Runtime.Call("pass time", affine.None, nil, nil)
+					_, err = pt.Runtime.Call(PassTime, affine.None, nil, nil)
 				}
 			}
 		}
@@ -158,9 +190,9 @@ func (pt *Playtime) play(act string, nouns []string, args []call.Arg) (err error
 
 // generic catch all action
 func raiseRunAction(run rt.Runtime, actor rt.Value, act string, nouns []string) (okay bool, err error) {
-	keys := []string{"actor", "action", "first noun", "second noun"}
+	keys := []string{Actor, Action, FirstNoun, SecondNoun}
 	values := []rt.Value{actor, rt.StringOf(act), nounIndex(nouns, 0), nounIndex(nouns, 1)}
-	if v, e := run.Call("running an action", affine.None, keys, values); e != nil {
+	if v, e := run.Call(RunningAnAction, affine.None, keys, values); e != nil {
 		err = e
 	} else {
 		okay = v.Bool()

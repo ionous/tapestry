@@ -11,6 +11,7 @@
     - "after pass time, then continue"
     - "witness light"
     - - WitnessLight:
+
 - # run when a player first starts a new story.
   Define pattern:requires:provides:do:
     - "start game"
@@ -27,6 +28,7 @@
       - UpdateLastKnownStatus:
       - # allow 'after start game' rules.
         Continue:
+
 - Define rule:named:do:
     - "after start game, then continue"
     - "the print first room rule"
@@ -49,12 +51,14 @@
       - Set:state:
           - "#story"
           - "playing"
+
 - Define rule:named:do:
     - "before start game, then continue"
     - "the print banner rule"
     - - If:do:
           - Not: "@quietly"
           - - PrintTheBanner:
+
 - # a parser action which calls the low level quit.
   Define pattern:requires:provides:do:
     - "request quit"

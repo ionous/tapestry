@@ -32,7 +32,7 @@ Down has opposite up. Understand "d" as down.
 Inside has opposite outside. Understand "in" as inside.
 Outside has opposite inside. Understand "out" as outside.
 
-Doors are kinds of opener. Doors are usually fixed in place.
+Doors are a kind of opener. Doors are usually fixed in place.
 Doors have a room called the destination.
 ---
 - # given a room and its door, find the named direction it represents, if any.

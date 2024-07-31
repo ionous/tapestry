@@ -162,7 +162,7 @@ Spec:requires:contains:
               - true
 
     - # Group text into a single line <li> as part of a list of lines.
-      # See also: 'rows'.
+      # See also: `Print rows:`.
       Flow:slots:lede:terms:
         - "print_row"
         - ["text_eval", "execute"]
@@ -172,6 +172,66 @@ Spec:requires:contains:
               - "row"
               - "exe"
               - "execute"
+              - true
+
+    - # Starts a menu. Individual menu options are printed with `Print choice:`. It's considered an error to try to print multiple menus in single turn. Menus 
+      Flow:slots:lede:terms:
+        - "print_menu"
+        - "execute"
+        - "print"
+        - - # Name of the action to run when a menu option is selected.
+            Term:name:type:
+              - "menu"
+              - "action_name"
+              - "text_eval"
+          - # Settings to control menu presentation.
+            Term:name:optional:
+              - "options"
+              - "menu_options"
+              - true
+          - # Runs one or more statements, and collects all of the individual choices printed as these statements are executed.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+
+    - # Settings to control menu presentation.
+      Flow:lede:terms:
+        - "menu_options"
+        - "menu"
+        - - # Draw the menu as a ordered list using ol and li tags.
+            # By default, menus ARE drawn as a list.
+            Term:type:optional:
+              - "show_list"
+              - "bool_eval"
+              - true
+          - # Prefix each option with a number.
+            # Implies that the player can type a number to make a selection.
+            # By default, numbers ARE shown.
+            Term:type:optional:
+              - "show_numbers"
+              - "bool_eval"
+              - true
+
+    - # Prints an individual menu choice. It's considered an error to try to print a menu choice other than during `Print menu:choices:`.
+      Flow:slots:lede:terms:
+        - "print_menu_choice"
+        - "execute"
+        - "print"
+        - - # a label uniquely identifying the choice. 
+            # used as text the player can type to select the option,
+            # and passed to the menu action ( defined by `Print menu:do:` )
+            # sometimes, this might be the name of an existing noun.
+            Term:name:type:
+              - "menu"
+              - "label"
+              - "text_eval"
+          - # Text displayed on the menu for the user.
+            Term:name:type:optional:
+              - "choice"
+              - "content"
+              - "text_eval"
               - true
 
     - # Express a number using digits.

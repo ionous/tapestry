@@ -58,7 +58,7 @@ func checkAll(db *sql.DB, matching string, options qna.Options, signatures []map
 			debug.Stepper = func(words string) (err error) {
 				// FIX: errors for step are getting fmt.Println in playTime.go
 				// so expect output can't test for errors ( and on error looks a bit borken )
-				_, err = play.Step(words)
+				_, err = play.HandleTurn(words)
 				return
 			}
 			if e := checkOne(play, check); e != nil {

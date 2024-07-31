@@ -515,7 +515,7 @@ func (op *PrintRows_Slice) Repeats() bool {
 }
 
 // Group text into a single line <li> as part of a list of lines.
-// See also: 'rows'.
+// See also: `Print rows:`.
 type PrintRow struct {
 	Exe    []rtti.Execute
 	Markup map[string]any `json:",omitempty"`
@@ -551,6 +551,121 @@ func (*PrintRow_Slice) TypeInfo() typeinfo.T {
 
 // Implements [typeinfo.Repeats] for a slice of PrintRow.
 func (op *PrintRow_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Starts a menu. Individual menu options are printed with `Print choice:`. It's considered an error to try to print multiple menus in single turn. Menus
+type PrintMenu struct {
+	ActionName  rtti.TextEval
+	MenuOptions *MenuOptions
+	Exe         []rtti.Execute
+	Markup      map[string]any `json:",omitempty"`
+}
+
+// print_menu, a type of flow.
+var Zt_PrintMenu typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*PrintMenu) TypeInfo() typeinfo.T {
+	return &Zt_PrintMenu
+}
+
+// Implements [typeinfo.Markup]
+func (op *PrintMenu) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Execute = (*PrintMenu)(nil)
+
+// Holds a slice of type PrintMenu.
+type PrintMenu_Slice []PrintMenu
+
+// Implements [typeinfo.Instance] for a slice of PrintMenu.
+func (*PrintMenu_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintMenu
+}
+
+// Implements [typeinfo.Repeats] for a slice of PrintMenu.
+func (op *PrintMenu_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Settings to control menu presentation.
+type MenuOptions struct {
+	ShowList    rtti.BoolEval
+	ShowNumbers rtti.BoolEval
+	Markup      map[string]any `json:",omitempty"`
+}
+
+// menu_options, a type of flow.
+var Zt_MenuOptions typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*MenuOptions) TypeInfo() typeinfo.T {
+	return &Zt_MenuOptions
+}
+
+// Implements [typeinfo.Markup]
+func (op *MenuOptions) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Holds a slice of type MenuOptions.
+type MenuOptions_Slice []MenuOptions
+
+// Implements [typeinfo.Instance] for a slice of MenuOptions.
+func (*MenuOptions_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MenuOptions
+}
+
+// Implements [typeinfo.Repeats] for a slice of MenuOptions.
+func (op *MenuOptions_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Prints an individual menu choice. It's considered an error to try to print a menu choice other than during `Print menu:choices:`.
+type PrintMenuChoice struct {
+	Label   rtti.TextEval
+	Content rtti.TextEval
+	Markup  map[string]any `json:",omitempty"`
+}
+
+// print_menu_choice, a type of flow.
+var Zt_PrintMenuChoice typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*PrintMenuChoice) TypeInfo() typeinfo.T {
+	return &Zt_PrintMenuChoice
+}
+
+// Implements [typeinfo.Markup]
+func (op *PrintMenuChoice) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Execute = (*PrintMenuChoice)(nil)
+
+// Holds a slice of type PrintMenuChoice.
+type PrintMenuChoice_Slice []PrintMenuChoice
+
+// Implements [typeinfo.Instance] for a slice of PrintMenuChoice.
+func (*PrintMenuChoice_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintMenuChoice
+}
+
+// Implements [typeinfo.Repeats] for a slice of PrintMenuChoice.
+func (op *PrintMenuChoice_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -941,7 +1056,91 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"--": []string{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
+			"--": []string{"Group text into a single line <li> as part of a list of lines.", "See also: `Print rows:`."},
+		},
+	}
+	Zt_PrintMenu = typeinfo.Flow{
+		Name: "print_menu",
+		Lede: "print",
+		Terms: []typeinfo.Term{{
+			Name:  "action_name",
+			Label: "menu",
+			Markup: map[string]any{
+				"--": "Name of the action to run when a menu option is selected.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "menu_options",
+			Label:    "options",
+			Optional: true,
+			Markup: map[string]any{
+				"--": "Settings to control menu presentation.",
+			},
+			Type: &Zt_MenuOptions,
+		}, {
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Markup: map[string]any{
+				"--": "Runs one or more statements, and collects all of the individual choices printed as these statements are executed.",
+			},
+			Type: &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"--": "Starts a menu. Individual menu options are printed with `Print choice:`. It's considered an error to try to print multiple menus in single turn. Menus ",
+		},
+	}
+	Zt_MenuOptions = typeinfo.Flow{
+		Name: "menu_options",
+		Lede: "menu",
+		Terms: []typeinfo.Term{{
+			Name:     "show_list",
+			Label:    "show_list",
+			Optional: true,
+			Markup: map[string]any{
+				"--": []string{"Draw the menu as a ordered list using ol and li tags.", "By default, menus ARE drawn as a list."},
+			},
+			Type: &rtti.Zt_BoolEval,
+		}, {
+			Name:     "show_numbers",
+			Label:    "show_numbers",
+			Optional: true,
+			Markup: map[string]any{
+				"--": []string{"Prefix each option with a number.", "Implies that the player can type a number to make a selection.", "By default, numbers ARE shown."},
+			},
+			Type: &rtti.Zt_BoolEval,
+		}},
+		Markup: map[string]any{
+			"--": "Settings to control menu presentation.",
+		},
+	}
+	Zt_PrintMenuChoice = typeinfo.Flow{
+		Name: "print_menu_choice",
+		Lede: "print",
+		Terms: []typeinfo.Term{{
+			Name:  "label",
+			Label: "menu",
+			Markup: map[string]any{
+				"--": []string{"a label uniquely identifying the choice. ", "used as text the player can type to select the option,", "and passed to the menu action ( defined by `Print menu:do:` )", "sometimes, this might be the name of an existing noun."},
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "content",
+			Label:    "choice",
+			Optional: true,
+			Markup: map[string]any{
+				"--": "Text displayed on the menu for the user.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"--": "Prints an individual menu choice. It's considered an error to try to print a menu choice other than during `Print menu:choices:`.",
 		},
 	}
 	Zt_PrintNum = typeinfo.Flow{
@@ -1038,6 +1237,9 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_PrintCommas,
 	&Zt_PrintRows,
 	&Zt_PrintRow,
+	&Zt_PrintMenu,
+	&Zt_MenuOptions,
+	&Zt_PrintMenuChoice,
 	&Zt_PrintNum,
 	&Zt_PrintCount,
 	&Zt_SayActor,
@@ -1058,6 +1260,9 @@ func Register(reg func(any)) {
 	reg((*PrintCommas)(nil))
 	reg((*PrintRows)(nil))
 	reg((*PrintRow)(nil))
+	reg((*PrintMenu)(nil))
+	reg((*MenuOptions)(nil))
+	reg((*PrintMenuChoice)(nil))
 	reg((*PrintNum)(nil))
 	reg((*PrintCount)(nil))
 	reg((*SayActor)(nil))
@@ -1066,38 +1271,46 @@ func Register(reg func(any)) {
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	6760736350978281265:  (*PrintBrackets)(nil),  /* execute=Bracket: */
-	7683154690772057430:  (*PrintBrackets)(nil),  /* text_eval=Bracket: */
-	14977888493551680556: (*BufferText)(nil),     /* text_eval=Buffer: */
-	16098131496381194958: (*CycleText)(nil),      /* counter=Cycle name:text: */
-	5355971188045229340:  (*CycleText)(nil),      /* text_eval=Cycle name:text: */
-	17596073119249480739: (*CycleText)(nil),      /* counter=Cycle text: */
-	1237120803959249173:  (*CycleText)(nil),      /* text_eval=Cycle text: */
-	10898429598193857104: (*LineBreak)(nil),      /* execute=LineBreak */
-	1194153657675604478:  (*ParagraphBreak)(nil), /* execute=ParagraphBreak */
-	16169738297367022876: (*PrintCommas)(nil),    /* execute=Print commas: */
-	6231219704730380469:  (*PrintCommas)(nil),    /* text_eval=Print commas: */
-	4978673516128950201:  (*PrintCount)(nil),     /* execute=Print count: */
-	2099789459701495774:  (*PrintCount)(nil),     /* text_eval=Print count: */
-	12546625601524102208: (*PrintNum)(nil),       /* execute=Print num: */
-	406006008187655303:   (*PrintNum)(nil),       /* text_eval=Print num: */
-	6233864352801529036:  (*PrintRow)(nil),       /* execute=Print row: */
-	10792303622714475175: (*PrintRow)(nil),       /* text_eval=Print row: */
-	13143970129676688055: (*PrintRows)(nil),      /* execute=Print rows: */
-	10295299865541058706: (*PrintRows)(nil),      /* text_eval=Print rows: */
-	4149419216708670664:  (*PrintWords)(nil),     /* execute=Print separator:words: */
-	4219359027975954467:  (*PrintWords)(nil),     /* text_eval=Print separator:words: */
-	1331651249232124175:  (*PrintWords)(nil),     /* execute=Print words: */
-	17978150574109115948: (*PrintWords)(nil),     /* text_eval=Print words: */
-	4512128922644282356:  (*PrintText)(nil),      /* execute=Print: */
-	5755388447583507062:  (*SayActor)(nil),       /* execute=Say actor:text: */
-	12460624099586212271: (*ShuffleText)(nil),    /* counter=Shuffle name:text: */
-	8909818107999898193:  (*ShuffleText)(nil),    /* text_eval=Shuffle name:text: */
-	3444877746271964624:  (*ShuffleText)(nil),    /* counter=Shuffle text: */
-	7835310741853066190:  (*ShuffleText)(nil),    /* text_eval=Shuffle text: */
-	17335248920749226950: (*SoftBreak)(nil),      /* execute=SoftBreak */
-	13115056552370612412: (*StoppingText)(nil),   /* counter=Stopping name:text: */
-	11830555676954637550: (*StoppingText)(nil),   /* text_eval=Stopping name:text: */
-	13363393271236249653: (*StoppingText)(nil),   /* counter=Stopping text: */
-	9145628730349656131:  (*StoppingText)(nil),   /* text_eval=Stopping text: */
+	7893687197054840698:  (*MenuOptions)(nil),     /* Menu */
+	4587307135226762483:  (*MenuOptions)(nil),     /* Menu showList: */
+	1579563296511043854:  (*MenuOptions)(nil),     /* Menu showList:showNumbers: */
+	15900254530244336875: (*MenuOptions)(nil),     /* Menu showNumbers: */
+	6760736350978281265:  (*PrintBrackets)(nil),   /* execute=Bracket: */
+	7683154690772057430:  (*PrintBrackets)(nil),   /* text_eval=Bracket: */
+	14977888493551680556: (*BufferText)(nil),      /* text_eval=Buffer: */
+	16098131496381194958: (*CycleText)(nil),       /* counter=Cycle name:text: */
+	5355971188045229340:  (*CycleText)(nil),       /* text_eval=Cycle name:text: */
+	17596073119249480739: (*CycleText)(nil),       /* counter=Cycle text: */
+	1237120803959249173:  (*CycleText)(nil),       /* text_eval=Cycle text: */
+	10898429598193857104: (*LineBreak)(nil),       /* execute=LineBreak */
+	1194153657675604478:  (*ParagraphBreak)(nil),  /* execute=ParagraphBreak */
+	16169738297367022876: (*PrintCommas)(nil),     /* execute=Print commas: */
+	6231219704730380469:  (*PrintCommas)(nil),     /* text_eval=Print commas: */
+	4978673516128950201:  (*PrintCount)(nil),      /* execute=Print count: */
+	2099789459701495774:  (*PrintCount)(nil),      /* text_eval=Print count: */
+	18349817279922445149: (*PrintMenuChoice)(nil), /* execute=Print menu: */
+	4159597809735690860:  (*PrintMenuChoice)(nil), /* execute=Print menu:choice: */
+	9849274889996939986:  (*PrintMenu)(nil),       /* execute=Print menu:do: */
+	5521961814336828698:  (*PrintMenu)(nil),       /* execute=Print menu:options:do: */
+	12546625601524102208: (*PrintNum)(nil),        /* execute=Print num: */
+	406006008187655303:   (*PrintNum)(nil),        /* text_eval=Print num: */
+	6233864352801529036:  (*PrintRow)(nil),        /* execute=Print row: */
+	10792303622714475175: (*PrintRow)(nil),        /* text_eval=Print row: */
+	13143970129676688055: (*PrintRows)(nil),       /* execute=Print rows: */
+	10295299865541058706: (*PrintRows)(nil),       /* text_eval=Print rows: */
+	4149419216708670664:  (*PrintWords)(nil),      /* execute=Print separator:words: */
+	4219359027975954467:  (*PrintWords)(nil),      /* text_eval=Print separator:words: */
+	1331651249232124175:  (*PrintWords)(nil),      /* execute=Print words: */
+	17978150574109115948: (*PrintWords)(nil),      /* text_eval=Print words: */
+	4512128922644282356:  (*PrintText)(nil),       /* execute=Print: */
+	5755388447583507062:  (*SayActor)(nil),        /* execute=Say actor:text: */
+	12460624099586212271: (*ShuffleText)(nil),     /* counter=Shuffle name:text: */
+	8909818107999898193:  (*ShuffleText)(nil),     /* text_eval=Shuffle name:text: */
+	3444877746271964624:  (*ShuffleText)(nil),     /* counter=Shuffle text: */
+	7835310741853066190:  (*ShuffleText)(nil),     /* text_eval=Shuffle text: */
+	17335248920749226950: (*SoftBreak)(nil),       /* execute=SoftBreak */
+	13115056552370612412: (*StoppingText)(nil),    /* counter=Stopping name:text: */
+	11830555676954637550: (*StoppingText)(nil),    /* text_eval=Stopping name:text: */
+	13363393271236249653: (*StoppingText)(nil),    /* counter=Stopping text: */
+	9145628730349656131:  (*StoppingText)(nil),    /* text_eval=Stopping text: */
 }
