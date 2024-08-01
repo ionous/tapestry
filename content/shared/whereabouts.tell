@@ -36,7 +36,7 @@
                         - "whereabouts"
                         - "@obj"
 - # Returns the name of the specified object followed by all of its parents names.
-  # Often used for event handling.
+  # Called by the qna runtime when 'sending' to patterns declared with 'Define action:'.
   Define pattern:requires:provides:do:
     - "Capture"
     - - Text:kind:
