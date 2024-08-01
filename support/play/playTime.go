@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/format"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -53,14 +54,15 @@ func (pt *Playtime) HandleTurn(words string) (ret *Result, err error) {
 
 func (pt *Playtime) handleMenus(menu format.MenuData, w string) (ret *Result, err error) {
 	str, _ := menu.Match(w)
-	nouns := []string{str} // .play adds the player's actor in automatically.
-	if e := pt.play(menu.Action, nouns, nil); e != nil {
+	if e := pt.play(menu.Action, nil, []call.Arg{{
+		Value: &call.FromText{Value: literal.T(str)}},
+	}); e != nil {
 		err = e
 	} else {
 		// fix: shouldnt play return result? ( do we even need result? )
 		ret = &Result{
 			Action: menu.Action,
-			Nouns:  nouns,
+			// Nouns:  nouns,
 		}
 	}
 	return
@@ -149,9 +151,9 @@ func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
 
 // execute a command
 func (pt *Playtime) play(act string, nouns []string, args []call.Arg) (err error) {
+	// 1. out of world requests:
 	if outOfWorld := strings.HasPrefix(act, OutOfWorldPrefix); outOfWorld {
 		if len(nouns) != 0 {
-			// fix: check at weave?
 			err = errutil.New("out of world actions don't expect any nouns")
 		} else if ks, vs, e := call.ExpandArgs(pt, args); e != nil {
 			err = e
@@ -159,29 +161,31 @@ func (pt *Playtime) play(act string, nouns []string, args []call.Arg) (err error
 			_, err = pt.Runtime.Call(act, affine.None, ks, vs)
 		}
 	} else {
-		// fix: raise a parsing event with the nouns and the action name
+		// player action:
 		if focus := pt.survey.GetFocalObject(); focus == nil {
-			err = errutil.New("couldnt get focal object")
+			err = errutil.New("couldn't get focal object")
 		} else if ok, e := raiseRunAction(pt, focus, act, nouns); e != nil {
 			err = e
-		} else if !ok {
-			_, err = pt.Runtime.Call(PassTime, affine.None, nil, nil)
 		} else {
-			if ks, vs, e := call.ExpandArgs(pt, args); e != nil {
-				err = e
-			} else {
-				// the actor ( and any nouns ) need to precede the "keyed" fields.
-				els := make([]rt.Value, 1, 1+len(nouns)+len(vs))
-				els[0] = focus // presumably the player's actor
-				for _, n := range nouns {
-					els = append(els, rt.StringOf(n))
-				}
-				els = append(els, vs...)
-				if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
+			// "running an action" returned true
+			// permitting us to call the requested parser action:
+			if ok {
+				if ks, vs, e := call.ExpandArgs(pt, args); e != nil {
 					err = e
 				} else {
-					_, err = pt.Runtime.Call(PassTime, affine.None, nil, nil)
+					// the actor ( and any nouns ) need to precede the "keyed" fields.
+					els := make([]rt.Value, 1, 1+len(nouns)+len(vs))
+					els[0] = focus // presumably the player's actor
+					for _, n := range nouns {
+						els = append(els, rt.StringOf(n))
+					}
+					els = append(els, vs...)
+					_, err = pt.Runtime.Call(act, affine.None, ks, els)
 				}
+			}
+			// pass time.
+			if err == nil {
+				_, err = pt.Runtime.Call(PassTime, affine.None, nil, nil)
 			}
 		}
 	}

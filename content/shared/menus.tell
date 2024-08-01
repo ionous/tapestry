@@ -6,6 +6,7 @@
     - Define action:requires:
       - "menu selected"
       - - # always the player
+          # ( needed for event capture )
           Text:kind:
           - "actor"
           - "actor"
@@ -21,16 +22,21 @@ Before requesting player input:
       "menu selected"
     - - Say: "<b>Choose something from the menu:</b>"
       - Print menu:choice:
-        - "one"
+        - "alpha"
         - "Here's something to say."
       - Print menu:choice:
-        - "two"
+        - "beta"
         - "Here's nothing to say."
       - Print menu:choice:
-        - "three"
+        - "gamma"
         - "All of the above."
 
 # The action specified by the menu.
 When menu selected:
-  - Say: "You selected {.menuChoice}." 
+  - Say: "You selected {.menu_choice}." 
 
+Instead of menu selected:
+  - If:do:
+    - Is nothing: "@menu_choice"
+    - - Say: "You should have selected a valid option." 
+      - QuitGame:
