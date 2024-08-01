@@ -716,11 +716,15 @@ Spec:requires:contains:
     - Flow:terms:
         - "rule_target"
         - - Term:optional:
+              - "pronoun"
+              - true
+          - Term:optional:
               - "kind"
               - true
           - Term:optional:
               - "noun"
               - true
+
 
     - # Phrases can break out of plain text and into structured tell docs.
       # The documents start with a colon (:) followed by a newline

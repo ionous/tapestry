@@ -71,13 +71,22 @@ func (op *Pronoun) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-// names are often potential nouns;
-// this helper generates them as such.
-func (op *Pronoun) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *Pronoun) GetNounName() (ret string, err error) {
 	if src := op.proref.source; src == nil {
 		err = errors.New("missing referenced name")
 	} else if n := src.desiredNoun.Noun; len(n) == 0 {
 		err = errors.New("missing referenced noun")
+	} else {
+		ret = n
+	}
+	return
+}
+
+// names are often potential nouns;
+// this helper generates them as such.
+func (op *Pronoun) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+	if n, e := op.GetNounName(); e != nil {
+		err = e
 	} else {
 		// duplicates Noun.BuildNouns:
 		if e := writeKinds(w, n, props.Kinds); e != nil {

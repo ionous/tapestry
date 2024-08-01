@@ -3,6 +3,7 @@ package jess
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -20,7 +21,7 @@ func (op *TimedRule) MatchLine(q Query, line InputState) (ret InputState, okay b
 	/**/ op.RulePrefix.Match(q, &next) &&
 		(op.matchSomeone(q, &next) || true) &&
 		op.Pattern.Match(q, &next) &&
-		(Optional(q, &next, &op.RuleTarget) || true) &&
+		(Optional(AddContext(q, MatchPronouns), &next, &op.RuleTarget) || true) &&
 		(Optional(q, &next, &op.RuleSuffix) || true) &&
 		(op.matchName(q, &next) || true) &&
 		op.SubAssignment.Match(&next) {
@@ -87,7 +88,13 @@ func (op *TimedRule) Generate(ctx Context) (err error) {
 
 				// add custom filters ( if any )
 				if tgt := op.RuleTarget; tgt != nil {
-					if n := tgt.Noun; n != nil {
+					if p := tgt.Pronoun; p != nil {
+						if name, e := p.GetNounName(); e != nil {
+							log.Panic("unknown noun when building rule from pronoun", e)
+						} else {
+							filters = rules.AddNounFilter(name, filters)
+						}
+					} else if n := tgt.Noun; n != nil {
 						filters = rules.AddNounFilter(n.actualNoun.Name, filters)
 					} else if k := tgt.Kind; k != nil {
 						filters = rules.AddKindFilter(k.actualKind.Name, filters)
@@ -155,7 +162,8 @@ func (op *SubAssignment) GetExe() (ret []rt.Execute, okay bool) {
 
 func (op *RuleTarget) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	Optional(q, &next, &op.Kind) ||
+	Optional(q, &next, &op.Pronoun) ||
+		Optional(q, &next, &op.Kind) ||
 		Optional(q, &next, &op.Noun) {
 		*input, okay = next, true
 	}

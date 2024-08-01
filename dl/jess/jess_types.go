@@ -2085,9 +2085,10 @@ func (op *RuleName_Slice) Repeats() bool {
 }
 
 type RuleTarget struct {
-	Kind   *Kind
-	Noun   *Noun
-	Markup map[string]any `json:",omitempty"`
+	Pronoun *Pronoun
+	Kind    *Kind
+	Noun    *Noun
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // rule_target, a type of flow.
@@ -3730,6 +3731,11 @@ func init() {
 		Name: "rule_target",
 		Lede: "rule_target",
 		Terms: []typeinfo.Term{{
+			Name:     "pronoun",
+			Label:    "pronoun",
+			Optional: true,
+			Type:     &Zt_Pronoun,
+		}, {
 			Name:     "kind",
 			Label:    "kind",
 			Optional: true,
@@ -4302,6 +4308,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1634876132861208202:  (*RuleTarget)(nil),               /* RuleTarget kind: */
 	14594080518908639404: (*RuleTarget)(nil),               /* RuleTarget kind:noun: */
 	16511386036724990548: (*RuleTarget)(nil),               /* RuleTarget noun: */
+	10115953531763300485: (*RuleTarget)(nil),               /* RuleTarget pronoun: */
+	7670543421446265851:  (*RuleTarget)(nil),               /* RuleTarget pronoun:kind: */
+	12398975034005281131: (*RuleTarget)(nil),               /* RuleTarget pronoun:kind:noun: */
+	2235549943136108873:  (*RuleTarget)(nil),               /* RuleTarget pronoun:noun: */
 	8620010389824513622:  (*SingleValue)(nil),              /* SingleValue */
 	15504423809522254666: (*SingleValue)(nil),              /* SingleValue kind: */
 	13476648886480809019: (*SingleValue)(nil),              /* SingleValue matchingNum: */

@@ -19,6 +19,7 @@ import (
 )
 
 var Phrases = []Phrase{
+
 	// ----------------
 	// context it.
 	// ----------------
@@ -85,11 +86,21 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// matching works ... now need to generate some ... filters....
-		// and log them.... serialize to json maybe? ugh.
+		// fix: need to be able to verify the filter generation
+		// log the rule to json maybe?
 		test:   `Report someone storing the message`,
 		assign: true,
 		result: []string{
+			"ExtendPattern:", "after storing",
+			"Rule:", "<unnamed>, Stop:true, Jump:JumpNow, Updates:false",
+		},
+	},
+	{
+		// use pronoun reference
+		test:   `The bottle is a container. Report someone storing it`,
+		assign: true, // pretend like it has a trailing assignment
+		result: []string{
+			"AddNounKind:", "bottle", "containers",
 			"ExtendPattern:", "after storing",
 			"Rule:", "<unnamed>, Stop:true, Jump:JumpNow, Updates:false",
 		},
