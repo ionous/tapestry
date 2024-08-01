@@ -110,6 +110,9 @@ Spec:requires:contains:
               - "pronoun"
               - true
           - Term:optional:
+              - "kind_called"
+              - true
+          - Term:optional:
               - "noun"
               - true
           - Term:optional:

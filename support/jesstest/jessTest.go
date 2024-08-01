@@ -470,10 +470,14 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// fix: currently succeeds with a noun called "thing called the cat"
-		// inform gets confused, but we could handle this okay
+		// inform gets confused, but we can handle this okay
 		test: `The description of the thing called the cat is "meow."`,
-		// result: errors.New("can't use property noun value this way."),
+		result: []string{
+			"AddNounKind:", "cat", "things",
+			"AddNounName:", "cat", "cat",
+			"AddNounValue:", "cat", "indefinite article", text("the"),
+			"AddNounValue:", "cat", "description", text("meow."),
+		},
 	},
 	// ------------------------------------------------------------------------
 	// NounPropertyValue
@@ -500,10 +504,32 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// fix: inform allows this, and jess does not.
 		test: `The thing called the cat has the description "meow."`,
-		// 	result: []string{
-		// 	},
+		result: []string{
+			"AddNounKind:", "cat", "things",
+			"AddNounName:", "cat", "cat",
+			"AddNounValue:", "cat", "indefinite article", text("the"),
+			"AddNounValue:", "cat", "description", text("meow."),
+		},
+	},
+	{
+		test: `The thing called "the cat" has the description "meow."`,
+		result: []string{
+			"AddNounKind:", "the cat", "things",
+			"AddNounName:", "the cat", "the cat",
+			"AddNounTrait:", "the cat", "proper named",
+			"AddNounValue:", "the cat", "description", text("meow."),
+		},
+	},
+
+	{
+		test: `The story has the title story.`,
+		result: []string{
+			// this matches here --
+			// but ideally would at least warn in the runtime b/c of subtype narrowing
+			// (ie. from things to pain-text)
+			"AddNounValue:", "story", "title", textKind("story", "things"),
+		},
 	},
 
 	// ------------------------------------------------------------------------

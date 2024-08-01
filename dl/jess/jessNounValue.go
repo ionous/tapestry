@@ -131,14 +131,16 @@ func (op *NounPropertyValue) Generate(ctx Context) error {
 // --------------------------------------------------------------
 
 func matchedKind(named NamedNoun) (ret string) {
-	if n := named.Noun; n != nil {
-		ret = n.actualNoun.Kind
-	} else if n := named.Name; n != nil {
-		ret = Things // if it hasn't matched, this is the default that will be generated
-	} else if n := named.Pronoun; n != nil {
+	if n := named.Pronoun; n != nil {
 		//  pronoun might have to hold a namedNoun so it can do the right thing.
 		// or even share constructed noun memory
 		ret = Things
+	} else if n := named.KindCalled; n != nil {
+		ret = n.Kind.actualKind.Name
+	} else if n := named.Noun; n != nil {
+		ret = n.actualNoun.Kind
+	} else if n := named.Name; n != nil {
+		ret = Things // if it hasn't matched, this is the default that will be generated
 	} else {
 		panic("unexpected matchedKind")
 	}
