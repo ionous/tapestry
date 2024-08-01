@@ -30,45 +30,37 @@ func (pt *Playtime) Survey() *Survey {
 	return &pt.survey
 }
 
-type Result struct {
-	Action string
-	Nouns  []string
-}
-
 func (pt *Playtime) RunPlayerAction(name string) (err error) {
 	_, err = pt.Call(name, affine.None, nil, []rt.Value{pt.survey.GetFocalObject()})
 	return
 }
 
 // advance time
-func (pt *Playtime) HandleTurn(words string) (ret *Result, err error) {
+func (pt *Playtime) HandleTurn(words string) (okay bool, err error) {
 	var menu format.MenuData // swap and reset
 	format.CurrentMenu, menu = menu, format.CurrentMenu
 	if len(menu.Action) > 0 {
-		ret, err = pt.handleMenus(menu, words)
+		okay, err = pt.handleMenus(menu, words)
 	} else {
-		ret, err = pt.handlePhrases(words)
+		okay, err = pt.handlePhrases(words)
 	}
 	return
 }
 
-func (pt *Playtime) handleMenus(menu format.MenuData, w string) (ret *Result, err error) {
+func (pt *Playtime) handleMenus(menu format.MenuData, w string) (okay bool, err error) {
 	str, _ := menu.Match(w)
 	if e := pt.play(menu.Action, nil, []call.Arg{{
 		Value: &call.FromText{Value: literal.T(str)}},
-	}); e != nil {
-		err = e
+	}); e != nil || len(w) == 0 {
+		err = e // loop on invalid choices
+		format.CurrentMenu = menu
 	} else {
-		// fix: shouldnt play return result? ( do we even need result? )
-		ret = &Result{
-			Action: menu.Action,
-			// Nouns:  nouns,
-		}
+		okay = true
 	}
 	return
 }
 
-func (pt *Playtime) handlePhrases(words string) (ret *Result, err error) {
+func (pt *Playtime) handlePhrases(words string) (okay bool, err error) {
 	w := pt.Writer()
 	switch res, e := pt.scan(words); e.(type) {
 	default:
@@ -114,10 +106,7 @@ func (pt *Playtime) handlePhrases(words string) (ret *Result, err error) {
 				if e := pt.play(act.Name, nouns, act.Args); e != nil {
 					err = errutil.Fmt("%w for %v", e, res)
 				} else {
-					ret = &Result{
-						Action: act.Name,
-						Nouns:  nouns,
-					}
+					okay = true
 				}
 			}
 

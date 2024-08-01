@@ -153,7 +153,7 @@ func goPlay(ctx context, scene string, opts qna.Options, testString string) (err
 
 func handleTurn(pt *play.Playtime, ps *Persistence, story string, s string) (done bool) {
 	var sig rt.Signal
-	if res, e := pt.HandleTurn(s); errors.As(e, &sig) {
+	if okay, e := pt.HandleTurn(s); errors.As(e, &sig) {
 		switch sig {
 		case rt.SignalLoad:
 			if ps == nil {
@@ -179,7 +179,7 @@ func handleTurn(pt *play.Playtime, ps *Persistence, story string, s string) (don
 		}
 	} else if e != nil {
 		log.Println("error:", e)
-	} else if res != nil {
+	} else if okay {
 		fmt.Println()
 	}
 	return
