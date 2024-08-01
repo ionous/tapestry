@@ -1,9 +1,12 @@
 package qna
 
 import (
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"github.com/ionous/errutil"
@@ -13,13 +16,19 @@ import (
 // note: in order to generate appropriate defaults ( ex. a record of the right type )
 // can return both a both meaningful value *and* an error
 func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []rt.Value) (ret rt.Value, err error) {
+
 	// create a container to hold results of args, locals, and the pending return value
 	if pat, e := run.GetKindByName(name); e != nil {
 		err = e
 	} else if rec, e := pattern.InitRecord(run, pat, keys, vals); e != nil {
 		err = e
 	} else {
-		switch pattern.Categorize(pat.Ancestors()) {
+		cat := pattern.Categorize(pat.Ancestors())
+		if run.options.IsOption(meta.PrintPatternNames) {
+			// ex. Calls pattern: "something".
+			log.Printf("%s pattern %q\n", cat, name)
+		}
+		switch cat {
 		case pattern.Initializes:
 			ret = rt.RecordOf(rec)
 

@@ -1,6 +1,8 @@
 package qna
 
 import (
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -13,9 +15,10 @@ type Options struct {
 }
 
 // indexed by meta.Options
-var optionTypes = []affine.Affinity{affine.Bool, affine.Bool, affine.Text}
+var optionTypes = [...]affine.Affinity{affine.Bool, affine.Bool, affine.Bool, affine.Text}
 
 func NewOptions() Options {
+	// if this fails, then optionsTypes has to be adjusted to match the meta options
 	var staticAssert [1]struct{}
 	_ = staticAssert[int(meta.NumOptions)-len(optionTypes)]
 	//
@@ -58,6 +61,15 @@ func (m Options) OptionByName(name string) (ret rt.Value, err error) {
 
 func (m Options) Option(opt meta.Options) (ret rt.Value, err error) {
 	return m.OptionByName(opt.String())
+}
+
+func (m Options) IsOption(opt meta.Options) (okay bool) {
+	if flag, e := m.Option(opt); e != nil {
+		log.Printf("couldn't determine option %s because %s.\n", opt, e)
+	} else if flag.Affinity() == affine.Bool && flag.Bool() {
+		okay = true
+	}
+	return
 }
 
 func (m Options) cacheErrors() (okay bool) {

@@ -334,9 +334,7 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 			ret = rt.IntOf(b)
 
 		case meta.Response:
-			if flag, e := run.options.Option(meta.PrintResponseNames); e != nil {
-				err = e
-			} else if flag.Affinity() == affine.Bool && flag.Bool() {
+			if run.options.IsOption(meta.PrintResponseNames) {
 				// fix? hen response are printed inline, they get munged together
 				// manually add some spacing.
 				ret = rt.StringOf(field + ". ")

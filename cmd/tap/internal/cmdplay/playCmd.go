@@ -33,6 +33,7 @@ func playCmd(ctx context.Context, _ *base.Command, args []string) (err error) {
 		debug.LogLevel = lvl
 		opts := qna.NewOptions()
 		opts.SetOption(meta.PrintResponseNames, rt.BoolOf(cfg.responses))
+		opts.SetOption(meta.PrintPatternNames, rt.BoolOf(cfg.patterns))
 		opts.SetOption(meta.SaveDir, rt.StringOf(saveDir))
 		err = player.PlayWithOptions(cfg.inFile, cfg.testString, scene, opts)
 	}
@@ -65,7 +66,7 @@ Using '-test' can run the list of specified commands as if a player had typed th
 // filled with the user's choices as described by buildFlags()
 var cfg = struct {
 	inFile, saveDir, testString string
-	json, responses             bool
+	json, responses, patterns   bool
 	logLevel                    string
 }{}
 
@@ -84,6 +85,7 @@ func buildFlags() (ret flag.FlagSet) {
 	ret.StringVar(&cfg.testString, "test", "", "optional list of commands to run (non-interactive)")
 	ret.BoolVar(&cfg.json, "json", false, "expect input/output in json (default is plain text)")
 	ret.BoolVar(&cfg.responses, "responses", false, "print response names instead of values")
+	ret.BoolVar(&cfg.patterns, "patterns", false, "print every pattern call")
 	ret.StringVar(&cfg.logLevel, "log", debug.C_LoggingLevel_Info.String(), levels)
 	return
 }

@@ -31,7 +31,8 @@ type Options int
 const (
 	// flag to print response names ( instead of values )
 	PrintResponseNames Options = iota
-	CacheErrors                // by default we dont
-	SaveDir                    // location for save files.
+	PrintPatternNames
+	CacheErrors // by default we dont
+	SaveDir     // location for save files.
 	NumOptions
 )

@@ -9,14 +9,15 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[PrintResponseNames-0]
-	_ = x[CacheErrors-1]
-	_ = x[SaveDir-2]
-	_ = x[NumOptions-3]
+	_ = x[PrintPatternNames-1]
+	_ = x[CacheErrors-2]
+	_ = x[SaveDir-3]
+	_ = x[NumOptions-4]
 }
 
-const _Options_name = "PrintResponseNamesCacheErrorsSaveDirNumOptions"
+const _Options_name = "PrintResponseNamesPrintPatternNamesCacheErrorsSaveDirNumOptions"
 
-var _Options_index = [...]uint8{0, 18, 29, 36, 46}
+var _Options_index = [...]uint8{0, 18, 35, 46, 53, 63}
 
 func (i Options) String() string {
 	if i < 0 || i >= Options(len(_Options_index)-1) {
