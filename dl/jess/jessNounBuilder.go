@@ -12,6 +12,12 @@ type NounBuilder interface {
 	BuildNouns(Query, weaver.Weaves, rt.Runtime, NounProperties) ([]DesiredNoun, error)
 }
 
+type GetDesiredNouns interface {
+	GetDesiredNouns() []DesiredNoun
+}
+
+type DesiredNouns []DesiredNoun
+
 // useful for dispatching a parent's call to build nouns to one of its matched children.
 // ( calls .BuildNoun() on the first non-nil builder )
 func buildNounsFrom(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties, builders ...nounBuilderRef) (ret []DesiredNoun, err error) {

@@ -333,10 +333,9 @@ func (op *Called_Slice) Repeats() bool {
 //
 // Future: allow quoted "titles" ( which are then allowed to break those assumptions )
 type Name struct {
-	Article     *Article
-	Matched     Matched
-	desiredNoun DesiredNoun
-	Markup      map[string]any `json:",omitempty"`
+	Article *Article
+	Matched Matched
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // name, a type of flow.
@@ -415,11 +414,12 @@ func (op *Noun_Slice) Repeats() bool {
 // Matches an existing noun, or if not: then something new.
 // Noun property uses this to find the best property field based on a noun's kind.
 type NamedNoun struct {
-	Pronoun    *Pronoun
-	KindCalled *KindCalled
-	Noun       *Noun
-	Name       *Name
-	Markup     map[string]any `json:",omitempty"`
+	Pronoun      *Pronoun
+	KindCalled   *KindCalled
+	Noun         *Noun
+	Name         *Name
+	desiredNouns DesiredNouns
+	Markup       map[string]any `json:",omitempty"`
 }
 
 // named_noun, a type of flow.
@@ -505,6 +505,7 @@ func (op *KindCalled_Slice) Repeats() bool {
 // Only one of the options here, plus possibly 'additional_names', will match.
 // Not all options are valid in all contexts.
 type MultipleNames struct {
+	desiredNouns    DesiredNouns
 	Pronoun         *Pronoun
 	CountedKind     *CountedKind
 	KindCalled      *KindCalled
@@ -2664,10 +2665,6 @@ func init() {
 			Name:  "matched",
 			Label: "matched",
 			Type:  &Zt_Matched,
-		}, {
-			Name:    "desired_noun",
-			Label:   "desired_noun",
-			Private: true,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_NounBuilder,
@@ -2726,6 +2723,10 @@ func init() {
 			Label:    "name",
 			Optional: true,
 			Type:     &Zt_Name,
+		}, {
+			Name:    "desired_nouns",
+			Label:   "desired_nouns",
+			Private: true,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_NounBuilder,
@@ -2769,6 +2770,10 @@ func init() {
 		Name: "multiple_names",
 		Lede: "multiple_names",
 		Terms: []typeinfo.Term{{
+			Name:    "desired_nouns",
+			Label:   "desired_nouns",
+			Private: true,
+		}, {
 			Name:     "pronoun",
 			Label:    "pronoun",
 			Optional: true,

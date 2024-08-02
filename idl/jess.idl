@@ -81,10 +81,7 @@ Spec:requires:contains:
               - "article"
               - true
           - Term: "matched"
-          - # cache for pronouns
-            Term:private:
-              - "desired_noun"
-              - true
+          
 
     - # Matches an existing noun
       # ( by checking multiple words for the best match ).
@@ -118,6 +115,10 @@ Spec:requires:contains:
           - Term:optional:
               - "name"
               - true
+          - # cache for pronouns
+            Term:private:
+              - "desired_nouns"
+              - true
 
     - # Defines a name and its kind in a single phrase.
       # Matches: (traits) kind "called" {the name}.
@@ -146,7 +147,11 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "multiple_names"
         - "noun_builder"
-        - - # this only applies in some contexts
+        - - # cache for pronouns
+            Term:private:
+            - "desired_nouns"
+            - true
+          - # this only applies in some contexts
             # it can only appear as the first name in a list
             # and will block additional names from matching.
             Term:optional:

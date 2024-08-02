@@ -17,14 +17,25 @@ func (op *NamedNoun) GetNormalizedName() (ret string, err error) {
 	return
 }
 
+// requires that BuildNouns have been called already
+func (op *NamedNoun) GetDesiredNouns() []DesiredNoun {
+	return op.desiredNouns
+}
+
 // panics if not matched
-func (op *NamedNoun) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) ([]DesiredNoun, error) {
-	return buildNounsFrom(q, w, run, props,
+func (op *NamedNoun) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+	if nouns, e := buildNounsFrom(q, w, run, props,
 		nillable(op.Pronoun),
 		nillable(op.KindCalled),
 		nillable(op.Noun),
 		nillable(op.Name),
-	)
+	); e != nil {
+		err = e
+	} else {
+		op.desiredNouns = nouns
+		ret = nouns
+	}
+	return
 }
 
 func (op *NamedNoun) Match(q Query, input *InputState) (okay bool) {

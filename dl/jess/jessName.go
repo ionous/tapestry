@@ -6,12 +6,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
+// the exact name specified by the player
 func (op *Name) GetNormalizedName() (string, error) {
 	return match.NormalizeAll(op.Matched)
 }
 
 // names are often potential nouns;
-// this helper generates them as such.
+// this helper treats them as such,
+// ensuring that they exist in the database.
 func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if noun, created, e := ensureNoun(q, w, op.Matched, &props); e != nil {
 		err = e
@@ -22,7 +24,6 @@ func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounP
 		if created {
 			n.appendArticle(op.Article)
 		}
-		op.desiredNoun = n // cache for pronoun references
 		ret = []DesiredNoun{n}
 	}
 	return

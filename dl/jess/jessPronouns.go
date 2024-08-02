@@ -12,13 +12,13 @@ import (
 type pronounSource struct {
 	// within a paragraph, sentences can establish a source for pronouns.
 	// if its not used; its cleared
-	source       *Name // for now, singular name; could support plural
-	usedPronouns bool  //reset every matching attempt
+	source       GetDesiredNouns // for now, singular name; could support plural
+	usedPronouns bool            //reset every matching attempt
 }
 
 // stored privately in the matched pronoun object
 type PronounReference struct {
-	source *Name // refers back to whatever was established
+	source GetDesiredNouns // refers back to whatever was established
 }
 
 // called for every new sentence.
@@ -34,9 +34,9 @@ func (k *pronounSource) nextPronoun() (ret pronounSource) {
 
 // at least for now, only works with single nouns
 // and the matcher only understands "it"
-func (k *pronounSource) setPronounSource(ns MultipleNames) {
-	if ns.Name != nil && ns.AdditionalNames == nil {
-		k.source = ns.Name
+func (k *pronounSource) setPronounSource(ns GetDesiredNouns) {
+	if ns != nil {
+		k.source = ns
 		k.usedPronouns = true
 	}
 }
@@ -74,10 +74,12 @@ func (op *Pronoun) Match(q Query, input *InputState) (okay bool) {
 func (op *Pronoun) GetNounName() (ret string, err error) {
 	if src := op.proref.source; src == nil {
 		err = errors.New("missing referenced name")
-	} else if n := src.desiredNoun.Noun; len(n) == 0 {
+	} else if n := src.GetDesiredNouns(); len(n) == 0 {
 		err = errors.New("missing referenced noun")
+	} else if len(n) > 1 {
+		err = errors.New("expected a single noun")
 	} else {
-		ret = n
+		ret = n[0].Noun
 	}
 	return
 }

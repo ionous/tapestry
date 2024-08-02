@@ -158,7 +158,7 @@ func (op *NamesAreLikeVerbs) MatchLine(q Query, line InputState) (ret InputState
 		op.Adjectives.Match(q, &next) {
 		Optional(q, &next, &op.VerbPhrase)
 		//
-		next.pronouns.setPronounSource(op.Names)
+		next.pronouns.setPronounSource(&op.Names)
 		ret, okay = next, true
 	}
 	return

@@ -98,6 +98,8 @@ func (op *NounPropertyValue) MatchLine(q Query, line InputState) (ret InputState
 	op.NamedNoun.Match(AddContext(q, MatchPronouns), &next) &&
 		op.Has.Match(q, &next, keywords.Has) &&
 		op.PropertyValues.Match(q, matchedKind(op.NamedNoun), &next) {
+		//
+		next.pronouns.setPronounSource(&op.NamedNoun)
 		ret, okay = next, true
 	}
 	return

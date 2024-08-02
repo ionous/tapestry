@@ -21,18 +21,8 @@ import (
 var Phrases = []Phrase{
 
 	// ----------------
-	// context it.
+	// misc
 	// ----------------
-	{
-		// the definition as a container should win out over the default of a thing.
-		// NamesAreLikeVerbs, NounPropertyValue.
-		test: `The bottle is a container. It has an age of 42.`,
-		result: []string{
-			"AddNounKind:", "bottle", "containers",
-			"AddNounName:", "bottle", "bottle",
-			"AddNounValue:", "bottle", "age", number(42),
-		},
-	},
 	{
 		test: `The bottle has age 42 and the description "A plain glass bottle."`,
 		result: []string{
@@ -43,6 +33,7 @@ var Phrases = []Phrase{
 		},
 	},
 	{
+		// quoted nouns for exact names
 		test: `The "bottle" is a container.`,
 		result: []string{
 			"AddNounKind:", "bottle", "containers",
@@ -504,6 +495,15 @@ var Phrases = []Phrase{
 		},
 	},
 	{
+		// use pronoun reference. note: the definition as a container should win out over the default of a thing.
+		// NamesAreLikeVerbs, NounPropertyValue.
+		test: `The bottle is a container. It has an age of 42.`,
+		result: []string{
+			"AddNounKind:", "bottle", "containers",
+			"AddNounValue:", "bottle", "age", number(42),
+		},
+	},
+	{
 		test: `The thing called the cat has the description "meow."`,
 		result: []string{
 			"AddNounKind:", "cat", "things",
@@ -523,6 +523,7 @@ var Phrases = []Phrase{
 	},
 
 	{
+		// allow nouns to be property values
 		test: `The story has the title story.`,
 		result: []string{
 			// this matches here --
