@@ -12,13 +12,13 @@ import (
 type pronounSource struct {
 	// within a paragraph, sentences can establish a source for pronouns.
 	// if its not used; its cleared
-	source       GetDesiredNouns // for now, singular name; could support plural
-	usedPronouns bool            //reset every matching attempt
+	source       GetActualNoun // for now, singular name; could support plural
+	usedPronouns bool          //reset every matching attempt
 }
 
 // stored privately in the matched pronoun object
 type PronounReference struct {
-	source GetDesiredNouns // refers back to whatever was established
+	source GetActualNoun // refers back to whatever was established
 }
 
 // called for every new sentence.
@@ -34,7 +34,7 @@ func (k *pronounSource) nextPronoun() (ret pronounSource) {
 
 // at least for now, only works with single nouns
 // and the matcher only understands "it"
-func (k *pronounSource) setPronounSource(ns GetDesiredNouns) {
+func (k *pronounSource) setPronounSource(ns GetActualNoun) {
 	if ns != nil {
 		k.source = ns
 		k.usedPronouns = true
@@ -71,15 +71,22 @@ func (op *Pronoun) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Pronoun) GetNounName() (ret string, err error) {
+func (op *Pronoun) GetActualNoun() (ret ActualNoun, err error) {
 	if src := op.proref.source; src == nil {
 		err = errors.New("missing referenced name")
-	} else if n := src.GetDesiredNouns(); len(n) == 0 {
+	} else if n := src.GetActualNoun(); len(n.Name) == 0 {
 		err = errors.New("missing referenced noun")
-	} else if len(n) > 1 {
-		err = errors.New("expected a single noun")
 	} else {
-		ret = n[0].Noun
+		ret = n
+	}
+	return
+}
+
+func (op *Pronoun) GetNounName() (ret string, err error) {
+	if a, e := op.GetActualNoun(); e != nil {
+		err = e
+	} else {
+		ret = a.Name
 	}
 	return
 }
@@ -94,8 +101,35 @@ func (op *Pronoun) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props No
 		if e := writeKinds(w, n, props.Kinds); e != nil {
 			err = e
 		} else {
-			ret = []DesiredNoun{{Noun: n, Traits: props.Traits}}
+			var k string
+			if len(props.Kinds) > 0 {
+				k = props.Kinds[0]
+			}
+			ret = []DesiredNoun{{Noun: n, Traits: props.Traits, CreatedKind: k}}
 		}
 	}
 	return
+}
+
+// search for a pronoun and the noun that it represents
+func TryPronoun(q JessContext, in InputState,
+	accept func(Pronoun, ActualNoun, InputState),
+	reject func(error)) {
+	// the name scan differentiates "the it girl" from "she is ..."
+	// right now pronouns are all one word long
+	if w := nameScan(in.words); w != 1 {
+		reject(FailedMatch{"couldn't find a pronoun", in})
+	} else if in.words[0].Hash() != keywords.It { // ( and always "it")
+		reject(FailedMatch{"word isn't a known pronoun", in.Slice(w)})
+	} else {
+		var op Pronoun // hrm
+		in.pronouns.usePronoun(&op.proref)
+		q.Try(After(weaver.FallbackPhase), func(weaver.Weaves, rt.Runtime) {
+			if a, e := op.GetActualNoun(); e != nil {
+				reject(e)
+			} else {
+				accept(op, a, in.Skip(w))
+			}
+		}, reject)
+	}
 }

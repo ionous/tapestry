@@ -37,8 +37,9 @@ func (op *KindCalled) GetTraits() (ret *Traits) {
 	return
 }
 
+// transparent container called (the) box.
 func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+	if next := *input; // note: traits can eat up a leading article
 	(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) &&
 		op.Called.Match(q, &next) &&

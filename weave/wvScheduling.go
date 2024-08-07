@@ -13,7 +13,6 @@ import (
 // starting with those which have zero dependencies,
 // ending with those which have the most dependencies.
 type Processing struct {
-	phase weaver.Phase
 	queue []scheduled
 }
 
@@ -22,6 +21,7 @@ type scheduled struct {
 	pos compact.Source // source of the request
 	// because the requested phase can be zero
 	// ( for "try every phrase" ) the actual phase is passed in the callback
+	// fix: what do receivers use that for, and why do they need it?
 	req func(weaver.Phase, *mdl.Pen) error
 }
 
@@ -31,23 +31,14 @@ type PenCreator interface {
 }
 
 // queue the scheduled callback for processing.
-func (proc *Processing) schedule(when weaver.Phase, pos compact.Source, req func(weaver.Phase, *mdl.Pen) error) (err error) {
-	// phase is the past?
-	if now := proc.phase; now > when && when != 0 {
-		err = fmt.Errorf("processing %s phase %s already passed", now, when)
-	} else {
-		proc.queue = append(proc.queue, scheduled{when, pos, req})
-	}
+func (proc *Processing) Schedule(when weaver.Phase, pos compact.Source, req func(weaver.Phase, *mdl.Pen) error) (err error) {
+	proc.queue = append(proc.queue, scheduled{when, pos, req})
 	return
 }
 
-func (proc *Processing) runAll(cp PenCreator) (err error) {
+func (proc *Processing) RunPhases(cp PenCreator) (err error) {
 	for z := weaver.Phase(1); z < weaver.NumPhases; z++ {
-		// fix? necessary for re entrant scheduling
-		// if the weave callback contained a scheduler
-		// this ( and the processing object itself ) could probably go on the stack
-		proc.phase = z
-		if e := proc.runPhase(cp, z); e != nil {
+		if e := proc.UpdatePhase(cp, z); e != nil {
 			err = e
 			break
 		}
@@ -57,7 +48,7 @@ func (proc *Processing) runAll(cp PenCreator) (err error) {
 
 // run the passed phase until all scheduled callbacks have finished.
 // error if they didn't finish ( for example, after trying all of them and failing )
-func (proc *Processing) runPhase(cp PenCreator, now weaver.Phase) (err error) {
+func (proc *Processing) UpdatePhase(cp PenCreator, now weaver.Phase) (err error) {
 	var exitNextLoop bool
 Error:
 	for {
@@ -70,8 +61,7 @@ Error:
 			// pop the front element
 			next := proc.queue[0]
 			proc.queue = proc.queue[1:]
-			// phase zero always runs ( for jess )
-			if (next.on != 0) && (next.on != now) {
+			if now < next.on {
 				keep = append(keep, next)
 			} else {
 				// run the scheduled request:

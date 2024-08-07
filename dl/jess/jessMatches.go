@@ -76,11 +76,6 @@ func matchSentence(z weaver.Phase, q Query, line InputState, out *bestMatch) (ok
 				// place {is} direction "of/from" places.
 				matchLine(q, line, &op.MapLocations, out) ||
 
-				// field "of" noun {are} value
-				matchLine(q, line, &op.PropertyNounValue, out) ||
-				// noun "has" field value
-				matchLine(q, line, &op.NounPropertyValue, out) ||
-
 				// verb nouns {are} nouns
 				matchLine(q, line, &op.VerbNamesAreNames, out) ||
 				// nouns {are} verbing nouns

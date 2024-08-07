@@ -15,6 +15,9 @@ func (op *CalledName) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Called.Match(q, &next) &&
 		op.Name.Match(AddContext(q, CheckIndefiniteArticles), &next) {
+		// fix: does this need CheckIndefiniteArticles here?
+		// that seems a little weird, because when does this generate a noun
+		// to have that applied?
 		*input, okay = next, true
 	}
 	return

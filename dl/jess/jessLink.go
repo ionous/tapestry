@@ -25,7 +25,7 @@ func makeLink(n DesiredNoun, direction string) *jessLink {
 }
 
 func makeRoom(noun string) *jessLink {
-	n := DesiredNoun{Noun: noun}
+	n := DesiredNoun{Noun: noun, CreatedKind: Rooms}
 	return &jessLink{DesiredNoun: n, roomLike: true}
 }
 

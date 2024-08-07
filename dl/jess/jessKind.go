@@ -70,3 +70,18 @@ type ActualKind struct {
 	Name     string // as opposed to just what matched
 	BaseKind kindsOf.Kinds
 }
+
+// search ancestry for an existing kind
+func TryKind(q JessContext, in InputState,
+	accept func(Kind, InputState),
+	reject func(error)) {
+	q.Try(After(weaver.AncestryPhase), func(weaver.Weaves, rt.Runtime) {
+		var kind Kind
+		if !kind.Match(q, &in) {
+			reject(FailedMatch{"couldn't find matching kind", in})
+		} else {
+			accept(kind, in)
+		}
+		return
+	}, reject)
+}

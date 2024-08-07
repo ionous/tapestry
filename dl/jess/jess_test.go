@@ -33,8 +33,8 @@ func TestPhrases(t *testing.T) {
 				known.nounPool[name] = name
 				known.nounPool["$"+name] = "things"
 			}
-			// request on logging
-			q := jess.AddContext(&known, jess.LogMatches)
+			// optionally: request on logging
+			q := jess.AddContext(&known, 0) //jess.LogMatches)
 			// create the test helper
 			m := jesstest.MakeMock(q, known.nounPool)
 			// run the test:

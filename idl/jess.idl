@@ -100,25 +100,38 @@ Spec:requires:contains:
 
     - # Matches an existing noun, or if not: then something new.
       # Noun property uses this to find the best property field based on a noun's kind.
-      Flow:slots:terms:
+      Flow:terms:
         - "named_noun"
-        - "noun_builder"
         - - Term:optional:
               - "pronoun"
               - true
           - Term:optional:
-              - "kind_called"
-              - true
-          - Term:optional:
-              - "noun"
+              - "inline_noun"
               - true
           - Term:optional:
               - "name"
               - true
-          - # cache for pronouns
-            Term:private:
-              - "desired_nouns"
+
+    - # "the closed container called the box."
+      Flow:terms:
+        - "inline_noun"
+        - - Term: "inline_kind"
+          - Term: "called"
+          - Term: "name"
+
+    - # unlike 'multiple_adjectives' this can only specify a single trailing kind
+      Flow:terms:
+        - "inline_kind"
+        - - Term:optional:
+            - "article"
+            - true
+          - # one or more traits, with or without comma separators.
+            # ex. closed transparent
+            Term:optional:
+              - "traits"
               - true
+          - # an existing kind
+            Term: "kind"
 
     - # Defines a name and its kind in a single phrase.
       # Matches: (traits) kind "called" {the name}.
@@ -149,7 +162,7 @@ Spec:requires:contains:
         - "noun_builder"
         - - # cache for pronouns
             Term:private:
-            - "desired_nouns"
+            - "actual_noun"
             - true
           - # this only applies in some contexts
             # it can only appear as the first name in a list
@@ -253,9 +266,10 @@ Spec:requires:contains:
         - - Term:optional:
               - "article"
               - true
-          - Term:type:
-              - "matched"
-              - "text"
+          - Term: "matched"
+          - Term:private:
+              - "field_name"
+              - true
 
     - # Matches the name of an (existing) trait.
       Flow:terms:
@@ -297,6 +311,7 @@ Spec:requires:contains:
         - - Term: "text"
 
     - Slot: "line_matcher"
+    - Slot: "parallel_matcher"
 
     - # This is the union of all possible line matchers.
       # For any given plain text sentence,
@@ -498,7 +513,7 @@ Spec:requires:contains:
       # ex. The implications of carrying are "not worn" and "portable".
       Flow:slots:terms:
         - "property_noun_value"
-        - "line_matcher"
+        - "parallel_matcher"
         - - Term:optional:
               - "article"
               - true
@@ -511,12 +526,7 @@ Spec:requires:contains:
             # generating a new noun if needed.
             Term: "named_noun"
           - Term: "are"
-          - Term:optional:
-              - "single_value"
-              - true
-          - Term:optional:
-              - "quoted_texts"
-              - true
+          - Term: "property_value"
 
     - # Assigns a default value to a noun.
       # ex.
@@ -524,7 +534,7 @@ Spec:requires:contains:
       # like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
       Flow:slots:terms:
         - "noun_property_value"
-        - "line_matcher"
+        - "parallel_matcher"
         - # tries to match an existing noun, or generates one.
           # use the matched noun to guide property matching.
           # 
@@ -568,10 +578,13 @@ Spec:requires:contains:
             - "values"
             - "property_values"
 
+    - Slot: "property_value"
+
     - # This matches only one of its options.
       # ( The options could be represented as a slot; this feels easier for now ).
-      Flow:terms:
+      Flow:slot:terms:
         - "single_value"
+        - "property_value"
         - - Term:optional:
               - "quoted_text"
               - true
@@ -669,8 +682,9 @@ Spec:requires:contains:
 
     - # One or more strings of quoted text
       # separated by the words "and", "comma", or "or".
-      Flow:terms:
+      Flow:slot:terms:
         - "quoted_texts"
+        - "property_value"
         - - Term: "quoted_text"
           - Term:optional:
               - "additional_text"

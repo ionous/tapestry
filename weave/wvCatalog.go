@@ -154,7 +154,7 @@ func (cat *Catalog) ScheduleCmd(key typeinfo.Markup, when weaver.Phase, cb func(
 // run the passed function now or in the future.
 func (cat *Catalog) SchedulePos(pos compact.Source, when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) error {
 	d, _ := cat.sceneStack.Top()
-	return d.proc.schedule(when, pos, func(now weaver.Phase, pen *mdl.Pen) error {
+	return d.proc.Schedule(when, pos, func(now weaver.Phase, pen *mdl.Pen) error {
 		w := localWeaver{d, pen}
 		return cb(w, cat.run)
 	})
@@ -165,7 +165,7 @@ func (cat *Catalog) SchedulePos(pos compact.Source, when weaver.Phase, cb func(w
 // if currently processing, the first step will execute next phase.
 func (cat *Catalog) Step(pos compact.Source, cb func(weaver.Phase, *mdl.Pen) error) error {
 	d, _ := cat.sceneStack.Top()
-	return d.proc.schedule(0, pos, cb)
+	return d.proc.Schedule(0, pos, cb)
 }
 
 // find or create the named domain

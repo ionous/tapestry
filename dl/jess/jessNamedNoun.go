@@ -1,50 +1,31 @@
 package jess
 
-import (
-	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/weaver"
-)
-
-func (op *NamedNoun) GetNormalizedName() (ret string, err error) {
-	if n := op.Noun; n != nil {
-		ret = n.actualNoun.Name // the actual name is already normalized
-	} else if n := op.Name; n != nil {
-		ret, err = match.NormalizeAll(n.Matched)
-	} else {
-		panic("NamedNoun was unmatched")
-	}
-	return
-}
-
-// requires that BuildNouns have been called already
-func (op *NamedNoun) GetDesiredNouns() []DesiredNoun {
-	return op.desiredNouns
-}
-
-// panics if not matched
-func (op *NamedNoun) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
-	if nouns, e := buildNounsFrom(q, w, run, props,
-		nillable(op.Pronoun),
-		nillable(op.KindCalled),
-		nillable(op.Noun),
-		nillable(op.Name),
-	); e != nil {
-		err = e
-	} else {
-		op.desiredNouns = nouns
-		ret = nouns
-	}
-	return
-}
-
-func (op *NamedNoun) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	Optional(q, &next, &op.Pronoun) ||
-		Optional(q, &next, &op.KindCalled) ||
-		Optional(q, &next, &op.Noun) ||
-		Optional(q, &next, &op.Name) {
-		*input, okay = next, true
-	}
+func TryNamedNoun(q JessContext, in InputState,
+	accept func(NamedNoun, ActualNoun, InputState),
+	reject func(error)) {
+	TryPronoun(q, in, func(pro Pronoun, noun ActualNoun, next InputState) {
+		// accept fires in the value phase;
+		// reject can fire asap if it doesn't look like a pronoun.
+		accept(NamedNoun{Pronoun: &pro}, noun, next)
+	}, func(error) {
+		// matches a name, kind, and traits
+		TryInlineNoun(q, in, func(n InlineNoun, next InputState) {
+			// create a noun with the matched data:
+			GenerateNoun(q, n.Name, n.GetKind(), n.GetTraits(), func(noun ActualNoun) {
+				// matched!
+				accept(NamedNoun{InlineNoun: &n}, noun, next)
+			}, reject)
+		}, func(error) {
+			var n Name
+			if next := in; !n.Match(q, &next) {
+				reject(FailedMatch{"TryNamedNoun expected a name", next})
+			} else {
+				// matched! now (in fallbacks) make sure the noun exists
+				GenerateImplicitNoun(q, n, func(noun ActualNoun) {
+					accept(NamedNoun{Name: &n}, noun, next)
+				}, reject)
+			}
+		})
+	})
 	return
 }

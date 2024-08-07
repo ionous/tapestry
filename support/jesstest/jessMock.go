@@ -1,7 +1,6 @@
 package jesstest
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -11,6 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
@@ -23,8 +23,8 @@ type Mock struct {
 	out                 []string
 	unique              map[string]int
 	nounPool, nounPairs map[string]string
-	ProcessingList
-	jessRt jessRt
+	proc                weave.Processing
+	jessRt              jessRt
 }
 
 func MakeMock(q jess.Query, nouns map[string]string) Mock {
@@ -46,6 +46,21 @@ func (m *Mock) Generate(str string, val rt.Assignment) (ret []string, err error)
 	return
 }
 
+// placeholder for scheduling.
+func (m *Mock) NewPen(weaver.Phase, compact.Source) *mdl.Pen {
+	return nil
+}
+
+func (m *Mock) Schedule(z weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) error {
+	return m.SchedulePos(compact.Source{}, z, cb)
+}
+
+func (m *Mock) SchedulePos(p compact.Source, z weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) error {
+	return m.proc.Schedule(z, p, func(weaver.Phase, *mdl.Pen) error {
+		return cb(m, &m.jessRt) // fix: what is with these parameters :sob:
+	})
+}
+
 func (m *Mock) generate(str string, val rt.Assignment) (err error) {
 	if p, e := jess.NewParagraph(compact.Source{}, str, val); e != nil {
 		err = e
@@ -54,15 +69,9 @@ func (m *Mock) generate(str string, val rt.Assignment) (err error) {
 			if _, e := p.WeaveParagraph(z, m.q, m); e != nil {
 				err = e // match, and schedule callbacks for (later) phases
 				break
-			} else {
-				// update callbacks for the current phase
-				// in story; these would be intermixed with other scheduled elements for the phase
-				cnt, e := m.UpdatePhase(z, m, &m.jessRt)
-				missing := errors.Is(e, weaver.ErrMissing)
-				if (e != nil && !missing) || (missing && cnt == 0) {
-					err = e
-					break
-				}
+			} else if e := m.proc.UpdatePhase(m, z); e != nil {
+				err = e
+				break
 			}
 		}
 	}

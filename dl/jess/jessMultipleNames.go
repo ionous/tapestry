@@ -54,8 +54,8 @@ func (op *MultipleNames) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *MultipleNames) GetDesiredNouns() []DesiredNoun {
-	return op.desiredNouns
+func (op *MultipleNames) GetActualNoun() ActualNoun {
+	return op.actualNoun
 }
 
 // implements NounBuilder by calling BuildNouns on all matched names
@@ -72,7 +72,15 @@ func (op *MultipleNames) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, pr
 			break
 		} else {
 			out := append(ret, ns...)
-			op.desiredNouns = out
+			var an ActualNoun
+			if len(out) == 1 {
+				n := out[0]
+				an = ActualNoun{
+					n.Noun,
+					n.CreatedKind,
+				}
+			}
+			op.actualNoun = an
 			ret = out
 		}
 	}

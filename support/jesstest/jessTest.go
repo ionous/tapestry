@@ -19,25 +19,55 @@ import (
 )
 
 var Phrases = []Phrase{
-
-	// ----------------
-	// misc
-	// ----------------
+	// ------------------------------------------------------------------------
+	// PropertyNounValue
+	// ------------------------------------------------------------------------
 	{
-		test: `The bottle has age 42 and the description "A plain glass bottle."`,
+		// the bottle is a new noun.
+		test: `The age of the bottle is 42.`,
 		result: []string{
 			"AddNounName:", "bottle", "bottle",
 			"AddNounKind:", "bottle", "things",
 			"AddNounValue:", "bottle", "age", number(42),
-			"AddNounValue:", "bottle", "description", text("A plain glass bottle."),
 		},
 	},
+	{
+		// the story is an existing noun ( in jess_test, jessdb_test )
+		test: `The title of the story is "A Secret."`,
+		result: []string{
+			// no noun declaration because the story is was pre-existing
+			"AddNounValue:", "story", "title", text("A Secret."),
+		},
+	},
+	{
+		// create a new noun "story teller";
+		// shouldnt match the existing noun "story."
+		test: `The age of the story teller is 42.`,
+		result: []string{
+			"AddNounName:", "story teller", "story teller",
+			"AddNounKind:", "story teller", "things",
+			"AddNounValue:", "story teller", "age", number(42),
+		},
+	},
+	{
+		// inform gets confused, but we can handle this okay
+		test: `The description of the thing called the cat is "meow."`,
+		result: []string{
+			"AddNounKind:", "cat", "things",
+			"AddNounName:", "cat", "cat",
+			"AddNounValue:", "cat", "indefinite article", text("the"),
+			"AddNounValue:", "cat", "description", text("meow."),
+		},
+	},
+	// ----------------
+	// misc
+	// ----------------
 	{
 		// quoted nouns for exact names
 		test: `The "bottle" is a container.`,
 		result: []string{
 			"AddNounKind:", "bottle", "containers",
-			// for now: it doesnt add the pieces of the noun as a name
+			"AddNounName:", "bottle", "bottle",
 		},
 	},
 	// ------------------------------------------------------------------------
@@ -92,6 +122,7 @@ var Phrases = []Phrase{
 		assign: true, // pretend like it has a trailing assignment
 		result: []string{
 			"AddNounKind:", "bottle", "containers",
+			"AddNounName:", "bottle", "bottle",
 			"ExtendPattern:", "after storing",
 			"Rule:", "<unnamed>, Stop:true, Jump:JumpNow, Updates:false",
 		},
@@ -430,51 +461,21 @@ var Phrases = []Phrase{
 			`{"Action:":"storing"}`,
 		},
 	},
-	// ------------------------------------------------------------------------
-	// PropertyNounValue
-	// ------------------------------------------------------------------------
-	{
-		test: `The title of the story is "A Secret."`,
-		result: []string{
-			// no noun declaration because the story is a known noun ( in these tests )
-			"AddNounValue:", "story", "title", text("A Secret."),
-		},
-	},
-	{
-		// note: we don't validate properties while matching
-		// weave validates them when attempting to write them.
-		test: `The age of the bottle is 42.`,
-		result: []string{
-			"AddNounName:", "bottle", "bottle",
-			"AddNounKind:", "bottle", "things",
-			"AddNounValue:", "bottle", "age", number(42),
-		},
-	},
-	{
-		// create a new noun "story teller";
-		// shouldnt match the existing noun "story."
-		test: `The age of the story teller is 42.`,
-		result: []string{
-			"AddNounName:", "story teller", "story teller",
-			"AddNounKind:", "story teller", "things",
-			"AddNounValue:", "story teller", "age", number(42),
-		},
-	},
-	{
-		// inform gets confused, but we can handle this okay
-		test: `The description of the thing called the cat is "meow."`,
-		result: []string{
-			"AddNounKind:", "cat", "things",
-			"AddNounName:", "cat", "cat",
-			"AddNounValue:", "cat", "indefinite article", text("the"),
-			"AddNounValue:", "cat", "description", text("meow."),
-		},
-	},
+
 	// ------------------------------------------------------------------------
 	// NounPropertyValue
 	// note: we don't validate the values of properties while matching;
 	// weave validates values when attempting to write them to the db.
 	// ------------------------------------------------------------------------
+	{
+		test: `The bottle has age 42 and the description "A plain glass bottle."`,
+		result: []string{
+			"AddNounName:", "bottle", "bottle",
+			"AddNounKind:", "bottle", "things",
+			"AddNounValue:", "bottle", "age", number(42),
+			"AddNounValue:", "bottle", "description", text("A plain glass bottle."),
+		},
+	},
 	{
 		// fix? mixed feelings on the trailing full-stop.
 		test: `The story has the title "{15|print_num!}".`,
@@ -1063,7 +1064,8 @@ func (p *Phrase) Test() (string, rt.Assignment, bool) {
 func (p *Phrase) Verify(haveRes []string, haveError error) (okay bool) {
 	if expectError, ok := p.result.(error); ok {
 		if haveError != nil {
-			log.Println("ok, test", p.test, haveError)
+			// optional: log when a test fails as expected
+			// log.Println("ok, test", p.test, haveError)
 			okay = true
 		} else {
 			log.Println("NG! test", p.test, "expected an error", expectError, "but succeeded with", pretty.Sprint(haveRes))

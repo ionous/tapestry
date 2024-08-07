@@ -29,6 +29,10 @@ func (in InputState) Len() int {
 	return len(in.words)
 }
 
+func (in InputState) DebugString() string {
+	return match.DebugStringify(in.words)
+}
+
 func (in InputState) Words() []match.TokenValue {
 	return in.words
 }
@@ -46,6 +50,15 @@ func (in InputState) Skip(skip int) InputState {
 		p:        in.p,
 		pronouns: in.pronouns,
 		words:    in.words[skip:],
+	}
+}
+
+// return an input state of the passed width; dropping the trailing ones.
+func (in InputState) Slice(width int) InputState {
+	return InputState{
+		p:        in.p,
+		pronouns: in.pronouns,
+		words:    in.words[:width],
 	}
 }
 

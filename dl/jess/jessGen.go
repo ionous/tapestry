@@ -24,7 +24,7 @@ func startsUpper(rs []match.TokenValue) (okay bool) {
 
 // even one name can generate several nouns ( ex. "two things" )
 // after gets called for each one.
-func genNounValues(u Scheduler, ns []DesiredNoun, after postGenOne) (err error) {
+func genNounValues(u Scheduler, ns []DesiredNoun, after postGenOne) error {
 	return u.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if e := writeNounValues(w, ns); e != nil {
 			err = e
@@ -65,26 +65,30 @@ func writeNounValues(w weaver.Weaves, ns []DesiredNoun) (err error) {
 // creates a noun as a placeholder ( from a specified Name )
 // later, a pass ensures that all placeholder nouns have been given kinds;
 // or it upgrades them to things.
-// to simplify the code, this happens even if the kind might possibly be known.
-func ensureNoun(q Query, w weaver.Weaves, ts []match.TokenValue, props *NounProperties) (ret string, created bool, err error) {
-	if noun, width := q.FindNoun(ts, nil); width > 0 {
-		ret = noun
+// FIX: why is the placeholder needed?
+func ensureNoun(q Query, w weaver.Weaves, ts []match.TokenValue, props *NounProperties) (retNoun, retKind string, created bool, err error) {
+	if noun, width := q.FindNoun(ts, &retKind); width > 0 {
+		retNoun = noun
 	} else if name, count := match.Stringify(ts); count != len(ts) {
 		out := match.DebugStringify(ts)
 		err = fmt.Errorf("not all of name consumed? %q", out)
 	} else {
 		noun := inflect.Normalize(name)
 		defaultKind := Objects
-		if ks := props.Kinds; len(ks) > 0 {
-			defaultKind = ks[0]
-			props.Kinds = ks[1:]
+		// pop the first kind, and let that override Objects
+		if props != nil {
+			if ks := props.Kinds; len(ks) > 0 {
+				defaultKind = ks[0]
+				props.Kinds = ks[1:]
+			}
 		}
 		if e := w.AddNounKind(noun, defaultKind); e != nil {
 			err = e // if duplicate, FindNoun should have triggered; so return all errors
 		} else if e := registerNames(w, noun, name); e != nil {
 			err = e
 		} else {
-			ret = noun
+			retNoun = noun
+			retKind = defaultKind
 			created = true
 		}
 	}

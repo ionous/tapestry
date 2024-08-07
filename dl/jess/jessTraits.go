@@ -1,6 +1,10 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/inflect"
+import (
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
+)
 
 // iterator helper
 func (op *Traits) Next() (ret *Traits) {
@@ -61,4 +65,21 @@ func ReduceTraits(it *Traits) (ret []string) {
 		ret = append(ret, it.Trait.String())
 	}
 	return
+}
+
+// search the input left to right for zero or matching traits;
+// regardless of the desired kind.
+func TryTraits(q JessContext, in InputState,
+	accept func(*Traits, InputState),
+	reject func(error),
+) {
+	q.Try(After(weaver.PropertyPhase), func(weaver.Weaves, rt.Runtime) {
+		var traits Traits
+		if !traits.Match(q, &in) {
+			accept(nil, in) // zero or more so no traits is okay.
+		} else {
+			accept(&traits, in)
+		}
+		return
+	}, reject)
 }

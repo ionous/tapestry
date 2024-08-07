@@ -7,13 +7,13 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// fix: maybe move this into weave as a "noun builder" to reduce duplicate queries?
-// maybe has an interface -- so that "AddKind" might be immediately adding for mock; but not for real
+// stores information about nouns during the parsing and generation process
 type DesiredNoun struct {
-	Noun    string // key ( once it has been created; or if it already exists. )
-	Aliases []string
-	Traits  []string
-	Values  []DesiredValue
+	Noun        string   // key ( once it has been created; or if it already exists. )
+	Aliases     []string // used specifically for anonymous nouns
+	Traits      []string
+	Values      []DesiredValue
+	CreatedKind string // hacking for pronouns
 	//
 	ArticleTrait      string
 	IndefiniteArticle string
@@ -80,6 +80,8 @@ func (n DesiredNoun) applyArticleValue(w weaver.Weaves) (err error) {
 	return
 }
 
+// confusing: used for anonymous nouns ( they have explicit aliases )
+// implicit aliases are written with registerNames via Name.BuildNouns()
 // assumes that the noun key is already set.
 func (n DesiredNoun) applyAliases(w weaver.Weaves) (err error) {
 	for _, a := range n.Aliases {

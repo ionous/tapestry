@@ -12,11 +12,9 @@ type NounBuilder interface {
 	BuildNouns(Query, weaver.Weaves, rt.Runtime, NounProperties) ([]DesiredNoun, error)
 }
 
-type GetDesiredNouns interface {
-	GetDesiredNouns() []DesiredNoun
+type GetActualNoun interface {
+	GetActualNoun() ActualNoun
 }
-
-type DesiredNouns []DesiredNoun
 
 // useful for dispatching a parent's call to build nouns to one of its matched children.
 // ( calls .BuildNoun() on the first non-nil builder )
@@ -42,9 +40,10 @@ func buildAnon(w weaver.Weaves, plural, singular string, props NounProperties) (
 		ret = DesiredNoun{
 			// no name and no article because, the object itself is anonymous.
 			// ( the article associated with the kind gets eaten )
-			Noun:    n,
-			Aliases: []string{singular}, // at runtime, "triangle" means "triangle-1"
-			Traits:  append([]string{CountedTrait}, props.Traits...),
+			Noun:        n,
+			CreatedKind: plural,
+			Aliases:     []string{singular}, // at runtime, "triangle" means "triangle-1"
+			Traits:      append([]string{CountedTrait}, props.Traits...),
 			Values: []DesiredValue{{
 				// to print "triangle-1" as "triangle"
 				PrintedName, text(singular, ""),

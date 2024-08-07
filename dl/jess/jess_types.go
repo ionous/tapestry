@@ -103,6 +103,58 @@ func (op *LineMatcher_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// parallel_matcher, a type of slot.
+var Zt_ParallelMatcher = typeinfo.Slot{
+	Name: "parallel_matcher",
+}
+
+// Holds a single slot.
+type ParallelMatcher_Slot struct{ Value ParallelMatcher }
+
+// Implements [typeinfo.Instance] for a single slot.
+func (*ParallelMatcher_Slot) TypeInfo() typeinfo.T {
+	return &Zt_ParallelMatcher
+}
+
+// Holds a slice of slots.
+type ParallelMatcher_Slots []ParallelMatcher
+
+// Implements [typeinfo.Instance] for a slice of slots.
+func (*ParallelMatcher_Slots) TypeInfo() typeinfo.T {
+	return &Zt_ParallelMatcher
+}
+
+// Implements [typeinfo.Repeats] for a slice of slots.
+func (op *ParallelMatcher_Slots) Repeats() bool {
+	return len(*op) > 0
+}
+
+// property_value, a type of slot.
+var Zt_PropertyValue = typeinfo.Slot{
+	Name: "property_value",
+}
+
+// Holds a single slot.
+type PropertyValue_Slot struct{ Value PropertyValue }
+
+// Implements [typeinfo.Instance] for a single slot.
+func (*PropertyValue_Slot) TypeInfo() typeinfo.T {
+	return &Zt_PropertyValue
+}
+
+// Holds a slice of slots.
+type PropertyValue_Slots []PropertyValue
+
+// Implements [typeinfo.Instance] for a slice of slots.
+func (*PropertyValue_Slots) TypeInfo() typeinfo.T {
+	return &Zt_PropertyValue
+}
+
+// Implements [typeinfo.Repeats] for a slice of slots.
+func (op *PropertyValue_Slots) Repeats() bool {
+	return len(*op) > 0
+}
+
 // One of a predefined set of determiners: the, a/n, some, our.
 // This only matches if the first letter is lowercase, or uppercase at the start of a sentence;
 // otherwise, the article gets treated as part of the name.
@@ -414,12 +466,10 @@ func (op *Noun_Slice) Repeats() bool {
 // Matches an existing noun, or if not: then something new.
 // Noun property uses this to find the best property field based on a noun's kind.
 type NamedNoun struct {
-	Pronoun      *Pronoun
-	KindCalled   *KindCalled
-	Noun         *Noun
-	Name         *Name
-	desiredNouns DesiredNouns
-	Markup       map[string]any `json:",omitempty"`
+	Pronoun    *Pronoun
+	InlineNoun *InlineNoun
+	Name       *Name
+	Markup     map[string]any `json:",omitempty"`
 }
 
 // named_noun, a type of flow.
@@ -438,9 +488,6 @@ func (op *NamedNoun) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// Ensures the command implements its specified slots.
-var _ NounBuilder = (*NamedNoun)(nil)
-
 // Holds a slice of type NamedNoun.
 type NamedNoun_Slice []NamedNoun
 
@@ -451,6 +498,80 @@ func (*NamedNoun_Slice) TypeInfo() typeinfo.T {
 
 // Implements [typeinfo.Repeats] for a slice of NamedNoun.
 func (op *NamedNoun_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// "the closed container called the box."
+type InlineNoun struct {
+	InlineKind InlineKind
+	Called     Called
+	Name       Name
+	Markup     map[string]any `json:",omitempty"`
+}
+
+// inline_noun, a type of flow.
+var Zt_InlineNoun typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*InlineNoun) TypeInfo() typeinfo.T {
+	return &Zt_InlineNoun
+}
+
+// Implements [typeinfo.Markup]
+func (op *InlineNoun) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Holds a slice of type InlineNoun.
+type InlineNoun_Slice []InlineNoun
+
+// Implements [typeinfo.Instance] for a slice of InlineNoun.
+func (*InlineNoun_Slice) TypeInfo() typeinfo.T {
+	return &Zt_InlineNoun
+}
+
+// Implements [typeinfo.Repeats] for a slice of InlineNoun.
+func (op *InlineNoun_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// unlike 'multiple_adjectives' this can only specify a single trailing kind
+type InlineKind struct {
+	Article *Article
+	Traits  *Traits
+	Kind    Kind
+	Markup  map[string]any `json:",omitempty"`
+}
+
+// inline_kind, a type of flow.
+var Zt_InlineKind typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*InlineKind) TypeInfo() typeinfo.T {
+	return &Zt_InlineKind
+}
+
+// Implements [typeinfo.Markup]
+func (op *InlineKind) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Holds a slice of type InlineKind.
+type InlineKind_Slice []InlineKind
+
+// Implements [typeinfo.Instance] for a slice of InlineKind.
+func (*InlineKind_Slice) TypeInfo() typeinfo.T {
+	return &Zt_InlineKind
+}
+
+// Implements [typeinfo.Repeats] for a slice of InlineKind.
+func (op *InlineKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -505,7 +626,7 @@ func (op *KindCalled_Slice) Repeats() bool {
 // Only one of the options here, plus possibly 'additional_names', will match.
 // Not all options are valid in all contexts.
 type MultipleNames struct {
-	desiredNouns    DesiredNouns
+	actualNoun      ActualNoun
 	Pronoun         *Pronoun
 	CountedKind     *CountedKind
 	KindCalled      *KindCalled
@@ -743,9 +864,10 @@ func (op *AdditionalKinds_Slice) Repeats() bool {
 
 // Matches the name of a field in a kind.
 type Property struct {
-	Article *Article
-	Matched string
-	Markup  map[string]any `json:",omitempty"`
+	Article   *Article
+	Matched   Matched
+	fieldName FieldName
+	Markup    map[string]any `json:",omitempty"`
 }
 
 // property, a type of flow.
@@ -1423,14 +1545,13 @@ func (op *AdditionalAdjectives_Slice) Repeats() bool {
 // ( indicated with "are", versus "is" )
 // ex. The implications of carrying are "not worn" and "portable".
 type PropertyNounValue struct {
-	Article     *Article
-	Property    Property
-	Of          Words
-	NamedNoun   NamedNoun
-	Are         Are
-	SingleValue *SingleValue
-	QuotedTexts *QuotedTexts
-	Markup      map[string]any `json:",omitempty"`
+	Article       *Article
+	Property      Property
+	Of            Words
+	NamedNoun     NamedNoun
+	Are           Are
+	PropertyValue PropertyValue
+	Markup        map[string]any `json:",omitempty"`
 }
 
 // property_noun_value, a type of flow.
@@ -1450,7 +1571,7 @@ func (op *PropertyNounValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ LineMatcher = (*PropertyNounValue)(nil)
+var _ ParallelMatcher = (*PropertyNounValue)(nil)
 
 // Holds a slice of type PropertyNounValue.
 type PropertyNounValue_Slice []PropertyNounValue
@@ -1493,9 +1614,6 @@ func (op *NounPropertyValue) GetMarkup(ensure bool) map[string]any {
 	}
 	return op.Markup
 }
-
-// Ensures the command implements its specified slots.
-var _ LineMatcher = (*NounPropertyValue)(nil)
 
 // Holds a slice of type NounPropertyValue.
 type NounPropertyValue_Slice []NounPropertyValue
@@ -2709,30 +2827,66 @@ func init() {
 			Optional: true,
 			Type:     &Zt_Pronoun,
 		}, {
-			Name:     "kind_called",
-			Label:    "kind_called",
+			Name:     "inline_noun",
+			Label:    "inline_noun",
 			Optional: true,
-			Type:     &Zt_KindCalled,
-		}, {
-			Name:     "noun",
-			Label:    "noun",
-			Optional: true,
-			Type:     &Zt_Noun,
+			Type:     &Zt_InlineNoun,
 		}, {
 			Name:     "name",
 			Label:    "name",
 			Optional: true,
 			Type:     &Zt_Name,
-		}, {
-			Name:    "desired_nouns",
-			Label:   "desired_nouns",
-			Private: true,
 		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_NounBuilder,
-		},
 		Markup: map[string]any{
 			"--": []string{"Matches an existing noun, or if not: then something new.", "Noun property uses this to find the best property field based on a noun's kind."},
+		},
+	}
+	Zt_InlineNoun = typeinfo.Flow{
+		Name: "inline_noun",
+		Lede: "inline_noun",
+		Terms: []typeinfo.Term{{
+			Name:  "inline_kind",
+			Label: "inline_kind",
+			Type:  &Zt_InlineKind,
+		}, {
+			Name:  "called",
+			Label: "called",
+			Type:  &Zt_Called,
+		}, {
+			Name:  "name",
+			Label: "name",
+			Type:  &Zt_Name,
+		}},
+		Markup: map[string]any{
+			"--": "\"the closed container called the box.\"",
+		},
+	}
+	Zt_InlineKind = typeinfo.Flow{
+		Name: "inline_kind",
+		Lede: "inline_kind",
+		Terms: []typeinfo.Term{{
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:     "traits",
+			Label:    "traits",
+			Optional: true,
+			Markup: map[string]any{
+				"--": []string{"one or more traits, with or without comma separators.", "ex. closed transparent"},
+			},
+			Type: &Zt_Traits,
+		}, {
+			Name:  "kind",
+			Label: "kind",
+			Markup: map[string]any{
+				"--": "an existing kind",
+			},
+			Type: &Zt_Kind,
+		}},
+		Markup: map[string]any{
+			"--": "unlike 'multiple_adjectives' this can only specify a single trailing kind",
 		},
 	}
 	Zt_KindCalled = typeinfo.Flow{
@@ -2770,8 +2924,8 @@ func init() {
 		Name: "multiple_names",
 		Lede: "multiple_names",
 		Terms: []typeinfo.Term{{
-			Name:    "desired_nouns",
-			Label:   "desired_nouns",
+			Name:    "actual_nouns",
+			Label:   "actual_nouns",
 			Private: true,
 		}, {
 			Name:     "pronoun",
@@ -2963,7 +3117,11 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
+		}, {
+			Name:    "field_name",
+			Label:   "field_name",
+			Private: true,
 		}},
 		Markup: map[string]any{
 			"--": "Matches the name of a field in a kind.",
@@ -3388,18 +3546,12 @@ func init() {
 			Label: "are",
 			Type:  &Zt_Are,
 		}, {
-			Name:     "single_value",
-			Label:    "single_value",
-			Optional: true,
-			Type:     &Zt_SingleValue,
-		}, {
-			Name:     "quoted_texts",
-			Label:    "quoted_texts",
-			Optional: true,
-			Type:     &Zt_QuotedTexts,
+			Name:  "property_value",
+			Label: "property_value",
+			Type:  &Zt_PropertyValue,
 		}},
 		Slots: []*typeinfo.Slot{
-			&Zt_LineMatcher,
+			&Zt_ParallelMatcher,
 		},
 		Markup: map[string]any{
 			"--": []string{"Assigns a default value to a noun.", "ex.", "  The description of the pen is \"mightier than the sword.\"", "", "As a special case this also allows a list of quoted text.", "( indicated with \"are\", versus \"is\" )", "ex. The implications of carrying are \"not worn\" and \"portable\"."},
@@ -4094,6 +4246,8 @@ var z_slot_list = []*typeinfo.Slot{
 	&Zt_Matched,
 	&Zt_NounBuilder,
 	&Zt_LineMatcher,
+	&Zt_ParallelMatcher,
+	&Zt_PropertyValue,
 }
 
 // A list of all flows in this this package.
@@ -4108,6 +4262,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Name,
 	&Zt_Noun,
 	&Zt_NamedNoun,
+	&Zt_InlineNoun,
+	&Zt_InlineKind,
 	&Zt_KindCalled,
 	&Zt_MultipleNames,
 	&Zt_AdditionalNames,
@@ -4173,6 +4329,8 @@ func Register(reg func(any)) {
 	reg((*Name)(nil))
 	reg((*Noun)(nil))
 	reg((*NamedNoun)(nil))
+	reg((*InlineNoun)(nil))
+	reg((*InlineKind)(nil))
 	reg((*KindCalled)(nil))
 	reg((*MultipleNames)(nil))
 	reg((*AdditionalNames)(nil))
@@ -4249,6 +4407,11 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	4143979682086652670:  (*CommaAndOr)(nil),               /* CommaAndOr matched: */
 	11748118905044300293: (*Direction)(nil),                /* Direction text: */
 	15872175738337217373: (*DirectionOfLinking)(nil),       /* DirectionOfLinking direction:fromOf:linking: */
+	9389151571921915078:  (*InlineKind)(nil),               /* InlineKind article:kind: */
+	7954607523285254761:  (*InlineKind)(nil),               /* InlineKind article:traits:kind: */
+	6158263872927378170:  (*InlineKind)(nil),               /* InlineKind kind: */
+	4458816180434663957:  (*InlineKind)(nil),               /* InlineKind traits:kind: */
+	14001114425011853343: (*InlineNoun)(nil),               /* InlineNoun inlineKind:called:name: */
 	7200467591641800230:  (*KindCalled)(nil),               /* KindCalled kind:called:name: */
 	18330146863789594065: (*KindCalled)(nil),               /* KindCalled traits:kind:called:name: */
 	1268488188857917463:  (*Linking)(nil),                  /* Linking */
@@ -4285,6 +4448,14 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16041644570033386905: (*MultipleKinds)(nil),            /* MultipleKinds traits:article:matched:additionalKinds: */
 	515189789689999091:   (*MultipleKinds)(nil),            /* MultipleKinds traits:matched: */
 	3954908539177505437:  (*MultipleKinds)(nil),            /* MultipleKinds traits:matched:additionalKinds: */
+	4129327877806922250:  (*NamedNoun)(nil),                /* NamedNoun */
+	15674858480040079915: (*NamedNoun)(nil),                /* NamedNoun inlineNoun: */
+	7587220412346550494:  (*NamedNoun)(nil),                /* NamedNoun inlineNoun:name: */
+	18262445508219665061: (*NamedNoun)(nil),                /* NamedNoun name: */
+	8155668028885339465:  (*NamedNoun)(nil),                /* NamedNoun pronoun: */
+	16464286730426898134: (*NamedNoun)(nil),                /* NamedNoun pronoun:inlineNoun: */
+	3912094578928834749:  (*NamedNoun)(nil),                /* NamedNoun pronoun:inlineNoun:name: */
+	13719488748761627272: (*NamedNoun)(nil),                /* NamedNoun pronoun:name: */
 	8736862563783456239:  (*NewTrait)(nil),                 /* NewTrait matched: */
 	8812100125409583293:  (*NewTrait)(nil),                 /* NewTrait matched:newTrait: */
 	10988987173186478526: (*Pronoun)(nil),                  /* Pronoun matched: */
@@ -4438,36 +4609,14 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7797942681300387677:  (*MultipleNames)(nil),            /* noun_builder=MultipleNames pronoun:name:additionalNames: */
 	16595966641928411799: (*Name)(nil),                     /* noun_builder=Name article:matched: */
 	4672836465996832923:  (*Name)(nil),                     /* noun_builder=Name matched: */
-	18272900946848200057: (*NamedNoun)(nil),                /* noun_builder=NamedNoun */
-	2164196975237065714:  (*NamedNoun)(nil),                /* noun_builder=NamedNoun kindCalled: */
-	11405655282247465433: (*NamedNoun)(nil),                /* noun_builder=NamedNoun kindCalled:name: */
-	14533451630974206692: (*NamedNoun)(nil),                /* noun_builder=NamedNoun kindCalled:noun: */
-	1953553467028742431:  (*NamedNoun)(nil),                /* noun_builder=NamedNoun kindCalled:noun:name: */
-	15792878411416494446: (*NamedNoun)(nil),                /* noun_builder=NamedNoun name: */
-	4609637404391733803:  (*NamedNoun)(nil),                /* noun_builder=NamedNoun noun: */
-	12436910703333794014: (*NamedNoun)(nil),                /* noun_builder=NamedNoun noun:name: */
-	1305998967661273620:  (*NamedNoun)(nil),                /* noun_builder=NamedNoun pronoun: */
-	17186940015789773683: (*NamedNoun)(nil),                /* noun_builder=NamedNoun pronoun:kindCalled: */
-	16608498298953455014: (*NamedNoun)(nil),                /* noun_builder=NamedNoun pronoun:kindCalled:name: */
-	15653900158553267987: (*NamedNoun)(nil),                /* noun_builder=NamedNoun pronoun:kindCalled:noun: */
-	4798320504911901254:  (*NamedNoun)(nil),                /* noun_builder=NamedNoun pronoun:kindCalled:noun:name: */
-	7839223505009909583:  (*NamedNoun)(nil),                /* noun_builder=NamedNoun pronoun:name: */
-	13596338099683082:    (*NamedNoun)(nil),                /* noun_builder=NamedNoun pronoun:noun: */
-	3835299996712127377:  (*NamedNoun)(nil),                /* noun_builder=NamedNoun pronoun:noun:name: */
 	2480790538618820002:  (*NamesAreLikeVerbs)(nil),        /* line_matcher=NamesAreLikeVerbs names:are:adjectives: */
 	1188910158540681012:  (*NamesAreLikeVerbs)(nil),        /* line_matcher=NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
 	13957738718698792135: (*NamesVerbNames)(nil),           /* line_matcher=NamesVerbNames names:are:verb:otherNames: */
 	4465529434619879510:  (*Noun)(nil),                     /* noun_builder=Noun article:matched: */
 	2598335774687055558:  (*Noun)(nil),                     /* noun_builder=Noun matched: */
 	11952309116369055139: (*NounPropertyValue)(nil),        /* line_matcher=NounPropertyValue namedNoun:has:propertyValues: */
-	13355966762972280532: (*PropertyNounValue)(nil),        /* line_matcher=PropertyNounValue article:property:of:namedNoun:are: */
-	16985260655146966950: (*PropertyNounValue)(nil),        /* line_matcher=PropertyNounValue article:property:of:namedNoun:are:quotedTexts: */
-	12454917053183108577: (*PropertyNounValue)(nil),        /* line_matcher=PropertyNounValue article:property:of:namedNoun:are:singleValue: */
-	13401603458416388911: (*PropertyNounValue)(nil),        /* line_matcher=PropertyNounValue article:property:of:namedNoun:are:singleValue:quotedTexts: */
-	506834062808246924:   (*PropertyNounValue)(nil),        /* line_matcher=PropertyNounValue property:of:namedNoun:are: */
-	16734417498401866958: (*PropertyNounValue)(nil),        /* line_matcher=PropertyNounValue property:of:namedNoun:are:quotedTexts: */
-	10227198874392768393: (*PropertyNounValue)(nil),        /* line_matcher=PropertyNounValue property:of:namedNoun:are:singleValue: */
-	3755383019791636263:  (*PropertyNounValue)(nil),        /* line_matcher=PropertyNounValue property:of:namedNoun:are:singleValue:quotedTexts: */
+	15101359153249610887: (*PropertyNounValue)(nil),        /* parallel_matcher=PropertyNounValue article:property:of:namedNoun:are:propertyValue: */
+	4416132831794334839:  (*PropertyNounValue)(nil),        /* parallel_matcher=PropertyNounValue property:of:namedNoun:are:propertyValue: */
 	11079814442419901472: (*TimedRule)(nil),                /* line_matcher=TimedRule rulePrefix:pattern:ruleName:subAssignment: */
 	11138780886479969949: (*TimedRule)(nil),                /* line_matcher=TimedRule rulePrefix:pattern:ruleSuffix:ruleName:subAssignment: */
 	16788547542883751782: (*TimedRule)(nil),                /* line_matcher=TimedRule rulePrefix:pattern:ruleSuffix:subAssignment: */

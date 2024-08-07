@@ -220,3 +220,40 @@ func applyVerb(ctx Context, verbName string, lhs, rhs []DesiredNoun) (err error)
 		return
 	})
 }
+
+// try to apply one of the passed kinds to each of the desired nouns
+// the first one not to generate a conflict succeeds.
+func generateFallbacks(u Scheduler, ns []DesiredNoun, kinds ...string) error {
+	return u.Schedule(weaver.FallbackPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	Loop:
+		for _, n := range ns {
+			for _, k := range kinds {
+				if e := w.AddNounKind(n.Noun, k); e == nil || errors.Is(e, weaver.ErrDuplicate) {
+					err = nil // applying a duplicate kind is considered a success
+					break Loop
+				} else {
+					err = e // keep one of the conflicts; only cleared on success
+					if !errors.Is(e, weaver.ErrConflict) {
+						break Loop // some other error is an immediate problem
+					}
+				}
+			}
+		}
+		return
+	})
+}
+
+// here, we don't care if we aren't able to set "Things"
+// this is really and truly a "if nothing else applied" situation.
+func tryAsThings(u Scheduler, ns []DesiredNoun) (err error) {
+	return u.Schedule(weaver.FallbackPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		for _, n := range ns {
+			e := w.AddNounKind(n.Noun, Things)
+			if e != nil && !errors.Is(e, weaver.ErrConflict) && !errors.Is(e, weaver.ErrDuplicate) {
+				err = e
+				break
+			}
+		}
+		return
+	})
+}

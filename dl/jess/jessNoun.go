@@ -10,7 +10,11 @@ func (op *Noun) BuildNouns(_ Query, w weaver.Weaves, _ rt.Runtime, props NounPro
 	if e := writeKinds(w, n, props.Kinds); e != nil {
 		err = e
 	} else {
-		ret = []DesiredNoun{{Noun: n, Traits: props.Traits}}
+		var k string
+		if len(props.Kinds) > 0 {
+			k = props.Kinds[0]
+		}
+		ret = []DesiredNoun{{Noun: n, Traits: props.Traits, CreatedKind: k}}
 	}
 	return
 }
