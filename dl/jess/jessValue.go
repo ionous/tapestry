@@ -10,11 +10,28 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/template"
 	"git.sr.ht/~ionous/tapestry/template/types"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // --------------------------------------------------------------
 // SingleValue
 // --------------------------------------------------------------
+
+// match and apply a value
+func TrySingleValue(q JessContext, in InputState,
+	an ActualNoun,
+	accept func(SingleValue, InputState),
+	reject func(error),
+) {
+	q.Try(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) {
+		var sv SingleValue
+		if !sv.Match(q, &in) {
+			reject(FailedMatch{"didn't understand the value", in})
+		} else {
+			accept(sv, in)
+		}
+	}, reject)
+}
 
 // panics if unmatched
 func (op *SingleValue) Assignment() (ret rt.Assignment) {
@@ -33,6 +50,8 @@ func (op *SingleValue) Assignment() (ret rt.Assignment) {
 }
 
 func (op *SingleValue) Match(q Query, input *InputState) (okay bool) {
+	// alt: could rework each of these as implementing a "single_value" interface
+	// ( well: probably single_value and property_value )
 	if next := *input; //
 	Optional(q, &next, &op.QuotedText) ||
 		Optional(q, &next, &op.MatchingNum) ||

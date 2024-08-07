@@ -514,10 +514,7 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "property_noun_value"
         - "parallel_matcher"
-        - - Term:optional:
-              - "article"
-              - true
-          - Term: "property"
+        - - Term: "property"
           - # the word "of"
             Term:type:
               - "of"
@@ -552,12 +549,8 @@ Spec:requires:contains:
       # each pair separated by ands ( or commas. )
       Flow:terms:
         - "property_values"
-        - - Term:optional:
-              - "article"
-              - true
-          - Term: "property"
-          - # using the word "of" sometimes looks better.
-            # ( i think... )
+        - - Term: "property"
+          - # using the word "of" sometimes looks better. ( i think... )
             Term:type:optional:
               - "of"
               - "words"

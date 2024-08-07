@@ -16,6 +16,7 @@ type FieldName = string
 func TryProperty(q JessContext, in InputState, kind string,
 	accept func(Property, InputState), reject func(error),
 ) {
+	// the article is optional, even at the start of a sentence where grammar often demands it.
 	TryArticle(q, in, func(article *Article, next InputState) {
 		q.Try(After(weaver.PropertyPhase), func(w weaver.Weaves, run rt.Runtime) {
 			if field, width := q.FindField(kind, next.words); width > 0 {

@@ -87,7 +87,6 @@ func keywordEquals(m Matched, hash uint64) bool {
 	return len(m) == 1 && m[0].Hash() == hash
 }
 
-// TODO: check boundaries
 // expects words before and after the split
 func keywordSplit(in InputState, hashes ...uint64) (ret split, okay bool) {
 	if start := scanUntil(in.words, hashes...); start > 0 {

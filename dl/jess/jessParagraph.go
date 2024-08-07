@@ -92,18 +92,18 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 			el.StartParallelMatch(p, q, u) // launch parallel matches
 		}
 	}
-	for i, n := range unmatched { // n: is a sentence of tokens
+	for i, el := range unmatched {
 		_ = i // i is useful for debugging.
-		if n.matched != nil {
+		if el.matched != nil {
 			continue // parallel matched this.
 		}
 		var best bestMatch
-		line := InputState{p: p, words: n.words, pronouns: p.pronouns.nextPronoun()}
+		line := InputState{p: p, words: el.words, pronouns: p.pronouns.nextPronoun()}
 		// match a sentence,
 		// and if matched Generate/Schedule it for weaving database info
 		if matchSentence(z, q, line, &best) {
 			// track this match
-			n.matched = best.match
+			el.matched = best.match
 			//
 			source := line.Source()
 			// update the paragraph's context so other sentences can refer to it.
@@ -119,10 +119,11 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 			// if it didn't match; retry in a later phase
 			// ( but error if we've gone through all the phases without success )
 			if z == weaver.NextPhase {
-				err = fmt.Errorf("failed to match %s %s %q", p.File, line.Source().ErrorString(), Matched(n.words).DebugString())
+				e := fmt.Errorf("failed to match %s %s %q", p.File, line.Source().ErrorString(), Matched(el.words).DebugString())
+				err = errors.Join(append([]error{e}, el.errs...)...)
 				break
 			} else {
-				unmatched[retry] = n
+				unmatched[retry] = el
 				retry++
 			}
 		}
@@ -138,8 +139,10 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 func (el *Line) StartParallelMatch(p *Paragraph, q Query, u Scheduler) {
 	jc := JessContext{q, u}
 	in := InputState{p: p, words: el.words}
-	// field "of" noun {are} value
+	// property of noun is/are value.
 	TryPropertyNounValue(jc, in, el.store, el.reject)
+	// noun has property of value.
+	TryNounPropertyValue(jc, in, el.store, el.reject)
 }
 
 // fix? maybe there's a difference b/t FailedMatch and other errors?

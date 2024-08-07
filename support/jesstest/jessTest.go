@@ -59,17 +59,6 @@ var Phrases = []Phrase{
 			"AddNounValue:", "cat", "description", text("meow."),
 		},
 	},
-	// ----------------
-	// misc
-	// ----------------
-	{
-		// quoted nouns for exact names
-		test: `The "bottle" is a container.`,
-		result: []string{
-			"AddNounKind:", "bottle", "containers",
-			"AddNounName:", "bottle", "bottle",
-		},
-	},
 	// ------------------------------------------------------------------------
 	// TimedRule
 	// ( storing is one of the predefined patterns. )
@@ -877,6 +866,15 @@ var Phrases = []Phrase{
 	// ------------------------------------------------------------------------
 	// NamesAreLikeVerbs
 	// ------------------------------------------------------------------------
+	{
+		// quoted nouns for exact names.
+		// tbd: if these should generate name parts.
+		test: `The "price is right" is a container.`,
+		result: []string{
+			"AddNounKind:", "price is right", "containers",
+			"AddNounName:", "price is right", "price is right",
+		},
+	},
 	{
 		// simple trait:
 		test: `The bottle is closed.`,

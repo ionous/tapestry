@@ -13,5 +13,5 @@ type FailedMatch struct {
 
 func (m FailedMatch) Error() string {
 	// fix: add source
-	return fmt.Sprintf("%s matching %s", m.reason, match.DebugStringify(m.input.words))
+	return fmt.Sprintf("%s when matching %q", m.reason, match.DebugStringify(m.input.words))
 }

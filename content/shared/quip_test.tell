@@ -1,0 +1,19 @@
+---
+- Define scene:requires:
+  - "quip test"
+  - - "tapestry"
+After discussing it:
+  - Set:value:
+      - "@speaker.greeting"
+      - FromText: "Hello again!"
+
+The quip called "Hello again" has the speaker Alien Boy.
+It has reply `"Hello{shuffle} again{or}{end}," the Alien Boy says.`
+
+The quip called "Later, old boy" has the speaker Alien Boy.
+It has remark, `"Oh, sorry," Alice says. "I'll be back."`.
+After discussing it:
+  - Departing actor: 
+      FromText: 
+          "#player"
+

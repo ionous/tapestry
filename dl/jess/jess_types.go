@@ -1545,7 +1545,6 @@ func (op *AdditionalAdjectives_Slice) Repeats() bool {
 // ( indicated with "are", versus "is" )
 // ex. The implications of carrying are "not worn" and "portable".
 type PropertyNounValue struct {
-	Article       *Article
 	Property      Property
 	Of            Words
 	NamedNoun     NamedNoun
@@ -1631,7 +1630,6 @@ func (op *NounPropertyValue_Slice) Repeats() bool {
 // Matches one or more pairs of property and value,
 // each pair separated by ands ( or commas. )
 type PropertyValues struct {
-	Article                  *Article
 	Property                 Property
 	Of                       *Words
 	Value                    SingleValue
