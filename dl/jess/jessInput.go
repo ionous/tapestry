@@ -7,10 +7,9 @@ import (
 
 // helper for line matching
 type InputState struct {
-	p        *Paragraph // helpful for debugging
-	pronouns pronounSource
-	// fix? change to a "reader" ( pull ) rather than pre-process?
-	words []match.TokenValue // the current line from the paragraph
+	p     *Paragraph
+	line  int
+	words []match.TokenValue // the remainder of the line being parsed
 }
 
 func (in InputState) Source() (ret compact.Source) {
@@ -47,18 +46,18 @@ func (in InputState) GetNext(t match.Token) (ret match.TokenValue, okay bool) {
 // return an input state that is the passed number of words after this one.
 func (in InputState) Skip(skip int) InputState {
 	return InputState{
-		p:        in.p,
-		pronouns: in.pronouns,
-		words:    in.words[skip:],
+		p:     in.p,
+		line:  in.line,
+		words: in.words[skip:],
 	}
 }
 
 // return an input state of the passed width; dropping the trailing ones.
 func (in InputState) Slice(width int) InputState {
 	return InputState{
-		p:        in.p,
-		pronouns: in.pronouns,
-		words:    in.words[:width],
+		p:     in.p,
+		line:  in.line,
+		words: in.words[:width],
 	}
 }
 

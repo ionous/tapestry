@@ -11,7 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-func (op *CalledName) Match(q Query, input *InputState) (okay bool) {
+func (op *CalledName) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Called.Match(q, &next) &&
 		op.Name.Match(AddContext(q, CheckIndefiniteArticles), &next) {
@@ -32,7 +32,7 @@ func (op *KindsHaveProperties) Phase() weaver.Phase {
 	return weaver.PropertyPhase
 }
 
-func (op *KindsHaveProperties) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *KindsHaveProperties) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	op.Kind.Match(q, &next) &&
 		op.Have.Match(q, &next, keywords.Have, keywords.Has) &&
@@ -77,7 +77,7 @@ func (op *KindsHaveProperties) Weave(w weaver.Weaves, run rt.Runtime) (err error
 	return
 }
 
-func (op *PropertyType) Match(q Query, input *InputState) (okay bool) {
+func (op *PropertyType) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.matchPrimitive(&next) ||
 		Optional(q, &next, &op.Kind) {

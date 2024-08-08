@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-func (op *CountedKind) Match(q Query, input *InputState) (okay bool) {
+func (op *CountedKind) Match(q JessContext, input *InputState) (okay bool) {
 	if start := *input; //
 	Optional(q, &start, &op.Article) || true {
 		if next := start; //
@@ -22,7 +22,7 @@ func (op *CountedKind) Match(q Query, input *InputState) (okay bool) {
 // generates n initial instances (and their aliases, cause why not.)
 // delays the desired traits and additional kinds
 // ( tbd if that makes sense or not )
-func (op *CountedKind) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *CountedKind) BuildNouns(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if plural, e := op.Kind.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {

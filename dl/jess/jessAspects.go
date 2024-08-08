@@ -18,7 +18,7 @@ func (op *AspectsAreTraits) Phase() weaver.Phase {
 
 // the colors are....
 // ( see also KindsOf )
-func (op *AspectsAreTraits) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *AspectsAreTraits) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	next := line //
 	Optional(q, &next, &op.Aspect.Article)
 	// aspects are stored as *singular*

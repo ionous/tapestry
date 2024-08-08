@@ -14,7 +14,7 @@ func (op *Name) GetNormalizedName() (string, error) {
 // names are often potential nouns;
 // this helper treats them as such,
 // ensuring that they exist in the database.
-func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *Name) BuildNouns(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if n, e := op.BuildNoun(q, w, props); e != nil {
 		err = e
 	} else {
@@ -25,7 +25,7 @@ func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounP
 
 // note: this doesn't apply values ( nor articles )
 // it stores them until writeNounValues ( left until after the kind of the noun is firmly established )
-func (op *Name) BuildNoun(q Query, w weaver.Weaves, props NounProperties) (ret DesiredNoun, err error) {
+func (op *Name) BuildNoun(q JessContext, w weaver.Weaves, props NounProperties) (ret DesiredNoun, err error) {
 	if noun, kind, created, e := ensureNoun(q, w, op.Matched, &props); e != nil {
 		err = e
 	} else if e := writeKinds(w, noun, props.Kinds); e != nil {
@@ -40,7 +40,7 @@ func (op *Name) BuildNoun(q Query, w weaver.Weaves, props NounProperties) (ret D
 	return
 }
 
-func (op *Name) Match(q Query, input *InputState) (okay bool) {
+func (op *Name) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
 		op.matchName(&next) {

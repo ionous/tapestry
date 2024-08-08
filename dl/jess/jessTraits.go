@@ -14,7 +14,7 @@ func (op *Traits) Next() (ret *Traits) {
 	return
 }
 
-func (op *AdditionalTraits) Match(q Query, input *InputState) (okay bool) {
+func (op *AdditionalTraits) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.CommaAnd) || true) &&
 		op.Traits.Match(q, &next) {
@@ -27,7 +27,7 @@ func (op *Trait) String() string {
 	return inflect.Normalize(op.Matched)
 }
 
-func (op *Trait) Match(q Query, input *InputState) (okay bool) {
+func (op *Trait) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
 		op.matchTrait(q, &next) {
@@ -36,7 +36,7 @@ func (op *Trait) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Trait) matchTrait(q Query, input *InputState) (okay bool) {
+func (op *Trait) matchTrait(q JessContext, input *InputState) (okay bool) {
 	if str, width := q.FindTrait(input.Words()); width > 0 {
 		op.Matched, *input, okay = str, input.Skip(width), true
 	}
@@ -45,7 +45,7 @@ func (op *Trait) matchTrait(q Query, input *InputState) (okay bool) {
 
 // its interesting that we dont have to store anything else
 // all the trait info is in this... even additional traits.
-func (op *Traits) Match(q Query, input *InputState) (okay bool) {
+func (op *Traits) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Trait.Match(q, &next) {
 		Optional(q, &next, &op.AdditionalTraits)

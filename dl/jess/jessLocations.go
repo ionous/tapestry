@@ -14,7 +14,7 @@ func (op *MapLocations) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
 
-func (op *MapLocations) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *MapLocations) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	op.Linking.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
@@ -30,7 +30,7 @@ func (op *MapLocations) GetOtherLocations() DirectIt {
 	return IterateDirections(&op.DirectionOfLinking, op.AdditionalDirections)
 }
 
-func (op *MapLocations) Generate(ctx Context) error {
+func (op *MapLocations) Generate(ctx JessContext) error {
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if links, e := op.generateLinks(ctx, w, run); e != nil {
 			err = e
@@ -48,7 +48,7 @@ func (op *MapLocations) Generate(ctx Context) error {
 	})
 }
 
-func (op *MapLocations) generateLinks(q Query, w weaver.Weaves, run rt.Runtime) (ret []*jessLink, err error) {
+func (op *MapLocations) generateLinks(q JessContext, w weaver.Weaves, run rt.Runtime) (ret []*jessLink, err error) {
 	if room, e := op.Linking.BuildNoun(q, w, run, NounProperties{}); e != nil {
 		err = e
 	} else {

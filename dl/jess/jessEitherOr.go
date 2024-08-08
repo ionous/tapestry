@@ -14,7 +14,7 @@ func (op *KindsAreEither) Phase() weaver.Phase {
 	return weaver.PropertyPhase
 }
 
-func (op *KindsAreEither) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *KindsAreEither) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	op.Kind.Match(q, &next) &&
 		op.matchEither(&next) &&
@@ -93,7 +93,7 @@ func normalizeTraits(ts NewTrait) (ret []string, err error) {
 var statusToken = match.TokenValue{Token: match.String, Value: "status"}
 var canBeEither = match.PanicSpans("can be", "are either", "is either", "can be either")
 
-func (op *NewTrait) Match(q Query, input *InputState) (okay bool) {
+func (op *NewTrait) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; next.Len() > 0 {
 		// look for 1) the end of the string, or 2) the separator "or"
 		if firstSpan := scanUntil(next.words, keywords.Or); firstSpan < 0 {

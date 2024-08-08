@@ -28,7 +28,7 @@ func (op *MultipleNames) GetTraits() (ret *Traits) {
 }
 
 // checks Query flags to control matching
-func (op *MultipleNames) Match(q Query, input *InputState) (okay bool) {
+func (op *MultipleNames) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input;                   //
 	Optional(q, &next, &op.Pronoun) || ( //
 	//
@@ -59,7 +59,7 @@ func (op *MultipleNames) GetActualNoun() ActualNoun {
 }
 
 // implements NounBuilder by calling BuildNouns on all matched names
-func (op *MultipleNames) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *MultipleNames) BuildNouns(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	for at := op; at != nil; at = at.Next() {
 		if ns, e := buildNounsFrom(q, w, run, props,
 			nillable(at.Pronoun),
@@ -87,7 +87,7 @@ func (op *MultipleNames) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, pr
 	return
 }
 
-func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
+func (op *AdditionalNames) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
 		op.Names.Match(q, &next) {

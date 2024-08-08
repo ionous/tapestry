@@ -13,7 +13,7 @@ import (
 //
 // note: capitalized articles in the middle of a sentence are treated as part of the name.
 // ex. "a man called The Vampire" assumes The Vampire is proper named."
-func (op *Article) Match(q Query, input *InputState) (okay bool) {
+func (op *Article) Match(q JessContext, input *InputState) (okay bool) {
 	ws := input.Words()
 	// match: the, a, some, etc. ( case insensitive )
 	if m, width := match.FindCommonArticles(ws); width > 0 {

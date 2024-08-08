@@ -52,12 +52,7 @@ Spec:requires:contains:
       Flow:terms:
         - "pronoun"
         - - Term: "matched"
-          - # the database info that matched
-            Term:type:private:
-              - "proref"
-              - "pronoun_reference"
-              - true
-
+          
     - # Matches the word "called".
       Flow:terms:
         - "called"
@@ -311,7 +306,7 @@ Spec:requires:contains:
         - - Term: "text"
 
     - Slot: "line_matcher"
-    - Slot: "parallel_matcher"
+    - Slot: "promise_matcher"
 
     - # This is the union of all possible line matchers.
       # For any given plain text sentence,
@@ -513,7 +508,7 @@ Spec:requires:contains:
       # ex. The implications of carrying are "not worn" and "portable".
       Flow:slots:terms:
         - "property_noun_value"
-        - "parallel_matcher"
+        - "promise_matcher"
         - - Term: "property"
           - # the word "of"
             Term:type:
@@ -531,7 +526,7 @@ Spec:requires:contains:
       # like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
       Flow:slots:terms:
         - "noun_property_value"
-        - "parallel_matcher"
+        - "promise_matcher"
         - # tries to match an existing noun, or generates one.
           # use the matched noun to guide property matching.
           # 

@@ -19,7 +19,7 @@ func (op *Kind) Validate(ks ...kindsOf.Kinds) (ret string, err error) {
 	return
 }
 
-func (op *Kind) Match(q Query, input *InputState) (okay bool) {
+func (op *Kind) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
 		op.matchKind(q, &next) {
@@ -28,7 +28,7 @@ func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
+func (op *Kind) matchKind(q JessContext, input *InputState) (okay bool) {
 	var k kindsOf.Kinds
 	if m, width := q.FindKind(input.Words(), &k); width > 0 && filterKind(q, k) {
 		op.actualKind = ActualKind{m, k}
@@ -40,7 +40,7 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 
 // if no specific filter is set, then all kinds can match;
 // otherwise one of the specific kinds must match.
-func filterKind(q Query, k kindsOf.Kinds) (okay bool) {
+func filterKind(q JessContext, k kindsOf.Kinds) (okay bool) {
 	aspects, kinds := matchKindsOfAspects(q), matchKindsOfKinds(q)
 	if !aspects && !kinds {
 		okay = true
@@ -52,7 +52,7 @@ func filterKind(q Query, k kindsOf.Kinds) (okay bool) {
 }
 
 // anonymous kinds: "the supporter"
-func (op *Kind) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *Kind) BuildNouns(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if plural, e := op.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {

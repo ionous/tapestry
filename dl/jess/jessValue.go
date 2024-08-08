@@ -49,7 +49,7 @@ func (op *SingleValue) Assignment() (ret rt.Assignment) {
 	return
 }
 
-func (op *SingleValue) Match(q Query, input *InputState) (okay bool) {
+func (op *SingleValue) Match(q JessContext, input *InputState) (okay bool) {
 	// alt: could rework each of these as implementing a "single_value" interface
 	// ( well: probably single_value and property_value )
 	if next := *input; //
@@ -95,7 +95,7 @@ func (op *QuotedText) TextEval() (ret rt.TextEval) {
 // match combines double quoted and backtick text:
 // generating a leading "QuotedText" indicator
 // and a single "word" containing the entire quoted text.
-func (op *QuotedText) Match(q Query, input *InputState) (okay bool) {
+func (op *QuotedText) Match(q JessContext, input *InputState) (okay bool) {
 	if v, ok := input.GetNext(match.Quoted); ok {
 		op.Matched = v.String()
 		*input, okay = input.Skip(1), true
@@ -112,7 +112,7 @@ func (op *MatchingNum) Assignment() rt.Assignment {
 }
 
 // matches a natural number in words, or a literal natural number.
-func (op *MatchingNum) Match(q Query, input *InputState) (okay bool) {
+func (op *MatchingNum) Match(q JessContext, input *InputState) (okay bool) {
 	if ws := input.Words(); len(ws) > 0 && ws[0].Token == match.String {
 		word := ws[0].String()
 		if v, ok := WordsToNum(word); ok && v > 0 {

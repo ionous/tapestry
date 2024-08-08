@@ -18,28 +18,16 @@ const (
 	LogMatches
 )
 
-// adds flags to the query ( via or )
-func AddContext(q Query, flags int) (ret Query) {
-	if ctx, ok := q.(queryContext); ok {
-		// since the query context isnt a reference
-		// this creates new flags for the scope
-		ctx.flags |= flags
-		ret = ctx
-	} else {
-		ret = queryContext{Query: q, flags: flags}
-	}
-	return
+// adds flags to the query
+func AddContext(q JessContext, flags int) JessContext {
+	q.flags |= flags
+	return q
 }
 
 // remove flags from the query
-func ClearContext(q Query, flags int) (ret Query) {
-	if ctx, ok := q.(queryContext); !ok {
-		ret = q // unchanged, b/c only a context can have flags.
-	} else {
-		ctx.flags &= ^flags
-		ret = ctx
-	}
-	return
+func ClearContext(q JessContext, flags int) (ret JessContext) {
+	q.flags &= ^flags
+	return q
 }
 
 type queryContext struct {

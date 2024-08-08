@@ -12,7 +12,7 @@ func (op *MultipleKinds) Next() (ret *MultipleKinds) {
 	return
 }
 
-func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
+func (op *AdditionalKinds) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
 		op.Kinds.Match(q, &next) {
@@ -22,7 +22,7 @@ func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
 }
 
 // note: traits are matched, but prohibited by "kinds_are_traits"
-func (op *MultipleKinds) Match(q Query, input *InputState) (okay bool) {
+func (op *MultipleKinds) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Traits) || true) &&
 		(Optional(q, &next, &op.Article) || true) &&

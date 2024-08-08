@@ -17,7 +17,7 @@ func (op *Understand) Phase() weaver.Phase {
 	return weaver.LanguagePhase
 }
 
-func (op *Understand) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *Understand) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	op.Understand.Match(q, &next, keywords.Understand) &&
 		op.QuotedTexts.Match(q, &next) &&
@@ -40,7 +40,7 @@ func (op *Understand) matchPluralOf(input *InputState) (okay bool) {
 
 var pluralOf = match.PanicSpans("plural of")
 
-func (op *Understand) Generate(ctx Context) error {
+func (op *Understand) Generate(ctx JessContext) error {
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if len(op.PluralOf) > 0 {
 			err = op.applyPlurals(ctx, w)
@@ -109,7 +109,7 @@ func (op *Understand) applyAliases(w weaver.Weaves, rhsNouns []string) (err erro
 	return
 }
 
-func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
+func (op *Understand) readRhs(q JessContext) (actions, nouns []string, err error) {
 	for it := &op.Names; it != nil; it = it.Next() {
 		if k := it.Kind; k != nil && k.actualKind.BaseKind == kindsOf.Action {
 			actions = append(actions, k.actualKind.Name)
@@ -130,7 +130,7 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 	return
 }
 
-func (op *Understand) applyPlurals(q Query, w weaver.Weaves) (err error) {
+func (op *Understand) applyPlurals(q JessContext, w weaver.Weaves) (err error) {
 Loop:
 	for it := &op.Names; it != nil; it = it.Next() {
 		if name := it.Name; name == nil {

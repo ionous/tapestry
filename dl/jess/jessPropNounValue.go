@@ -5,13 +5,13 @@ import (
 )
 
 // see: TryPropertyNounValue
-func (op *PropertyNounValue) ParallelMatcher() ParallelMatcher {
+func (op *PropertyNounValue) PromiseMatcher() PromiseMatcher {
 	return op
 }
 
 // `The description of the pen is "mightier than the sword.`
 func TryPropertyNounValue(q JessContext, in InputState,
-	accept func(ParallelMatcher), reject func(error),
+	accept func(PromiseMatcher), reject func(error),
 ) {
 	// the word "of" splits the property from the noun.
 	if propTarget, ok := keywordSplit(in, keywords.Of); !ok {

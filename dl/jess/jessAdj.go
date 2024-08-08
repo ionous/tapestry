@@ -9,7 +9,7 @@ func (op *MultipleAdjectives) Next() (ret *MultipleAdjectives) {
 	return
 }
 
-func (op *MultipleAdjectives) Match(q Query, input *InputState) (okay bool) {
+func (op *MultipleAdjectives) Match(q JessContext, input *InputState) (okay bool) {
 	next := *input
 	traits := Optional(q, &next, &op.Traits)
 	if traits {
@@ -48,7 +48,7 @@ func (op MultipleAdjectives) Reduce() (ret NounProperties, err error) {
 	return
 }
 
-func (op *AdditionalAdjectives) Match(q Query, input *InputState) (okay bool) {
+func (op *AdditionalAdjectives) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {

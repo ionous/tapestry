@@ -7,7 +7,7 @@ import (
 )
 
 // ----
-func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
+func (op *DirectionOfLinking) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Direction.Match(q, &next) &&
 		op.matchFromOf(&next) &&
@@ -17,7 +17,7 @@ func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *DirectionOfLinking) buildLink(q Query, w weaver.Weaves, run rt.Runtime) (ret *jessLink, err error) {
+func (op *DirectionOfLinking) buildLink(q JessContext, w weaver.Weaves, run rt.Runtime) (ret *jessLink, err error) {
 	if n, e := op.Linking.BuildNoun(q, w, run, NounProperties{}); e != nil {
 		err = e
 	} else {
@@ -38,7 +38,7 @@ func (op *DirectionOfLinking) matchFromOf(input *InputState) (okay bool) {
 var fromOf = match.PanicSpans("from", "of")
 
 // ----
-func (op *Direction) Match(q Query, input *InputState) (okay bool) {
+func (op *Direction) Match(q JessContext, input *InputState) (okay bool) {
 	// options:
 	// 1. look at the fields of the compass
 	// 2. look at the noun instances of kind directions
@@ -51,7 +51,7 @@ func (op *Direction) Match(q Query, input *InputState) (okay bool) {
 }
 
 // ----
-func (op *Linking) Match(q Query, input *InputState) (okay bool) {
+func (op *Linking) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input;        //
 	op.matchNowhere(&next) || // tbd. maybe this is better than context flags? i dunno.
 		Optional(q, &next, &op.KindCalled) ||
@@ -70,7 +70,7 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 }
 
 // generate a room or door; an object if there's not enough information to know; or nil for nowhere.
-func (op *Linking) BuildNoun(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret *DesiredNoun, err error) {
+func (op *Linking) BuildNoun(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret *DesiredNoun, err error) {
 	if !op.Nowhere {
 		if els, e := buildNounsFrom(q, w, run, props, nillable(op.KindCalled), nillable(op.Name)); e != nil {
 			err = e
@@ -83,7 +83,7 @@ func (op *Linking) BuildNoun(q Query, w weaver.Weaves, run rt.Runtime, props Nou
 }
 
 // ----
-func (op *AdditionalLinks) Match(q Query, input *InputState) (okay bool) {
+func (op *AdditionalLinks) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
 		op.Linking.Match(q, &next) {
@@ -119,7 +119,7 @@ func (it *LinkIt) GetNext() (ret Linking) {
 }
 
 // ----
-func (op *AdditionalDirections) Match(q Query, input *InputState) (okay bool) {
+func (op *AdditionalDirections) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
 		op.DirectionOfLinking.Match(q, &next) {

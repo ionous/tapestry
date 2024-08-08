@@ -33,10 +33,8 @@ func TestPhrases(t *testing.T) {
 				known.nounPool[name] = name
 				known.nounPool["$"+name] = "things"
 			}
-			// optionally: request on logging
-			q := jess.AddContext(&known, 0) //jess.LogMatches)
 			// create the test helper
-			m := jesstest.MakeMock(q, known.nounPool)
+			m := jesstest.MakeMock(&known, known.nounPool)
 			// run the test:
 			t.Logf("testing: %d %s", i, str)
 			if !p.Verify(m.Generate(str, val)) {
@@ -55,10 +53,11 @@ type info struct {
 	traits, fields,
 	nouns, directions, verbNames match.SpanList
 	nounPool map[string]string
+	flags    int
 }
 
 func (n *info) GetContext() int {
-	return 0
+	return n.flags
 }
 
 func (n *info) FindKind(ws []match.TokenValue, out *kindsOf.Kinds) (ret string, width int) {
@@ -141,6 +140,7 @@ func (n *info) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width
 }
 
 var known = info{
+	flags: jess.LogMatches,
 	kinds: []string{
 		"kind", "kinds",
 		"object", "objects",

@@ -9,7 +9,7 @@ func (op *Are) IsPlural() bool {
 	return keywordEquals(op.Matched, keywords.Are)
 }
 
-func (op *Are) Match(_ Query, input *InputState) (okay bool) {
+func (op *Are) Match(_ JessContext, input *InputState) (okay bool) {
 	if width := input.MatchWord(keywords.Are, keywords.Is); width > 0 {
 		op.Matched = input.Cut(width)
 		*input = input.Skip(width)
@@ -28,7 +28,7 @@ func (op *Are) Split(input InputState) (lhs, rhs InputState, okay bool) {
 	return
 }
 
-func (op *Called) Match(_ Query, input *InputState) (okay bool) {
+func (op *Called) Match(_ JessContext, input *InputState) (okay bool) {
 	if width := input.MatchWord(keywords.Called); width > 0 {
 		op.Matched = input.Cut(width)
 		*input = input.Skip(width)
@@ -46,7 +46,11 @@ func (op *Called) Split(in InputState) (lhs, rhs InputState, okay bool) {
 	return
 }
 
-func (op *CommaAnd) Match(_ Query, input *InputState) (okay bool) {
+func (op *CommaAnd) Match(_ JessContext, input *InputState) bool {
+	return op.SimpleMatch(input)
+}
+
+func (op *CommaAnd) SimpleMatch(input *InputState) (okay bool) {
 	if sep, e := ReadCommaAnd(input.Words()); e == nil && sep != 0 {
 		width := sep.Len()
 		op.Matched = input.Cut(width)
@@ -56,7 +60,7 @@ func (op *CommaAnd) Match(_ Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *CommaAndOr) Match(_ Query, input *InputState) (okay bool) {
+func (op *CommaAndOr) Match(_ JessContext, input *InputState) (okay bool) {
 	if sep, e := ReadCommaAndOr(input.Words()); e == nil && sep != 0 {
 		width := sep.Len()
 		op.Matched = input.Cut(width)
@@ -66,7 +70,7 @@ func (op *CommaAndOr) Match(_ Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Words) Match(_ Query, input *InputState, hashes ...uint64) (okay bool) {
+func (op *Words) Match(_ JessContext, input *InputState, hashes ...uint64) (okay bool) {
 	if width := input.MatchWord(hashes...); width > 0 {
 		op.Matched = input.Cut(width)
 		*input = input.Skip(width)

@@ -18,7 +18,7 @@ func (op *QuotedTexts) Next() (ret *QuotedTexts) {
 
 // its interesting that we dont have to store anything else
 // all the trait info is in this... even additional traits.
-func (op *QuotedTexts) Match(q Query, input *InputState) (okay bool) {
+func (op *QuotedTexts) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.QuotedText.Match(q, &next) {
 		Optional(q, &next, &op.AdditionalText)
@@ -51,7 +51,7 @@ func (op *QuotedTexts) Reduce() (ret []string) {
 // AdditionalText
 // --------------------------------------------------------------
 
-func (op *AdditionalText) Match(q Query, input *InputState) (okay bool) {
+func (op *AdditionalText) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAndOr.Match(q, &next) &&
 		op.QuotedTexts.Match(q, &next) {

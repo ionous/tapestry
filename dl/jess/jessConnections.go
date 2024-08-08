@@ -12,7 +12,7 @@ func (op *MapConnections) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
 
-func (op *MapConnections) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *MapConnections) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	op.matchThrough(&next) &&
 		op.Doors.Match(q, &next) &&
@@ -40,7 +40,7 @@ func (op *MapConnections) GetDoors() LinkIt {
 // 1. ensure the rhs link is a room.
 // 2. ensure all of the lhs links are doors
 // 3. set the destination of those doors to the rhs room.
-func (op *MapConnections) Generate(ctx Context) error {
+func (op *MapConnections) Generate(ctx JessContext) error {
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if room, e := op.generateRoom(ctx, w, run, NounProperties{Kinds: []string{Rooms}}); e != nil {
 			err = e
@@ -79,7 +79,7 @@ func (op *MapConnections) Generate(ctx Context) error {
 
 // helper since we know there's linking doesnt support counted nouns, but does support nowhere;
 // BuildNouns will always return a list of one or none.
-func (op *MapConnections) generateRoom(ctx Context, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret string, err error) {
+func (op *MapConnections) generateRoom(ctx JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret string, err error) {
 	if room, e := op.Room.BuildNoun(ctx, w, run, props); e != nil {
 		err = e
 	} else if room != nil {

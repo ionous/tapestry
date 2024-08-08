@@ -8,7 +8,7 @@ import (
 
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
-func (op *KindCalled) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *KindCalled) BuildNouns(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if kind, e := op.GetKind(); e != nil {
 		err = e
 	} else {
@@ -38,7 +38,7 @@ func (op *KindCalled) GetTraits() (ret *Traits) {
 }
 
 // transparent container called (the) box.
-func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
+func (op *KindCalled) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; // note: traits can eat up a leading article
 	(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) &&

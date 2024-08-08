@@ -3,7 +3,6 @@ package jess
 import (
 	"errors"
 	"fmt"
-	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -16,7 +15,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-func (op *TimedRule) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *TimedRule) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	/**/ op.RulePrefix.Match(q, &next) &&
 		(op.matchSomeone(q, &next) || true) &&
@@ -39,7 +38,7 @@ func (op *TimedRule) matchSomeone(_ Query, input *InputState) (okay bool) {
 }
 
 // parenthetical name
-func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
+func (op *TimedRule) matchName(q JessContext, input *InputState) (okay bool) {
 	if val, ok := input.GetNext(match.Parenthetical); ok {
 		// fix: it might make more sense to handle open/close parens separately
 		// ... there also might be something clever here with rule_name matched
@@ -50,7 +49,7 @@ func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
 			op.RuleName = new(RuleName)
 			*input, okay = input.Skip(1), true
 		} else {
-			words := InputState{words: words}
+			words := InputState{p: input.p, line: input.line, words: words}
 			if Optional(q, &words, &op.RuleName) {
 				*input, okay = input.Skip(1), true
 			}
@@ -60,7 +59,7 @@ func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
 }
 
 // goal: schedule the rule
-func (op *TimedRule) Generate(ctx Context) (err error) {
+func (op *TimedRule) Generate(ctx JessContext) (err error) {
 	if label, e := GetRuleName(op.RuleName); e != nil {
 		err = e
 	} else if pat, e := op.Pattern.Validate(kindsOf.Pattern, kindsOf.Action); e != nil {
@@ -84,44 +83,49 @@ func (op *TimedRule) Generate(ctx Context) (err error) {
 					Prefix: GetRulePrefix(op.RulePrefix),
 					Suffix: GetRuleSuffix(op.RuleSuffix),
 				}
-				var filters []rt.BoolEval
 
-				// add custom filters ( if any )
-				if tgt := op.RuleTarget; tgt != nil {
-					if p := tgt.Pronoun; p != nil {
-						if name, e := p.GetNounName(); e != nil {
-							log.Panic("unknown noun when building rule from pronoun", e)
-						} else {
-							filters = rules.AddNounFilter(name, filters)
-						}
-					} else if n := tgt.Noun; n != nil {
-						filters = rules.AddNounFilter(n.actualNoun.Name, filters)
-					} else if k := tgt.Kind; k != nil {
-						filters = rules.AddKindFilter(k.actualKind.Name, filters)
-					} else {
-						panic("unhandled target match")
-					}
-				}
-
-				// add other action filters
-				if op.Pattern.actualKind.BaseKind == kindsOf.Action {
-					if !op.Someone {
-						// all actions are triggered by actors;
-						// then we automatically filter for the player
-						filters = rules.AddPlayerFilter(filters)
-					}
-					// by default: all event handlers are filtered to the innermost target.
-					filters = rules.AddEventFilters(filters)
-				}
-
-				if rule, e := n.GetRuleInfo(); e != nil {
+				if filters, e := op.buildFilters(ctx); e != nil {
 					err = e
 				} else {
-					err = rule.WeaveRule(w, filters, exe)
+					// add other action filters
+					if op.Pattern.actualKind.BaseKind == kindsOf.Action {
+						if !op.Someone {
+							// all actions are triggered by actors;
+							// then we automatically filter for the player
+							filters = rules.AddPlayerFilter(filters)
+						}
+						// by default: all event handlers are filtered to the innermost target.
+						filters = rules.AddEventFilters(filters)
+					}
+					if rule, e := n.GetRuleInfo(); e != nil {
+						err = e
+					} else {
+						err = rule.WeaveRule(w, filters, exe)
+					}
 				}
 			}
 			return
 		})
+	}
+	return
+}
+
+func (op *TimedRule) buildFilters(ctx JessContext) (ret []rt.BoolEval, err error) {
+	if tgt := op.RuleTarget; tgt != nil {
+		if p := tgt.Pronoun; p != nil {
+			// the pronoun hasn't been "built" so we can't use the cache.
+			if an := ctx.GetTopic(); !an.IsValid() {
+				err = fmt.Errorf("unknown sentence topic when building rule using a pronoun")
+			} else {
+				ret = rules.AddNounFilter(an.Name, ret)
+			}
+		} else if n := tgt.Noun; n != nil {
+			ret = rules.AddNounFilter(n.actualNoun.Name, ret)
+		} else if k := tgt.Kind; k != nil {
+			ret = rules.AddKindFilter(k.actualKind.Name, ret)
+		} else {
+			panic("unhandled target match")
+		}
 	}
 	return
 }
@@ -160,7 +164,7 @@ func (op *SubAssignment) GetExe() (ret []rt.Execute, okay bool) {
 
 // ----
 
-func (op *RuleTarget) Match(q Query, input *InputState) (okay bool) {
+func (op *RuleTarget) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	Optional(q, &next, &op.Pronoun) ||
 		Optional(q, &next, &op.Kind) ||
@@ -176,7 +180,7 @@ func GetRulePrefix(op RulePrefix) rules.Prefix {
 	return rules.Prefix(op.prefixValue)
 }
 
-func (op *RulePrefix) Match(q Query, input *InputState) (okay bool) {
+func (op *RulePrefix) Match(q JessContext, input *InputState) (okay bool) {
 	if idx, width := prefixes.FindPrefixIndex(input.Words()); width > 0 {
 		op.prefixValue = PrefixValue(idx)
 		*input, okay = input.Skip(width), true
@@ -194,7 +198,7 @@ func GetRuleSuffix(op *RuleSuffix) (ret rules.Suffix) {
 }
 
 // ", and then continue"
-func (op *RuleSuffix) Match(q Query, input *InputState) (okay bool) {
+func (op *RuleSuffix) Match(q JessContext, input *InputState) (okay bool) {
 	if sep, e := ReadCommaAnd(input.Words()); e == nil && sep != 0 {
 		width := sep.Len()
 		next := input.Skip(width)
@@ -220,7 +224,7 @@ func GetRuleName(op *RuleName) (ret string, err error) {
 }
 
 // assumes we are inside the parens
-func (op *RuleName) Match(q Query, input *InputState) (okay bool) {
+func (op *RuleName) Match(q JessContext, input *InputState) (okay bool) {
 	next := input.words
 	// "this is"
 	if m, width := ruleNamePrefix.FindPrefix(next); m != nil {

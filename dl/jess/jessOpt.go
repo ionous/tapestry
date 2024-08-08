@@ -13,7 +13,7 @@ func Optional[M any,
 		// *phew*
 		*M
 		OptionalMatcher
-	}](q Query, input *InputState, out **M) (okay bool) {
+	}](q JessContext, input *InputState, out **M) (okay bool) {
 	var v M
 	if next := *input; IM(&v).Match(q, &next) {
 		*out, *input, okay = &v, next, true

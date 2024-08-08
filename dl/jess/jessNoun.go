@@ -5,7 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-func (op *Noun) BuildNouns(_ Query, w weaver.Weaves, _ rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *Noun) BuildNouns(_ JessContext, w weaver.Weaves, _ rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	n := op.actualNoun.Name
 	if e := writeKinds(w, n, props.Kinds); e != nil {
 		err = e
@@ -19,7 +19,7 @@ func (op *Noun) BuildNouns(_ Query, w weaver.Weaves, _ rt.Runtime, props NounPro
 	return
 }
 
-func (op *Noun) Match(q Query, input *InputState) (okay bool) {
+func (op *Noun) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
 		op.matchNoun(q, &next) {
@@ -28,7 +28,7 @@ func (op *Noun) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Noun) matchNoun(q Query, input *InputState) (okay bool) {
+func (op *Noun) matchNoun(q JessContext, input *InputState) (okay bool) {
 	if cnt := nameScan(input.Words()); cnt > 0 {
 		var kind string
 		sub := input.Cut(cnt)
@@ -45,4 +45,12 @@ func (op *Noun) matchNoun(q Query, input *InputState) (okay bool) {
 type ActualNoun struct {
 	Name string
 	Kind string
+}
+
+func (an *ActualNoun) GetActualNoun() ActualNoun {
+	return *an
+}
+
+func (an ActualNoun) IsValid() bool {
+	return len(an.Name) > 0
 }

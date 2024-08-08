@@ -15,7 +15,7 @@ func (op *KindsAreKind) Phase() weaver.Phase {
 	return weaver.AncestryPhase
 }
 
-func (op *KindsAreKind) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *KindsAreKind) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
@@ -46,7 +46,7 @@ func (op *KindsAreKind) GetTraits() (ret *Traits) {
 }
 
 // The closed containers called safes are a kind of fixed in place thing.
-func (op *KindsAreKind) Generate(ctx Context) error {
+func (op *KindsAreKind) Generate(ctx JessContext) error {
 	// manually schedule, so we can query FindKind()
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		var base kindsOf.Kinds

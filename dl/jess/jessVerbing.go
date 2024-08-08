@@ -12,7 +12,7 @@ import (
 // -------------------------------------------------------------------------
 
 // the passed phrase is the macro to match
-func (op *Verb) Match(q Query, input *InputState) (okay bool) {
+func (op *Verb) Match(q JessContext, input *InputState) (okay bool) {
 	kind := Verbs
 	if m, width := q.FindNoun(input.Words(), &kind); width > 0 {
 		op.Text = m // holds the normalized name
@@ -25,7 +25,7 @@ func (op *Verb) Match(q Query, input *InputState) (okay bool) {
 // VerbPhrase
 // -------------------------------------------------------------------------
 
-func (op *VerbPhrase) Match(q Query, input *InputState) (okay bool) {
+func (op *VerbPhrase) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Verb.Match(q, &next) &&
 		op.PlainNames.Match(AddContext(q, PlainNameMatching), &next) {
@@ -56,11 +56,11 @@ func (op *VerbNamesAreNames) GetVerb() string {
 	return op.Verb.Text
 }
 
-func (op *VerbNamesAreNames) Generate(ctx Context) error {
+func (op *VerbNamesAreNames) Generate(ctx JessContext) error {
 	return generateVerbPhrase(ctx, op)
 }
 
-func (op *VerbNamesAreNames) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *VerbNamesAreNames) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next, q := line, //
 		AddContext(q, MatchKindsOfKinds); //
 	op.Verb.Match(q, &next) &&
@@ -92,7 +92,7 @@ func (op *NamesVerbNames) GetAdjectives() (_ MultipleAdjectives) {
 func (op *NamesVerbNames) GetVerb() string {
 	return op.Verb.Text
 }
-func (op *NamesVerbNames) Generate(ctx Context) (err error) {
+func (op *NamesVerbNames) Generate(ctx JessContext) (err error) {
 	if op.Names.HasAnonymousKind() {
 		err = errors.New("can't start phrase with an anonymous leading kind")
 	} else {
@@ -100,7 +100,7 @@ func (op *NamesVerbNames) Generate(ctx Context) (err error) {
 	}
 	return
 }
-func (op *NamesVerbNames) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *NamesVerbNames) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next, q := line, //
 		AddContext(q, MatchKindsOfKinds|MatchPronouns);
 	// like NamesAreLikeVerbs, this limits lhs matching to kinds which can be instanced
@@ -141,7 +141,7 @@ func (op *NamesAreLikeVerbs) GetVerb() (ret string) {
 	}
 	return
 }
-func (op *NamesAreLikeVerbs) Generate(ctx Context) (err error) {
+func (op *NamesAreLikeVerbs) Generate(ctx JessContext) (err error) {
 	if op.Names.HasAnonymousKind() {
 		err = errors.New("can't start phrase with an anonymous leading kind")
 	} else {
@@ -150,15 +150,15 @@ func (op *NamesAreLikeVerbs) Generate(ctx Context) (err error) {
 	return
 }
 
-func (op *NamesAreLikeVerbs) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *NamesAreLikeVerbs) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next, q := line, //
 		AddContext(q, MatchKindsOfKinds); //
 	op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {
 		Optional(q, &next, &op.VerbPhrase)
-		//
-		next.pronouns.setPronounSource(&op.Names)
+		// this sets up the *possibility*; the value is filled out in BuildNouns
+		q.SetTopic(&op.Names)
 		ret, okay = next, true
 	}
 	return
@@ -181,7 +181,7 @@ type jessVerbPhrase interface {
 	GetVerb() string
 }
 
-func generateVerbPhrase(ctx Context, p jessVerbPhrase) error {
+func generateVerbPhrase(ctx JessContext, p jessVerbPhrase) error {
 	return ctx.Schedule(p.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if props, e := p.GetAdjectives().Reduce(); e != nil {
 			err = e
@@ -210,7 +210,7 @@ func generateVerbPhrase(ctx Context, p jessVerbPhrase) error {
 
 // note: some phrases "the box is open" dont have macros.
 // in that case, genNounValues itself does all the work.
-func applyVerb(ctx Context, verbName string, lhs, rhs []DesiredNoun) (err error) {
+func applyVerb(ctx JessContext, verbName string, lhs, rhs []DesiredNoun) (err error) {
 	return ctx.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if v, e := readVerb(run, verbName); e != nil {
 			err = e

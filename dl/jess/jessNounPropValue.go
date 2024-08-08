@@ -6,14 +6,14 @@ import (
 )
 
 // see: TryNounPropertyValue
-func (op *NounPropertyValue) ParallelMatcher() ParallelMatcher {
+func (op *NounPropertyValue) PromiseMatcher() PromiseMatcher {
 	return op
 }
 
 // `The pen has (the) description (of) "mightier than the sword."`
 // `The bottle has age 42 and the description "A plain glass bottle."`
 func TryNounPropertyValue(q JessContext, in InputState,
-	accept func(ParallelMatcher), reject func(error),
+	accept func(PromiseMatcher), reject func(error),
 ) {
 	// the word "has/have" splits the noun from the property
 	if tgtProp, ok := keywordSplit(in, keywords.Has, keywords.Have); !ok {
@@ -27,8 +27,6 @@ func TryNounPropertyValue(q JessContext, in InputState,
 				// given the kind, match the property names and values.
 				// ( required to separate it from unquoted nouns or kinds as values )
 				TryPropertyValues(q, tgtProp.rhs, an, func(pv PropertyValues) {
-					// FIX... and how.
-					// ext.pronouns.setPronounSource(&op.NamedNoun)
 					accept(&NounPropertyValue{
 						NamedNoun:      nn,
 						Has:            Words{Matched: tgtProp.matched},
@@ -92,7 +90,7 @@ func TryAdditionalValues(q JessContext, in InputState,
 		accept(nil)
 	} else {
 		var ca CommaAnd
-		if !ca.Match(nil, &in) {
+		if !ca.SimpleMatch(&in) {
 			reject(FailedMatch{"unknown words following values", in})
 		} else {
 			TryPropertyValues(q, in, an, func(pv PropertyValues) {

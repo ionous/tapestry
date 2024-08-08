@@ -46,10 +46,10 @@ func (m Matched) DebugString() string {
 // implemented by phrases so that they can create story fragments based on
 // the english language text they have parsed.
 type Generator interface {
-	Generate(Context) error
+	Generate(JessContext) error
 }
 
 // used internally for matching some kinds of phrases.
 type OptionalMatcher interface {
-	Match(Query, *InputState) bool
+	Match(JessContext, *InputState) bool
 }

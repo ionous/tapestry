@@ -12,7 +12,7 @@ func (op *MapDirections) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
 
-func (op *MapDirections) MatchLine(q Query, line InputState) (ret InputState, okay bool) {
+func (op *MapDirections) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
 	if next := line; //
 	op.DirectionOfLinking.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
@@ -23,7 +23,7 @@ func (op *MapDirections) MatchLine(q Query, line InputState) (ret InputState, ok
 	return
 }
 
-func (op *MapDirections) Generate(ctx Context) (err error) {
+func (op *MapDirections) Generate(ctx JessContext) (err error) {
 	if op.Linking != nil {
 		err = op.simpleLink(ctx)
 	} else if op.Redirect != nil {
@@ -35,7 +35,7 @@ func (op *MapDirections) Generate(ctx Context) (err error) {
 }
 
 // uses .Linking
-func (op *MapDirections) simpleLink(ctx Context) error {
+func (op *MapDirections) simpleLink(ctx JessContext) error {
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		var links []*jessLink
 		if lhs, e := op.DirectionOfLinking.buildLink(ctx, w, run); e != nil {
@@ -59,7 +59,7 @@ func (op *MapDirections) simpleLink(ctx Context) error {
 }
 
 // uses .Redirect
-func (op *MapDirections) multiLink(ctx Context) error {
+func (op *MapDirections) multiLink(ctx JessContext) error {
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if lhs, e := op.DirectionOfLinking.buildLink(ctx, w, run); e != nil {
 			err = e

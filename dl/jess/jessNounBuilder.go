@@ -9,7 +9,7 @@ import (
 // to support "counted nouns" any given specification can generate multiple nouns
 // ( even though all, other than "names" and "counted nouns" only generate one a piece. )
 type NounBuilder interface {
-	BuildNouns(Query, weaver.Weaves, rt.Runtime, NounProperties) ([]DesiredNoun, error)
+	BuildNouns(JessContext, weaver.Weaves, rt.Runtime, NounProperties) ([]DesiredNoun, error)
 }
 
 type GetActualNoun interface {
@@ -18,7 +18,7 @@ type GetActualNoun interface {
 
 // useful for dispatching a parent's call to build nouns to one of its matched children.
 // ( calls .BuildNoun() on the first non-nil builder )
-func buildNounsFrom(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties, builders ...nounBuilderRef) (ret []DesiredNoun, err error) {
+func buildNounsFrom(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties, builders ...nounBuilderRef) (ret []DesiredNoun, err error) {
 	for _, builder := range builders {
 		if !builder.IsNil {
 			ret, err = builder.BuildNouns(q, w, run, props)

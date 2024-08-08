@@ -12,14 +12,14 @@ import (
 // the top level matching interface implemented by members of MatchedPhrase.
 // "Line" here means "sentence of a paragraph"
 type LineMatcher interface {
-	MatchLine(Query, InputState) (InputState, bool)
+	MatchLine(JessContext, InputState) (InputState, bool)
 	typeinfo.Instance // for logging
 	typeinfo.Markup
 }
 
 // different phases (z) can match different phrases (ws)
 // should a match occur, return true; and set 'out' to the matched phrase.
-func matchSentence(z weaver.Phase, q Query, line InputState, out *bestMatch) (okay bool) {
+func matchSentence(z weaver.Phase, q JessContext, line InputState, out *bestMatch) (okay bool) {
 	var op MatchedPhrase
 	switch z {
 	case weaver.LanguagePhase:
@@ -92,7 +92,6 @@ func matchSentence(z weaver.Phase, q Query, line InputState, out *bestMatch) (ok
 type bestMatch struct {
 	match    matchGenerator
 	numWords int
-	pronouns pronounSource
 }
 
 // each LineMatchers is either a Generator, a schedulee.
@@ -122,7 +121,7 @@ type genericSchedule struct {
 	schedulee
 }
 
-func (op genericSchedule) Generate(ctx Context) (err error) {
+func (op genericSchedule) Generate(ctx JessContext) (err error) {
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if e := op.Weave(w, run); e != nil {
 			err = schedulingError{op, e, op.Phase()}
@@ -149,7 +148,7 @@ func (e schedulingError) Error() string {
 // match the input against the passed parse tree.
 // passes out an object which can create nouns, define kinds, set properties, and so on.
 // returns the number of words *not* matched
-func matchLine(q Query, line InputState, op matchGenerator, out *bestMatch) (okay bool) {
+func matchLine(q JessContext, line InputState, op matchGenerator, out *bestMatch) (okay bool) {
 	// "understand" {quoted text} as .....
 	if next, ok := op.MatchLine(q, line); ok {
 		// was the phrase only partially matched?
@@ -163,7 +162,7 @@ func matchLine(q Query, line InputState, op matchGenerator, out *bestMatch) (oka
 				m := Matched(line.words)
 				log.Printf("matched %s %q\n", op.TypeInfo().TypeName(), m.DebugString())
 			}
-			(*out) = bestMatch{match: op, pronouns: next.pronouns}
+			(*out) = bestMatch{match: op}
 			okay = true
 		}
 	}

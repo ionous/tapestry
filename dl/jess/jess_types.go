@@ -103,29 +103,29 @@ func (op *LineMatcher_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
-// parallel_matcher, a type of slot.
-var Zt_ParallelMatcher = typeinfo.Slot{
-	Name: "parallel_matcher",
+// promise_matcher, a type of slot.
+var Zt_PromiseMatcher = typeinfo.Slot{
+	Name: "promise_matcher",
 }
 
 // Holds a single slot.
-type ParallelMatcher_Slot struct{ Value ParallelMatcher }
+type PromiseMatcher_Slot struct{ Value PromiseMatcher }
 
 // Implements [typeinfo.Instance] for a single slot.
-func (*ParallelMatcher_Slot) TypeInfo() typeinfo.T {
-	return &Zt_ParallelMatcher
+func (*PromiseMatcher_Slot) TypeInfo() typeinfo.T {
+	return &Zt_PromiseMatcher
 }
 
 // Holds a slice of slots.
-type ParallelMatcher_Slots []ParallelMatcher
+type PromiseMatcher_Slots []PromiseMatcher
 
 // Implements [typeinfo.Instance] for a slice of slots.
-func (*ParallelMatcher_Slots) TypeInfo() typeinfo.T {
-	return &Zt_ParallelMatcher
+func (*PromiseMatcher_Slots) TypeInfo() typeinfo.T {
+	return &Zt_PromiseMatcher
 }
 
 // Implements [typeinfo.Repeats] for a slice of slots.
-func (op *ParallelMatcher_Slots) Repeats() bool {
+func (op *PromiseMatcher_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -308,7 +308,6 @@ func (op *Are_Slice) Repeats() bool {
 // Matches the word "it".
 type Pronoun struct {
 	Matched Matched
-	proref  PronounReference
 	Markup  map[string]any `json:",omitempty"`
 }
 
@@ -1570,7 +1569,7 @@ func (op *PropertyNounValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ ParallelMatcher = (*PropertyNounValue)(nil)
+var _ PromiseMatcher = (*PropertyNounValue)(nil)
 
 // Holds a slice of type PropertyNounValue.
 type PropertyNounValue_Slice []PropertyNounValue
@@ -1613,6 +1612,9 @@ func (op *NounPropertyValue) GetMarkup(ensure bool) map[string]any {
 	}
 	return op.Markup
 }
+
+// Ensures the command implements its specified slots.
+var _ PromiseMatcher = (*NounPropertyValue)(nil)
 
 // Holds a slice of type NounPropertyValue.
 type NounPropertyValue_Slice []NounPropertyValue
@@ -2748,10 +2750,6 @@ func init() {
 			Name:  "matched",
 			Label: "matched",
 			Type:  &Zt_Matched,
-		}, {
-			Name:    "proref",
-			Label:   "proref",
-			Private: true,
 		}},
 		Markup: map[string]any{
 			"--": "Matches the word \"it\".",
@@ -2922,8 +2920,8 @@ func init() {
 		Name: "multiple_names",
 		Lede: "multiple_names",
 		Terms: []typeinfo.Term{{
-			Name:    "actual_nouns",
-			Label:   "actual_nouns",
+			Name:    "actual_noun",
+			Label:   "actual_noun",
 			Private: true,
 		}, {
 			Name:     "pronoun",
@@ -3517,11 +3515,6 @@ func init() {
 		Name: "property_noun_value",
 		Lede: "property_noun_value",
 		Terms: []typeinfo.Term{{
-			Name:     "article",
-			Label:    "article",
-			Optional: true,
-			Type:     &Zt_Article,
-		}, {
 			Name:  "property",
 			Label: "property",
 			Type:  &Zt_Property,
@@ -3549,7 +3542,7 @@ func init() {
 			Type:  &Zt_PropertyValue,
 		}},
 		Slots: []*typeinfo.Slot{
-			&Zt_ParallelMatcher,
+			&Zt_PromiseMatcher,
 		},
 		Markup: map[string]any{
 			"--": []string{"Assigns a default value to a noun.", "ex.", "  The description of the pen is \"mightier than the sword.\"", "", "As a special case this also allows a list of quoted text.", "( indicated with \"are\", versus \"is\" )", "ex. The implications of carrying are \"not worn\" and \"portable\"."},
@@ -3572,7 +3565,7 @@ func init() {
 			Type:  &Zt_PropertyValues,
 		}},
 		Slots: []*typeinfo.Slot{
-			&Zt_LineMatcher,
+			&Zt_PromiseMatcher,
 		},
 		Markup: map[string]any{
 			"--": []string{"Assigns a default value to a noun.", "ex.", "  The pen has (the) description (of) \"mightier than the sword.\"", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
@@ -3582,11 +3575,6 @@ func init() {
 		Name: "property_values",
 		Lede: "property_values",
 		Terms: []typeinfo.Term{{
-			Name:     "article",
-			Label:    "article",
-			Optional: true,
-			Type:     &Zt_Article,
-		}, {
 			Name:  "property",
 			Label: "property",
 			Type:  &Zt_Property,
@@ -3595,7 +3583,7 @@ func init() {
 			Label:    "of",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"using the word \"of\" sometimes looks better.", "( i think... )"},
+				"--": "using the word \"of\" sometimes looks better. ( i think... )",
 			},
 			Type: &Zt_Words,
 		}, {
@@ -4244,7 +4232,7 @@ var z_slot_list = []*typeinfo.Slot{
 	&Zt_Matched,
 	&Zt_NounBuilder,
 	&Zt_LineMatcher,
-	&Zt_ParallelMatcher,
+	&Zt_PromiseMatcher,
 	&Zt_PropertyValue,
 }
 
@@ -4463,10 +4451,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11567946081716077320: (*PropertyType)(nil),             /* PropertyType kind: */
 	8224056348026199873:  (*PropertyType)(nil),             /* PropertyType primitive: */
 	8660980422311242175:  (*PropertyType)(nil),             /* PropertyType primitive:kind: */
-	16338083795047999109: (*PropertyValues)(nil),           /* PropertyValues article:property:of:value: */
-	11870151606184605867: (*PropertyValues)(nil),           /* PropertyValues article:property:of:value:additionalPropertyValues: */
-	13122921333553547486: (*PropertyValues)(nil),           /* PropertyValues article:property:value: */
-	3131261979235446782:  (*PropertyValues)(nil),           /* PropertyValues article:property:value:additionalPropertyValues: */
 	8244016008737881097:  (*PropertyValues)(nil),           /* PropertyValues property:of:value: */
 	1359311954908418463:  (*PropertyValues)(nil),           /* PropertyValues property:of:value:additionalPropertyValues: */
 	7457853335233705882:  (*PropertyValues)(nil),           /* PropertyValues property:value: */
@@ -4612,9 +4596,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	13957738718698792135: (*NamesVerbNames)(nil),           /* line_matcher=NamesVerbNames names:are:verb:otherNames: */
 	4465529434619879510:  (*Noun)(nil),                     /* noun_builder=Noun article:matched: */
 	2598335774687055558:  (*Noun)(nil),                     /* noun_builder=Noun matched: */
-	11952309116369055139: (*NounPropertyValue)(nil),        /* line_matcher=NounPropertyValue namedNoun:has:propertyValues: */
-	15101359153249610887: (*PropertyNounValue)(nil),        /* parallel_matcher=PropertyNounValue article:property:of:namedNoun:are:propertyValue: */
-	4416132831794334839:  (*PropertyNounValue)(nil),        /* parallel_matcher=PropertyNounValue property:of:namedNoun:are:propertyValue: */
+	15928611818273472590: (*NounPropertyValue)(nil),        /* promise_matcher=NounPropertyValue namedNoun:has:propertyValues: */
+	467064048610179367:   (*PropertyNounValue)(nil),        /* promise_matcher=PropertyNounValue property:of:namedNoun:are:propertyValue: */
 	11079814442419901472: (*TimedRule)(nil),                /* line_matcher=TimedRule rulePrefix:pattern:ruleName:subAssignment: */
 	11138780886479969949: (*TimedRule)(nil),                /* line_matcher=TimedRule rulePrefix:pattern:ruleSuffix:ruleName:subAssignment: */
 	16788547542883751782: (*TimedRule)(nil),                /* line_matcher=TimedRule rulePrefix:pattern:ruleSuffix:subAssignment: */

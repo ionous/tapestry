@@ -3,10 +3,8 @@ package jess
 import (
 	"errors"
 	"fmt"
-	"log"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
-	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -19,38 +17,14 @@ type Paragraph struct {
 	// each sentence is its own slice of tokens.
 	// weaving winnows this list.
 	Lines []Line
-	// keeps pronoun context for the most recent line
-	// across multiple calls to "schedule"
-	// ( if scheduling was channel based, we could put pronounSource on the stack )
-	pronouns pronounSource
-	//
-	unmatched []*Line
-}
-
-type Line struct {
-	words []match.TokenValue // fix? all tokens have pos; we only really need the first.
-	// the successful match; mainly for debugging; its already written itself to the database
-	matched typeinfo.Instance // could store MatchedPhrase maybe.
-	//
-	errs []error // things we've tried
+	// index into lines of unmatched sentences
+	unmatched []int
 }
 
 // use the existing tokens as a paragraph
 // ( ex. from parsing a plain text section )
 func MakeParagraph(file string, lines [][]match.TokenValue) Paragraph {
 	return Paragraph{File: file, Lines: linesToLines(lines)}
-}
-
-// fix: make collector speak in terms of lines?
-func linesToLines(src [][]match.TokenValue) []Line {
-	out := make([]Line, len(src))
-	for i, el := range src {
-		if len(el) == 0 {
-			panic("?")
-		}
-		out[i].words = el
-	}
-	return out
 }
 
 // parse the passed string into a paragraph of sentences.
@@ -82,36 +56,38 @@ func NewParagraph(pos compact.Source, str string, assign rt.Assignment) (ret Par
 // expects to be called every phase
 // returns true when it no longer needs to be called because everything is scheduled
 func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay bool, err error) {
+	const defaultFlags = 0
 	unmatched, retry := p.unmatched, 0
 	// first weave initialization
 	if unmatched == nil { // ugh. fine for now.
-		unmatched = make([]*Line, len(p.Lines))
-		for i := range p.Lines {
-			el := &(p.Lines[i])
-			unmatched[i] = el              // fine so long as we don't resize
-			el.StartParallelMatch(p, q, u) // launch parallel matches
+		unmatched = make([]int, len(p.Lines))
+		for i, el := range p.Lines {
+			jc := JessContext{q, u, p, i, defaultFlags}
+			in := InputState{p: p, line: i, words: el.words}
+			TryPromisedMatch(jc, in) // launch parallel matches
+			unmatched[i] = i
 		}
 	}
-	for i, el := range unmatched {
-		_ = i // i is useful for debugging.
+	for _, i := range unmatched {
+		jc := JessContext{q, u, p, i, defaultFlags}
+		el := &(p.Lines[i])
 		if el.matched != nil {
 			continue // parallel matched this.
 		}
 		var best bestMatch
-		line := InputState{p: p, words: el.words, pronouns: p.pronouns.nextPronoun()}
+		line := InputState{p: p, line: i, words: el.words}
 		// match a sentence,
 		// and if matched Generate/Schedule it for weaving database info
-		if matchSentence(z, q, line, &best) {
+		if matchSentence(z, jc, line, &best) {
 			// track this match
 			el.matched = best.match
+			if el.topicType == undeterminedTopic {
+				el.topicType = otherTopic
+			}
 			//
-			source := line.Source()
-			// update the paragraph's context so other sentences can refer to it.
-			// ( or if no pronoun was matched, or reused, clear it )
-			p.pronouns = best.pronouns
 			// after matching: try to generate ( which inevitably calls schedule... )
 			// ( errors here are critical, and not a request to "retry" )
-			if e := best.match.Generate(Context{q, u, source}); e != nil {
+			if e := best.match.Generate(jc); e != nil {
 				err = e
 				break
 			}
@@ -123,7 +99,7 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 				err = errors.Join(append([]error{e}, el.errs...)...)
 				break
 			} else {
-				unmatched[retry] = el
+				unmatched[retry] = i
 				retry++
 			}
 		}
@@ -136,26 +112,10 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 	return
 }
 
-func (el *Line) StartParallelMatch(p *Paragraph, q Query, u Scheduler) {
-	jc := JessContext{q, u}
-	in := InputState{p: p, words: el.words}
+func TryPromisedMatch(jc JessContext, in InputState) {
+	el := jc.CurrentLine()
 	// property of noun is/are value.
 	TryPropertyNounValue(jc, in, el.store, el.reject)
 	// noun has property of value.
 	TryNounPropertyValue(jc, in, el.store, el.reject)
-}
-
-// fix? maybe there's a difference b/t FailedMatch and other errors?
-// Failed indicates the "shape" is wrong
-// other errors indicates the content of the particular shape is wrong.
-func (el *Line) store(res ParallelMatcher) {
-	if el.matched != nil {
-		log.Println("matched multiple phases")
-	} else {
-		el.matched = res
-	}
-}
-
-func (el *Line) reject(e error) {
-	el.errs = append(el.errs, e)
 }
