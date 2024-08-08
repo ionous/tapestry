@@ -25,6 +25,8 @@ type Mock struct {
 	nounPool, nounPairs map[string]string
 	proc                weave.Processing
 	jessRt              jessRt
+	lastNamedNoun       string
+	lastNamedSize       int
 }
 
 func MakeMock(q jess.Query, nouns map[string]string) Mock {
@@ -110,22 +112,19 @@ func (m *Mock) addNounKind(noun, kind string) {
 	m.nounPool["$"+noun] = kind
 }
 
-var lastNamedNoun string
-var lastNamedSize int
-
 // slightly limit the name spew; name generation gets tested elsewhere
 func (m *Mock) AddNounName(noun, name string, r int) (_ error) {
-	if lastNamedSize != len(m.out) {
-		lastNamedNoun = ""
+	if m.lastNamedSize != len(m.out) {
+		m.lastNamedNoun = ""
 	}
 	if r < 0 {
 		m.out = append(m.out, "AddNounAlias:", noun, name)
-	} else if lastNamedNoun != noun || r < 0 {
+	} else if m.lastNamedNoun != noun || r < 0 {
 		m.out = append(m.out, "AddNounName:", noun, name)
 	}
 	m.nounPool[name] = noun
-	lastNamedNoun = noun
-	lastNamedSize = len(m.out)
+	m.lastNamedNoun = noun
+	m.lastNamedSize = len(m.out)
 	return
 }
 
