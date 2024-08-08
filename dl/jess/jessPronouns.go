@@ -1,6 +1,7 @@
 package jess
 
 import (
+	"errors"
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -13,10 +14,11 @@ func (op *Pronoun) Match(q JessContext, input *InputState) (okay bool) {
 	// fix: ideally replace with "promise" so that it can return error okay
 	if matchPronouns(q) {
 		if width := input.MatchWord(keywords.It); width > 0 {
-			q.UsePronoun()
-			op.Matched = input.Cut(width)
-			*input = input.Skip(width)
-			okay = true
+			if q.CurrentLine().UsePronoun() {
+				op.Matched = input.Cut(width)
+				*input = input.Skip(width)
+				okay = true
+			}
 		}
 	}
 	return
@@ -47,7 +49,8 @@ func (op *Pronoun) BuildNouns(q JessContext, w weaver.Weaves, run rt.Runtime, pr
 // reject can fire asap if it doesn't look like a pronoun.
 func TryPronoun(q JessContext, in InputState,
 	accept func(Pronoun, ActualNoun, InputState),
-	reject func(error)) {
+	reject func(error),
+) {
 	// the name scan differentiates "the it girl" from "she is ..."
 	// right now pronouns are all one word long
 	if w := nameScan(in.words); w != 1 {
@@ -55,16 +58,28 @@ func TryPronoun(q JessContext, in InputState,
 	} else if in.words[0].Hash() != keywords.It { // ( and always "it")
 		reject(FailedMatch{"word isn't a known pronoun", in.Slice(w)})
 	} else {
-		q.UsePronoun()
-		q.Try(After(weaver.FallbackPhase), func(weaver.Weaves, rt.Runtime) {
-			if an := q.GetTopic(); !an.IsValid() {
-				e := fmt.Errorf("couldn't find topic of pronoun")
-				reject(e)
-			} else {
-				accept(Pronoun{
-					Matched: in.words,
-				}, an, in.Skip(w))
-			}
+		RequestPronoun(q, func(an ActualNoun) {
+			accept(Pronoun{
+				Matched: in.words,
+			}, an, in.Skip(w))
 		}, reject)
 	}
+}
+
+// determine the topic of the sentence based on an earlier definition.
+func RequestPronoun(q JessContext,
+	accept func(ActualNoun),
+	reject func(error),
+) {
+	q.Try(After(weaver.FallbackPhase), func(weaver.Weaves, rt.Runtime) {
+		if !q.CurrentLine().UsePronoun() {
+			reject(errors.New("sentence describes a particular noun"))
+		} else if an := q.GetTopic(); !an.IsValid() {
+			e := fmt.Errorf("couldn't find topic of pronoun")
+			reject(e)
+		} else {
+			accept(an)
+		}
+	}, reject)
+
 }

@@ -19,13 +19,8 @@ func (op *Are) Match(_ JessContext, input *InputState) (okay bool) {
 }
 
 // given a phrase, split around the word is or are.
-func (op *Are) Split(input InputState) (lhs, rhs InputState, okay bool) {
-	if split, ok := keywordSplit(input, keywords.Are, keywords.Is); ok {
-		lhs, rhs = split.lhs, split.rhs
-		op.Matched = split.matched
-		okay = true
-	}
-	return
+func (op *Are) Split(input InputState) (Split, bool) {
+	return keywordSplit(input, keywords.Are, keywords.Is)
 }
 
 func (op *Called) Match(_ JessContext, input *InputState) (okay bool) {
@@ -47,10 +42,10 @@ func (op *Called) Split(in InputState) (lhs, rhs InputState, okay bool) {
 }
 
 func (op *CommaAnd) Match(_ JessContext, input *InputState) bool {
-	return op.SimpleMatch(input)
+	return op.InputMatch(input)
 }
 
-func (op *CommaAnd) SimpleMatch(input *InputState) (okay bool) {
+func (op *CommaAnd) InputMatch(input *InputState) (okay bool) {
 	if sep, e := ReadCommaAnd(input.Words()); e == nil && sep != 0 {
 		width := sep.Len()
 		op.Matched = input.Cut(width)
@@ -92,10 +87,10 @@ func keywordEquals(m Matched, hash uint64) bool {
 }
 
 // expects words before and after the split
-func keywordSplit(in InputState, hashes ...uint64) (ret split, okay bool) {
+func keywordSplit(in InputState, hashes ...uint64) (ret Split, okay bool) {
 	if start := scanUntil(in.words, hashes...); start > 0 {
 		if end := start + 1; end < in.Len() {
-			ret, okay = split{
+			ret, okay = Split{
 				in.Slice(start),
 				in.Skip(end),
 				in.words[start:end],
@@ -105,7 +100,7 @@ func keywordSplit(in InputState, hashes ...uint64) (ret split, okay bool) {
 	return
 }
 
-type split struct {
+type Split struct {
 	lhs, rhs InputState
 	matched  Matched
 }

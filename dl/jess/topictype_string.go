@@ -9,14 +9,14 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[undeterminedTopic-0]
-	_ = x[nounTopic-1]
+	_ = x[otherTopic-1]
 	_ = x[pronounReference-2]
-	_ = x[otherTopic-3]
+	_ = x[nounTopic-3]
 }
 
-const _topicType_name = "undeterminedTopicnounTopicpronounReferenceotherTopic"
+const _topicType_name = "undeterminedTopicotherTopicpronounReferencenounTopic"
 
-var _topicType_index = [...]uint8{0, 17, 26, 42, 52}
+var _topicType_index = [...]uint8{0, 17, 27, 43, 52}
 
 func (i topicType) String() string {
 	if i < 0 || i >= topicType(len(_topicType_index)-1) {

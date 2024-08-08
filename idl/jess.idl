@@ -49,6 +49,9 @@ Spec:requires:contains:
         - - Term: "matched"
 
     - # Matches the word "it".
+      # note: in inform, pronouns can be implicit.
+      # ex. The description is "something about the former noun."
+      # and they can apply to kinds `A thing has a number called age. The age is 42.`
       Flow:terms:
         - "pronoun"
         - - Term: "matched"

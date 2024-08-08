@@ -31,7 +31,7 @@ func TryProperty(q JessContext, in InputState, kind string,
 }
 
 // match and write a property value
-func GeneratePropertyValue(q JessContext, in InputState,
+func generatePropertyValue(q JessContext, in InputState,
 	noun, field string, isPlural bool,
 	accept func(PropertyValue, InputState),
 	reject func(error),

@@ -34,6 +34,7 @@ func TestPhrases(t *testing.T) {
 				known.nounPool["$"+name] = "things"
 			}
 			// create the test helper
+			known.flags = jess.LogMatches
 			m := jesstest.MakeMock(&known, known.nounPool)
 			// run the test:
 			t.Logf("testing: %d %s", i, str)
@@ -140,7 +141,6 @@ func (n *info) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width
 }
 
 var known = info{
-	flags: jess.LogMatches,
 	kinds: []string{
 		"kind", "kinds",
 		"object", "objects",

@@ -3,6 +3,9 @@ package jess
 import (
 	"errors"
 	"fmt"
+
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 func TryNamedNoun(q JessContext, in InputState,
@@ -31,14 +34,39 @@ func TryNamedNoun(q JessContext, in InputState,
 				if !errors.As(e, &matchError) {
 					reject(e)
 				} else {
-					// if all the earlier matches failed, try as an implicit noun.
-					TryImplicitNoun(q, in, func(name Name, an ActualNoun, next InputState) {
-						accept(NamedNoun{Name: &name}, an, next)
-					}, reject)
+					// see if there is already such a noun.
+					TryExistingNoun(q, in, func(noun Noun, next InputState) {
+						accept(NamedNoun{
+							Name: &Name{
+								Article: noun.Article,
+								Matched: noun.Matched,
+							}}, noun.actualNoun, next)
+					}, func(error) {
+						// if all the earlier matches failed, generate an implicit noun.
+						TryImplicitNoun(q, in, func(name Name, an ActualNoun, next InputState) {
+							accept(NamedNoun{Name: &name}, an, next)
+						}, reject)
+					})
 				}
 			})
 		}
 	})
+}
+
+// match an existing noun
+func TryExistingNoun(q JessContext, in InputState,
+	accept func(Noun, InputState),
+	reject func(error),
+) {
+	q.Try(After(weaver.NounPhase), func(weaver.Weaves, rt.Runtime) {
+		var noun Noun
+		if next := in; !noun.Match(q, &next) {
+			reject(FailedMatch{"no such noun", in})
+		} else {
+			q.SetTopic(&noun.actualNoun)
+			accept(noun, next)
+		}
+	}, reject)
 }
 
 // a phrase implies a noun exists, but no particular kind has been assigned.
@@ -49,9 +77,7 @@ func TryImplicitNoun(q JessContext, in InputState,
 	// tricksy: don't generate an implicit noun if it would conflict with a kind
 	// ( its probably actually some other phrase )
 	TryKind(q, in, func(kind Kind, rest InputState) {
-		// tbd: allow this if there is an existing noun?
-		// ( ordering to get the exact kind might be hard re: fallbacks )
-		reject(fmt.Errorf("the phrase implies a noun, but there's already a kind of that name %s", kind.actualKind.Name))
+		reject(fmt.Errorf("the phrase implies a noun %q, but there's already a kind of that name", kind.actualKind.Name))
 	}, func(error) {
 		var n Name
 		if next := in; !n.Match(q, &next) {

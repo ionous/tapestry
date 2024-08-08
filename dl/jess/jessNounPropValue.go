@@ -90,7 +90,7 @@ func TryAdditionalValues(q JessContext, in InputState,
 		accept(nil)
 	} else {
 		var ca CommaAnd
-		if !ca.SimpleMatch(&in) {
+		if !ca.InputMatch(&in) {
 			reject(FailedMatch{"unknown words following values", in})
 		} else {
 			TryPropertyValues(q, in, an, func(pv PropertyValues) {

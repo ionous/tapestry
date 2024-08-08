@@ -13,9 +13,9 @@ type topicType int
 //go:generate stringer -type=topicType
 const (
 	undeterminedTopic topicType = iota
-	nounTopic
-	pronounReference // refers to some prior line's noun ( if it can )
 	otherTopic
+	pronounReference // refers to some prior line's noun ( if it can )
+	nounTopic
 )
 
 type Line struct {
@@ -29,19 +29,23 @@ type Line struct {
 	topicType topicType
 }
 
-func (el *Line) UsePronoun() {
+// can return false if another phrase has determined it should be a noun.if
+func (el *Line) UsePronoun() (okay bool) {
 	// because its parallel matching, this can happen multiple times.
-	if el.topicType != 0 && el.topicType != pronounReference {
-		log.Panicf("trying to reference a topic but already have %s", el.topicType)
+	if el.topicType == 0 || el.topicType == pronounReference {
+		el.topicType = pronounReference
+		okay = true
 	}
-	el.topicType = pronounReference
+	return
 }
 
 func (el *Line) SetTopic(an GetActualNoun) {
 	// a successful build should (probably) only happen from one place.
-	if el.topicType > 0 {
-		log.Panicf("trying to set a topic but already have %s", el.topicType)
-	}
+	// right now, its not always clear who's going to win
+	// (indicating line data, or at least this sort) should maybe be scoped to the match.
+	// if el.topicType > 0 {
+	// 	log.Panicf("trying to set a topic but already have %s", el.topicType)
+	// }
 	el.topicType = nounTopic
 	el.topic = an
 }

@@ -485,12 +485,22 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// use pronoun reference. note: the definition as a container should win out over the default of a thing.
+		// use pronoun reference.
 		// NamesAreLikeVerbs, NounPropertyValue.
 		test: `The bottle is a container. It has an age of 42.`,
 		result: []string{
 			"AddNounKind:", "bottle", "containers",
+			"AddNounName:", "bottle", "bottle",
 			"AddNounValue:", "bottle", "age", number(42),
+		},
+	},
+	{
+		// implicit pronouns for NounPropertyValue.
+		test: `The bottle is a container. The description is "A plain glass bottle."`,
+		result: []string{
+			"AddNounKind:", "bottle", "containers",
+			"AddNounName:", "bottle", "bottle",
+			"AddNounValue:", "bottle", "description", text("A plain glass bottle."),
 		},
 	},
 	{

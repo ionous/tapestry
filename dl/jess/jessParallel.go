@@ -64,10 +64,6 @@ func (jc JessContext) SetTopic(n GetActualNoun) {
 	jc.CurrentLine().SetTopic(n)
 }
 
-func (jc JessContext) UsePronoun() {
-	jc.CurrentLine().UsePronoun()
-}
-
 func (jc JessContext) GetTopic() (ret ActualNoun) {
 	p, line := jc.p, jc.line
 	for ; line >= 0; line-- {
