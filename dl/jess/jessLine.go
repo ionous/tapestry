@@ -18,6 +18,8 @@ const (
 	nounTopic
 )
 
+// a *sentence* within a paragraph. ( not a line in a file )
+// fix rename to "phrase"?
 type Line struct {
 	words []match.TokenValue // fix? all tokens have pos; we only really need the first.
 	// the successful match; mainly for debugging; its already written itself to the database

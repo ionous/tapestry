@@ -22,6 +22,8 @@ type PromiseMatcher interface {
 type JessContext struct {
 	Query
 	Scheduler
+	// note: the paragraph and line appear in the input state as well
+	// probably should just be there, and not here.
 	p     *Paragraph
 	line  int
 	flags int

@@ -11,16 +11,13 @@ func TryPropertyNounValue(q JessContext, in InputState,
 	accept func(PromiseMatcher), reject func(error),
 ) {
 	var are Are
-	if descValueIs, ok := are.Split(in); !ok {
+	if lhs, rhs, ok := are.Split(in); !ok {
 		reject(FailedMatch{"property noun phrases require 'is' or 'are'", in})
 	} else {
 		// the target can be implied
-		if propTargetOf, ok := keywordSplit(descValueIs.lhs, keywords.Of); !ok {
+		if propTargetOf, ok := keywordSplit(lhs, keywords.Of); !ok {
 			RequestPronoun(q, func(an ActualNoun) {
-				GeneratePropertyNounValue(q,
-					an, are,
-					descValueIs.lhs,
-					descValueIs.rhs,
+				GeneratePropertyNounValue(q, an, are, lhs, rhs,
 					func(prop Property, val PropertyValue) {
 						accept(&PropertyNounValue{
 							Property:      prop,
@@ -33,10 +30,7 @@ func TryPropertyNounValue(q JessContext, in InputState,
 			// match a name to a noun ( or generate one )
 			// ( interesting to note that inform doesn't allow "kind called" here. )
 			TryNamedNoun(q, propTargetOf.rhs, func(nn NamedNoun, an ActualNoun, in InputState) {
-				GeneratePropertyNounValue(q,
-					an, are,
-					propTargetOf.lhs,
-					descValueIs.rhs,
+				GeneratePropertyNounValue(q, an, are, propTargetOf.lhs, rhs,
 					func(prop Property, val PropertyValue) {
 						accept(&PropertyNounValue{
 							Property:      prop,

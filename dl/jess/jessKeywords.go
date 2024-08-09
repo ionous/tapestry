@@ -19,8 +19,13 @@ func (op *Are) Match(_ JessContext, input *InputState) (okay bool) {
 }
 
 // given a phrase, split around the word is or are.
-func (op *Are) Split(input InputState) (Split, bool) {
-	return keywordSplit(input, keywords.Are, keywords.Is)
+func (op *Are) Split(input InputState) (lhs, rhs InputState, okay bool) {
+	if s, ok := keywordSplit(input, keywords.Are, keywords.Is); ok {
+		op.Matched = s.matched
+		lhs, rhs = s.lhs, s.rhs
+		okay = true
+	}
+	return
 }
 
 func (op *Called) Match(_ JessContext, input *InputState) (okay bool) {
