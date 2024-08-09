@@ -22,11 +22,11 @@ type PromiseMatcher interface {
 type JessContext struct {
 	Query
 	Scheduler
-	// note: the paragraph and line appear in the input state as well
+	// note: the paragraph and phrase appear in the input state as well
 	// probably should just be there, and not here.
-	p     *Paragraph
-	line  int
-	flags int
+	p           *Paragraph
+	phraseIndex int
+	flags       int
 }
 
 // override query context to provide additional flags
@@ -48,12 +48,12 @@ func (jc JessContext) Try(z weaver.Phase, cb func(weaver.Weaves, rt.Runtime), re
 	}
 }
 
-func (jc JessContext) CurrentLine() *Line {
-	return &jc.p.Lines[jc.line]
+func (jc JessContext) CurrentPhrase() *Phrase {
+	return &jc.p.Phrases[jc.phraseIndex]
 }
 
 func (jc JessContext) Source() (ret compact.Source) {
-	p, el := jc.p, jc.CurrentLine()
+	p, el := jc.p, jc.CurrentPhrase()
 	lineOfs := el.words[0].Pos.Y
 	return compact.Source{
 		File:    p.File,
@@ -63,13 +63,13 @@ func (jc JessContext) Source() (ret compact.Source) {
 }
 
 func (jc JessContext) SetTopic(n GetActualNoun) {
-	jc.CurrentLine().SetTopic(n)
+	jc.CurrentPhrase().SetTopic(n)
 }
 
 func (jc JessContext) GetTopic() (ret ActualNoun) {
-	p, line := jc.p, jc.line
+	p, line := jc.p, jc.phraseIndex
 	for ; line >= 0; line-- {
-		if el := p.Lines[line]; el.topicType == nounTopic {
+		if el := p.Phrases[line]; el.topicType == nounTopic {
 			ret = el.topic.GetActualNoun()
 		} else if el.topicType != pronounReference {
 			break // pronoun references will keep searching backwards

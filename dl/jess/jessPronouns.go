@@ -14,7 +14,7 @@ func (op *Pronoun) Match(q JessContext, input *InputState) (okay bool) {
 	// fix: ideally replace with "promise" so that it can return error okay
 	if matchPronouns(q) {
 		if width := input.MatchWord(keywords.It); width > 0 {
-			if q.CurrentLine().UsePronoun() {
+			if q.CurrentPhrase().UsePronoun() {
 				op.Matched = input.Cut(width)
 				*input = input.Skip(width)
 				okay = true
@@ -72,7 +72,7 @@ func RequestPronoun(q JessContext,
 	reject func(error),
 ) {
 	q.Try(After(weaver.FallbackPhase), func(weaver.Weaves, rt.Runtime) {
-		if !q.CurrentLine().UsePronoun() {
+		if !q.CurrentPhrase().UsePronoun() {
 			reject(errors.New("sentence describes a particular noun"))
 		} else if an := q.GetTopic(); !an.IsValid() {
 			e := fmt.Errorf("couldn't find topic of pronoun")

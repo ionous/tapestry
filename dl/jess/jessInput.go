@@ -1,28 +1,27 @@
 package jess
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-// helper for line matching
+// The english language phrase being matched.
 type InputState struct {
-	p     *Paragraph
-	line  int
-	words []match.TokenValue // the remainder of the line being parsed
+	// p           *Paragraph
+	// phraseIndex int
+	words []match.TokenValue // the remainder of the phrase being parsed
 }
 
-func (in InputState) Source() (ret compact.Source) {
-	if p, ws := in.p, in.words; len(ws) > 0 {
-		lineOfs := ws[0].Pos.Y
-		ret = compact.Source{
-			File:    p.File,
-			Line:    lineOfs,
-			Comment: "a plain-text paragraph",
-		}
-	}
-	return
-}
+// func (in InputState) Source() (ret compact.Source) {
+// 	if p, ws := in.p, in.words; len(ws) > 0 {
+// 		lineOfs := ws[0].Pos.Y // this is the source file line ( not phrase )
+// 		ret = compact.Source{
+// 			File:    p.File,
+// 			Line:    lineOfs,
+// 			Comment: "a plain-text paragraph",
+// 		}
+// 	}
+// 	return
+// }
 
 func (in InputState) Len() int {
 	return len(in.words)
@@ -46,8 +45,8 @@ func (in InputState) GetNext(t match.Token) (ret match.TokenValue, okay bool) {
 // return an input state that is the passed number of words after this one.
 func (in InputState) Skip(skip int) InputState {
 	return InputState{
-		p:     in.p,
-		line:  in.line,
+		// p:           in.p,
+		// phraseIndex: in.phraseIndex,
 		words: in.words[skip:],
 	}
 }
@@ -55,8 +54,8 @@ func (in InputState) Skip(skip int) InputState {
 // return an input state of the passed width; dropping the trailing ones.
 func (in InputState) Slice(width int) InputState {
 	return InputState{
-		p:     in.p,
-		line:  in.line,
+		// p:           in.p,
+		// phraseIndex: in.phraseIndex,
 		words: in.words[:width],
 	}
 }

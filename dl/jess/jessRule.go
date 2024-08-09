@@ -49,7 +49,7 @@ func (op *TimedRule) matchName(q JessContext, input *InputState) (okay bool) {
 			op.RuleName = new(RuleName)
 			*input, okay = input.Skip(1), true
 		} else {
-			words := InputState{p: input.p, line: input.line, words: words}
+			words := InputState{ /*p: input.p, phraseIndex: input.phraseIndex, */ words: words}
 			if Optional(q, &words, &op.RuleName) {
 				*input, okay = input.Skip(1), true
 			}

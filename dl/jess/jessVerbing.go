@@ -150,15 +150,15 @@ func (op *NamesAreLikeVerbs) Generate(ctx JessContext) (err error) {
 	return
 }
 
-func (op *NamesAreLikeVerbs) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {
-	if next, q := line, //
+func (op *NamesAreLikeVerbs) MatchLine(q JessContext, in InputState) (ret InputState, okay bool) {
+	if next, q := in, //
 		AddContext(q, MatchKindsOfKinds); //
 	op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {
 		Optional(q, &next, &op.VerbPhrase)
 		// this sets up the *possibility*; the value is filled out in BuildNouns
-		q.SetTopic(&op.Names)
+		q.CurrentPhrase().SetTopic(&op.Names)
 		ret, okay = next, true
 	}
 	return

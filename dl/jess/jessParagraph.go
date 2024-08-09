@@ -16,15 +16,15 @@ type Paragraph struct {
 	// sentences within the paragraph.
 	// each sentence is its own slice of tokens.
 	// weaving winnows this list.
-	Lines []Line
-	// index into lines of unmatched sentences
+	Phrases []Phrase
+	// index into phrases of unmatched sentences
 	unmatched []int
 }
 
 // use the existing tokens as a paragraph
 // ( ex. from parsing a plain text section )
-func MakeParagraph(file string, lines [][]match.TokenValue) Paragraph {
-	return Paragraph{File: file, Lines: linesToLines(lines)}
+func MakeParagraph(file string, phrases [][]match.TokenValue) Paragraph {
+	return Paragraph{File: file, Phrases: tokensToPhrases(phrases)}
 }
 
 // parse the passed string into a paragraph of sentences.
@@ -40,13 +40,13 @@ func NewParagraph(pos compact.Source, str string, assign rt.Assignment) (ret Par
 		} else if cnt != 0 && assign == nil {
 			err = errors.New("expected trailing assignment")
 		} else {
-			lines := c.Lines
+			phrases := c.Lines
 			if assign != nil && cnt != 0 {
 				tv := match.TokenValue{Token: match.Tell, Value: assign}
 				c.Tokens = append(c.Tokens, tv)
-				lines = append(lines, c.Tokens)
+				phrases = append(phrases, c.Tokens)
 			}
-			ret = MakeParagraph(pos.File, lines)
+			ret = MakeParagraph(pos.File, phrases)
 		}
 	}
 	return
@@ -60,22 +60,22 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 	unmatched, retry := p.unmatched, 0
 	// first weave initialization
 	if unmatched == nil { // ugh. fine for now.
-		unmatched = make([]int, len(p.Lines))
-		for i, el := range p.Lines {
+		unmatched = make([]int, len(p.Phrases))
+		for i, el := range p.Phrases {
 			jc := JessContext{q, u, p, i, defaultFlags}
-			in := InputState{p: p, line: i, words: el.words}
+			in := InputState{words: el.words}
 			TryPromisedMatch(jc, in) // launch parallel matches
 			unmatched[i] = i
 		}
 	}
 	for _, i := range unmatched {
 		jc := JessContext{q, u, p, i, defaultFlags}
-		el := &(p.Lines[i])
+		el := &(p.Phrases[i])
 		if el.matched != nil {
 			continue // parallel matched this.
 		}
 		var best bestMatch
-		line := InputState{p: p, line: i, words: el.words}
+		line := InputState{words: el.words}
 		// match a sentence,
 		// and if matched Generate/Schedule it for weaving database info
 		if matchSentence(z, jc, line, &best) {
@@ -95,7 +95,7 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 			// if it didn't match; retry in a later phase
 			// ( but error if we've gone through all the phases without success )
 			if z == weaver.NextPhase {
-				e := fmt.Errorf("failed to match %s %s %q", p.File, line.Source().ErrorString(), Matched(el.words).DebugString())
+				e := fmt.Errorf("failed to match %s %s %q", p.File, jc.Source().ErrorString(), Matched(el.words).DebugString())
 				err = errors.Join(append([]error{e}, el.errs...)...)
 				break
 			} else {
@@ -113,7 +113,7 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 }
 
 func TryPromisedMatch(jc JessContext, in InputState) {
-	el := jc.CurrentLine()
+	el := jc.CurrentPhrase()
 	// property of noun is/are value.
 	TryPropertyNounValue(jc, in, el.store, el.reject)
 	// noun has property of value.

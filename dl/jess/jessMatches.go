@@ -35,16 +35,16 @@ func matchSentence(z weaver.Phase, q JessContext, line InputState, out *bestMatc
 		// names {are} "a kind of"/"kinds of" [traits] kind.
 		okay = matchLine(q, line, &op.KindsAreKind, out) ||
 			// The colors are black and blue.
-			matchLine(q, line, schedule(line, &op.AspectsAreTraits), out)
+			matchLine(q, line, schedule(q, &op.AspectsAreTraits), out)
 
 	case weaver.PropertyPhase:
 		// fix? combine these to speed matching?
 		// kinds {are} "usually"
-		okay = matchLine(q, line, schedule(line, &op.KindsAreTraits), out) ||
+		okay = matchLine(q, line, schedule(q, &op.KindsAreTraits), out) ||
 			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
-			matchLine(q, line, schedule(line, &op.KindsHaveProperties), out) ||
+			matchLine(q, line, schedule(q, &op.KindsHaveProperties), out) ||
 			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
-			matchLine(q, line, schedule(line, &op.KindsAreEither), out)
+			matchLine(q, line, schedule(q, &op.KindsAreEither), out)
 
 	case weaver.NounPhase:
 		// note: the direction phrases have to be first
@@ -112,12 +112,12 @@ type schedulee interface {
 
 // phases that can weave immediately, without needing to schedule more phases
 // can use this to define a Generate method
-func schedule(line InputState, s schedulee) genericSchedule {
-	return genericSchedule{line, s}
+func schedule(ctx JessContext, s schedulee) genericSchedule {
+	return genericSchedule{ctx, s}
 }
 
 type genericSchedule struct {
-	line InputState
+	ctx JessContext // for debugging
 	schedulee
 }
 
@@ -141,7 +141,7 @@ func (e schedulingError) Unwrap() error {
 }
 
 func (e schedulingError) Error() string {
-	src := e.op.line.Source().ErrorString()
+	src := e.op.ctx.Source().ErrorString()
 	return fmt.Sprintf("%s during %s at %s for %s", e.err, e.phase, src, e.op.TypeInfo().TypeName())
 }
 

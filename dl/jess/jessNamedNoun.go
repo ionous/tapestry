@@ -23,7 +23,7 @@ func TryNamedNoun(q JessContext, in InputState,
 			// matches a name, kind, and traits. ( "the animal called the cat" )
 			TryInlineNoun(q, in, func(n InlineNoun, next InputState) {
 				futureNoun := new(ActualNoun)
-				q.SetTopic(futureNoun) // should this be after the generation?
+				q.CurrentPhrase().SetTopic(futureNoun) // should this be after the generation?
 				// create a noun with the matched data:
 				GenerateNoun(q, n.Name, n.GetKind(), n.GetTraits(), func(an ActualNoun) {
 					*futureNoun = an
@@ -63,7 +63,7 @@ func TryExistingNoun(q JessContext, in InputState,
 		if next := in; !noun.Match(q, &next) {
 			reject(FailedMatch{"no such noun", in})
 		} else {
-			q.SetTopic(&noun.actualNoun)
+			q.CurrentPhrase().SetTopic(&noun.actualNoun)
 			accept(noun, next)
 		}
 	}, reject)
@@ -84,7 +84,7 @@ func TryImplicitNoun(q JessContext, in InputState,
 			reject(FailedMatch{"expected some sort of name", next})
 		} else {
 			futureNoun := new(ActualNoun)
-			q.SetTopic(futureNoun) // should this be after the generation?
+			q.CurrentPhrase().SetTopic(futureNoun) // should this be after the generation?
 			GenerateImplicitNoun(q, n, func(an ActualNoun) {
 				*futureNoun = an
 				accept(n, an, next)
