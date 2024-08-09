@@ -215,7 +215,7 @@ func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, 
 		val = a.Assignment
 	}
 	if aff := call.GetAffinity(val); aff != wantAff {
-		err = fmt.Errorf("%w assignment wanted %s not %s", ErrConflict, aff, wantAff)
+		err = fmt.Errorf("%w assignment wanted %s not %s", ErrConflict, wantAff, aff)
 	} else {
 		// strip off the From section to avoid serializing redundant info
 		switch v := val.(type) {

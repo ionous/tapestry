@@ -759,8 +759,8 @@ func (pen *Pen) AddDefaultValue(kind, field string, value rt.Assignment) (err er
 func (pen *Pen) AddNounValue(noun, field string, value rt.Assignment) (err error) {
 	if strings.ContainsRune(field, '.') {
 		err = fmt.Errorf("unexpected dot in assigned value for noun %q field %q", noun, field)
-	} else {
-		err = pen.addFieldValue(noun, field, value)
+	} else if e := pen.addFieldValue(noun, field, value); e != nil {
+		err = fmt.Errorf("%w for noun %q field %q", e, noun, field)
 	}
 	return
 }
