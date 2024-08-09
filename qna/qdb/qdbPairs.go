@@ -48,15 +48,15 @@ select domain, relKind, oneNoun, otherNoun, cardinality
 // ( see also: Runner.RelateTo )
 var newPairsFromNames = `
 with newPairs as (
-	select ?1 as domain, rel.relKind, one.rowid as oneNoun, other.rowid as otherNoun, rel.cardinality
+	select ?1 as domain, rel.relKind, one.noun as oneNoun, other.noun as otherNoun, rel.cardinality
 	from mdl_rel rel 
 	join active_kinds ks
 		on (ks.kind = rel.relKind)
-	join mdl_noun one
-	join mdl_noun other
+	join active_nouns one
+	join active_nouns other
 	where ks.name = ?2
-	and one.noun = ?3
-	and other.noun = ?4
+	and one.name = ?3
+	and other.name = ?4
 )` + relatePair
 
 // zero out and mismatched pairs, and then write the new pairs
