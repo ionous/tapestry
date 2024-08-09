@@ -19,6 +19,11 @@ func (op *Noun) BuildNouns(_ JessContext, w weaver.Weaves, _ rt.Runtime, props N
 	return
 }
 
+// for use in properties
+func (op *Noun) Assignment() rt.Assignment {
+	return text(op.actualNoun.Name, op.actualNoun.Kind)
+}
+
 func (op *Noun) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&

@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// marker interface
 type PropertyValue interface {
 	Assignment() rt.Assignment
 }
@@ -13,7 +12,7 @@ type PropertyValue interface {
 type FieldName = string
 
 // match the name of a property
-func TryProperty(q JessContext, in InputState, kind string,
+func TryPropertyName(q JessContext, in InputState, kind string,
 	accept func(Property, InputState), reject func(error),
 ) {
 	// the article is optional, even at the start of a sentence where grammar often demands it.
@@ -36,7 +35,11 @@ func generatePropertyValue(q JessContext, in InputState,
 	accept func(PropertyValue, InputState),
 	reject func(error),
 ) {
-	if pv, ok := matchPropertyValue(q, &in, isPlural); !ok {
+	flags := AllowSingular
+	if isPlural {
+		flags = AllowPlural
+	}
+	if pv, ok := matchPropertyValue(q, &in, flags); !ok {
 		reject(FailedMatch{"didn't understand the value", in})
 	} else {
 		q.Try(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) {
@@ -47,15 +50,4 @@ func generatePropertyValue(q JessContext, in InputState,
 			}
 		}, reject)
 	}
-}
-
-func matchPropertyValue(q JessContext, in *InputState, isPlural bool) (ret PropertyValue, okay bool) {
-	var qt *QuotedTexts
-	var sv *SingleValue
-	if isPlural && Optional(q, in, &qt) {
-		ret, okay = qt, true
-	} else if !isPlural && Optional(q, in, &sv) {
-		ret, okay = sv, true
-	}
-	return
 }

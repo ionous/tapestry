@@ -53,7 +53,7 @@ func GeneratePropertyNounValue(q JessContext,
 	reject func(error),
 ) {
 	// match a property name
-	TryProperty(q, inProp, an.Kind, func(prop Property, rest InputState) {
+	TryPropertyName(q, inProp, an.Kind, func(prop Property, rest InputState) {
 		if rest.Len() != 0 {
 			e := fmt.Errorf("trying to define a property for a noun %q of kind %q, but didn't recognize %s", an.Name, an.Kind, rest.DebugString())
 			reject(e)
@@ -62,7 +62,7 @@ func GeneratePropertyNounValue(q JessContext,
 				an.Name, prop.fieldName, isAre.IsPlural(),
 				func(val PropertyValue, rest InputState) {
 					if rest.Len() != 0 {
-						reject(FailedMatch{"unexpected words trailing a property definition", rest})
+						reject(FailedMatch{"unexpected words after a property definition", rest})
 					} else {
 						accept(prop, val)
 					}

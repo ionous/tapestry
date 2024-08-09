@@ -496,6 +496,8 @@ var Phrases = []Phrase{
 	},
 	{
 		// implicit pronouns for NounPropertyValue.
+		// fix? this is how inform does it. but possessive pronouns ( which it does not allow )
+		// would be better. Its/their/his/her description is....
 		test: `The bottle is a container. The description is "A plain glass bottle."`,
 		result: []string{
 			"AddNounKind:", "bottle", "containers",

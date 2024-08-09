@@ -26,11 +26,11 @@ func TryNounPropertyValue(q JessContext, in InputState,
 			} else {
 				// given the kind, match the property names and values.
 				// ( required to separate it from unquoted nouns or kinds as values )
-				TryPropertyValues(q, tgtProp.rhs, an, func(pv PropertyValues) {
+				TryPropertyPossessions(q, tgtProp.rhs, an, func(ps PropertyPossessions) {
 					accept(&NounPropertyValue{
-						NamedNoun:      nn,
-						Has:            Words{Matched: tgtProp.matched},
-						PropertyValues: pv,
+						NamedNoun:           nn,
+						Has:                 Words{Matched: tgtProp.matched},
+						PropertyPossessions: ps,
 					})
 				}, reject)
 			}
@@ -41,34 +41,34 @@ func TryNounPropertyValue(q JessContext, in InputState,
 // recursively generate a list of property values.
 // expects to eat the entire input, and therefore doesn't return next InputState.
 // ex. `age of 42, color red, and the description "A plain glass bottle."`
-func TryPropertyValues(q JessContext, in InputState,
+func TryPropertyPossessions(q JessContext, in InputState,
 	an ActualNoun,
-	accept func(PropertyValues),
+	accept func(PropertyPossessions),
 	reject func(error),
 ) {
 	// matches an optional article, and field name.
-	TryProperty(q, in, an.Kind, func(prop Property, valueOf InputState) {
+	TryPropertyName(q, in, an.Kind, func(prop Property, valueOf InputState) {
 		if valueOf.Len() == 0 {
 			reject(FailedMatch{"it seems you were trying to define a property without a value", in})
 		} else {
 			// optionally, the word "of" can separate the property name and value
 			of := matchOf(&valueOf)
 			// find the value
-			TrySingleValue(q, valueOf, an, func(sv SingleValue, is InputState) {
+			TryPropertyValue(q, valueOf, an, AllowSingular, func(pv PropertyValue, rest InputState) {
 				// try to apply that value to the noun
+				// FIX: this should be delayed until the phrase is completely matched.
 				q.Try(weaver.AnyPhase, func(w weaver.Weaves, run rt.Runtime) {
-					if e := w.AddNounValue(an.Name, prop.fieldName, sv.Assignment()); e != nil {
+					if e := w.AddNounValue(an.Name, prop.fieldName, pv.Assignment()); e != nil {
 						reject(e)
 					}
 				}, reject)
-				// try to find additional properties
-				TryAdditionalValues(q, is, an,
-					func(more *AdditionalPropertyValues) {
-						accept(PropertyValues{
-							Property:                 prop,
-							Of:                       of,
-							Value:                    sv,
-							AdditionalPropertyValues: more,
+				TryAdditionalPossessions(q, rest, an,
+					func(more *AdditionalPossessions) {
+						accept(PropertyPossessions{
+							Property:              prop,
+							Of:                    of,
+							PropertyValue:         pv,
+							AdditionalPossessions: more,
 						})
 					}, reject)
 			}, reject)
@@ -81,9 +81,9 @@ func TryPropertyValues(q JessContext, in InputState,
 // because the values are optional, the input can be empty,
 // in which case the accepted additional values are nil.
 // "ex. "and the description ...."
-func TryAdditionalValues(q JessContext, in InputState,
+func TryAdditionalPossessions(q JessContext, in InputState,
 	an ActualNoun,
-	accept func(*AdditionalPropertyValues),
+	accept func(*AdditionalPossessions),
 	reject func(error),
 ) {
 	if in.Len() == 0 {
@@ -93,10 +93,10 @@ func TryAdditionalValues(q JessContext, in InputState,
 		if !ca.InputMatch(&in) {
 			reject(FailedMatch{"unknown words following values", in})
 		} else {
-			TryPropertyValues(q, in, an, func(pv PropertyValues) {
-				accept(&AdditionalPropertyValues{
-					CommaAnd: ca,
-					Values:   pv,
+			TryPropertyPossessions(q, in, an, func(pv PropertyPossessions) {
+				accept(&AdditionalPossessions{
+					CommaAnd:            ca,
+					PropertyPossessions: pv,
 				})
 			}, reject)
 		}

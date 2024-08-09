@@ -79,13 +79,14 @@ Spec:requires:contains:
               - "article"
               - true
           - Term: "matched"
-          
 
     - # Matches an existing noun
       # ( by checking multiple words for the best match ).
+      # Can be used as a property value: the property receives the noun's name.
       Flow:slots:terms:
         - "noun"
-        - "noun_builder"
+        - - "noun_builder"
+          - "property_value"
         - - Term:optional:
               - "article"
               - true
@@ -215,10 +216,12 @@ Spec:requires:contains:
           - Term: "matched"
 
     - # Matches the name of an existing kind.
-      # Can generate a single anonymous noun.
+      # In some contexts, can generate a single anonymous noun.
+      # Can be used as a property value: the property receives the name of kind.
       Flow:slots:terms:
         - "kind"
-        - "noun_builder"
+        - - "noun_builder"
+          - "property_value"
         - - # while an article can precede every kind
             # it doesn't influence which kind gets matched.
             Term:optional:
@@ -521,6 +524,9 @@ Spec:requires:contains:
             # generating a new noun if needed.
             Term: "named_noun"
           - Term: "are"
+          # future: allow multiple property assignments, each with its own "and is/are". 
+          # tbd: in that case, how to handle quoted text properties ending with terminals.
+          # for example: `the description is "oops.", and the problem is "didn't that end a sentence?"
           - Term: "property_value"
 
     - # Assigns a default value to a noun.
@@ -541,66 +547,53 @@ Spec:requires:contains:
           - Term:type:
               - "has"
               - "words"
-          - Term: "property_values"
+          - Term: "property_possessions"
 
-    - # Matches one or more pairs of property and value,
-      # each pair separated by ands ( or commas. )
+    - # A value used to initialize a noun.
+      # ( Can either be a single value, or a value containing a list. )
+      Slot: "property_value"
+    
+    - # Matches one or more pairs of property and value.
+      # Each pair is separated by ands ( or commas. )
+      # For example: `has age 42 and height 32.`
       Flow:terms:
-        - "property_values"
+        - "property_possessions"
         - - Term: "property"
           - # using the word "of" sometimes looks better. ( i think... )
             Term:type:optional:
               - "of"
               - "words"
               - true
-          - Term:type:
-            - "value"
-            - "single_value"
-          - Term:optional:
-              - "additional_property_values"
+          - Term: "property_value"
+          - # additional property names and values for the current noun.
+            # only valid when the property value represents a single value, and not a list. 
+            Term:optional:
+              - "additional_possessions"
               - true
 
     - # Matches a value following another value.
       Flow:terms:
-        - "additional_property_values"
+        - "additional_possessions"
         - - # a separator is required between property value pairs
             Term: "comma_and"
-          - Term:type:
-            - "values"
-            - "property_values"
-
-    - Slot: "property_value"
-
-    - # This matches only one of its options.
-      # ( The options could be represented as a slot; this feels easier for now ).
-      Flow:slot:terms:
-        - "single_value"
-        - "property_value"
-        - - Term:optional:
-              - "quoted_text"
-              - true
-          - Term:optional:
-              - "matching_num"
-              - true
-          - Term:optional:
-              - "noun"
-              - true
-          - Term:optional:
-              - "kind"
-              - true
+          - Term: "property_possessions"
 
     - # Text that begins and ends with double quotes.
       # The quotes themselves are not part of the matched text.
-      Flow:terms:
+      # Can be used as the value of a property.
+      Flow:slot:terms:
         - "quoted_text"
+        - "property_value"
         - - Term:type:
               - "matched"
               - "text"
 
     - # Reads a number specified in words or as digits.
       # Stores the result as the parsed number.
-      Flow:terms:
+      # Can be used as the value of a property.
+      Flow:slot:terms:
         - "matching_num"
+        - "property_value"
         - - Term:type:
               - "value"
               - "num"

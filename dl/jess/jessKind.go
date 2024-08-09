@@ -28,6 +28,11 @@ func (op *Kind) Match(q JessContext, input *InputState) (okay bool) {
 	return
 }
 
+// for use in properties
+func (op *Kind) Assignment() rt.Assignment {
+	return text(op.actualKind.Name, "") // tbd: should these be typed? ex. as "kinds" or something?
+}
+
 func (op *Kind) matchKind(q JessContext, input *InputState) (okay bool) {
 	var k kindsOf.Kinds
 	if m, width := q.FindKind(input.Words(), &k); width > 0 && filterKind(q, k) {

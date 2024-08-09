@@ -10,65 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/template"
 	"git.sr.ht/~ionous/tapestry/template/types"
-	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
-
-// --------------------------------------------------------------
-// SingleValue
-// --------------------------------------------------------------
-
-// match and apply a value
-func TrySingleValue(q JessContext, in InputState,
-	an ActualNoun,
-	accept func(SingleValue, InputState),
-	reject func(error),
-) {
-	q.Try(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) {
-		var sv SingleValue
-		if !sv.Match(q, &in) {
-			reject(FailedMatch{"didn't understand the value", in})
-		} else {
-			accept(sv, in)
-		}
-	}, reject)
-}
-
-// panics if unmatched
-func (op *SingleValue) Assignment() (ret rt.Assignment) {
-	if n := op.QuotedText; n != nil {
-		ret = n.Assignment()
-	} else if n := op.MatchingNum; n != nil {
-		ret = n.Assignment()
-	} else if n := op.Noun; n != nil {
-		ret = nounAsTextValue(n.actualNoun)
-	} else if k := op.Kind; k != nil {
-		ret = kindAsTextValue(k.actualKind)
-	} else {
-		panic("unmatched assignment")
-	}
-	return
-}
-
-func (op *SingleValue) Match(q JessContext, input *InputState) (okay bool) {
-	// alt: could rework each of these as implementing a "single_value" interface
-	// ( well: probably single_value and property_value )
-	if next := *input; //
-	Optional(q, &next, &op.QuotedText) ||
-		Optional(q, &next, &op.MatchingNum) ||
-		Optional(q, &next, &op.Noun) ||
-		Optional(q, &next, &op.Kind) {
-		*input, okay = next, true
-	}
-	return
-}
-
-func nounAsTextValue(noun ActualNoun) rt.Assignment {
-	return text(noun.Name, noun.Kind)
-}
-
-func kindAsTextValue(kind ActualKind) rt.Assignment {
-	return text(kind.Name, "") // tbd: should these be typed? ex. as "kinds" or something?
-}
 
 // --------------------------------------------------------------
 // QuotedText

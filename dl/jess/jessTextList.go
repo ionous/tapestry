@@ -27,6 +27,7 @@ func (op *QuotedTexts) Match(q JessContext, input *InputState) (okay bool) {
 	return
 }
 
+// implements PropertyValue
 func (op *QuotedTexts) Assignment() (ret rt.Assignment) {
 	var els []rt.TextEval
 	for it := op; it != nil; it = it.Next() {

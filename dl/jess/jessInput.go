@@ -4,24 +4,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-// The english language phrase being matched.
+// The English language phrase being matched.
 type InputState struct {
-	// p           *Paragraph
-	// phraseIndex int
 	words []match.TokenValue // the remainder of the phrase being parsed
 }
-
-// func (in InputState) Source() (ret compact.Source) {
-// 	if p, ws := in.p, in.words; len(ws) > 0 {
-// 		lineOfs := ws[0].Pos.Y // this is the source file line ( not phrase )
-// 		ret = compact.Source{
-// 			File:    p.File,
-// 			Line:    lineOfs,
-// 			Comment: "a plain-text paragraph",
-// 		}
-// 	}
-// 	return
-// }
 
 func (in InputState) Len() int {
 	return len(in.words)
