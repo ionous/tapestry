@@ -48,6 +48,11 @@ Spec:requires:contains:
         - "are"
         - - Term: "matched"
 
+    - Flow:slots:terms:
+        - "property_pronoun"
+        - "property_noun"
+        - - Term: "pronoun"
+      
     - # Matches the word "it".
       # note: in inform, pronouns can be implicit.
       # ex. The description is "something about the former noun."
@@ -55,6 +60,9 @@ Spec:requires:contains:
       Flow:terms:
         - "pronoun"
         - - Term: "matched"
+          - Term:private:
+            - "actual_noun"
+            - true
           
     - # Matches the word "called".
       Flow:terms:
@@ -62,7 +70,7 @@ Spec:requires:contains:
         - - Term: "matched"
 
     - # Indicates a matcher which can define a noun.
-      Slot: "noun_builder"
+      Slot: "noun_maker"
 
     - # Specifies a name who's meaning depends on context.
       # For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
@@ -74,18 +82,28 @@ Spec:requires:contains:
       # Future: allow quoted "titles" ( which are then allowed to break those assumptions )
       Flow:slots:terms:
         - "name"
-        - "noun_builder"
+        - - "noun_maker"
         - - Term:optional:
               - "article"
               - true
           - Term: "matched"
-
+    
+    - Flow:slots:terms:
+        - "implicit_noun"
+        - - "property_noun"
+        - - Term: "name"
+          - # the database info that matched
+            Term:private:
+              - "actual_noun"
+              - true
+    
     - # Matches an existing noun
       # ( by checking multiple words for the best match ).
       # Can be used as a property value: the property receives the noun's name.
       Flow:slots:terms:
-        - "noun"
-        - - "noun_builder"
+        - "existing_noun"
+        - - "noun_maker"
+          - "property_noun"
           - "property_value"
         - - Term:optional:
               - "article"
@@ -99,24 +117,18 @@ Spec:requires:contains:
 
     - # Matches an existing noun, or if not: then something new.
       # Noun property uses this to find the best property field based on a noun's kind.
-      Flow:terms:
-        - "named_noun"
-        - - Term:optional:
-              - "pronoun"
-              - true
-          - Term:optional:
-              - "inline_noun"
-              - true
-          - Term:optional:
-              - "name"
-              - true
+      Slot: "property_noun"
 
     - # "the closed container called the box."
-      Flow:terms:
+      Flow:slots:terms:
         - "inline_noun"
+        - "property_noun"
         - - Term: "inline_kind"
           - Term: "called"
           - Term: "name"
+          - Term:private: 
+            - "actual_noun"
+            - true
 
     - # unlike 'multiple_adjectives' this can only specify a single trailing kind
       Flow:terms:
@@ -158,7 +170,7 @@ Spec:requires:contains:
       # Not all options are valid in all contexts.
       Flow:slots:terms:
         - "multiple_names"
-        - "noun_builder"
+        - "noun_maker"
         - - # cache for pronouns
             Term:private:
             - "actual_noun"
@@ -207,7 +219,7 @@ Spec:requires:contains:
       # ( yes, `the five the containers` is permitted. )
       Flow:slots:terms:
         - "counted_kind"
-        - "noun_builder"
+        - "noun_maker"
         - - Term:optional:
               - "article"
               - true
@@ -220,7 +232,7 @@ Spec:requires:contains:
       # Can be used as a property value: the property receives the name of kind.
       Flow:slots:terms:
         - "kind"
-        - - "noun_builder"
+        - - "noun_maker"
           - "property_value"
         - - # while an article can precede every kind
             # it doesn't influence which kind gets matched.
@@ -312,7 +324,7 @@ Spec:requires:contains:
         - - Term: "text"
 
     - Slot: "line_matcher"
-    - Slot: "promise_matcher"
+    - Slot: "promised_matcher"
 
     - # This is the union of all possible line matchers.
       # For any given plain text sentence,
@@ -514,7 +526,7 @@ Spec:requires:contains:
       # ex. The implications of carrying are "not worn" and "portable".
       Flow:slots:terms:
         - "property_noun_value"
-        - "promise_matcher"
+        - "promised_matcher"
         - - Term: "property"
           - # the word "of"
             Term:type:
@@ -522,12 +534,16 @@ Spec:requires:contains:
               - "words"
           - # tries to match an existing noun,
             # generating a new noun if needed.
-            Term: "named_noun"
+            Term: "property_noun"
           - Term: "are"
           # future: allow multiple property assignments, each with its own "and is/are". 
           # tbd: in that case, how to handle quoted text properties ending with terminals.
           # for example: `the description is "oops.", and the problem is "didn't that end a sentence?"
           - Term: "property_value"
+          - Term:type:private:
+            - "builder"
+            - "property_builder"
+            - true 
 
     - # Assigns a default value to a noun.
       # ex.
@@ -535,7 +551,7 @@ Spec:requires:contains:
       # like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
       Flow:slots:terms:
         - "noun_property_value"
-        - "promise_matcher"
+        - "promised_matcher"
         - # tries to match an existing noun, or generates one.
           # use the matched noun to guide property matching.
           # 
@@ -543,11 +559,15 @@ Spec:requires:contains:
           # perhaps GetPartialNoun/Kind could optionally search/grow right to left.
           # ( noun/kind matching is useful for verbs "The subject of supporting is supporters." )
           # ( if the values were only number or quoted text, it'd be simpler )
-          - Term: "named_noun"
+          - Term: "property_noun"
           - Term:type:
               - "has"
               - "words"
           - Term: "property_possessions"
+          - Term:type:private:
+            - "builder"
+            - "property_builder"
+            - true 
 
     - # A value used to initialize a noun.
       # ( Can either be a single value, or a value containing a list. )
@@ -728,9 +748,8 @@ Spec:requires:contains:
               - "kind"
               - true
           - Term:optional:
-              - "noun"
+              - "existing_noun"
               - true
-
 
     - # Phrases can break out of plain text and into structured tell docs.
       # The documents start with a colon (:) followed by a newline

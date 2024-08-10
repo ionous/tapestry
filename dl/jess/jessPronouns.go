@@ -8,6 +8,20 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
+func (op *PropertyPronoun) BuildPropertyNoun(ctx BuildContext) (string, error) {
+	return op.Pronoun.actualNoun.Name, nil
+}
+
+// PropertyNoun interface, only valid after a match.
+func (op *PropertyPronoun) GetKind() string {
+	return op.Pronoun.actualNoun.Kind
+}
+
+// PropertyNoun interface, only valid after build
+func (op *PropertyPronoun) GetActualNoun() ActualNoun {
+	return op.Pronoun.actualNoun
+}
+
 // when the query context has "MatchPronouns",
 // try to match the *use* of a pronoun ( ex. "it" ).
 func (op *Pronoun) Match(q JessContext, input *InputState) (okay bool) {
@@ -48,7 +62,7 @@ func (op *Pronoun) BuildNouns(q JessContext, w weaver.Weaves, run rt.Runtime, pr
 // accept fires in the value phase;
 // reject can fire asap if it doesn't look like a pronoun.
 func TryPronoun(q JessContext, in InputState,
-	accept func(Pronoun, ActualNoun, InputState),
+	accept func(Pronoun, InputState),
 	reject func(error),
 ) {
 	// the name scan differentiates "the it girl" from "she is ..."
@@ -60,10 +74,21 @@ func TryPronoun(q JessContext, in InputState,
 	} else {
 		RequestPronoun(q, func(an ActualNoun) {
 			accept(Pronoun{
-				Matched: in.words,
-			}, an, in.Skip(w))
+				Matched:    in.words,
+				actualNoun: an,
+			}, in.Skip(w))
 		}, reject)
 	}
+}
+
+// property pronouns can be implied: "The description is".
+func TryImpliedPronoun(q JessContext,
+	accept func(PropertyPronoun),
+	reject func(error),
+) {
+	RequestPronoun(q, func(an ActualNoun) {
+		accept(PropertyPronoun{Pronoun: Pronoun{actualNoun: an}})
+	}, reject)
 }
 
 // determine the topic of the sentence based on an earlier definition.
@@ -71,6 +96,8 @@ func RequestPronoun(q JessContext,
 	accept func(ActualNoun),
 	reject func(error),
 ) {
+	// fix: a direct dependency on previous phrase -- whatever its phase -- would be better.
+	// (ex. add a notifier or a something to a topical sentence)
 	q.Try(After(weaver.FallbackPhase), func(weaver.Weaves, rt.Runtime) {
 		if !q.CurrentPhrase().UsePronoun() {
 			reject(errors.New("sentence describes a particular noun"))

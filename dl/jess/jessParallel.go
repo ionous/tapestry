@@ -2,7 +2,6 @@ package jess
 
 import (
 	"git.sr.ht/~ionous/tapestry/lang/compact"
-	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -14,9 +13,10 @@ type Scheduler interface {
 	SchedulePos(compact.Source, weaver.Phase, func(weaver.Weaves, rt.Runtime) error) error
 }
 
-type PromiseMatcher interface {
-	PromiseMatcher() PromiseMatcher
-	typeinfo.Instance
+// what do accept/reject function pairs generate?
+// they generate builders.
+type PromisedMatcher interface {
+	GetBuilder() Builder
 }
 
 type JessContext struct {

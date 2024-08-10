@@ -1,14 +1,15 @@
 package jess
 
-import "fmt"
+import (
+	"fmt"
+)
 
-// see: TryPropertyNounValue
-func (op *PropertyNounValue) PromiseMatcher() PromiseMatcher {
-	return op
+func (op *PropertyNounValue) GetBuilder() Builder {
+	return &op.builder
 }
 
 func TryPropertyNounValue(q JessContext, in InputState,
-	accept func(PromiseMatcher), reject func(error),
+	accept func(PromisedMatcher), reject func(error),
 ) {
 	var are Are
 	if lhs, rhs, ok := are.Split(in); !ok {
@@ -16,28 +17,34 @@ func TryPropertyNounValue(q JessContext, in InputState,
 	} else {
 		// the target can be implied
 		if propTargetOf, ok := keywordSplit(lhs, keywords.Of); !ok {
-			RequestPronoun(q, func(an ActualNoun) {
-				GeneratePropertyNounValue(q, an, are, lhs, rhs,
+			// an implied pronoun; requests the pronoun because we need the kind
+			TryImpliedPronoun(q, func(pn PropertyPronoun) {
+				pb := PropertyBuilder{Context: q, noun: &pn}
+				tryPropertyNounValue(&pb, are, lhs, rhs,
 					func(prop Property, val PropertyValue) {
 						accept(&PropertyNounValue{
 							Property:      prop,
+							PropertyNoun:  &pn,
 							Are:           are,
 							PropertyValue: val,
+							builder:       pb,
 						})
 					}, reject)
 			}, reject)
 		} else {
 			// match a name to a noun ( or generate one )
 			// ( interesting to note that inform doesn't allow "kind called" here. )
-			TryNamedNoun(q, propTargetOf.rhs, func(nn NamedNoun, an ActualNoun, in InputState) {
-				GeneratePropertyNounValue(q, an, are, propTargetOf.lhs, rhs,
-					func(prop Property, val PropertyValue) {
+			TryPropertyNoun(q, propTargetOf.rhs, func(pn PropertyNoun, in InputState) {
+				pb := PropertyBuilder{Context: q, noun: pn}
+				tryPropertyNounValue(&pb, are, propTargetOf.lhs, rhs,
+					func(prop Property, pv PropertyValue) {
 						accept(&PropertyNounValue{
 							Property:      prop,
 							Of:            Words{Matched: propTargetOf.matched},
-							NamedNoun:     nn,
+							PropertyNoun:  pn,
 							Are:           are,
-							PropertyValue: val,
+							PropertyValue: pv,
+							builder:       pb,
 						})
 					}, reject)
 			}, reject)
@@ -46,27 +53,29 @@ func TryPropertyNounValue(q JessContext, in InputState,
 }
 
 // a super specific function: part of TryPropertyNounValue
-func GeneratePropertyNounValue(q JessContext,
-	an ActualNoun, isAre Are,
+func tryPropertyNounValue(pb *PropertyBuilder, isAre Are,
 	inProp, inValue InputState,
 	accept func(Property, PropertyValue),
 	reject func(error),
 ) {
 	// match a property name
-	TryPropertyName(q, inProp, an.Kind, func(prop Property, rest InputState) {
+	TryPropertyName(pb.Context, inProp, pb.GetKind(), func(prop Property, rest InputState) {
 		if rest.Len() != 0 {
-			e := fmt.Errorf("trying to define a property for a noun %q of kind %q, but didn't recognize %s", an.Name, an.Kind, rest.DebugString())
+			e := fmt.Errorf("trying to define a property for a kind of %q, but didn't recognize %s", pb.GetKind(), rest.DebugString())
 			reject(e)
 		} else {
-			generatePropertyValue(q, inValue,
-				an.Name, prop.fieldName, isAre.IsPlural(),
-				func(val PropertyValue, rest InputState) {
-					if rest.Len() != 0 {
-						reject(FailedMatch{"unexpected words after a property definition", rest})
-					} else {
-						accept(prop, val)
-					}
-				}, reject)
+			flags := AllowSingular
+			if isAre.IsPlural() {
+				flags = AllowPlural
+			}
+			TryPropertyValue(pb.Context, inValue, flags, func(val PropertyValue, fin InputState) {
+				if fin.Len() != 0 {
+					reject(FailedMatch{"unexpected words after a property definition", rest})
+				} else {
+					pb.addProperty(prop.fieldName, val.Assignment())
+					accept(prop, val)
+				}
+			}, reject)
 		}
 	}, reject)
 }

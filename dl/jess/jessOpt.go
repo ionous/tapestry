@@ -29,12 +29,12 @@ func Optional[M any,
 func nillable[M any,
 	IM interface {
 		*M
-		NounBuilder
-	}](in *M) nounBuilderRef {
-	return nounBuilderRef{IM(in), in == nil}
+		NounMaker
+	}](in *M) NounMakerRef {
+	return NounMakerRef{IM(in), in == nil}
 }
 
-type nounBuilderRef struct {
-	NounBuilder
+type NounMakerRef struct {
+	NounMaker
 	IsNil bool
 }

@@ -28,26 +28,3 @@ func TryPropertyName(q JessContext, in InputState, kind string,
 		}, reject)
 	}, reject)
 }
-
-// match and write a property value
-func generatePropertyValue(q JessContext, in InputState,
-	noun, field string, isPlural bool,
-	accept func(PropertyValue, InputState),
-	reject func(error),
-) {
-	flags := AllowSingular
-	if isPlural {
-		flags = AllowPlural
-	}
-	if pv, ok := matchPropertyValue(q, &in, flags); !ok {
-		reject(FailedMatch{"didn't understand the value", in})
-	} else {
-		q.Try(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) {
-			if e := w.AddNounValue(noun, field, pv.Assignment()); e != nil {
-				reject(e)
-			} else {
-				accept(pv, in)
-			}
-		}, reject)
-	}
-}

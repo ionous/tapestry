@@ -119,7 +119,7 @@ func (op *TimedRule) buildFilters(ctx JessContext) (ret []rt.BoolEval, err error
 			} else {
 				ret = rules.AddNounFilter(an.Name, ret)
 			}
-		} else if n := tgt.Noun; n != nil {
+		} else if n := tgt.ExistingNoun; n != nil {
 			ret = rules.AddNounFilter(n.actualNoun.Name, ret)
 		} else if k := tgt.Kind; k != nil {
 			ret = rules.AddKindFilter(k.actualKind.Name, ret)
@@ -168,7 +168,7 @@ func (op *RuleTarget) Match(q JessContext, input *InputState) (okay bool) {
 	if next := *input; //
 	Optional(q, &next, &op.Pronoun) ||
 		Optional(q, &next, &op.Kind) ||
-		Optional(q, &next, &op.Noun) {
+		Optional(q, &next, &op.ExistingNoun) {
 		*input, okay = next, true
 	}
 	return

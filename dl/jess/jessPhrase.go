@@ -4,7 +4,9 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // future: maybe a plural topics for they/them; actor/s for xe/they; or inanimate topics
@@ -22,12 +24,25 @@ const (
 type Phrase struct {
 	words []match.TokenValue // fix? all tokens have pos; we only really need the first.
 	// the successful match; mainly for debugging; its already written itself to the database
-	matched typeinfo.Instance // could store MatchedPhrase maybe.
+	matched  typeinfo.Instance // could store MatchedPhrase maybe.
+	promised PromisedMatcher
 	// things we've tried; not necessarily exclusive with a valid match
 	errs []error
 	// pronoun helpers
 	topic     GetActualNoun // might have to be GetActualNoun unless everything uses promises
 	topicType topicType
+}
+
+// returns true if a build was initiated
+func (el *Phrase) Build(jc JessContext) (okay bool) {
+	if p := el.promised; p != nil {
+		jc.Schedule(weaver.AnyPhase, func(w weaver.Weaves, run rt.Runtime) error {
+			b := p.GetBuilder() // builds in the "background"
+			return b.Build(BuildContext{jc.Query, w, run})
+		})
+		okay = true
+	}
+	return
 }
 
 // can return false if another phrase has determined it should be a noun.if
@@ -52,11 +67,11 @@ func (el *Phrase) SetTopic(an GetActualNoun) {
 }
 
 // helper for "promise" style matching.
-func (el *Phrase) store(res PromiseMatcher) {
-	if el.matched != nil {
-		log.Println("matched multiple phases")
+func (el *Phrase) store(res PromisedMatcher) {
+	if el.matched != nil || el.promised != nil {
+		log.Println("matched multiple patterns")
 	} else {
-		el.matched = res
+		el.promised = res
 	}
 }
 

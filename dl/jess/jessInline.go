@@ -1,7 +1,6 @@
 package jess
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
@@ -57,6 +56,21 @@ func TryInlineKind(q JessContext, in InputState,
 	}, reject)
 }
 
+func (op *InlineNoun) BuildPropertyNoun(ctx BuildContext) (ret string, err error) {
+	if an, e := generateNoun(ctx, ctx, op.Name, op.GetKind(), op.GetTraits()); e != nil {
+		err = e
+	} else {
+		op.actualNoun = an
+		ret = an.Name
+	}
+	return
+}
+
+// valid after generation
+func (op *InlineNoun) GetActualNoun() ActualNoun {
+	return op.actualNoun
+}
+
 func (op *InlineNoun) GetKind() string {
 	return op.InlineKind.GetKind()
 }
@@ -73,41 +87,9 @@ func (op *InlineKind) GetTraits() []string {
 	return ReduceTraits(op.Traits)
 }
 
-func GenerateNoun(q JessContext,
-	name Name, kind string, traits []string,
-	accept func(ActualNoun), reject func(error)) {
-	q.Try(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) {
-		if a, e := generateNoun(q, w, name, kind, traits); e != nil {
-			reject(e)
-		} else {
-			accept(a)
-		}
-	}, reject)
-}
-
-func GenerateImplicitNoun(q JessContext, name Name,
-	accept func(ActualNoun), reject func(error)) {
-	q.Try(weaver.FallbackPhase, func(w weaver.Weaves, run rt.Runtime) {
-		// fix: for backwards compatibility with tests, this first creates the noun as "object"
-		// and then generates it as Things. i dont remember why the placeholder was necessary.
-		// the test output will list the name before the kind when created this way.
-		if noun, kind, created, e := ensureNoun(q, w, name.Matched, nil); e != nil {
-			reject(e)
-		} else if !created {
-			accept(ActualNoun{Name: noun, Kind: kind})
-		} else {
-			if a, e := generateNoun(q, w, name, Things, nil); e != nil {
-				reject(e)
-			} else {
-				accept(a)
-			}
-		}
-	}, reject)
-}
-
-func generateNoun(q JessContext, w weaver.Weaves, name Name, kind string, traits []string) (ret ActualNoun, err error) {
+func generateNoun(q Query, w weaver.Weaves, name Name, kind string, traits []string) (ret ActualNoun, err error) {
 	// ick.
-	if n, e := name.BuildNoun(q, w, NounProperties{
+	if n, e := name.BuildPropertyNoun(q, w, NounProperties{
 		Kinds:  []string{kind},
 		Traits: traits,
 	}); e != nil {

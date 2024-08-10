@@ -13,9 +13,7 @@ const (
 )
 
 // match and apply a value
-// fix: separate the matching and the application... somehow.
-func TryPropertyValue(q JessContext, in InputState,
-	an ActualNoun, flags PvFlags,
+func TryPropertyValue(q JessContext, in InputState, flags PvFlags,
 	accept func(PropertyValue, InputState),
 	reject func(error),
 ) {
@@ -44,7 +42,7 @@ func matchPropertyValue(q JessContext, in *InputState, flags PvFlags) (ret Prope
 			} else if num := (MatchingNum{}); num.Match(q, &next) {
 				ret = &num
 				*in, okay = next, true
-			} else if noun := (Noun{}); noun.Match(q, &next) {
+			} else if noun := (ExistingNoun{}); noun.Match(q, &next) {
 				ret = &noun
 				*in, okay = next, true
 			} else if kind := (Kind{}); kind.Match(q, &next) {

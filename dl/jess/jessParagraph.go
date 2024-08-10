@@ -71,8 +71,8 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 	for _, i := range unmatched {
 		jc := JessContext{q, u, p, i, defaultFlags}
 		el := &(p.Phrases[i])
-		if el.matched != nil {
-			continue // parallel matched this.
+		if el.Build(jc) {
+			continue // parallel matched this; removes from the unmatched loop.
 		}
 		var best bestMatch
 		line := InputState{words: el.words}
@@ -112,6 +112,8 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 	return
 }
 
+// launch background attempts to match
+// success and failure talks to the Phrase itself
 func TryPromisedMatch(jc JessContext, in InputState) {
 	el := jc.CurrentPhrase()
 	// property of noun is/are value.

@@ -8,7 +8,7 @@ import (
 // really this builds "pending nouns"....
 // to support "counted nouns" any given specification can generate multiple nouns
 // ( even though all, other than "names" and "counted nouns" only generate one a piece. )
-type NounBuilder interface {
+type NounMaker interface {
 	BuildNouns(JessContext, weaver.Weaves, rt.Runtime, NounProperties) ([]DesiredNoun, error)
 }
 
@@ -17,8 +17,8 @@ type GetActualNoun interface {
 }
 
 // useful for dispatching a parent's call to build nouns to one of its matched children.
-// ( calls .BuildNoun() on the first non-nil builder )
-func buildNounsFrom(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties, builders ...nounBuilderRef) (ret []DesiredNoun, err error) {
+// ( calls .BuildPropertyNoun() on the first non-nil builder )
+func buildNounsFrom(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties, builders ...NounMakerRef) (ret []DesiredNoun, err error) {
 	for _, builder := range builders {
 		if !builder.IsNil {
 			ret, err = builder.BuildNouns(q, w, run, props)

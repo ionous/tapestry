@@ -28,7 +28,7 @@ func (op *Kind) Match(q JessContext, input *InputState) (okay bool) {
 	return
 }
 
-// for use in properties
+// so that kinds can be used as the *value* of a property
 func (op *Kind) Assignment() rt.Assignment {
 	return text(op.actualKind.Name, "") // tbd: should these be typed? ex. as "kinds" or something?
 }
