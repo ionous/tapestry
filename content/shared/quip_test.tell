@@ -2,16 +2,26 @@
 - Define scene:requires:
   - "quip test"
   - - "tapestry"
+    - "quips"
+---
+# a location for testing
+The observatory is a room. You are in the observatory.
+The alien boy is an actor in the observatory.
+
+The alien boy has the greeting "What's the matter".
+
+The quip called "What's the matter" has speaker Alien Boy. 
+It has the reply `"You wouldn't happen to have a matter disrupter?", the Alien Boy asks.` 
 After discussing it:
   - Set:value:
       - "@speaker.greeting"
       - FromText: "Hello again!"
 
-The quip called "Hello again" has the speaker Alien Boy.
+The quip called "Hello again" has the speaker Alien Boy. 
 It has reply `"Hello{shuffle} again{or}{end}," the Alien Boy says.`
 
-The quip called "Later, old boy" has the speaker Alien Boy.
-It has remark, `"Oh, sorry," Alice says. "I'll be back."`.
+The quip called "Later, old boy" has the speaker Alien Boy. 
+It has remark `"Oh, sorry," Alice says. "I'll be back."`. 
 After discussing it:
   - Departing actor: 
       FromText: 

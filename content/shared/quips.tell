@@ -111,13 +111,14 @@ The actors have a quip called the greeting.
     - "departing"
     - - # the actor saying goodbye.
         # ( often, but not always the player )
-        Text:kind:
+        Text:kind:initially:
           - "actor"
           - "actor"
+          - "#self"
 
 - # A conversation choice by the player.
   Define action:requires:
-    - "remarking"
+    - "discussing"
     - - # the player's actor.
         Text:kind:
         - "actor"
@@ -169,7 +170,7 @@ When greeting:
       - FromText: "@speaker"
   - RememberConversation quip:
       FromText: "@quip"
-  - Remarking actor:quip:
+  - Discussing actor:quip:
     - FromText: "#self"
     - FromText: "@quip" 
 
@@ -180,8 +181,8 @@ When departing:
     - FromText: ""
   - Erase: "#conversation.history"
   
-# Remarking is always the player.
-When remarking:
+# Discussing is always the player.
+When discussing:
   - # Let the player speak:
     Say actor:text:
     - "@actor"
@@ -214,6 +215,19 @@ When replying:
           FromText: "@actor"
 
 ---
+- # Unique action for handling quip selection
+  Define action:requires:
+    - "inputting dialog"
+    - - # always the player
+        # ( needed for event capture )
+        Text:kind:
+        - "actor"
+        - "actor"
+      - # the menu item selected
+        Text:kind:
+        - "quip"
+        - "quip"
+
 - # Display the dialog options the player can choose from.
   Define pattern:requires:provides:do:
     - "print conversation choices"
@@ -230,44 +244,35 @@ When replying:
             FromText: "#self"
       - # else:
         Finally do:
-          - Set:value:
-            - "#player" # agent vs actor...
-            - FromText: "inputting dialog"
-          - Repeat across:as:do:
-            - FromTextList: "@quips"
-            - "quip"
-            - # do:
-              OfferQuip quip: 
-                FromText: "@quip"
+          - Print menu:do:
+            - "inputting dialog"
+            - - Repeat across:as:do:
+                - FromTextList: "@quips"
+                - "quip"
+                - OfferQuip quip: 
+                    FromText: "@quip"
 ---
-After pass time, then continue (this is the print conversation rule):
-  - # If in conversation, print conversation choices
+Before requesting player input (this is the print conversation rule):
+  - # If in conversation, print conversation choices.
     If:do:
       - Not: 
           Is nothing: "#conversation.speaker"
       - - PrintConversationChoices actor:
             FromText: "@actor"
 
-# a state to track when the player needs to select a conversational choice.
-An agent can be inputting dialog.
+When inputting dialog:
+  - # Handle the selection of a menu option
+    # XXX: quitting?
+    Discussing actor:quip:
+    - FromText: "@actor"
+    - FromText: "@quip"
 
-# todo: connect with the main game parsing...
-# When parsing player input:
-#   - If:do:
-#     - "#player.inputting_dialog"
-#     - - Set:state:
-#         - "#player"
-#         - "not inputting dialog"
-#       - If:assuming:do:
-#         - Is nothing: "@input"
-#         - Arg:from:
-#           - "input"
-#           - FromText: "@story.player_input"
-#         - - Say response:with:
-#             - "Invalid input option" 
-#             - "Please choose a valid option."
-#           - PrintConversationChoices actor:
-#               FromText: "#player"
+When inputting dialog:
+  - If:do:
+      - Is nothing: "@quip"
+      - - Say response:with:
+          - "Invalid dialog option" 
+          - "Please choose a valid option."
 
 ---
 - # display a choice during conversation
@@ -286,7 +291,9 @@ An agent can be inputting dialog.
                 - Split lines: "@quip.remark"
                 - 1 
     - # do:
-      - Say: "@slug"
+      - Print menu:choice: 
+        - "@quip"   # the "key" used to identify the menu option
+        - "@slug"   # the actual text printed
 
 - # record the passed quip to the recent history
   Define pattern:requires:provides:do:
