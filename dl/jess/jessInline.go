@@ -56,21 +56,9 @@ func TryInlineKind(q JessContext, in InputState,
 	}, reject)
 }
 
-func (op *InlineNoun) BuildPropertyNoun(ctx BuildContext) (ret string, err error) {
-	if an, e := generateNoun(ctx, ctx, op.Name, op.GetKind(), op.GetTraits()); e != nil {
-		err = e
-	} else {
-		op.actualNoun = an
-		ret = an.Name
-	}
-	return
+func (op *InlineNoun) BuildPropertyNoun(ctx BuildContext) (ActualNoun, error) {
+	return generateNoun(ctx, ctx, op.Name, op.GetKind(), op.GetTraits())
 }
-
-// valid after generation
-func (op *InlineNoun) GetActualNoun() ActualNoun {
-	return op.actualNoun
-}
-
 func (op *InlineNoun) GetKind() string {
 	return op.InlineKind.GetKind()
 }
@@ -89,7 +77,7 @@ func (op *InlineKind) GetTraits() []string {
 
 func generateNoun(q Query, w weaver.Weaves, name Name, kind string, traits []string) (ret ActualNoun, err error) {
 	// ick.
-	if n, e := name.BuildPropertyNoun(q, w, NounProperties{
+	if n, e := name.BuildNoun(q, w, NounProperties{
 		Kinds:  []string{kind},
 		Traits: traits,
 	}); e != nil {

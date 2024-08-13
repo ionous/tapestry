@@ -54,10 +54,6 @@ func (op *MultipleNames) Match(q JessContext, input *InputState) (okay bool) {
 	return
 }
 
-func (op *MultipleNames) GetActualNoun() ActualNoun {
-	return op.actualNoun
-}
-
 // implements NounMaker by calling BuildNouns on all matched names
 func (op *MultipleNames) BuildNouns(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	for at := op; at != nil; at = at.Next() {

@@ -80,6 +80,5 @@ func TryTraits(q JessContext, in InputState,
 		} else {
 			accept(&traits, in)
 		}
-		return
 	}, reject)
 }

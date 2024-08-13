@@ -9,17 +9,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// future: maybe a plural topics for they/them; actor/s for xe/they; or inanimate topics
-type topicType int
-
-//go:generate stringer -type=topicType
-const (
-	undeterminedTopic topicType = iota
-	otherTopic
-	pronounReference // refers to some prior line's noun ( if it can )
-	nounTopic
-)
-
 // a sentence within a paragraph.
 type Phrase struct {
 	words []match.TokenValue // fix? all tokens have pos; we only really need the first.
@@ -28,42 +17,32 @@ type Phrase struct {
 	promised PromisedMatcher
 	// things we've tried; not necessarily exclusive with a valid match
 	errs []error
+
 	// pronoun helpers
-	topic     GetActualNoun // might have to be GetActualNoun unless everything uses promises
-	topicType topicType
+	topic         Topic
+	pendingTopics promisedTopics
 }
 
 // returns true if a build was initiated
 func (el *Phrase) Build(jc JessContext) (okay bool) {
 	if p := el.promised; p != nil {
-		jc.Schedule(weaver.AnyPhase, func(w weaver.Weaves, run rt.Runtime) error {
+		if useLogging(jc) {
+			m := Matched(el.words)
+			log.Printf("matched %s %q\n", p.TypeInfo().TypeName(), m.DebugString())
+		}
+		jc.Schedule(weaver.AnyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 			b := p.GetBuilder() // builds in the "background"
-			return b.Build(BuildContext{jc.Query, w, run})
+			if e := b.Build(BuildContext{jc.Query, w, run}); e != nil {
+				el.pendingTopics.reject(e)
+				err = e
+			} else {
+				el.pendingTopics.accept(el.topic.noun)
+			}
+			return
 		})
 		okay = true
 	}
 	return
-}
-
-// can return false if another phrase has determined it should be a noun.if
-func (el *Phrase) UsePronoun() (okay bool) {
-	// because its parallel matching, this can happen multiple times.
-	if el.topicType == 0 || el.topicType == pronounReference {
-		el.topicType = pronounReference
-		okay = true
-	}
-	return
-}
-
-func (el *Phrase) SetTopic(an GetActualNoun) {
-	// a successful build should (probably) only happen from one place.
-	// right now, its not always clear who's going to win
-	// (indicating line data, or at least this sort) should maybe be scoped to the match.
-	// if el.topicType > 0 {
-	// 	log.Panicf("trying to set a topic but already have %s", el.topicType)
-	// }
-	el.topicType = nounTopic
-	el.topic = an
 }
 
 // helper for "promise" style matching.
@@ -82,7 +61,7 @@ func (el *Phrase) reject(e error) {
 	el.errs = append(el.errs, e)
 }
 
-// fix: make collector speak in terms of lines?
+// fix: make collector speak in terms of phrases?
 func tokensToPhrases(src [][]match.TokenValue) []Phrase {
 	out := make([]Phrase, len(src))
 	for i, el := range src {

@@ -17,7 +17,8 @@ func TryPropertyValue(q JessContext, in InputState, flags PvFlags,
 	accept func(PropertyValue, InputState),
 	reject func(error),
 ) {
-	q.Try(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) {
+	// noun phase to so it can match bare noun names.
+	q.Try(After(weaver.NounPhase), func(w weaver.Weaves, run rt.Runtime) {
 		if a, ok := matchPropertyValue(q, &in, flags); !ok {
 			reject(FailedMatch{"didn't understand the value in this context", in})
 		} else {

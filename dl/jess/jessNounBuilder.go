@@ -12,12 +12,8 @@ type NounMaker interface {
 	BuildNouns(JessContext, weaver.Weaves, rt.Runtime, NounProperties) ([]DesiredNoun, error)
 }
 
-type GetActualNoun interface {
-	GetActualNoun() ActualNoun
-}
-
 // useful for dispatching a parent's call to build nouns to one of its matched children.
-// ( calls .BuildPropertyNoun() on the first non-nil builder )
+// ( calls .BuildNouns() on the first non-nil builder )
 func buildNounsFrom(q JessContext, w weaver.Weaves, run rt.Runtime, props NounProperties, builders ...NounMakerRef) (ret []DesiredNoun, err error) {
 	for _, builder := range builders {
 		if !builder.IsNil {

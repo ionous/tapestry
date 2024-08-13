@@ -35,25 +35,18 @@ func (op *ImplicitNoun) GetKind() string {
 	return Things
 }
 
-// valid after build
-func (op *ImplicitNoun) GetActualNoun() ActualNoun {
-	return op.actualNoun
-}
-
-func (op *ImplicitNoun) BuildPropertyNoun(ctx BuildContext) (ret string, err error) {
+func (op *ImplicitNoun) BuildPropertyNoun(ctx BuildContext) (ret ActualNoun, err error) {
 	// fix: for backwards compatibility with tests, this first creates the noun as "object"
 	// and then generates it as Things. i dont remember why the placeholder was necessary.
 	// the test output will list the name before the kind when created this way.
-	if noun, kind, created, e := ensureNoun(ctx, ctx, op.Name.Matched, nil); e != nil {
+	if an, created, e := ensureNoun(ctx, ctx, op.Name.Matched, nil); e != nil {
 		err = e
 	} else if !created {
-		op.actualNoun = ActualNoun{Name: noun, Kind: kind}
-		ret = noun
+		ret = an
 	} else if an, e := generateNoun(ctx, ctx, op.Name, Things, nil); e != nil {
 		err = e
 	} else {
-		op.actualNoun = an
-		ret = an.Name
+		ret = an
 	}
 	return
 }

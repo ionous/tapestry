@@ -66,9 +66,10 @@ func writeNounValues(w weaver.Weaves, ns []DesiredNoun) (err error) {
 // later, a pass ensures that all placeholder nouns have been given kinds;
 // or it upgrades them to things.
 // FIX: why is the placeholder needed?
-func ensureNoun(q Query, w weaver.Weaves, ts []match.TokenValue, props *NounProperties) (retNoun, retKind string, created bool, err error) {
-	if noun, width := q.FindNoun(ts, &retKind); width > 0 {
-		retNoun = noun
+func ensureNoun(q Query, w weaver.Weaves, ts []match.TokenValue, props *NounProperties) (ret ActualNoun, created bool, err error) {
+	var kind string
+	if noun, width := q.FindNoun(ts, &kind); width > 0 {
+		ret = ActualNoun{noun, kind}
 	} else if name, count := match.Stringify(ts); count != len(ts) {
 		out := match.DebugStringify(ts)
 		err = fmt.Errorf("not all of name consumed? %q", out)
@@ -87,8 +88,7 @@ func ensureNoun(q Query, w weaver.Weaves, ts []match.TokenValue, props *NounProp
 		} else if e := registerNames(w, noun, name); e != nil {
 			err = e
 		} else {
-			retNoun = noun
-			retKind = defaultKind
+			ret = ActualNoun{noun, defaultKind}
 			created = true
 		}
 	}

@@ -132,9 +132,9 @@ func (op *LineMatcher_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
-// promise_matcher, a type of slot.
+// promised_matcher, a type of slot.
 var Zt_PromisedMatcher = typeinfo.Slot{
-	Name: "promise_matcher",
+	Name: "promised_matcher",
 }
 
 // Holds a single slot.
@@ -337,51 +337,14 @@ func (op *Are_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type PropertyPronoun struct {
-	Pronoun Pronoun
-	Markup  map[string]any `json:",omitempty"`
-}
-
-// property_pronoun, a type of flow.
-var Zt_PropertyPronoun typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*PropertyPronoun) TypeInfo() typeinfo.T {
-	return &Zt_PropertyPronoun
-}
-
-// Implements [typeinfo.Markup]
-func (op *PropertyPronoun) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ PropertyNoun = (*PropertyPronoun)(nil)
-
-// Holds a slice of type PropertyPronoun.
-type PropertyPronoun_Slice []PropertyPronoun
-
-// Implements [typeinfo.Instance] for a slice of PropertyPronoun.
-func (*PropertyPronoun_Slice) TypeInfo() typeinfo.T {
-	return &Zt_PropertyPronoun
-}
-
-// Implements [typeinfo.Repeats] for a slice of PropertyPronoun.
-func (op *PropertyPronoun_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // Matches the word "it".
 // note: in inform, pronouns can be implicit.
 // ex. The description is "something about the former noun."
 // and they can apply to kinds `A thing has a number called age. The age is 42.`
 type Pronoun struct {
-	Matched    Matched
-	actualNoun ActualNoun
-	Markup     map[string]any `json:",omitempty"`
+	Matched Matched
+	topic   Topic
+	Markup  map[string]any `json:",omitempty"`
 }
 
 // pronoun, a type of flow.
@@ -399,6 +362,9 @@ func (op *Pronoun) GetMarkup(ensure bool) map[string]any {
 	}
 	return op.Markup
 }
+
+// Ensures the command implements its specified slots.
+var _ PropertyNoun = (*Pronoun)(nil)
 
 // Holds a slice of type Pronoun.
 type Pronoun_Slice []Pronoun
@@ -581,7 +547,6 @@ type InlineNoun struct {
 	InlineKind InlineKind
 	Called     Called
 	Name       Name
-	actualNoun ActualNoun
 	Markup     map[string]any `json:",omitempty"`
 }
 
@@ -2791,18 +2756,6 @@ func init() {
 			"--": "Matches the words \"is\" or \"are\".",
 		},
 	}
-	Zt_PropertyPronoun = typeinfo.Flow{
-		Name: "property_pronoun",
-		Lede: "property_pronoun",
-		Terms: []typeinfo.Term{{
-			Name:  "pronoun",
-			Label: "pronoun",
-			Type:  &Zt_Pronoun,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_PropertyNoun,
-		},
-	}
 	Zt_Pronoun = typeinfo.Flow{
 		Name: "pronoun",
 		Lede: "pronoun",
@@ -2811,10 +2764,13 @@ func init() {
 			Label: "matched",
 			Type:  &Zt_Matched,
 		}, {
-			Name:    "actual_noun",
-			Label:   "actual_noun",
+			Name:    "topic",
+			Label:   "topic",
 			Private: true,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_PropertyNoun,
+		},
 		Markup: map[string]any{
 			"--": []string{"Matches the word \"it\".", "note: in inform, pronouns can be implicit.", "ex. The description is \"something about the former noun.\"", "and they can apply to kinds `A thing has a number called age. The age is 42.`"},
 		},
@@ -2911,10 +2867,6 @@ func init() {
 			Name:  "name",
 			Label: "name",
 			Type:  &Zt_Name,
-		}, {
-			Name:    "actual_noun",
-			Label:   "actual_noun",
-			Private: true,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_PropertyNoun,
@@ -4294,7 +4246,6 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_CommaAnd,
 	&Zt_CommaAndOr,
 	&Zt_Are,
-	&Zt_PropertyPronoun,
 	&Zt_Pronoun,
 	&Zt_Called,
 	&Zt_Name,
@@ -4361,7 +4312,6 @@ func Register(reg func(any)) {
 	reg((*CommaAnd)(nil))
 	reg((*CommaAndOr)(nil))
 	reg((*Are)(nil))
-	reg((*PropertyPronoun)(nil))
 	reg((*Pronoun)(nil))
 	reg((*Called)(nil))
 	reg((*Name)(nil))
@@ -4486,7 +4436,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3954908539177505437:  (*MultipleKinds)(nil),         /* MultipleKinds traits:matched:additionalKinds: */
 	8736862563783456239:  (*NewTrait)(nil),              /* NewTrait matched: */
 	8812100125409583293:  (*NewTrait)(nil),              /* NewTrait matched:newTrait: */
-	10988987173186478526: (*Pronoun)(nil),               /* Pronoun matched: */
 	11106580022094386190: (*Property)(nil),              /* Property article:matched: */
 	7038723543321541230:  (*Property)(nil),              /* Property matched: */
 	4711921330441156255:  (*PropertyPossessions)(nil),   /* PropertyPossessions property:of:propertyValue: */
@@ -4630,9 +4579,9 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	2480790538618820002:  (*NamesAreLikeVerbs)(nil),     /* line_matcher=NamesAreLikeVerbs names:are:adjectives: */
 	1188910158540681012:  (*NamesAreLikeVerbs)(nil),     /* line_matcher=NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
 	13957738718698792135: (*NamesVerbNames)(nil),        /* line_matcher=NamesVerbNames names:are:verb:otherNames: */
-	17794994996638991833: (*NounPropertyValue)(nil),     /* promise_matcher=NounPropertyValue propertyNoun:has:propertyPossessions: */
-	15151176678176688807: (*PropertyNounValue)(nil),     /* promise_matcher=PropertyNounValue property:of:propertyNoun:are:propertyValue: */
-	6112597012528784251:  (*PropertyPronoun)(nil),       /* property_noun=PropertyPronoun pronoun: */
+	18083209618376643753: (*NounPropertyValue)(nil),     /* promised_matcher=NounPropertyValue propertyNoun:has:propertyPossessions: */
+	13336489085882927551: (*Pronoun)(nil),               /* property_noun=Pronoun matched: */
+	4938525726516174135:  (*PropertyNounValue)(nil),     /* promised_matcher=PropertyNounValue property:of:propertyNoun:are:propertyValue: */
 	11079814442419901472: (*TimedRule)(nil),             /* line_matcher=TimedRule rulePrefix:pattern:ruleName:subAssignment: */
 	11138780886479969949: (*TimedRule)(nil),             /* line_matcher=TimedRule rulePrefix:pattern:ruleSuffix:ruleName:subAssignment: */
 	16788547542883751782: (*TimedRule)(nil),             /* line_matcher=TimedRule rulePrefix:pattern:ruleSuffix:subAssignment: */

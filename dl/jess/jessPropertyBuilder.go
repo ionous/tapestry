@@ -25,8 +25,9 @@ func (pb *PropertyBuilder) Build(out BuildContext) (err error) {
 	if noun, e := pb.noun.BuildPropertyNoun(out); e != nil {
 		err = e
 	} else {
+		pb.Context.SetTopic(noun)
 		for _, prop := range pb.pending {
-			if e := out.AddNounValue(noun, prop.fieldName, prop.val); e != nil {
+			if e := out.AddNounValue(noun.Name, prop.fieldName, prop.val); e != nil {
 				err = e
 				break
 			}

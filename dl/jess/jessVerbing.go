@@ -157,8 +157,6 @@ func (op *NamesAreLikeVerbs) MatchLine(q JessContext, in InputState) (ret InputS
 		op.Are.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {
 		Optional(q, &next, &op.VerbPhrase)
-		// this sets up the *possibility*; the value is filled out in BuildNouns
-		q.CurrentPhrase().SetTopic(&op.Names)
 		ret, okay = next, true
 	}
 	return
@@ -192,6 +190,14 @@ func generateVerbPhrase(ctx JessContext, p jessVerbPhrase) error {
 		} else if e := genNounValues(ctx, lhs, nil); e != nil {
 			err = e
 		} else {
+			if cnt := len(lhs); cnt > 0 {
+				if cnt == 1 {
+					n := lhs[0]
+					ctx.SetTopic(ActualNoun{n.Noun, n.CreatedKind})
+				} else {
+					ctx.RejectTopic(errors.New("pronouns expect a single noun"))
+				}
+			}
 			if verbName := p.GetVerb(); len(verbName) > 0 {
 				if e := genNounValues(ctx, rhs, nil); e != nil {
 					err = e
@@ -210,7 +216,7 @@ func generateVerbPhrase(ctx JessContext, p jessVerbPhrase) error {
 
 // note: some phrases "the box is open" dont have macros.
 // in that case, genNounValues itself does all the work.
-func applyVerb(ctx JessContext, verbName string, lhs, rhs []DesiredNoun) (err error) {
+func applyVerb(ctx JessContext, verbName string, lhs, rhs []DesiredNoun) error {
 	return ctx.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if v, e := readVerb(run, verbName); e != nil {
 			err = e

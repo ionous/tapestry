@@ -30,15 +30,6 @@ func ClearContext(q JessContext, flags int) (ret JessContext) {
 	return q
 }
 
-type queryContext struct {
-	Query
-	flags int
-}
-
-func (q queryContext) GetContext() int {
-	return q.flags
-}
-
 func matchKinds(q Query) bool {
 	flags := q.GetContext()
 	return (flags & PlainNameMatching) == 0

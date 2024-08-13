@@ -17,6 +17,6 @@ type BuildContext struct {
 	run rt.Runtime
 }
 
-func (an ActualNoun) BuildPropertyNoun(BuildContext) string {
-	return an.Name
+func (an ActualNoun) BuildPropertyNoun(BuildContext) ActualNoun {
+	return an
 }

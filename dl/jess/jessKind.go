@@ -87,6 +87,5 @@ func TryKind(q JessContext, in InputState,
 		} else {
 			accept(kind, in)
 		}
-		return
 	}, reject)
 }

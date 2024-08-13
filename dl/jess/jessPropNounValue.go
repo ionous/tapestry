@@ -18,7 +18,7 @@ func TryPropertyNounValue(q JessContext, in InputState,
 		// the target can be implied
 		if propTargetOf, ok := keywordSplit(lhs, keywords.Of); !ok {
 			// an implied pronoun; requests the pronoun because we need the kind
-			TryImpliedPronoun(q, func(pn PropertyPronoun) {
+			TryImpliedPronoun(q, func(pn Pronoun) {
 				pb := PropertyBuilder{Context: q, noun: &pn}
 				tryPropertyNounValue(&pb, are, lhs, rhs,
 					func(prop Property, val PropertyValue) {

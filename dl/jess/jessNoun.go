@@ -26,13 +26,8 @@ func (op *ExistingNoun) GetKind() string {
 }
 
 // valid after match ( because it already exists )
-func (op *ExistingNoun) BuildPropertyNoun(ctx BuildContext) (string, error) {
-	return op.actualNoun.Name, nil
-}
-
-// valid after match ( because it already exists )
-func (op *ExistingNoun) GetActualNoun() ActualNoun {
-	return op.actualNoun
+func (op *ExistingNoun) BuildPropertyNoun(ctx BuildContext) (ActualNoun, error) {
+	return op.actualNoun, nil
 }
 
 // so that nouns can be used as the *value* of a property

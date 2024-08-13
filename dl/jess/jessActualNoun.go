@@ -6,10 +6,6 @@ type ActualNoun struct {
 	Kind string
 }
 
-func (an *ActualNoun) GetActualNoun() ActualNoun {
-	return *an
-}
-
 func (an ActualNoun) IsValid() bool {
 	return len(an.Name) > 0
 }

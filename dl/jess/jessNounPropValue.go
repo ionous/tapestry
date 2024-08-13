@@ -8,7 +8,8 @@ func (op *NounPropertyValue) GetBuilder() Builder {
 // `The pen has (the) description (of) "mightier than the sword."`
 // `The bottle has age 42 and the description "A plain glass bottle."`
 func TryNounPropertyValue(q JessContext, in InputState,
-	accept func(PromisedMatcher), reject func(error),
+	accept func(PromisedMatcher),
+	reject func(error),
 ) {
 	// the word "has/have" splits the noun from the property
 	if tgtProp, ok := keywordSplit(in, keywords.Has, keywords.Have); !ok {

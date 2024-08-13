@@ -114,8 +114,8 @@ func (op *TimedRule) buildFilters(ctx JessContext) (ret []rt.BoolEval, err error
 	if tgt := op.RuleTarget; tgt != nil {
 		if p := tgt.Pronoun; p != nil {
 			// the pronoun hasn't been "built" so we can't use the cache.
-			if an := ctx.GetTopic(); !an.IsValid() {
-				err = fmt.Errorf("unknown sentence topic when building rule using a pronoun")
+			if an, e := p.topic.Resolve(); e != nil {
+				err = e
 			} else {
 				ret = rules.AddNounFilter(an.Name, ret)
 			}

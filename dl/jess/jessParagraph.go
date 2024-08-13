@@ -61,7 +61,7 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 	// first weave initialization
 	if unmatched == nil { // ugh. fine for now.
 		unmatched = make([]int, len(p.Phrases))
-		for i, el := range p.Phrases {
+		for i, el := range p.Phrases { // note: el is a copy here, but that's fine.
 			jc := JessContext{q, u, p, i, defaultFlags}
 			in := InputState{words: el.words}
 			TryPromisedMatch(jc, in) // launch parallel matches
@@ -71,8 +71,10 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 	for _, i := range unmatched {
 		jc := JessContext{q, u, p, i, defaultFlags}
 		el := &(p.Phrases[i])
+		// returns true if this was able to kick off a build of a parallel match.
+		// by not re-adding to the unmatched list; it gets dropped.
 		if el.Build(jc) {
-			continue // parallel matched this; removes from the unmatched loop.
+			continue
 		}
 		var best bestMatch
 		line := InputState{words: el.words}
@@ -81,10 +83,6 @@ func (p *Paragraph) WeaveParagraph(z weaver.Phase, q Query, u Scheduler) (okay b
 		if matchSentence(z, jc, line, &best) {
 			// track this match
 			el.matched = best.match
-			if el.topicType == undeterminedTopic {
-				el.topicType = otherTopic
-			}
-			//
 			// after matching: try to generate ( which inevitably calls schedule... )
 			// ( errors here are critical, and not a request to "retry" )
 			if e := best.match.Generate(jc); e != nil {
