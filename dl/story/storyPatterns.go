@@ -17,7 +17,7 @@ import (
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.ScheduleCmd(op, weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.ScheduleCmd(op, weaver.AnyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if name, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else {
@@ -38,14 +38,19 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 					// and so is the rule Rank
 				})
 			}
-			err = w.AddPattern(pb.Pattern)
+			// try to create the pattern;
+			// the individual fields may require kinds, so this might return missing
+			err = cat.ScheduleCmd(op, weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) error {
+				return w.AddPattern(pb.Pattern)
+			})
 		}
 		return
 	})
 }
 
 func (op *DefineAction) Weave(cat *weave.Catalog) error {
-	return cat.ScheduleCmd(op, weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	// build up the desired pattern data
+	return cat.ScheduleCmd(op, weaver.AnyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if act, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else {
@@ -53,18 +58,23 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 			// note: actions dont have an explicit return
 			act.AddParams(reduceFields(run, op.Requires))
 			act.AddLocals(reduceFields(run, op.Provides))
-			if e := w.AddPattern(act.Pattern); e != nil {
-				err = e
-			} else {
-				// derive the before and after phases
-				for _, phase := range []event.Phase{event.BeforePhase, event.AfterPhase} {
-					pb := mdl.NewPatternSubtype(phase.PatternName(act.Name()), act.Name())
-					if e := w.AddPattern(pb.Pattern); e != nil {
-						err = e
-						break
+			// then try to create the pattern;
+			// the individual fields may require kinds, so this might return missing
+			err = cat.ScheduleCmd(op, weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+				if e := w.AddPattern(act.Pattern); e != nil {
+					err = e
+				} else {
+					// derive the before and after phases
+					for _, phase := range []event.Phase{event.BeforePhase, event.AfterPhase} {
+						pb := mdl.NewPatternSubtype(phase.PatternName(act.Name()), act.Name())
+						if e := w.AddPattern(pb.Pattern); e != nil {
+							err = e
+							break
+						}
 					}
 				}
-			}
+				return
+			})
 		}
 		return
 	})

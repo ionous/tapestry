@@ -38,7 +38,7 @@ South from the Foyer is the Foyer Bar. The bar is unlit. The scrawled message is
 
 Neatness is a kind of aspect. The neatnesses are neat, scuffed, and trampled.
 Messages are a kind of thing. Messages have a neatness. The scrawled message is a message.
-Understand "floor" or "sawdust" as the message.
+Understand "floor" or "sawdust" as the scrawled message.
 
 Instead of examining the message:
   - # Objects can be referred to in commands, by starting their name with a '#'.

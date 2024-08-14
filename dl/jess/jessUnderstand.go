@@ -12,9 +12,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// runs in the LanguagePhase phase
 func (op *Understand) Phase() weaver.Phase {
-	return weaver.LanguagePhase
+	// see also jessMatches; this and that should match
+	return After(weaver.AncestryPhase)
 }
 
 func (op *Understand) MatchLine(q JessContext, line InputState) (ret InputState, okay bool) {

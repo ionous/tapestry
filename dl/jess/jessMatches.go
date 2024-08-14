@@ -22,10 +22,6 @@ type LineMatcher interface {
 func matchSentence(z weaver.Phase, q JessContext, line InputState, out *bestMatch) (okay bool) {
 	var op MatchedPhrase
 	switch z {
-	case weaver.LanguagePhase:
-		// "understand" {quoted text} as .....
-		okay = matchLine(q, line, &op.Understand, out)
-
 	case weaver.AncestryPhase:
 		// FIX -- KindsAreKind needs TRAITS to *match*
 		// to do the idea of match once, generate often;
@@ -38,10 +34,12 @@ func matchSentence(z weaver.Phase, q JessContext, line InputState, out *bestMatc
 			matchLine(q, line, schedule(q, &op.AspectsAreTraits), out)
 
 	case weaver.PropertyPhase:
-		// fix? combine these to speed matching?
-		// kinds {are} "usually"
-		okay = matchLine(q, line, schedule(q, &op.KindsAreTraits), out) ||
-			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
+		// "understand" {quoted text} as .....
+		okay = matchLine(q, line, &op.Understand, out) ||
+			// fix? combine these to speed matching?
+			// kinds {are} "usually"
+			matchLine(q, line, schedule(q, &op.KindsAreTraits), out) ||
+			// kinds(of records|objects, out) "have" a ["list of"] 	number|text|records|objects|aspects ["called a" ...]
 			matchLine(q, line, schedule(q, &op.KindsHaveProperties), out) ||
 			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
 			matchLine(q, line, schedule(q, &op.KindsAreEither), out)
