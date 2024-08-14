@@ -88,10 +88,6 @@ Spec:requires:contains:
         - "implicit_noun"
         - - "property_noun"
         - - Term: "name"
-          - # the database info that matched
-            Term:private:
-              - "actual_noun"
-              - true
     
     - # Matches an existing noun
       # ( by checking multiple words for the best match ).

@@ -461,9 +461,8 @@ func (op *Name_Slice) Repeats() bool {
 }
 
 type ImplicitNoun struct {
-	Name       Name
-	actualNoun ActualNoun
-	Markup     map[string]any `json:",omitempty"`
+	Name   Name
+	Markup map[string]any `json:",omitempty"`
 }
 
 // implicit_noun, a type of flow.
@@ -2814,10 +2813,6 @@ func init() {
 			Name:  "name",
 			Label: "name",
 			Type:  &Zt_Name,
-		}, {
-			Name:    "actual_noun",
-			Label:   "actual_noun",
-			Private: true,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_PropertyNoun,
