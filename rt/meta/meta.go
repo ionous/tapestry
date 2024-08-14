@@ -14,7 +14,7 @@ const (
 	ObjectKind     = "$kind"      // type of a game object
 	ObjectKinds    = "$ancestry"  // ancestor of an object's type ( a text list, root at the start )
 	ObjectName     = "$name"      // given a noun, return the friendly name declared by the author
-	ObjectsOfKind  = "$instances" // all objects of a given kind
+	ObjectsOfKind  = "$instances" // all objects of a given kind ( and descendants of )
 	Option         = "$flags"     // get/set various runtime options ( see below )
 	PatternLabels  = "$labels"    // strings of the parameter names, the last is the return
 	PatternRunning = "$pattern"   // returns true if the named pattern is running

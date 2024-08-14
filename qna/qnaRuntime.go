@@ -306,7 +306,7 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 		case meta.ObjectsOfKind:
 			if k, e := run.getKind(field); e != nil {
 				err = e
-			} else if ns, e := run.query.NounsByKind(k.Name()); e != nil {
+			} else if ns, e := run.query.NounsWithAncestor(k.Name()); e != nil {
 				err = e
 			} else {
 				ret = rt.StringsOf(ns)

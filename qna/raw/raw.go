@@ -38,7 +38,7 @@ type NounData struct {
 	Id         int // mdl_noun
 	Domain     string
 	Noun       string       // full, unique name
-	Kind       string       // or would id be better?
+	Kind       string       // alt? id, path, bitarray? ...
 	CommonName string       // author defined name
 	Aliases    []string     // alpha order for parser
 	Values     []EvalData   `json:",omitempty"` // sparse field values, sorted by field name

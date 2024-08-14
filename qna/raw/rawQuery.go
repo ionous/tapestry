@@ -125,10 +125,23 @@ func (q RawQuery) NounValue(full, field string) (ret rt.Assignment, err error) {
 	return
 }
 
-func (q RawQuery) NounsByKind(kind string) (ret []string, _ error) {
-	for _, n := range q.Nouns { // tbd: record nouns per kind?
+// ex. give me all nouns of type "actors"
+func (q RawQuery) NounsWithAncestor(kind string) (ret []string, err error) {
+	for _, n := range q.Nouns {
+		// quick check:
 		if n.Kind == kind {
 			ret = append(ret, n.Noun)
+		} else {
+			// slow check:
+			if nk, e := q.GetKindByName(n.Kind); e != nil {
+				err = e
+				break
+			} else {
+				nks := nk.Ancestors() // path: animals, *actors*, things....
+				if i := slices.Index(nks, kind); i >= 0 {
+					ret = append(ret, n.Noun)
+				}
+			}
 		}
 	}
 	return

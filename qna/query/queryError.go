@@ -53,7 +53,7 @@ func (q QueryNone) NounValue(id, field string) (_ rt.Assignment, _ error) {
 	return
 }
 
-func (q QueryNone) NounsByKind(kind string) (_ []string, _ error) {
+func (q QueryNone) NounsWithAncestor(kind string) (_ []string, _ error) {
 	return
 }
 

@@ -34,7 +34,7 @@ type Query interface {
 	// so this returns "pairs" of paths and values.
 	NounValue(fullname, field string) (rt.Assignment, error)
 	// all nouns of the indicated kind
-	NounsByKind(exactKind string) ([]string, error)
+	NounsWithAncestor(kind string) ([]string, error)
 	// the empty string if not found
 	PluralToSingular(plural string) (string, error)
 	// the empty string if not found

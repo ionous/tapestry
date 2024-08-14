@@ -27,13 +27,14 @@ type Query struct {
 	domainDelete,
 	domainScope,
 	fieldsOf,
+	kindId,
 	kindOfAncestors,
 	nounInfo,
 	nounKind,
 	nounName,
 	nounValues,
 	nounAliases,
-	nounsByKind,
+	nounsWithAncestor,
 	patternOf,
 	newPairsFromDomain,
 	newPairsFromNames,
@@ -183,8 +184,13 @@ func (q *Query) NounNames(id string) (ret []string, err error) {
 	return scanStrings(q.nounAliases, id)
 }
 
-func (q *Query) NounsByKind(kind string) ([]string, error) {
-	return scanStrings(q.nounsByKind, kind)
+func (q *Query) NounsWithAncestor(kind string) (ret []string, err error) {
+	if id, e := scanId(q.kindId, kind); e != nil {
+		err = e
+	} else {
+		ret, err = scanStrings(q.nounsWithAncestor, id)
+	}
+	return
 }
 
 func (q *Query) PluralToSingular(plural string) (string, error) {
@@ -334,6 +340,11 @@ where (ks.name = ?1)
 -- and, finally, put final values first.
 order by mf.rowid, mv.kind desc, mv.final desc`,
 		),
+		kindId: ps.Prep(db,
+			`select ks.kind 
+			from active_kinds ks
+			where ks.name = ?1`,
+		),
 		// path is materialized ids so we return multiple values of resolved names
 		kindOfAncestors: ps.Prep(db,
 			`select mk.kind 
@@ -396,13 +407,14 @@ order by mf.rowid, mv.kind desc, mv.final desc`,
 			order by rank
 			limit 1`,
 		),
-		// given a named kind, find the nouns
-		nounsByKind: ps.Prep(db,
-			`select ns.name
-			from active_kinds ks
-			join active_nouns ns 
-				using (kind)
-			where ks.name=?1`, // order?
+		// for all the active kinds, find
+		nounsWithAncestor: ps.Prep(db,
+			`select an.name
+      from active_nouns an
+      join mdl_kind mk
+        on (mk.rowid = an.kind)
+      -- is Y (the kind we want) within X (the path of our noun's kind)
+      where instr( ',' || mk.rowid || ',' || mk.path, ?1 )`,
 		),
 		// query the db for the value(s) of a given field for a given noun
 		// fix: future, we will want to save values to a "run_value" table and union those in here.
