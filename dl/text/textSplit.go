@@ -22,7 +22,7 @@ func (op *SplitLines) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmd.Error(op, e)
 	} else {
-		vs := strings.Fields(t.String())
+		vs := strings.Split(t.String(), "\n")
 		ret = rt.StringsOf(vs)
 	}
 	return
