@@ -10,15 +10,17 @@ import (
 )
 
 func (op *VariableDot) GetReference(run rt.Runtime) (ret rt.Reference, err error) {
-	if name, e := safe.GetText(run, op.VariableName); e != nil {
+	if varName, e := safe.GetText(run, op.VariableName); e != nil {
 		err = e
 	} else if path, e := resolveDots(run, op.Dot); e != nil {
 		err = e
 	} else {
+		// we create a reference containing the variable name
 		at := dot.MakeReference(run, meta.Variables)
-		if at, e := at.Dot(dot.Field(name.String())); e != nil {
+		if at, e := at.Dot(dot.Field(varName.String())); e != nil {
 			err = e
 		} else {
+			// walk the full path ( if any ) to expand it.
 			ret, err = dot.Path(at, path)
 		}
 	}
@@ -53,6 +55,7 @@ func (op *VariableDot) GetRecordList(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.RecordList)
 }
 
+// uses GetReference, which expands the full path to get the targeted value.
 func (op *VariableDot) getValue(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
 	if at, e := op.GetReference(run); e != nil {
 		err = cmd.Error(op, e)

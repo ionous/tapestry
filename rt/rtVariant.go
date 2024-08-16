@@ -130,7 +130,7 @@ func (n variant) FieldByName(name string) (ret Value, err error) {
 	case *Record:
 		ret, err = rec.GetNamedField(name)
 	default:
-		log.Panicf("%s doesn't have fields", n.a)
+		log.Panicf("trying to get field %q, but %s types don't have fields", name, n.a)
 	}
 	return
 }
@@ -142,7 +142,7 @@ func (n variant) SetFieldByName(name string, v Value) (err error) {
 		newVal := CopyValue(v)
 		return rec.SetNamedField(name, newVal)
 	default:
-		log.Panicf("%s doesn't have fields", n.a)
+		log.Panicf("trying to set field %q, but %s types don't have fields", name, n.a)
 	}
 	return
 }

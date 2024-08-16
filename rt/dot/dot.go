@@ -14,8 +14,7 @@ func MakeReference(run rt.Runtime, name string) Reference {
 }
 
 func MakeReferenceValue(run rt.Runtime, rec rt.Value) Reference {
-	root := recordDot{run, rec}
-	return Reference{child: root}
+	return Reference{child: recordDot{run, rec}}
 }
 
 // the final position in a path where we might want to get or put a value.
