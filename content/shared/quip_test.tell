@@ -14,7 +14,9 @@ The quip called "What's the matter" has speaker Alien Boy.
 It has the reply `"You wouldn't happen to have a matter disrupter?", the Alien Boy asks.` 
 After discussing it:
   - Set:value:
-      - "@speaker.greeting"
+      - Object:dot:
+        - "@target"
+        - "greeting"
       - FromText: "Hello again!"
 
 The quip called "Hello again" has the speaker Alien Boy. 

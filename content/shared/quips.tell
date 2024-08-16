@@ -8,7 +8,7 @@
 # Quips are the units of this particular conversation system.
 - Define kind:fields:
     - "quips"
-    - - # The npc involved in the conversation.
+    - - # The target of a player initiated conversation.
         Text:kind:
         - "speaker"
         - "actor"
@@ -20,7 +20,7 @@
         Text: "slug"
       - # The remark is the bit of text said by the player's character as a result of that choice.
         Text: "remark"
-      - # The reply is the response of the speaker: the other actor.
+      - # The reply is the response of the target.
         Text: "reply"
 
 - Define relation:kind:otherKind:cardinality:
@@ -44,7 +44,7 @@
     - "many_to_many"    
 
 - # Conversations is a singleton.
-  # It implies that the player and a single other actor are talking.
+  # It implies that the player and a single other actor ( the target ) are talking.
   Define noun:kind:
     - "conversation"
     - "conversations"
@@ -52,7 +52,7 @@
 - Define kind:fields:
     - "conversations"
     - - Text:kind:
-        - "speaker"
+        - "target"
         - "actor"
       - TextList:kind:
         - "history"
@@ -89,7 +89,7 @@ The actors have a quip called the greeting.
 ---
 - # Start a conversation.
   # This is the only conversation action which has two actors.
-  # The "other actor" here becomes the global conversation object's speaker.
+  # The target here also becomes the global conversation object's target.
   Define action:requires:
     - "greeting"
     - - # the actor starting the conversation (ex. the player).
@@ -98,13 +98,13 @@ The actors have a quip called the greeting.
           - "actor"
       - # the actor being talked to.
         Text:kind:
-          - "other actor"
+          - "target"
           - "actor"
       - # optional, falls back to the blank default greeting.
         Text:kind:initially:
           - "quip"
           - "quip"
-          - "@default_greeting"
+          - "#default_greeting"
 
 - # end a conversation.
   Define action:requires:
@@ -141,33 +141,35 @@ The actors have a quip called the greeting.
         - "quip"
 
 ---
-Understand "t|greet|ask [actors]" as greeting. Understand "talk to/with/-- [actors]" as greeting.
+Understand "t/greet/ask [actors]" as greeting. Understand "talk to/with/-- [actors]" as greeting.
 
 Instead of greeting:
   - # Reticence stops a conversation from starting if the actor doesn't want to talk. 
     If:do:
-      - "@speaker.reticence" 
+      - Object:dot:
+        - "@target"
+        - "reticence"
       - - Say: "There's no response."
 
 Instead of greeting:
   - # Already talking to one actor or another.
     If:do:else:
       - Is:matching:text:
-          - "@speaker"
+          - "@target"
           - "equal_to"
-          - "#conversation.speaker"
+          - "#conversation.target"
       - - Say: "You're already talking to them!"
-      - # Otherwise: already talking to some other actor
+      - # Otherwise: already talking to some other actor.
         If:do:
           - Not: 
                 Is nothing:
-                - "#conversation.speaker"
+                - "#conversation.target"
           - - Say: "You're already talking to someone!"
 
 When greeting:
   - Set:value:
-      - "#conversation.speaker"
-      - FromText: "@speaker"
+      - "#conversation.target"
+      - FromText: "@target"
   - RememberConversation quip:
       FromText: "@quip"
   - Discussing actor:quip:
@@ -177,7 +179,7 @@ When greeting:
 # Reset the conversation
 When departing:
   - Set:value:
-    - "#conversation.speaker"
+    - "#conversation.target"
     - FromText: ""
   - Erase: "#conversation.history"
   
@@ -186,13 +188,15 @@ When discussing:
   - # Let the player speak:
     Say actor:text:
     - "@actor"
-    - "@quip.remark"
+    - Object:dot:
+        - "@quip"
+        - "remark"
   - # Remember that the player made this particular choice.
     RememberConversation quip: 
       FromText: "@quip"
   - # Let the npc respond:
     Replying actor:quip: 
-      - FromText: "#conversation.npc"
+      - FromText: "#conversation.target"
       - FromText: "@quip"
 
 # Replying is the always the npc.
@@ -200,17 +204,24 @@ When replying:
   - # Make the npc speak the line.
     If:do:
       - Not:
-          Is nothing: "@quip.reply"
+          Is nothing: 
+            Object:dot:
+              - "@quip"
+              - "reply"
       - - Say actor:text:
           - "@actor"
-          - "@quip.reply"
+          - Object:dot:
+            - "@quip"
+            - "reply"
   - # Now the player knows what the npc has said.
     Set:state:
     - "@quip"
     - "known"
   - # Perform a mic drop if the quip says to.
     If:do:
-    - "@quip.departing"
+    - Object:dot:
+        - "@quip"
+        - "departing"
     - - Departing actor: 
           FromText: "@actor"
 
@@ -238,7 +249,8 @@ When replying:
         - "quips"
         - GetPlayerQuips:
     - If:do:else:
-      - Is nothing: "@quips"
+      - Is empty: 
+          FromTextList: "@quips"
       - - # do:
           Departing actor: 
             FromText: "#self"
@@ -256,7 +268,7 @@ Before requesting player input (this is the print conversation rule):
   - # If in conversation, print conversation choices.
     If:do:
       - Not: 
-          Is nothing: "#conversation.speaker"
+          Is nothing: "#conversation.target"
       - - PrintConversationChoices actor:
             FromText: "@actor"
 
@@ -285,10 +297,18 @@ When inputting dialog:
         - "slug"
         - Text if:then:else:
             - Not: 
-                Is nothing: "@quip.slug"
-            - "@quip.slug"
+                Is nothing: 
+                  Object:dot:
+                    - "@quip"
+                    - "slug"
+            - Object:dot:
+              - "@quip"
+              - "slug"
             - Text list:at: 
-                - Split lines: "@quip.remark"
+                - Split lines: 
+                    Object:dot:
+                      - "@quip"
+                      - "remark"
                 - 1 
     - # do:
       - Print menu:choice: 
@@ -321,21 +341,23 @@ When inputting dialog:
     - - Text:kind:
         - "quip"
         - "quip"
-    - - TextList:kind:initially:
+    - - # returns:
+        Bool:initially:
+        - "permitted"
+        - true 
+      - TextList:kind:initially:
         - "requirements"
         - "facts"
         - Relatives:object:
           - "quip requirements"
           - "@quip"
-      - # returns:
-        Bool:initially:
-        - "permitted"
-        - true 
     - - Repeat across:as:do:
-        - FromText: "@requirements"
+        - FromTextList: "@requirements"
         - "fact"
         - - If:do:
-            - "@fact.unknown"
+            - Object:dot:
+              - "@fact"
+              - "unknown"
             - - Set:value:
                 - "@permitted"
                 - FromBool: false 
@@ -350,22 +372,24 @@ When inputting dialog:
   - - Text:kind:
       - "quip"
       - "quip"
-  - - TextList:kind:initially:
+  - - # returns:
+      Bool:initially:
+      - "prohibited"
+      - false
+    - TextList:kind:initially:
       - "prohibitions"
       - "facts"
       - Relatives:object:
         - "quip prohibitions"
         - "@quip"
-    - # returns:
-      Bool:initially:
-      - "prohibited"
-      - false 
   - - Repeat across:as:do:
-      - FromText:
+      - FromTextList:
         - "@prohibitions"
       - "fact"
       - - If:do:
-          - "@fact.known"
+          - Object:dot:
+              - "@fact"
+              - "known"
           - - Set:value:
               - "@prohibited"
               - FromBool: true
@@ -424,39 +448,51 @@ When inputting dialog:
   - - Text:kind:
       - "quip"
       - "quip"
-  - - # conversation history during greeting 
+  - - # return true to include a quip.
+      # unless specifically included, quips are filtered out.
+      Bool:initially:
+      - "result"
+      - false
+    - # conversation history during greeting 
       # ( and after the player has chosen a quip )
       # so there's always a valid current quip.
       Text:kind:initially:
       - "current"
       - "quip"
       - "#conversation.history.1"
-    - # return true to include a quip.
-      # unless specifically included, quips are filtered out.
-      Bool:initially:
-      - "result"
-      - false
   - # do:
     - If:do:
       - Is all:
         - # only quips which involve this speaker.
           # note: the default greeting is shared by many speakers
-          # so we can't use "@current.speaker" here.
+          # so we can't use look at the current target.
           Is:matching:text:
-          - "#conversation.speaker"
+          - "#conversation.target"
           - "equal_to"
-          - "@quip.speaker"
+          - Object:dot:
+            - "@quip"
+            - "speaker"
         - # only quips where the player to has something to say.
           Is any:
             - Not:
-               Is nothing: "@quip.remark"
+               Is nothing:
+                Object:dot:
+                  - "@quip"
+                  - "remark"
             - Not:
-               Is nothing: "@quip.slug"
+               Is nothing:
+                Object:dot:
+                  - "@quip"
+                  - "slug"
         - # only quips with the current topic
           Is:matching:text:
-            - "@current.topic"
+            - Object:dot:
+                - "@current"
+                - "topic"
             - "equal_to"
-            - "@quip.topic"
+            - Object:dot:
+                - "@quip"
+                - "topic"
         - # specifically permitted 
           IsQuipPermitted quip: 
             FromText: "@quip"
@@ -467,7 +503,10 @@ When inputting dialog:
           
       - # do:
         If:do:else:
-        - Not: "@current.restrictive"
+        - Not: 
+            Object:dot:
+              - "@current"
+              - "restrictive"
         - - Set:value:
             - "@result"
             - FromBool: true
