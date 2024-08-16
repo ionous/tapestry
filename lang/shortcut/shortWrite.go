@@ -54,7 +54,7 @@ Loop:
 				break Loop
 			} else {
 				out.WriteRune(FieldSeparator)
-				out.WriteString(strconv.Itoa(idx + 1))
+				out.WriteString(strconv.Itoa(idx))
 			}
 		default:
 			okay = false

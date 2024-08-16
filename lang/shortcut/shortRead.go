@@ -83,7 +83,7 @@ func (a *Shortcut) Decoded(t Type, v any) (err error) {
 			err = errors.New("zero is an invalid element")
 		} else {
 			a.dot = append(a.dot, &object.AtIndex{
-				Index: literal.I(idx - 1),
+				Index: literal.I(idx),
 			})
 		}
 

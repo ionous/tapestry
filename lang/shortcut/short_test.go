@@ -10,8 +10,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/object"
 )
 
-func TestWrite(t *testing.T) {
-	if a, ok := WriteDots(object.Object("obj", "field", 0, "el")); !ok {
+// test the dot writer
+func TestDotWrite(t *testing.T) {
+	if a, ok := WriteDots(object.Object("obj", "field", 1, "el")); !ok {
 		t.Fatal("couldnt write")
 	} else if a != "#obj.field.1.el" {
 		t.Fatal("mismatch", a)
@@ -34,7 +35,8 @@ func TestWrite(t *testing.T) {
 	}
 }
 
-func TestTokens(t *testing.T) {
+// test the dot parser
+func TestDotRead(t *testing.T) {
 	if e := match("@var.5", AtSign, "var", 5); e != nil {
 		t.Fatal(e)
 	} else if e := match("#obj.field", HashMark, "obj", "field"); e != nil {
