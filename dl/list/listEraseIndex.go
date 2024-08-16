@@ -33,31 +33,37 @@ func eraseIndex(run rt.Runtime,
 		if count, e := safe.GetOptionalInt(run, count, size); e != nil {
 			err = e
 		} else {
-			if count <= 0 {
-				start, end = 0, 0 // zero and negative count means remove nothing
-			} else {
-				if start < 0 {
-					start += size // wrap negative starts
-				} else {
-					start -= 1 // adjust to zero based
-				}
-				if start >= size {
-					start, end = 0, 0 // (still) out of bounds? do nothing.
-				} else {
-					// If length + start is less than 0, begin from index 0.
-					if start < 0 {
-						start = 0
-					}
-					// clip too many elements
-					end = start + count
-					if end > size {
-						end = size
-					}
-				}
-			}
+			start, end := cap(start, end, count, size)
 			// always splice unless there was a critical error.
 			err = vs.Splice(start, end, nil, cutList)
 		}
 	}
 	return
+}
+
+// weird, without wrapping this into a function; go decides to skip the splicing.
+func cap(start, end, count, size int) (int, int) {
+	if count <= 0 {
+		start, end = 0, 0 // zero and negative count means remove nothing
+	} else {
+		if start < 0 {
+			start += size // wrap negative starts
+		} else {
+			start -= 1 // adjust to zero based
+		}
+		if start >= size {
+			start, end = 0, 0 // (still) out of bounds? do nothing.
+		} else {
+			// If length + start is less than 0, begin from index 0.
+			if start < 0 {
+				start = 0
+			}
+			// clip too many elements
+			end = start + count
+			if end > size {
+				end = size
+			}
+		}
+	}
+	return start, end
 }
