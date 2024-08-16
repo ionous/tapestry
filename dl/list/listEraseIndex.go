@@ -14,7 +14,7 @@ func (op *ListErase) Execute(run rt.Runtime) (err error) {
 }
 
 func eraseIndex(run rt.Runtime,
-	count rt.NumEval,
+	span rt.NumEval,
 	target rt.Address,
 	atIndex rt.NumEval,
 	cutList *rt.Value,
@@ -25,45 +25,19 @@ func eraseIndex(run rt.Runtime,
 		err = e
 	} else if e := safe.CheckList(vs); e != nil {
 		err = e
-	} else if start, e := safe.GetOptionalInt(run, atIndex, 1); e != nil {
-		err = e // start is a one based offset here.
+	} else if start, e := safe.GetOptionalInt(run, atIndex, 0); e != nil {
+		err = e // ^ the default of 0 here indicates unspecified
 	} else {
-		var end int
-		size := vs.Len() // if count isnt specified; erase everything
-		if count, e := safe.GetOptionalInt(run, count, size); e != nil {
-			err = e
+		cnt := vs.Len()
+		if rng, e := safe.GetOptionalInt(run, span, cnt); e != nil {
+			err = e // ^ if the span isn't specified; erase everything.
 		} else {
-			start, end := cap(start, end, count, size)
-			// always splice unless there was a critical error.
-			err = vs.Splice(start, end, nil, cutList)
+			i := clipStart(start, cnt)  // these turn one-based indices to zero-based
+			j := clipRange(i, rng, cnt) // converts range to an ending index
+			if i >= 0 && j >= i {       // negative after clip indicate no-op
+				err = vs.Splice(i, j, nil, cutList)
+			}
 		}
 	}
 	return
-}
-
-// weird, without wrapping this into a function; go decides to skip the splicing.
-func cap(start, end, count, size int) (int, int) {
-	if count <= 0 {
-		start, end = 0, 0 // zero and negative count means remove nothing
-	} else {
-		if start < 0 {
-			start += size // wrap negative starts
-		} else {
-			start -= 1 // adjust to zero based
-		}
-		if start >= size {
-			start, end = 0, 0 // (still) out of bounds? do nothing.
-		} else {
-			// If length + start is less than 0, begin from index 0.
-			if start < 0 {
-				start = 0
-			}
-			// clip too many elements
-			end = start + count
-			if end > size {
-				end = size
-			}
-		}
-	}
-	return start, end
 }

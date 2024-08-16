@@ -83,14 +83,17 @@ func (op *ListSplice) getNewValues(run rt.Runtime, src rt.Value) (ret rt.Value, 
 	return
 }
 
+// return zero based indices
+// cnt is the actual length of the list.
 func (op *ListSplice) getIndices(run rt.Runtime, cnt int) (reti, retj int, err error) {
+	// this defaults to zero to indicate "unspecified"
 	if i, e := safe.GetOptionalNumber(run, op.Start, 0); e != nil {
 		err = e
-	} else if rng, e := safe.GetOptionalNumber(run, op.Count, float64(cnt)); e != nil {
-		err = e
+	} else if rng, e := safe.GetOptionalInt(run, op.Count, cnt); e != nil {
+		err = e // ^ if the count isn't specified, remove as many values as possible.
 	} else {
-		reti = clipStart(i.Int(), cnt)
-		retj = clipRange(reti, rng.Int(), cnt)
+		reti = clipStart(i.Int(), cnt)   // these both turn one-based indices to zero-based
+		retj = clipRange(reti, rng, cnt) // converts range to an ending index
 	}
 	return
 }

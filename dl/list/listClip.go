@@ -18,7 +18,7 @@ func clipStart(i, cnt int) (ret int) {
 	return
 }
 
-// for slice and splice: normalize the ending index
+// for slice: normalize the ending index
 // assumes a one based index as input, returns a zero based index as output.
 func clipEnd(j, cnt int) (ret int) {
 	if j > cnt {

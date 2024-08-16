@@ -203,7 +203,7 @@ func (n variant) Slice(i, j int) (ret Value, err error) {
 // Splice replaces a range of values
 func (n variant) Splice(i, j int, add Value, cutList *Value) (err error) {
 	if i < 0 {
-		err = fmt.Errorf("slice at %d can't be negative", i)
+		err = fmt.Errorf("splice at %d can't be negative", i)
 	} else if cnt := n.Len(); j > cnt {
 		err = fmt.Errorf("splice at %d out of range %d", j, cnt)
 	} else if i > j {

@@ -61,11 +61,13 @@ func (op *ListSlice) sliceList(run rt.Runtime, aff affine.Affinity) (retVal rt.V
 
 // reti is < 0 to indicate an empty list
 func (op *ListSlice) getIndices(run rt.Runtime, cnt int) (reti, retj int, err error) {
+	// these default to zero to indicate "unspecified"
 	if i, e := safe.GetOptionalNumber(run, op.Start, 0); e != nil {
 		err = e
 	} else if j, e := safe.GetOptionalNumber(run, op.End, 0); e != nil {
 		err = e
 	} else {
+		// these both turn one-based indices to zero-based
 		reti = clipStart(i.Int(), cnt)
 		retj = clipEnd(j.Int(), cnt)
 	}

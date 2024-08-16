@@ -26,7 +26,7 @@ func FilterByPattern(run rt.Runtime, vs rt.Value, name string) (err error) {
 	}
 	// chop down the list ( unless we didn't chop anything )
 	if err == nil && out != cnt {
-		err = vs.Splice(0, out, nil, nil)
+		err = vs.Splice(out, cnt, nil, nil)
 	}
 	return
 }
