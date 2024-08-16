@@ -43,8 +43,29 @@ func TestCoreEncoding(t *testing.T) {
 			literal.T("one"), literal.T("two"), literal.T("three"),
 		}},
 		`{"Join parts:":["one","two","three"]}`,
-	},
-	})
+	}, {
+		// dot field shortcuts
+		&object.ObjectDot{
+			NounName: &object.VariableDot{
+				VariableName: literal.T("objvar"),
+			},
+			Dot: []object.Dot{
+				&object.AtField{FieldName: literal.T("field")},
+			},
+		},
+		`{"Object:dot:":["@objvar",["field"]]}`,
+	}, {
+		// dot index shortcuts
+		&object.ObjectDot{
+			NounName: &object.VariableDot{
+				VariableName: literal.T("objvar"),
+			},
+			Dot: []object.Dot{
+				&object.AtIndex{Index: literal.F(5)},
+			},
+		},
+		`{"Object:dot:":["@objvar",[5]]}`,
+	}})
 }
 
 type testPair struct {

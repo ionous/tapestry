@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
@@ -12,17 +13,30 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// move to a better location...
 func Encoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
 	switch op := op.(type) {
-	case *call.CallPattern: // fix? i dont love this dependency.
-		ret, err = call.CustomEncoder(enc, op)
-
 	case rtti.Address:
 		if str, ok := WriteDots(op); !ok {
 			err = compact.Unhandled("address")
 		} else {
 			ret = str
+		}
+
+	case *call.CallPattern:
+		ret, err = call.CustomEncoder(enc, op)
+
+	case *object.AtField:
+		if a, ok := op.FieldName.(*literal.TextValue); ok {
+			ret = a.Value
+		} else {
+			err = compact.Unhandled("field")
+		}
+
+	case *object.AtIndex:
+		if a, ok := op.Index.(*literal.NumValue); ok {
+			ret = a.Value
+		} else {
+			err = compact.Unhandled("field")
 		}
 
 	case *literal.TextValue:
@@ -44,7 +58,7 @@ func Decoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret typeinfo.I
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
 	switch slot {
 	default:
-		err = compact.Unhandled("core decoder")
+		err = compact.Unhandled("shortcut decoder")
 	case
 		// reading from a variable:
 		&rtti.Zt_BoolEval,
@@ -69,6 +83,19 @@ func Decoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret typeinfo.I
 				// use decode literal, could be string in a list.
 				ret, err = literal.DecodeLiteral(slot, str[clip:])
 			}
+		}
+	case &object.Zt_Dot:
+		switch v := body.(type) {
+		case string:
+			ret = &object.AtField{
+				FieldName: literal.T(v),
+			}
+		case float64:
+			ret = &object.AtIndex{
+				Index: literal.F(v),
+			}
+		default:
+			err = compact.Unhandled("dot decoder")
 		}
 	}
 	return
