@@ -4,8 +4,8 @@
 # for verification:
 # *** update this file with new info **
 # npm run build 
-# go test -count=1 ./...
-# npm run tap -- weave check
+# npm run test
+# npm run tap -- weave -check
 #
 # for sourcehut:
 # git checkout main

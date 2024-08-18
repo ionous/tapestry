@@ -843,12 +843,12 @@ func (op *ListSort_Slice) Repeats() bool {
 }
 
 // Modify a list by adding and removing values.
-// The type of the values being added must match the type of the list.
-// ( ie. Text cant be added to a list of numbers, and numbers cant be added to a list of text. )
-// If the starting index is negative, this begins that many values from the end of the array;
-// if list's length plus the start is less than zero, this begins from index zero.
-// If the remove count is missing, this removes all values from the start to the end;
+// If the starting index is negative, this begins that many values from the end of the list
+// ( clipped to the first element if that distance is more than the total list length. )
+// If the remove count is missing, this removes all values from the start to the end of the list.
 // if the remove count is zero or negative, no values are removed.
+// The type of the values being added must match the type of the list.
+// ( ex. Text can only be added to a list of text. )
 type ListSplice struct {
 	Target rtti.Address
 	Start  rtti.NumEval
@@ -1123,7 +1123,7 @@ func init() {
 			Label:    "start",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"The one-based index at which to start removing values.", "If not specified, starts with the first value."},
+				"--": []string{"The one-based index at which to start removing values.", "If zero or not specified, starts with the first value.", "Otherwise, follows the rules of splice. "},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1131,7 +1131,7 @@ func init() {
 			Label:    "count",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"The number of values to remove.", "If not specified, removes as many as it can."},
+				"--": []string{"The number of values to remove.", "If not specified, removes as many as it can.", "If zero or negative, no values are removed."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -1156,7 +1156,7 @@ func init() {
 			Label:    "start",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"The one-based index at which to start removing values.", "If not specified, starts with the first value."},
+				"--": []string{"The one-based index at which to start removing values.", "If zero or not specified, starts with the first value.", "Otherwise, follows the rules of splice. "},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1164,7 +1164,7 @@ func init() {
 			Label:    "count",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"The number of values to remove.", "If not specified, removes as many as it can."},
+				"--": []string{"The number of values to remove.", "If not specified, removes as many as it can.", "If zero or negative, no values are removed."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1583,7 +1583,7 @@ func init() {
 			Label:    "start",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"The one-based index to start cutting from.", "See the command documentation for full details."},
+				"--": "The first one-based index to remove.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1591,7 +1591,7 @@ func init() {
 			Label:    "count",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"The number of values to cut.", "See the command documentation for full details."},
+				"--": "The total number of values to remove.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1599,7 +1599,7 @@ func init() {
 			Label:    "insert",
 			Optional: true,
 			Markup: map[string]any{
-				"--": []string{"Optionally, a set of new values to inject into the list,", "starting at the location that was cut.", "See the command documentation for full details."},
+				"--": "New values to inject into the area that was just removed.",
 			},
 			Type: &rtti.Zt_Assignment,
 		}},
@@ -1610,7 +1610,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"--": []string{"Modify a list by adding and removing values.", "The type of the values being added must match the type of the list.", "( ie. Text cant be added to a list of numbers, and numbers cant be added to a list of text. )", "If the starting index is negative, this begins that many values from the end of the array;", "if list's length plus the start is less than zero, this begins from index zero.", "If the remove count is missing, this removes all values from the start to the end;", "if the remove count is zero or negative, no values are removed."},
+			"--": []string{"Modify a list by adding and removing values.", "If the starting index is negative, this begins that many values from the end of the list", "( clipped to the first element if that distance is more than the total list length. )", "If the remove count is missing, this removes all values from the start to the end of the list.", "if the remove count is zero or negative, no values are removed.", "The type of the values being added must match the type of the list.", "( ex. Text can only be added to a list of text. )"},
 		},
 	}
 	Zt_ListPush = typeinfo.Flow{

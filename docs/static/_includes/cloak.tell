@@ -1,8 +1,7 @@
-# -----------------------------------
+---
 # The 'Cloak of Darkness' was originally written by Roger Firth.
 # Its been implemented in many IF systems over the years.
 # This one is ported from the Inform7 version.
----
 Define scene:requires:
   - "cloak"
   - - "tapestry"  # a library of shared object types and behaviors.
@@ -15,7 +14,7 @@ The story has the max score 2.
 # -----------------------------------
 # The Foyer:
 # -----------------------------------
-The Foyer of the Opera House is a room. You are in the foyer. The description of the Foyer is "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and east."
+The foyer is a room. The printed name is "Foyer of the Opera House". The description is "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and east." You are in the foyer. 
 
 The entrance is a scenery door in the foyer. North from the foyer is the entrance. Through the entrance is the Street. Instead of traveling through the entrance:
   - Say: "You've only just arrived and besides the weather outside is terrible."
@@ -39,7 +38,7 @@ South from the Foyer is the Foyer Bar. The bar is unlit. The scrawled message is
 
 Neatness is a kind of aspect. The neatnesses are neat, scuffed, and trampled.
 Messages are a kind of thing. Messages have a neatness. The scrawled message is a message.
-Understand "floor" or "sawdust" as the message.
+Understand "floor" or "sawdust" as the scrawled message.
 
 Instead of examining the message:
   - # Objects can be referred to in commands, by starting their name with a '#'.
@@ -142,45 +141,54 @@ Instead of storing the cloak:
 # -----------------------------------
 ---
 - # Dropping the cloak should give you points, but shouldn't let you win the game.
-  Define test:do:
-  - "cloak of dropping"
+  Define scene:do:
+  - "Test cloak of dropping"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
       - FromBool: true
     - Fabricate input: "e; take off cloak; drop cloak; w; s; x message"
-    - Expect: "#story.completed"
-    - Expect:
-        Is:matching:num:
+    - Expect:test:
+      - "examining completed the game"
+      -  "#story.completed"
+    - Expect:test:
+      - "some points"
+      - Is:matching:num:
         - "#story.score"
         - "equal_to"
         - 1
 
 - # Hanging the cloak on the hook. That's where it's at.
-  Define test:do:
-  - "cloak of perfection"
+  Define scene:do:
+  - "Test cloak of perfection"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
       - FromBool: true
     - Fabricate input: "e; take off cloak; put cloak on peg; w; s; x message"
-    - Expect: "#story.completed"
-    - Expect:
-        Is:matching:num:
+    - Expect:test:
+      - "examining completed the game"
+      - "#story.completed"
+    - Expect:test:
+      - "perfect points"
+      - Is:matching:num:
         - "#story.score"
         - "equal_to"
         - 2
 
 - # Disturbing the message should fail the game.
-  Define test:do:
-  - "cloak of failure"
+  Define scene:do:
+  - "Test cloak of failure"
   - - StartGame actor:quietly:
       - FromText: "#player.pawn"
       - FromBool: true
     - Fabricate input: "s; jump; jump; n; e; take off cloak; drop cloak; w; s; x message"
-    - # Game should be finished, but not completed.
-      Expect: "#story.concluded"
+    - # Game should be over, but not completed.
+      Expect:test:
+      - "game over"
+      -  "#story.concluded"
     - # Dropping the cloak shouldn't have earned you any points.
-      Expect:
-        Is:matching:num:
+      Expect:test:
+      - "dropping is zero points"
+      - Is:matching:num:
         - "#story.score"
         - "equal_to"
         - 0
