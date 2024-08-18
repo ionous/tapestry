@@ -36,13 +36,12 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 			ret, err = run.call(pat, rec, aff)
 
 		case pattern.Sends:
-			// fix: currently, if the pattern contains "noun"
-			// then use that as the event target;
-			// otherwise, use the first parameter.
-			// alt: maybe putting noun first, or renaming noun to target
+			// fix? assumes the first parameter is the actor;
+			// and everything else is the target. ( unless there's only one param )
+			// running an action's parameter is the action name... which isn't a noun.
 			var target int
-			if i := pat.FieldIndex("noun"); i >= 0 {
-				target = i
+			if pat.FieldCount() > 1 && len(pat.Fields[1].Type) > 0 {
+				target = 1
 			}
 			if tgt, e := rec.GetIndexedField(target); e != nil {
 				err = e

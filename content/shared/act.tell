@@ -13,17 +13,18 @@
       - Text:kind:
           - "second noun"
           - "thing"
+
 - # State changing alters the state of a noun by changing a trait.
   Define action:requires:
     - "state changing"
-    - - # the noun that wants to change state.
+    - - # the actor who is causing the state to change.
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the noun that wants to change state.
         Text:kind:
           - "noun"
           - "thing"
-      - # the actor who is causing the state to change.
-        Text:kind:
-          - "actor"
-          - "actor"
       - # the state the noun wants to change to.
         Text: "trait"
       - # a trait which, if true, can block the noun from changing.

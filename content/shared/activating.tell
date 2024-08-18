@@ -38,9 +38,9 @@
     - "activating"
     - "the standard activating action"
     - - If:do:
-          - StateChanging noun:actor:trait:guard:change:
-              - FromText: "@noun"
+          - StateChanging actor:noun:trait:guard:change:
               - FromText: "@actor"
+              - FromText: "@noun"
               - FromText: "activated"
               - FromText: "activatable"
               - FromText: "switch on"
@@ -86,9 +86,9 @@
     - "deactivating"
     - "the standard deactivating action"
     - - If:do:
-          - StateChanging noun:actor:trait:guard:change:
-              - FromText: "@noun"
+          - StateChanging actor:noun:trait:guard:change:
               - FromText: "@actor"
+              - FromText: "@noun"
               - FromText: "deactivated"
               - FromText: "activatable"
               - FromText: "switch off"

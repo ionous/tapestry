@@ -47,9 +47,9 @@
     - "opening"
     - "the standard opening action"
     - - If:do:
-          - StateChanging noun:actor:trait:guard:change:
-              - FromText: "@noun"
+          - StateChanging actor:noun:trait:guard:change:
               - FromText: "@actor"
+              - FromText: "@noun"
               - FromText: "open"
               - FromText: "openable"
               - FromText: "open"
@@ -104,9 +104,9 @@
     - "closing"
     - "the standard closing action"
     - - If:do:
-          - StateChanging noun:actor:trait:guard:change:
-              - FromText: "@noun"
+          - StateChanging actor:noun:trait:guard:change:
               - FromText: "@actor"
+              - FromText: "@noun"
               - FromText: "closed"
               - FromText: "openable"
               - FromText: "close"

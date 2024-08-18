@@ -48,8 +48,12 @@ func (pt *Playtime) HandleTurn(words string) (okay bool, err error) {
 }
 
 func (pt *Playtime) handleMenus(menu format.MenuData, w string) (okay bool, err error) {
-	str, _ := menu.Match(w)
-	if e := pt.play(menu.Action, nil, []call.Arg{{
+	if str, _ := menu.Match(w); len(str) == 0 {
+		// FIX: events are a mess.
+		// we can't send a blank quip because that would be an empty target
+		// and .send would crash.
+		format.CurrentMenu = menu
+	} else if e := pt.play(menu.Action, nil, []call.Arg{{
 		Value: &call.FromText{Value: literal.T(str)}},
 	}); e != nil || len(w) == 0 {
 		err = e // loop on invalid choices

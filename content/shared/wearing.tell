@@ -27,9 +27,9 @@
     - "wearing"
     - "standard wearing action"
     - - If:do:
-          - StateChanging noun:actor:trait:guard:change:
-              - FromText: "@noun"
+          - StateChanging actor:noun:trait:guard:change:
               - FromText: "@actor"
+              - FromText: "@noun"
               - FromText: "worn"
               - FromText: "wearable"
               - FromText: "put on"
@@ -64,9 +64,9 @@
     - "removing"
     - "standard removing action"
     - - If:do:
-          - StateChanging noun:actor:trait:guard:change:
-              - FromText: "@noun"
+          - StateChanging actor:noun:trait:guard:change:
               - FromText: "@actor"
+              - FromText: "@noun"
               - FromText: "not worn"
               - FromText: "wearable"
               - FromText: "take off"

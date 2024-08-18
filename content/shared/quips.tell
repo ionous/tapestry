@@ -22,6 +22,8 @@
         Text: "remark"
       - # The reply is the response of the target.
         Text: "reply"
+      - # Exit conversation if the player uses this quip.
+        Bool: "departing"
 
 - Define relation:kind:otherKind:cardinality:
     - "quip followers"
@@ -176,7 +178,9 @@ When greeting:
     - FromText: "#self"
     - FromText: "@quip" 
 
-# Reset the conversation
+# Reset the conversation.
+# The "print conversation" rule for "before requesting player input"
+# will do nothing after this; and the player will have normal input.
 When departing:
   - Set:value:
     - "#conversation.target"
@@ -194,6 +198,8 @@ When discussing:
   - # Remember that the player made this particular choice.
     RememberConversation quip: 
       FromText: "@quip"
+  
+After discussing:        
   - # Let the npc respond:
     Replying actor:quip: 
       - FromText: "#conversation.target"
@@ -274,7 +280,6 @@ Before requesting player input (this is the print conversation rule):
 
 When inputting dialog:
   - # Handle the selection of a menu option
-    # XXX: quitting?
     Discussing actor:quip:
     - FromText: "@actor"
     - FromText: "@quip"
