@@ -53,16 +53,18 @@ func TestMarkup(t *testing.T) {
 			`<li>dolor sit</li>` +
 			`<ol>` +
 			/**/ `<li>amet</li>` +
+			/**/ `<li><a="test">adipiscing</a></li>` +
 			`</ol>` +
-			`<li>consectetur adipiscing</li>` +
+			`<li><a="test">consectetur</a></li>` +
 			`</ul>` +
 			`elit.`,
 		//
 		`Lorem
   - ipsum
   - dolor sit
-    - amet
-  - consectetur adipiscing
+    1. amet
+    2. adipiscing
+  - test: consectetur
 elit.`,
 		// 14. malformed ( no change )
 		"if x < 5; x= x<<5; < br >; < br/>; <123><></>",

@@ -10,11 +10,17 @@ import (
 )
 
 type converter struct {
-	out         io.Writer
-	buf         strings.Builder
-	listIndent, // desired horizontal spacing
+	out          io.Writer
+	buf          strings.Builder
 	newLineCount int // current vertical spacing ( ie. are we at the start of a new line )
-	spaces int
+	spaces       int // leading spaces
+	// for lists
+	lists []listHistory
+}
+
+type listHistory struct {
+	ordered   bool
+	itemCount int // item count
 }
 
 // return the contents of buf as a string, and reset it.
@@ -26,22 +32,7 @@ func flush(buf *strings.Builder) string {
 
 // closing tags start with a forward slash (/)
 func (c *converter) dispatchTag(tag, attr string) (okay bool, err error) {
-	opening := tag[0] != '/'
-	if !opening {
-		tag = tag[1:]
-	}
-	switch tag {
-	case "ol", "ul":
-		if opening {
-			c.listIndent++
-		} else {
-			c.listIndent--
-		}
-		okay = true
-	default:
-		okay, err = Formats.WriteTag(c, tag, attr, opening)
-	}
-	return
+	return Formats.WriteTag(c, tag, attr)
 }
 
 // watches for newlines, etc.
@@ -110,7 +101,8 @@ func (c *converter) writeIndent() {
 	// in which case, we should write any pending indentation
 	// ( and note: the very first line starts at line count 2 )
 	if c.newLineCount > 0 {
-		for range c.listIndent * Tabwidth {
+		listIndent := len(c.lists)
+		for range listIndent * Tabwidth {
 			c.out.Write([]byte{Space})
 		}
 		c.newLineCount = 0
