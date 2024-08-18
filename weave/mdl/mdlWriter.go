@@ -241,7 +241,7 @@ func (pen *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
 	return
 }
 
-var mdl_kind = tables.Insert("mdl_kind", "uid", "domain", "kind", "singular", "path", "at", "comment")
+var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "singular", "path", "at", "comment")
 
 // plural name of kind and materialized hierarchy of ancestors separated by commas
 // this (somewhat) duplicates the algorithm used by Noun()
@@ -282,10 +282,8 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 			// easiest is if the name has never been mentioned before;
 			// we verified the other inputs already, so insert:
 			path := parent.fullpath()
-			uid := makeId(domain, name)
 			if res, e := pen.db.Exec(
 				mdl_kind,
-				uid,
 				domain,
 				name,
 				optionalOne,
@@ -298,7 +296,6 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 			} else {
 				ret = kindInfo{
 					rowid:        newid,
-					uid:          uid,
 					name:         name,
 					domain:       domain,
 					path:         path,
