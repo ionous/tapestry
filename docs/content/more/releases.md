@@ -10,7 +10,8 @@
 # for sourcehut:
 # git checkout main
 # git merge <branch>
-# ex. git tag -a v0.24.6 -m "Documentation and various changes to make the command language more consistent with itself."
+# update this release document
+# ex. git tag -a v0.24.8 -m "First pass of menu based conversations."
 # git push --follow-tags
 #
 # for github:
@@ -41,6 +42,15 @@ Near term goals include:
 * Improving engine integration using godot as an example.
 
 # Version History
+
+**v0.24.8**:  First pass of menu based conversations.
+
+- quips library
+- basic menu functionality
+- various improvements and fixes for list functions ( erasing, sorting, filtering )
+- improved pronoun handling in jess
+- improved line and error reporting for weave, jess, etc.
+- misc: replaced mdl_check with scenes that start with the name "test".
 
 **v0.24.7**: 
 
